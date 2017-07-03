@@ -5,10 +5,14 @@ import App from './App'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import routeConfig from './router-config'
+import Element from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 
 import store from './store.js'
 
 //加载路由中间件
+
+Vue.use(Element);
 Vue.use(VueRouter)
 Vue.use(VueResource)
 

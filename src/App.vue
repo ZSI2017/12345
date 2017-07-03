@@ -1,4 +1,5 @@
 <template>
+
   <div id="app">
     <!-- 头部导航 -->
     <header class="header" :class="{ 'header-fixed' : headerFixed }">
@@ -64,6 +65,7 @@
           </div>
     </main>
   </div>
+
 </template>
 
 <script>
@@ -134,19 +136,9 @@ export default {
 
 </script>
 
+
+
 <style>
-
-body{margin: 0;}
-#app {
-  min-width: 1200px;
-  margin: 0 auto;
-  font-family: "Helvetica Neue","PingFang SC",Arial,sans-serif;
-}
-/* 头部导航 */
-header{z-index: 1000;min-width: 1200px;transition: all 0.5s ease;  border-top: solid 4px #3091F2;  background-color: #fff;  box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);  }
-header.header-fixed{position: fixed;top: 0;left: 0;right: 0;}
-header .el-menu-demo{padding-left: 300px!important;}
-
 /* 主内容区 */
 main{display: -webkit-box;display: -ms-flexbox;display: flex;  min-height: 800px; background-color: #FCFCFC;  }
 main .main-left{-webkit-box-flex: 0;-ms-flex: 0 0 200px;flex: 0 0 200px;}
@@ -180,14 +172,6 @@ main .main-left .el-menu-item,main .main-left .el-submenu__title{height:40px;lin
 /* 导航栏菜单选中效果 */
   /*.isActive{color: #20a0ff!important;}
    #app main .aside .is-active{color: #475669;}*/
-
-  /* 卡片 */
-  .el-card{overflow: visible!important;}
-
-
-.main-title{
-  padding-bottom:30px;
-}
 
 
 </style>
