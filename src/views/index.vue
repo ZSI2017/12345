@@ -13,20 +13,21 @@
   <div style="display:flex;flex-direction:row;">
 
     <div style="position:fixed;top:60px;bottom:0;min-width:200px;width:200px;background-color:#324157" v-show="fold">
-      <el-menu :default-active="$router.path" theme="dark" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router>
+      <el-menu :default-active="$router.path" theme="dark" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router>
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
-          <el-submenu :index="index+''"  v-if="items.hasChild">
-            <template slot="title" ><i class="el-icon-message"></i>{{items.name}}</template>
-            <!-- <el-menu-item-group> -->
-            <!-- <template slot="title">分组一</template> -->
-            <el-menu-item v-for="item in items.children" :index="item.path">
-              {{item.name}}
-            </el-menu-item>
-          </el-submenu>
-          <el-menu-item v-if="!items.hasChild" :index="items.children[0].path">
-            <i class="el-icon-menu"></i> {{items.children[0].name}}
-          </el-menu-item>
+
+      <el-submenu :index="index+''"  v-if="items.hasChild">
+        <template slot="title" >{{items.name}}</template>
+        <!-- <el-menu-item-group> -->
+        <!-- <template slot="title">分组一</template> -->
+        <el-menu-item v-for="item in items.children" :index="item.path">
+          {{item.name}}
+        </el-menu-item>
+        </el-submenu>
+        <el-menu-item v-if="!items.hasChild" :index="items.children[0].path">
+          {{items.children[0].name}}
+        </el-menu-item>
         </template>
       </el-menu>
     </div>
@@ -68,6 +69,7 @@ export default {
 
   data() {
     return {
+      uniqueOpened:true,
       fold:true,
       headerFixed: true,
       title: "我的快递",

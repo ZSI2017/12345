@@ -132,166 +132,296 @@ import upload from "./views/component/upload.vue"
 import layout from "./views/component/layout.vue"
 
 
-export default [
-  //订单管理
-  {
-    path:'/orderManage',component:orderManage
-
-  },
-  //选择快递页
-  {
-    path:'/chooseExpress',component:chooseExpress
-
-  },
-  //寄快递入口
-  {
-    path:'/sendExpressEnter',component:sendExpressEnter
-    
-  },
-  //选快递下单
-  {
-    path:'/expressOrder',component:expressOrder
-    
-  },
-  //快递公司管理
-  {
-    path:'/expressCompany',component:expressCompany
-    
-  },
-  //选快递下单管理
-  {
-    path:'/chooseExpressOrder',component:chooseExpressOrder
-    
-  },
-  //服务类型及折扣管理
-  {
-    path:'/serverTypeDiscount',component:serverTypeDiscount
-    
-  },
-  //非服务地区管理
-  {
-    path:'/nonServerDistrict',component:nonServerDistrict
-    
-  },
-  // 价格管理
-  {
-    path: '/priceManage',component:priceManage,
-    children:[
-      { path: ''      , component: priceManage  },
-      {
-        path: 'detail', component: detail,
-
-        children: [
-          {path:'',component: page1},
-          {
-            path: 'page1', component: page1,
-            children: [
-              {path: '', component: step1},
-              {path: 'step1', component: step1},
-              {path: 'step2', component: step2},
-              {path: 'step3', component: step3},
-              {path: 'step4', component: step4}
-            ]
-          },
-          { path: 'page2', component: page2  },
-          { path: 'page3', component: page3  },
-          { path: 'page4', component: page4  },
-          { path: 'page5', component: page5  }
-        ]
-      },
-    ]
-  },
-  //同城直送管理
-  {
-    path:'/oneCitySend',component:oneCitySend
-    
-  },
-  //附近快递资源管理
-  {
-    path:'/table',component:table
-    
-  },
-  //公告管理
-  {
-    path:'/noticeManage',component:noticeManage
-    
-  },
-  //订单取消频次管理
-  {
-    path:'/orderCancle',component:orderCancle
-    
-  },
-  //黑名单管理
-  {
-    path:'/blankList',component:blankList
-    
-  },
-  //寄快递首页
-  {
-    path:'/sendExpress',component:sendExpress,
-    children:[
-      { path: ''      , component: step1  },
-      { path: 'step1', component: step1  },
-      { path: 'step2', component: step2  },
-      { path: 'step3', component: step3  },
-      { path: 'step4', component: step4  }
-    ]
-  }
-]
+// export default [
+//   //订单管理
+//   {
+//     path:'/orderManage',component:orderManage
+//
+//   },
+//   //选择快递页
+//   {
+//     path:'/chooseExpress',component:chooseExpress
+//
+//   },
+//   //寄快递入口
+//   {
+//     path:'/sendExpressEnter',component:sendExpressEnter
+//
+//   },
+//   //选快递下单
+//   {
+//     path:'/expressOrder',component:expressOrder
+//
+//   },
+//   //快递公司管理
+//   {
+//     path:'/expressCompany',component:expressCompany
+//
+//   },
+//   //选快递下单管理
+//   {
+//     path:'/chooseExpressOrder',component:chooseExpressOrder
+//
+//   },
+//   //服务类型及折扣管理
+//   {
+//     path:'/serverTypeDiscount',component:serverTypeDiscount
+//
+//   },
+//   //非服务地区管理
+//   {
+//     path:'/nonServerDistrict',component:nonServerDistrict
+//
+//   },
+//   // 价格管理
+//   {
+//     path: '/priceManage',component:totalpages,
+//     children:[
+//       { path: ''      , component: priceManage  },
+//       {
+//         path: 'detail', component: detail,
+//
+//         children: [
+//           {path:'',component: page1},
+//           {
+//             path: 'page1', component: page1,
+//             children: [
+//               {path: '', component: step1},
+//               {path: 'step1', component: step1},
+//               {path: 'step2', component: step2},
+//               {path: 'step3', component: step3},
+//               {path: 'step4', component: step4}
+//             ]
+//           },
+//           { path: 'page2', component: page2  },
+//           { path: 'page3', component: page3  },
+//           { path: 'page4', component: page4  },
+//           { path: 'page5', component: page5  }
+//         ]
+//       },
+//     ]
+//   },
+//   //同城直送管理
+//   {
+//     path:'/oneCitySend',component:oneCitySend
+//
+//   },
+//   //附近快递资源管理
+//   {
+//     path:'/nearExpress',component:nearExpress
+//
+//   },
+//   //公告管理
+//   {
+//     path:'/noticeManage',component:noticeManage
+//
+//   },
+//   //订单取消频次管理
+//   {
+//     path:'/orderCancle',component:orderCancle
+//
+//   },
+//   //黑名单管理
+//   {
+//     path:'/blankList',component:blankList
+//
+//   },
+//   //寄快递首页
+//   {
+//     path:'/sendExpress',component:sendExpress,
+//     children:[
+//       { path: ''      , component: step1  },
+//       { path: 'step1', component: step1  },
+//       { path: 'step2', component: step2  },
+//       { path: 'step3', component: step3  },
+//       { path: 'step4', component: step4  }
+//     ]
+//   }
+// ]
 
 let routes =  [
-       {
-            path:'/',
-            name:"首页",
-            component:index,
-            hasChild:true,
-            children: [
-                   { path: 'table', component: table, name: '表格'},
-                   { path: 'time', component: time, name: '时间' },
-                   { path: 'form', component: form, name: '表单' },
-               ]
-      },{
-           path:'/',
-           name:"基础",
-           component:index,
-           hasChild:true,
-           children: [
-                  { path: 'upload', component: upload, name: '上传图片' },
-                  { path: 'layout', component: layout, name: '布局' }
-              ]
-     },{
-       path:'/',
-       name:"table",
-       component:index,
-      //  hasChild:true,
-       children: [
-              { path: 'addPage', component: addPage, name: 'table' },
-          ]
+  {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'orderManage',component:orderManage,name:"订单管理"}
+   ]
  },{
-          path:"/",
-          name:'nearExpress',
-          component:index,
-          // hasChild:true,
-          children: [
-              {path:'nearExpress',component:nearExpress,name:"nearExpress"}
+   path:'/',
+   name:"运营位管理",
+   component:index,
+   hasChild:true,
+   children:[
+     {   path:'sendExpress',component:sendExpress,name:"寄快递首页",
+          children:[
+            { path: '', component: step1  },
+            { path: 'step1', component: step1  },
+            { path: 'step2', component: step2  },
+            { path: 'step3', component: step3  },
+            { path: 'step4', component: step4  }
           ]
- },{
-          path:"/",
-          name:'priceManage',
-          component:index,
-          // hasChild:true,
-          children: [
-              {path:'priceManage',component:priceManage,name:"priceManage"}
-          ]
- }
-      // {
-      //    path:'/',
-      //    com
-      // }
-    //  {
-    //      path:"/second",
-    //      name:"second",
-    //      component:table
-    //  }
-];
+      },
+      {path:'chooseExpress',component:chooseExpress,name:"选择快递页"},
+      {path:'chooseExpress',component:orderManage,name:"选快递下单页"},
+   ]
+ },
+ //寄快递入口
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'sendExpressEnter',component:sendExpressEnter,name:"寄快递入口管理"}
+   ]
+  //  path:'/sendExpressEnter',component:sendExpressEnter
 
+ },
+ //选快递下单
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'expressOrder',component:expressOrder,name:"选快递下单"}
+   ]
+  //  path:'/expressOrder',component:expressOrder
+
+ },
+ //快递公司管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'expressCompany',component:expressCompany,name:"快递公司管理"}
+   ]
+  //  path:'/expressCompany',component:expressCompany
+
+ },
+ //选快递下单管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理"}
+   ]
+  //  path:'/chooseExpressOrder',component:chooseExpressOrder
+
+ },
+ //服务类型及折扣管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'serverTypeDiscount',component:serverTypeDiscount,name:"服务类型及折扣管理"}
+   ]
+  //  path:'/serverTypeDiscount',component:serverTypeDiscount
+
+ },
+ //非服务地区管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'nonServerDistrict',component:nonServerDistrict,name:"非服务地区管理"}
+   ]
+  //  path:'/nonServerDistrict',component:nonServerDistrict
+
+ },
+ // 价格管理
+ {
+   path:'/',
+   name:"价格管理",
+   component:index,
+   hasChild:true,
+   children:[
+      {path:'priceManage',component:totalpages,name:"运线快递费管理",   children:[
+           { path: ''      , component: priceManage  },
+           {
+             path: 'detail', component: detail,
+
+             children: [
+               {path:'',component: page1},
+               {
+                 path: 'page1', component: page1,
+                 children: [
+                   {path: '', component: step1},
+                   {path: 'step1', component: step1},
+                   {path: 'step2', component: step2},
+                   {path: 'step3', component: step3},
+                   {path: 'step4', component: step4}
+                 ]
+               },
+               { path: 'page2', component: page2  },
+               { path: 'page3', component: page3  },
+               { path: 'page4', component: page4  },
+               { path: 'page5', component: page5  }
+             ]
+           },
+         ]
+       }
+   ]
+ },
+ //同城直送管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'oneCitySend',component:oneCitySend,name:"同城直送管理"}
+   ]
+  //  path:'/oneCitySend',component:oneCitySend
+
+ },
+ //附近快递资源管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'nearExpress',component:nearExpress,name:"附近快递资源管理"}
+   ]
+  //  path:'/nearExpress',component:nearExpress
+
+ },
+ //公告管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+    {  path:'noticeManage',component:noticeManage,name:"公告管理"}
+   ]
+  //  path:'/noticeManage',component:noticeManage
+
+ },
+ //订单取消频次管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'orderCancle',component:orderCancle,name:"订单取消频次管理"}
+   ]
+  //  path:'/orderCancle',component:orderCancle
+
+ },
+ //黑名单管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'blankList',component:blankList,name:"黑名单管理"}
+   ]
+  //  path:'/blankList',component:blankList
+
+ },
+
+
+];
+export default routes;
