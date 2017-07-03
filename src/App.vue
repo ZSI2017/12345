@@ -139,5 +139,14 @@
 
 <style>
 
+/* 主内容区 */
+
+
+/* 导航栏菜单选中效果 */
+  /*.isActive{color: #20a0ff!important;}
+   #app main .aside .is-active{color: #475669;}*/
+
+
+
 
 </style>
