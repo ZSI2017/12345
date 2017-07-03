@@ -40,7 +40,7 @@
               <el-menu-item index="/priceManage">运线快递费管理</el-menu-item>
             </el-submenu> 
             <el-menu-item index="/oneCitySend">同城直送管理</el-menu-item>
-            <el-menu-item index="/nearExpress">附近快递资源管理</el-menu-item>
+            <el-menu-item index="/table">附近快递资源管理</el-menu-item>
             <el-menu-item index="/noticeManage">公告管理</el-menu-item>
             <el-submenu index="5">
               <template slot="title">用户管理</template>
@@ -59,9 +59,9 @@
               </div>
 
             </el-breadcrumb>
-            <!--<transition name="fade">-->
+            <transition name="fade" mode="out-in">
               <router-view class="view"></router-view>
-            <!--</transition>-->
+            </transition>
           </div>
     </main>
   </div>
@@ -121,7 +121,7 @@ export default {
              this.topTitle = "非服务地区管理";
          }else if(to.path == '/oneCitySend'){
              this.topTitle = "同城直送管理";
-         }else if(to.path == '/nearExpress'){
+         }else if(to.path == '/table'){
              this.topTitle = "附近快递资源管理";
          }else if(to.path == '/noticeManage'){
              this.topTitle = "公告管理";
@@ -167,6 +167,9 @@ main .main-left .el-menu-item,main .main-left .el-submenu__title{height:40px;lin
   .list-enter, .list-leave-active {
     opacity: 0;
     transform: translateY(30px);
+  }
+  .main-title{
+    padding-bottom: 30px;
   }
 
 /* 导航栏菜单选中效果 */

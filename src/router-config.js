@@ -175,7 +175,7 @@ export default [
   },
   // 价格管理
   {
-    path: '/priceManage',component:totalpages,
+    path: '/priceManage',component:priceManage,
     children:[
       { path: ''      , component: priceManage  },
       {
@@ -208,7 +208,7 @@ export default [
   },
   //附近快递资源管理
   {
-    path:'/nearExpress',component:nearExpress
+    path:'/table',component:table
     
   },
   //公告管理
