@@ -2,7 +2,7 @@
 <div class="section">
   <div class="btn" style="background-color:#EFF2F7;margin-bottom:20px;">
     <el-tooltip class="item" effect="light" content="添加数据" placement="right">
-      <el-b][+\utton type="primary" @click="dialogFormVisible = true" size="large">添加</el-button>
+      <el-button type="primary" @click="dialogFormVisible = true" size="large">添加</el-button>
     </el-tooltip>
   </div>
   <!--这里是新增的弹出框  -->

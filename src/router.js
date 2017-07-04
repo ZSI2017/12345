@@ -1,10 +1,67 @@
+// import App from './App.vue';
+// import table from "./views/table/table.vue";
+// import time from "./views/table/time.vue";
+// import form from "./views/table/form.vue";
+// import index from "./views/index.vue";
+//
+// import addPage from "./views/component/addpage.vue"
+// import upload from "./views/component/upload.vue"
+// import axios  from "views/component/RainAxios.vue"
+//
+// let routes =  [
+//        {
+//             path:'/',
+//             name:"表格",
+//             component:index,
+//             hasChild:true,
+//             children: [
+//                    { path: 'table', component: table, name: '表格'},
+//                    { path: 'time', component: time, name: '时间' },
+//                    { path: 'form', component: form, name: '表单' },
+//                ]
+//       },{
+//            path:'/',
+//            name:"图片",
+//            component:index,
+//           //  hasChild:true,
+//            children: [
+//                   { path: 'upload', component: upload, name: '上传图片' },
+//               ]
+//      },{
+//        path:'/',
+//        name:"App",
+//        component:index,
+//       //  hasChild:true,
+//        children: [
+//               { path: 'addPage', component: addPage, name: 'table' },
+//           ]
+//  },{
+//    path:'/',
+//    name:"Axios",
+//    component:index,
+//   //  hasChild:true,
+//    children: [
+//           { path: 'axios', component: axios, name: 'axios' },
+//       ]
+// },{
+//           path:"/",
+//           name:'addPage',
+//           component:addPage,
+//           hasChild:true,
+//           children: [
+//               {path:'table',component:addPage,name:"addPage"}
+//           ]
+//  }
+// ];
+//
+// export default routes;
 
 //订单管理
 import orderManage from './page/orderManage/index.vue'
 
 //寄快递首页
 import sendExpress from './page/sendExpress/index.vue'
-import step1 from './page/sendExpress/step1.vue'
+// import step1 from './page/sendExpress/step1.vue'
 import step2 from './page/sendExpress/step2.vue'
 import step3 from './page/sendExpress/step3.vue'
 import step4 from './page/sendExpress/step4.vue'
@@ -132,114 +189,6 @@ import addPage from "./views/component/addpage.vue"
 import upload from "./views/component/upload.vue"
 import layout from "./views/component/layout.vue"
 
-
-// export default [
-//   //订单管理
-//   {
-//     path:'/orderManage',component:orderManage
-//
-//   },
-//   //选择快递页
-//   {
-//     path:'/chooseExpress',component:chooseExpress
-//
-//   },
-//   //寄快递入口
-//   {
-//     path:'/sendExpressEnter',component:sendExpressEnter
-//
-//   },
-//   //选快递下单
-//   {
-//     path:'/expressOrder',component:expressOrder
-//
-//   },
-//   //快递公司管理
-//   {
-//     path:'/expressCompany',component:expressCompany
-//
-//   },
-//   //选快递下单管理
-//   {
-//     path:'/chooseExpressOrder',component:chooseExpressOrder
-//
-//   },
-//   //服务类型及折扣管理
-//   {
-//     path:'/serverTypeDiscount',component:serverTypeDiscount
-//
-//   },
-//   //非服务地区管理
-//   {
-//     path:'/nonServerDistrict',component:nonServerDistrict
-//
-//   },
-//   // 价格管理
-//   {
-//     path: '/priceManage',component:totalpages,
-//     children:[
-//       { path: ''      , component: priceManage  },
-//       {
-//         path: 'detail', component: detail,
-//
-//         children: [
-//           {path:'',component: page1},
-//           {
-//             path: 'page1', component: page1,
-//             children: [
-//               {path: '', component: step1},
-//               {path: 'step1', component: step1},
-//               {path: 'step2', component: step2},
-//               {path: 'step3', component: step3},
-//               {path: 'step4', component: step4}
-//             ]
-//           },
-//           { path: 'page2', component: page2  },
-//           { path: 'page3', component: page3  },
-//           { path: 'page4', component: page4  },
-//           { path: 'page5', component: page5  }
-//         ]
-//       },
-//     ]
-//   },
-//   //同城直送管理
-//   {
-//     path:'/oneCitySend',component:oneCitySend
-//
-//   },
-//   //附近快递资源管理
-//   {
-//     path:'/nearExpress',component:nearExpress
-//
-//   },
-//   //公告管理
-//   {
-//     path:'/noticeManage',component:noticeManage
-//
-//   },
-//   //订单取消频次管理
-//   {
-//     path:'/orderCancle',component:orderCancle
-//
-//   },
-//   //黑名单管理
-//   {
-//     path:'/blankList',component:blankList
-//
-//   },
-//   //寄快递首页
-//   {
-//     path:'/sendExpress',component:sendExpress,
-//     children:[
-//       { path: ''      , component: step1  },
-//       { path: 'step1', component: step1  },
-//       { path: 'step2', component: step2  },
-//       { path: 'step3', component: step3  },
-//       { path: 'step4', component: step4  }
-//     ]
-//   }
-// ]
-
 let routes =  [
 {
    path:'/',
@@ -257,7 +206,7 @@ let routes =  [
      {   path:'sendExpress',component:sendExpress,name:"寄快递首页",
           children:[
             // { path: '', component: step1  },
-            { path: 'step1', component: step1  },
+            // { path: 'step1', component: step1  },
             { path: 'step2', component: step2  },
             { path: 'step3', component: step3  },
             { path: 'step4', component: step4  }
@@ -351,8 +300,8 @@ let routes =  [
                {
                  path: 'page1', component: page1,
                  children: [
-                   {path: '', component: step1},
-                   {path: 'step1', component: step1},
+                  //  {path: '', component: step1},
+                  //  {path: 'step1', component: step1},
                    {path: 'step2', component: step2},
                    {path: 'step3', component: step3},
                    {path: 'step4', component: step4}
