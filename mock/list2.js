@@ -1,4 +1,7 @@
 
+// 随机生成表格里面的数据
+
+
 var  Mock =require("mockjs");
 // Mock.setup({
 //      timeout:'200-600'
@@ -6,12 +9,19 @@ var  Mock =require("mockjs");
 
 var tableDate = [];
 
-for(var i =0;i<100;i++){
+for(var i =0;i<60;i++){
     tableDate.push(
        Mock.mock({
-         "date":Mock.Random.date('yyyy-MM-dd'),
+         "currentState":"已上架",
+         "Forder":Mock.Random.natural(0, 1000),
+         "link":Mock.Random.url('http'),
+         "operationsMapName":Mock.Random.name(),
+         "date":Mock.Random.datetime(),
+         "createTime":Mock.Random.datetime(),
+         "modifyTime":Mock.Random.datetime(),
+         "activeTime":Mock.Random.datetime() +"至"+Mock.Random.datetime(),
          "name":Mock.Random.name(),
-         "address":Mock.Random.county(true)
+         "address":Mock.Random.county(true).replace(/' '/g,'')
        })
     )
 }
