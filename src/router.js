@@ -95,6 +95,7 @@ import nearExpress from './page/nearExpress/index.vue'
 
 //公告管理
 import noticeManage from './page/noticeManage/index.vue'
+import addType from './page/noticeManage/addType.vue'
 
 //订单取消频次管理
 import orderCancle from './page/orderCancle/index.vue'
@@ -345,9 +346,9 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-    {  path:'noticeManage',component:noticeManage,name:"公告管理"}
-   ]
-  //  path:'/noticeManage',component:noticeManage
+     {path:'noticeManage',component:noticeManage,name:"公告管理"},
+     {path:'addType',name:'添加',component:addType}    
+  ]
 
  },
  //用户管理
