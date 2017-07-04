@@ -1,22 +1,30 @@
-module.exports ={
-    "data":
-    [       {
-                title:'-北京苹果社区店',
-                no1:'地址：百子湾路苹果社区临街低商',
-                no2:'营业时间：08:00-18:00',
-                no3:'取件时间：08:00-18:00',
-              },
-              {
-                title:'-北京海淀社区店',
-                no1:'地址：百子湾路苹果社区临街低商',
-                no2:'营业时间：08:00-18:00',
-                no3:'取件时间：08:00-18:00',
-              },{
-                title:'-北京苹果社区店',
-                no1:'地址：百子湾路苹果社区临街低商',
-                no2:'营业时间：08:00-18:00',
-                no3:'取件时间：08:00-18:00',
-              }
-      ]
+// 随机生成覆盖地区里面的数据
+
+
+// 随机生成表格里面的数据
+
+
+var  Mock =require("mockjs");
+// Mock.setup({
+//      timeout:'200-600'
+// });
+
+var tableDate = [];
+
+for(var j =0;j<12;j++){
+    var city = [];
+    for(var i=0;i<10;i++){
+           city.push(Mock.Random.city());
+    }
+
+    tableDate.push(
+       Mock.mock({
+         "city":city,
+         "province":Mock.Random.province()
+       })
+    )
+}
+module.exports = {
+      "data":tableDate
 
 }

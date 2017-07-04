@@ -59,7 +59,7 @@
   </el-dialog>
 
   <!-- 表格  -->
-  <el-table :data="table2" stripe v-loading="listLoading" style="width: 100%" max-height="600" :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table :data="table2" stripe v-loading.fullscreen.lock="true" style="width: 100%" max-height="600" :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="date" label="日期" sortable width="180">
     </el-table-column>
     <el-table-column prop="name" label="姓名" sortable width="180">
