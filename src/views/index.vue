@@ -4,7 +4,7 @@
   <header class="header" :class="{ 'header-fixed' : headerFixed }">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content bg-purple" style="float:left;width:200px;height:60px;text-align:center;line-height:60px;background-color:#324057;color:#fff;">我的快递</div>
+        <div class="grid-content bg-purple" style="float:left;width:200px;height:60px;text-align:center;line-height:60px;background-color:#324057;color:#fff;">{{ title }}</div>
         <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#eee;color:#fff;">123456789</div>
       </el-col>
     </el-row>
@@ -12,7 +12,7 @@
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
   <div style="display:flex;flex-direction:row;">
 
-    <div class="main-left" style="position:fixed;top:64px;bottom:0;min-width:200px;width:200px;background-color:#324157" v-show="fold">
+    <div class="main-left" style="position:fixed;top:64px;bottom:0;min-width:200px;width:200px;background-color:#324157;overflow-x: hidden; overflow-y: auto;" v-show="fold">
       <el-menu :default-active="$router.path" theme="dark" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router>
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
@@ -36,9 +36,9 @@
 
     </div>
 
-    <div style="padding:20px;padding-left:220px;padding-top:20px;flex:1">
+    <div style="padding:20px;padding-left:220px;padding-top:20px;flex:1;background:#f1f1f1;">
 
-      <el-breadcrumb style="padding-bottom:20px;" separator="/">
+      <el-breadcrumb style="padding:10px 0 30px 0;" separator="/">
         <!-- {{$route.matched[0].name}} -->
         <el-breadcrumb-item v-for="item in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
           {{item.name}}
@@ -163,4 +163,25 @@ header.header-fixed {
 header .el-menu-demo {
     padding-left: 300px !important;
 }
+
+//////////////// 自定义滑块样式////////////////
+::-webkit-scrollbar  
+{  
+    width: 3px;  
+    height: 3px;  
+    background-color: #3091F2;  
+}  
+::-webkit-scrollbar-track  
+{  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
+    border-radius: 10px;  
+    background-color: #F5F5F5;  
+}
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 10px;  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
+    background-color: #3091F2;  
+}  
+//////////////// 自定义滑块样式////////////////
 </style>
