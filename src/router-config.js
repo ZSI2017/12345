@@ -256,7 +256,7 @@ let routes =  [
    children:[
      {   path:'sendExpress',component:sendExpress,name:"寄快递首页",
           children:[
-            { path: '', component: step1  },
+            // { path: '', component: step1  },
             { path: 'step1', component: step1  },
             { path: 'step2', component: step2  },
             { path: 'step3', component: step3  },
@@ -401,28 +401,30 @@ let routes =  [
   //  path:'/noticeManage',component:noticeManage
 
  },
- //订单取消频次管理
+ //用户管理
  {
    path:'/',
-   name:"首页",
+   name:"用户管理",
    component:index,
+   hasChild:true,
    children:[
-      {path:'orderCancle',component:orderCancle,name:"订单取消频次管理"}
+      {path:'orderCancle',component:orderCancle,name:"订单取消频次管理"},
+      {path:'blankList',component:blankList,name:"黑名单管理"}
    ]
   //  path:'/orderCancle',component:orderCancle
 
- },
+ }
  //黑名单管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'blankList',component:blankList,name:"黑名单管理"}
-   ]
-  //  path:'/blankList',component:blankList
+//  {
+//    path:'/',
+//    name:"首页",
+//    component:index,
+//    children:[
+//       {path:'blankList',component:blankList,name:"黑名单管理"}
+//    ]
+//   //  path:'/blankList',component:blankList
 
- },
+//  },
 
 
 ];
