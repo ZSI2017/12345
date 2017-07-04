@@ -1,6 +1,6 @@
 <template>
 <div class="section" style="overflow:hidden">
-  <el-row  type="flex" justify="space-around" class="btn" style="margin-bottom:20px;">
+  <el-row type="flex" justify="space-around" class="btn" style="margin-bottom:20px;">
     <el-col>
       <el-tooltip class="item" effect="light" content="添加数据" placement="right">
         <el-button type="primary" @click="setNewData" size="large">+添加</el-button>
@@ -8,9 +8,9 @@
     </el-col>
     <el-col offset="11">
       <span>当前状态:</span>
-      <el-select v-model="value" placeholder="请选择" >
+      <el-select v-model="value" placeholder="请选择">
 
-        <el-option v-for="item in options" :key="item.value"  :label="item.label" :value="item.value">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </el-col>
@@ -21,7 +21,7 @@
     <el-table-column prop="operationsMapName" label="运营图名称" sortable min-width="120">
     </el-table-column>
     <el-table-column prop="name" label="运营图" sortable min-width="100">
-        <template  scope="scope">
+      <template scope="scope">
             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
         </template>
     </el-table-column>
@@ -32,9 +32,9 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime"  label="创建时间">
+    <el-table-column prop="createTime" label="创建时间">
     </el-table-column>
-    <el-table-column prop="modifyTime"   label="修改时间">
+    <el-table-column prop="modifyTime" label="修改时间">
     </el-table-column>
     <el-table-column prop="activeTime" min-width="200" label="有效时段">
     </el-table-column>
@@ -46,7 +46,7 @@
     <el-table-column prop="auditState" label="审核状态">
     </el-table-column>
     <el-table-column label="操作" width="200">
-        <template scope="scope">
+      <template scope="scope">
            <el-button @click="handleClick" type="text" size="small">查看</el-button>
            <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
          </template>
@@ -59,7 +59,7 @@
   </div>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible" >
+  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="province" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
@@ -79,20 +79,20 @@
 export default {
   data() {
     return {
-      showHeader:false,
-      dialogTableVisible:false,
-    // 下拉选择
-    options: [{
-         value: '选项1',
-         label: '已上架 + 待审核'
-       }, {
-         value: '选项2',
-         label: '已下架'
-       }, {
-         value: '选项3',
-         label: '全部'
-       }],
-       value: '',
+      showHeader: false,
+      dialogTableVisible: false,
+      // 下拉选择
+      options: [{
+        value: '选项1',
+        label: '已上架 + 待审核'
+      }, {
+        value: '选项2',
+        label: '已下架'
+      }, {
+        value: '选项3',
+        label: '全部'
+      }],
+      value: '',
       pageSize: 5,
       listLoading: false,
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
@@ -108,8 +108,7 @@ export default {
         children: 'cities'
       },
       currentPage4: 1,
-      tableData: [
-        {
+      tableData: [{
           date: '2016-05-01',
           name: 'liqi',
           address: '北京朝阳区百子湾路12345'
@@ -152,30 +151,29 @@ export default {
           address: '北京朝阳区百子湾路12345'
         },
         {
-            date: '2016-07-01',
-            name: 'liqi',
-            address: '北京朝阳区百子湾路12345'
-          }, {
-            date: '2016-07-02',
-            name: 'liqi',
-            address: '北京朝阳区百子湾路12345'
-          },
-          {
-            date: '2016-07-03',
-            name: 'liqi',
-            address: '北京朝阳区百子湾路12345'
-          },
-          {
-            date: '2016-07-04',
-            name: 'liqi',
-            address: '北京朝阳区百子湾路12345'
-          },
-          {
-            date: '2016-07-05',
-            name: 'liqi',
-            address: '北京朝阳区百子湾路12345'
-          }
-        ,
+          date: '2016-07-01',
+          name: 'liqi',
+          address: '北京朝阳区百子湾路12345'
+        }, {
+          date: '2016-07-02',
+          name: 'liqi',
+          address: '北京朝阳区百子湾路12345'
+        },
+        {
+          date: '2016-07-03',
+          name: 'liqi',
+          address: '北京朝阳区百子湾路12345'
+        },
+        {
+          date: '2016-07-04',
+          name: 'liqi',
+          address: '北京朝阳区百子湾路12345'
+        },
+        {
+          date: '2016-07-05',
+          name: 'liqi',
+          address: '北京朝阳区百子湾路12345'
+        },
         {
           date: '2016-08-01',
           name: 'liqi',
@@ -212,30 +210,30 @@ export default {
 
   },
   created() {
-    var _this =this;
+    var _this = this;
     _this.$http.get("/rest/list2")
-           .then(function(rsp){
-               _this.tableData = rsp.data.data
-           })
-           .catch(function(error){
-                console.log(error);
-           })
+      .then(function(rsp) {
+        _this.tableData = rsp.data.data
+      })
+      .catch(function(error) {
+        console.log(error);
+      })
 
     console.log(this.$route.matched);
   },
   methods: {
-     // 查看覆盖地区
-    checkArea(){
-      var _this =this;
+    // 查看覆盖地区
+    checkArea() {
+      var _this = this;
       _this.$http.get("/rest/list3")
-             .then(function(rsp){
-                 _this.gridData  = rsp.data.data;
-                 console.log(_this.gridData);
-                 _this.dialogTableVisible= true
-             })
-             .catch(function(error){
-                  console.log(error);
-             })
+        .then(function(rsp) {
+          _this.gridData = rsp.data.data;
+          console.log(_this.gridData);
+          _this.dialogTableVisible = true
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
 
     },
     setNewData() {
