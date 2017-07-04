@@ -17,15 +17,15 @@
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
 
-          <el-submenu :index="index+''"  v-if="items.hasChild">
+          <el-submenu :index="index+''"  v-if="items.hasChild&&!items.isHide">
             <template slot="title" >{{items.name}}</template>
             <!-- <el-menu-item-group> -->
             <!-- <template slot="title">分组一</template> -->
-            <el-menu-item v-for="item in items.children" :index="item.path">
+            <el-menu-item v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
               {{item.name}}
             </el-menu-item>
           </el-submenu>
-          <el-menu-item v-if="!items.hasChild" :index="items.children[0].path">
+          <el-menu-item v-if="!items.hasChild&&!items.isHide" :index="items.children[0].path">
             {{items.children[0].name}}
           </el-menu-item>
         </template>
@@ -123,6 +123,15 @@ body {
     font-family: Helvetica, sans-serif;
     padding: 0;
     margin: 0;
+    background-color: #f3f3f3;
+}
+.section {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);
+    border:1px solid #D3DCE6;
+    border-radius: 4px;
+    padding:20px;
+    background-color: white;
+
 }
 // .header {
 //      font-size:20px;

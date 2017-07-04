@@ -1,12 +1,9 @@
 <template>
-<div>
+<div class="section">
   <div class="btn" style="background-color:#EFF2F7;margin-bottom:20px;">
     <el-tooltip class="item" effect="light" content="添加数据" placement="right">
-      <el-button type="primary" @click="dialogFormVisible = true" size="large">添加</el-button>
+      <el-b][+\utton type="primary" @click="dialogFormVisible = true" size="large">添加</el-button>
     </el-tooltip>
-    <!-- <el-input style="width:100px;" v-model="input" placeholder="请输入内容"></el-input>
-        <el-button type="primary">修改</el-button>
-         <el-button type="text">删除</el-button> -->
   </div>
   <!--这里是新增的弹出框  -->
   <el-dialog title="寄件地址" v-model="dialogFormVisible">

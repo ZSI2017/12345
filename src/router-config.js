@@ -125,6 +125,7 @@ import table from "./views/table/table.vue";
 import time from "./views/table/time.vue";
 import form from "./views/table/form.vue";
 import index from "./views/index.vue";
+import addData from "./page/chooseExpress/addData.vue"
 
 
 import addPage from "./views/component/addpage.vue"
@@ -240,7 +241,7 @@ import layout from "./views/component/layout.vue"
 // ]
 
 let routes =  [
-  {
+{
    path:'/',
    name:"首页",
    component:index,
@@ -264,6 +265,7 @@ let routes =  [
       },
       {path:'chooseExpress',component:chooseExpress,name:"选择快递页"},
       {path:'chooseExpress',component:orderManage,name:"选快递下单页"},
+      {path:"addData",component:addData,name:"添加数据",isHideChild:true}
    ]
  },
  //寄快递入口
