@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  //  import "./common.scss";
+   import "@/style/common.scss";
   // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
