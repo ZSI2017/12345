@@ -6,7 +6,7 @@
         <el-button type="primary" @click="setNewData" size="large">+添加</el-button>
       </el-tooltip>
     </el-col>
-    <el-col offset="11">
+    <el-col>
       <span>当前状态:</span>
       <el-select v-model="value" placeholder="请选择" >
 
@@ -79,6 +79,7 @@
 export default {
   data() {
     return {
+      gridData:[],
       showHeader:false,
       dialogTableVisible:false,
     // 下拉选择

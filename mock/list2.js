@@ -21,7 +21,9 @@ for(var i =0;i<60;i++){
          "modifyTime":Mock.Random.datetime(),
          "activeTime":Mock.Random.datetime() +"至"+Mock.Random.datetime(),
          "name":Mock.Random.name(),
-         "address":Mock.Random.county(true).replace(/' '/g,'')
+         "address":Mock.Random.county(true).replace(/' '/g,''),
+         "reviewState":"已完成",
+         "content":Mock.Random.ctitle(),
        })
     )
 }

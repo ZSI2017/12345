@@ -1,102 +1,106 @@
 <template>
-<div class="section">
-  <div class="btn" style="margin-bottom:20px;">
-    <el-tooltip class="item" effect="light" content="添加数据" placement="right">
-      <!--<el-button type="primary" @click="dialogFormVisible = true" size="large">添加</el-button>-->
-      <el-button type="primary" @click.native="addType" size="large">添加</el-button>
-    </el-tooltip>
-    <!-- <el-input style="width:100px;" v-model="input" placeholder="请输入内容"></el-input>
-        <el-button type="primary">修改</el-button>
-         <el-button type="text">删除</el-button> -->
+  <section>
+      <p style="color:#00b7f9;cursor:pointer;margin-bottom:20px;margin-top:0;"><span @click="$router.go(-1)">&lt; 返回</span></p>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="padding:0 160px 0 100px;">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="ruleForm.name" placeholder="请输入公告名称"></el-input>
+        </el-form-item>
+        <el-form-item label="公告内容" prop="desc">
+          <el-input type="textarea" v-model="ruleForm.desc" placeholder="请输入公告内容"></el-input>
+        </el-form-item>
+        <el-form-item label="活动时间" required>
+          <el-col :span="24">
+            <el-form-item>
+              <el-date-picker v-model="value3" type="datetimerange" placeholder="请选择时间范围">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <!--<el-col class="line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-form-item prop="date2">
+              <el-time-picker type="fixed-time" placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+            </el-form-item>
+          </el-col>-->
+        </el-form-item>
+        <!--<el-form-item label="覆盖地区" required>
+          <el-cascader expand-trigger="hover" :options="options" v-model="selectedOptions2" @change="handleChange">
+          </el-cascader>
+        </el-form-item>-->
+        <el-form-item label="覆盖地区" required>
+          <el-button size="mini" @click="dialogConfig">点击配置</el-button>
+          <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+          <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
+        </el-form-item>
+        <el-form-item label="当前状态" prop="resource">
+          <el-radio-group v-model="ruleForm.resource">
+            <el-radio label="上架"></el-radio>
+            <el-radio label="下架"></el-radio>
+          </el-radio-group>
+        </el-form-item>       
+      </el-form>
+      <el-row>
+          <el-col :span="2" :offset="10"><el-button type="primary" class="grid-content">立即提交</el-button></el-col>
+      </el-row>
 
-    <el-row type="flex" align="middle" :gutter="20" style="float:right;">
-      <el-col :span="5" style="width: 100px;text-align: center;">
-        当前状态
-      </el-col>
-      <el-col :span="16">
-        <el-select v-model="value" placeholder="请选择查询状态"  @change="changeState(value)">
-          <el-option
-            v-for="type in types"
-            :key="type"
-            :label="type"
-            :value="type">
-          </el-option>
-        </el-select>
-      </el-col>   
-    </el-row>  
-  </div>
+      <!-- 覆盖地区配置对话框      -->
+  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible">
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+      <el-table-column property="province" label="省" width="200"></el-table-column>
+      <el-table-column property="city" label="市">
+        <template scope="scope">
+      <!-- <el-tag
+        style="margin-right:10px;"
+        v-for="(item,index) in scope.row.city"
+        >{{item}}</el-tag> -->
+    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+  <div style="margin: 15px 0;"></div>
+  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+    <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+  </el-checkbox-group>
 
-  <!-- 表格  -->
-  <el-table :data="tableData" stripe v-loading.body="listLoading" lement-loading-text="拼命加载中" style="width: 100%" max-height="500" :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="name" label="公告名称" sortable min-width="120">
-    </el-table-column>
-    <el-table-column prop="content" label="内容" sortable min-width="100">
-    </el-table-column>
-    <el-table-column prop="address" label="覆盖地区" width="100">
-       <template scope="scope">
-         <el-button @click="checkArea" type="text" size="small">查看</el-button>
-       </template>
-    </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" min-width="120">
-    </el-table-column>
-    <el-table-column prop="activeTime" label="有效时段" min-width="140">
-    </el-table-column>
-    <el-table-column prop="currentState" label="当前状态">
-    </el-table-column>
-    <el-table-column prop="reviewState" label="审查状态">
-    </el-table-column>
-    <el-table-column label="操作" width="200">
-      <template scope="scope">
-           <el-button @click="handleClick" type="text" size="small">查看</el-button>
-           <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
-         </template>
-    </el-table-column>
-  </el-table>
+    </template>
+      </el-table-column>
+    </el-table>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="dialogFormVisible = false">保 存</el-button>
+    </div>
+  </el-dialog>
 
-  <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination
-       @size-change="handleSizeChange"
-       @current-change="handleCurrentChange"
-       :current-page="currentPage4"
-       :page-sizes="[5,10,15,20]"
-       :page-size="pageSize"
-       layout="total,sizes,prev, pager, next,jumper" :total="totalCount">
-    </el-pagination>
-  </div>
-
- <!--  覆盖地区 查看对话框 -->
+  <!--  覆盖地区 查看对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible" >
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="province" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
         <template scope="scope">
-        <el-tag
-          style="margin-right:10px;"
-          v-for="(item,index) in scope.row.city"
-          >{{item}}</el-tag>
-      </template>
+      <el-tag
+        style="margin-right:10px;"
+        v-for="(item,index) in scope.row.city"
+        >{{item}}</el-tag>
+    </template>
       </el-table-column>
     </el-table>
   </el-dialog>
-
-</div>
+ 
+     
+  </section>
 </template>
 
 <script>
-  import store from 'src/store.js'
-  import $ from 'jquery'
 export default {
   data() {
     return {
-      gridData:[],
-      pageSize: 5,
       listLoading: false,
-      showHeader:false,
+      value3: [new Date(2000, 10, 10, 10, 10), new Date(2200, 10, 10, 10, 10)],
+      // 覆盖地区选择
+      checkAll: true,
+      checkedCities: [],
+      // cities: cityOptions,
+      isIndeterminate: true,
+      dialogFormVisible: false,
       dialogTableVisible:false,
-      value: '',
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      types: ['全部','已下架','已上架待审核'],
-      totalCount:1000,//默认数据总数
+      gridData: [],
+      showHeader:false,
       options2: [{
         label: '江苏',
         cities: []
@@ -108,16 +112,10 @@ export default {
         value: 'label',
         children: 'cities'
       },
-      currentPage4: 1,
-      tableData: [
-
-      ],
-      dialogFormVisible: false,
       ruleForm: {
         name: '',
-        region: '',
         date1: '',
-        date2: '',
+        // date2: '',
         delivery: false,
         type: [],
         resource: '',
@@ -126,47 +124,42 @@ export default {
       rules: {
         name: [{
             required: true,
-            message: '请输入活动名称',
+            message: '请输入公告名称',
             trigger: 'blur'
           },
           {
             min: 3,
-            max: 5,
-            message: '长度在 3 到 5 个字符',
+            max: 15,
+            message: '长度在 3 到 15 个字符',
             trigger: 'blur'
           }
         ],
-        region: [{
-          required: true,
-          message: '请选择活动区域',
-          trigger: 'change'
-        }],
         date1: [{
           type: 'date',
           required: true,
-          message: '请选择日期',
+          message: '请选择日期与时间',
           trigger: 'change'
         }],
-        date2: [{
-          type: 'date',
-          required: true,
-          message: '请选择时间',
-          trigger: 'change'
-        }],
-        type: [{
-          type: 'array',
-          required: true,
-          message: '请至少选择一个活动性质',
-          trigger: 'change'
-        }],
-        resource: [{
-          required: true,
-          message: '请选择活动资源',
-          trigger: 'change'
-        }],
+        // date2: [{
+        //   type: 'date',
+        //   required: true,
+        //   message: '请选择时间',
+        //   trigger: 'change'
+        // }],
+        // type: [{
+        //   type: 'array',
+        //   required: true,
+        //   message: '请至少选择一个活动性质',
+        //   trigger: 'change'
+        // }],
+        // resource: [{
+        //   required: true,
+        //   message: '请选择活动资源',
+        //   trigger: 'change'
+        // }],
         desc: [{
           required: true,
-          message: '请填写活动形式',
+          message: '请输入公告内容',
           trigger: 'blur'
         }]
       },
@@ -378,114 +371,57 @@ export default {
     }
 
   },
-  created() {
-    this.loadData();
-
-  },
   methods: {
-    //从服务器读取数据
-    loadData: function(){    
-      var _this =this;                
-        _this.$http.get("./rest/list2").then(function(rsp){
-            _this.tableData = rsp.data.data;  //表格
-            _this.totalCount = rsp.data.data.length; //获取数据长度
-        },function(){
-            console.log('failed');
-        });                 
+    handleChange(value) {
+      console.log(value);
     },
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this.$message(`每页${val}`);
-      var count = this.pageSize / 5;
-      if (this.pageSize > 5) {
-        if (this.currentPage4 <= 1) {
-          var count = this.pageSize / 5;
-          var temp = [];
-          for (var i = 0; i < count; i++) {
-            temp = temp.concat(this.tableData[i]);
-          }
-          this.table2 = temp;
-        }
-
-      } else {
-        this.table2 = this.tableData[this.currentPage4 - 1];
-      }
-      // this.currentPage4 = 1;
-
-      //  console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      this.currentPage4 = val;
-      var _this = this;
-      _this.listLoading = true;
-      _this.$message(`当前页${val}`);
-      var count = _this.pageSize / 5;
-      if (count == 1) {
-        _this.table2 = _this.tableData[val - 1];
-      } else {
-        if (val == 1) {
-          var temp = [];
-          for (var i = 0; i < count; i++) {
-            temp = temp.concat(_this.tableData[i]);
-          }
-          _this.table2 = temp;
-        } else {
-          var temp = [];
-          for (var i = count; i < 4; i++) {
-            temp = temp.concat(_this.tableData[i]);
-          }
-          _this.table2 = temp;
-        }
-      }
-
-
-      setTimeout(() => {
-        _this.listLoading = false;
-      }, 600);
-      console.log(`当前页: ${val}`);
-    },
-        // 查看覆盖地区
-    checkArea(){
+    // 覆盖地区选择
+    dialogConfig(){
       var _this =this;
       _this.$http.get("/rest/list3")
              .then(function(rsp){
                  _this.gridData  = rsp.data.data;
+                //  _this.dialogTableVisible= true
+                 _this.dialogFormVisible = true;
                  console.log(_this.gridData);
-                 _this.dialogTableVisible= true
              })
              .catch(function(error){
                   console.log(error);
              })
+    },
+    handleCheckAllChange(event) {
+      this.checkedCities = event.target.checked ? 10 : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === 10;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < 10;
+    },
+     dialogTable(){
+      var _this =this;
+      _this.$http.get("/rest/list3")
+             .then(function(rsp){
+                 _this.gridData  = rsp.data.data;
 
-    },
-    handleClick() {
-      this.$notify({
-        title: '点击了查看',
-        message: '即将跳转到查看界面',
-        duration: 6000
-      })
-    },
-    handleEdit() {
-      this.$notify({
-        title: "点击了编辑",
-        message: "即将跳转到编辑界面"
-      })
-    },
-    changeState() {
-      this.$notify({
-        title: this.value,
-        message: "即将查询到" + this.value + "数据" 
-      })
-    },
-    addType: function () {
-      this.$router.push({path:'./addingValue'});
+                 _this.dialogTableVisible= true
+                 console.log(_this.gridData);
+             })
+             .catch(function(error){
+                  console.log(error);
+             })
     }
-
-  }
+  }  
 }
-
 </script>
 <style>
 
-</style>
+  section {
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);
+      border:1px solid #D3DCE6;
+      border-radius: 4px;
+      padding:20px;
+      background-color: white;
+  }      
 
+</style>
