@@ -43,46 +43,46 @@
       </el-row>
 
       <!-- 覆盖地区配置对话框      -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="province" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <!-- <el-tag
-        style="margin-right:10px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag> -->
-    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-  <div style="margin: 15px 0;"></div>
-  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-    <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
-  </el-checkbox-group>
+    <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible">
+      <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+        <el-table-column property="province" label="省" width="200"></el-table-column>
+        <el-table-column property="city" label="市">
+          <template scope="scope">
+        <!-- <el-tag
+          style="margin-right:10px;"
+          v-for="(item,index) in scope.row.city"
+          >{{item}}</el-tag> -->
+      <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+    <div style="margin: 15px 0;"></div>
+    <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+      <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+    </el-checkbox-group>
 
-    </template>
-      </el-table-column>
-    </el-table>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">保 存</el-button>
-    </div>
-  </el-dialog>
+      </template>
+        </el-table-column>
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">保 存</el-button>
+      </div>
+    </el-dialog>
 
-  <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible" >
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="province" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <el-tag
-        style="margin-right:10px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog>
- 
-     
+    <!--  覆盖地区 查看对话框 -->
+    <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible" >
+      <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+        <el-table-column property="province" label="省" width="200"></el-table-column>
+        <el-table-column property="city" label="市">
+          <template scope="scope">
+        <el-tag
+          style="margin-right:10px;"
+          v-for="(item,index) in scope.row.city"
+          >{{item}}</el-tag>
+      </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+  
+      
   </section>
 </template>
 
@@ -90,10 +90,11 @@
 export default {
   data() {
     return {
-      listLoading: false,
+      
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2200, 10, 10, 10, 10)],
       // 覆盖地区选择
       checkAll: true,
+      listLoading: false,
       checkedCities: [],
       // cities: cityOptions,
       isIndeterminate: true,
