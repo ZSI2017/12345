@@ -79,22 +79,6 @@
 export default {
   data() {
     return {
-<<<<<<< HEAD
-      showHeader: false,
-      dialogTableVisible: false,
-      // 下拉选择
-      options: [{
-        value: '选项1',
-        label: '已上架 + 待审核'
-      }, {
-        value: '选项2',
-        label: '已下架'
-      }, {
-        value: '选项3',
-        label: '全部'
-      }],
-      value: '',
-=======
       gridData:[],
       showHeader:false,
       dialogTableVisible:false,
@@ -110,7 +94,6 @@ export default {
          label: '全部'
        }],
        value: '',
->>>>>>> 09aeb6716a6de44f25de043c20f418bd612ef8cd
       pageSize: 5,
       listLoading: false,
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
