@@ -12,7 +12,7 @@
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
   <div style="display:flex;flex-direction:row;">
 
-    <div class="main-left" style="position:fixed;top:64px;bottom:0;min-width:200px;width:200px;background-color:#fff;overflow-x: hidden; overflow-y: auto;" v-show="fold">
+    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:230px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
       <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
@@ -39,7 +39,7 @@
 
     <div style="padding:20px;padding-left:220px;padding-top:20px;flex:1;background:#f1f1f1;">
 
-      <el-breadcrumb style="padding:10px 0 30px 0;" separator="/">
+      <el-breadcrumb style="padding:10px 0 10px 0;line-height:100%;margin-bottom:20px;background:#fff;box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);border:1px solid #D3DCE6;" separator="/">
         <!-- {{$route.matched[0].name}} -->
         <el-breadcrumb-item  v-if="index !=0" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
           {{item.name}}
@@ -119,8 +119,8 @@ export default {
     opacity: 0;
 }
 .main-left .el-menu-item,.main-left .el-submenu__title{
-  height:40px;
-  line-height:40px;
+  height:42px;
+  line-height:42px;
 }
 
 
@@ -163,13 +163,31 @@ header.header-fixed {
 header .el-menu-demo {
     padding-left: 300px !important;
 }
-.is-active{
+.el-submenu .is-active{
   border-right: 3px solid #5295e2;
   box-sizing: border-box;
 }
 .is-active.is-opened{
   border-right: 0;
 }
+.el-menu-item.is-active{
+  background: #f2f7fe;
+  border-right: 3px solid #5295e2;
+  box-sizing: border-box;
+}
+.el-submenu .el-menu-item.is-active{
+  background: #f2f7fe;
+}
+.el-submenu .el-menu-item{
+  background: #fff;
+}
+.main-left .el-menu-item:hover{
+  background: #eaf8fe;
+}
+.main-left .el-submenu__title:hover{
+  background: #eaf8fe;
+}
+
 //////////////// 自定义滑块样式////////////////
 ::-webkit-scrollbar
 {
