@@ -41,7 +41,7 @@
 
       <el-breadcrumb style="padding:10px 0 30px 0;" separator="/">
         <!-- {{$route.matched[0].name}} -->
-        <el-breadcrumb-item v-for="item in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
+        <el-breadcrumb-item  v-if="index !=0" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
           {{item.name}}
         </el-breadcrumb-item>
         <!-- <el-breadcrumb-item>运营位</el-breadcrumb-item> -->
