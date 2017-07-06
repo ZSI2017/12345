@@ -22,8 +22,8 @@
             :value="type">
           </el-option>
         </el-select>
-      </el-col>   
-    </el-row>  
+      </el-col>
+    </el-row>
   </div>
 
   <!-- 表格  -->
@@ -358,19 +358,20 @@ export default {
 
   },
   created() {
+    console.log(this.$route.matched);
     this.loadData();
 
   },
   methods: {
     //从服务器读取数据
-    loadData: function(){    
-      var _this =this;                
+    loadData: function(){
+      var _this =this;
         _this.$http.get("./rest/list2").then(function(rsp){
             _this.tableData = rsp.data.data;  //表格
             _this.totalCount = rsp.data.data.length; //获取数据长度
         },function(){
             console.log('failed');
-        });                 
+        });
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -439,7 +440,7 @@ export default {
     changeState() {
       this.$notify({
         title: this.value,
-        message: "即将查询到" + this.value + "数据" 
+        message: "即将查询到" + this.value + "数据"
       })
     },
     addType: function () {
@@ -454,4 +455,3 @@ export default {
 <style>
 
 </style>
-

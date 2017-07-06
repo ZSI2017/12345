@@ -217,7 +217,7 @@ let routes =  [
       },
       {path:'chooseExpress',component:chooseExpress,name:"选择快递页"},
       {path:'expressOrder',component:expressOrder,name:"选快递下单页"},
-      {path:"addData",component:addData,name:"添加数据",isHideChild:true}
+      {path:"addData",component:addData,name:"选择快递页 / 添加数据",isHideChild:true}
    ]
  },
  //寄快递入口
@@ -338,11 +338,11 @@ let routes =  [
    component:index,
    children:[
       {path:'nearExpress',component:nearExpress,name:"附近快递资源管理",
-      children:[                     
-          {path:'',component:main},              
-          {path:'NEaddData',name:'添加',component:NEaddData}    
+      children:[
+          {path:'/',component:main},
+          {path:'NEaddData',name:'添加',component:NEaddData}
       ]},
-      
+
    ]
   //  path:'/nearExpress',component:nearExpress
 
@@ -354,7 +354,7 @@ let routes =  [
    component:index,
    children:[
      {path:'noticeManage',component:noticeManage,name:"公告管理"},
-     {path:'addingValue',name:'添加',component:addingValue}    
+     {path:'addingValue',name:'添加',component:addingValue}
   ]
 
  },
