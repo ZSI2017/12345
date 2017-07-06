@@ -35,6 +35,12 @@
 
   <!-- 覆盖地区配置对话框      -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
+    <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+    <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+    <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+  </el-tabs>
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="province" label="省" width="200">
           <template scope="scope">
@@ -92,6 +98,8 @@
 export default {
   data() {
     return {
+      //标签页
+      activeName: 'second',
       // 覆盖地区选择
       checkAll:[],
       checkedCities: [],
@@ -121,6 +129,10 @@ export default {
     }
   },
   methods: {
+    // 标签页选择
+    handleClick(tab, event) {
+        console.log(tab, event);
+      },
     // 覆盖地区选择
     dialogConfig() {
       var _this = this;
@@ -176,7 +188,7 @@ export default {
   }
 }
 </script>
-<style  lang="scss" rel="stylesheet/scss">
+<style scoped lang="scss" rel="stylesheet/scss">
 section {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
     border: 1px solid #D3DCE6;

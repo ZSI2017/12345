@@ -62,6 +62,8 @@
 </template>
 
 <script>
+  import "@/style/common.scss";
+  // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
 // import Vue from 'vue'
@@ -102,8 +104,7 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
+<style scoped lang="scss">
 //  设置enter 和 leave 的路由动画
 .slide-fade-enter-active {
     transition: all 0.3s ease;
@@ -120,20 +121,7 @@ export default {
   height:40px;
   line-height:40px;
 }
-body {
-    font-family: Helvetica, sans-serif;
-    padding: 0;
-    margin: 0;
-    background-color: #f3f3f3;
-}
-.section {
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);
-    border:1px solid #D3DCE6;
-    border-radius: 4px;
-    padding:20px;
-    background-color: white;
 
-}
 
 // .header {
 //      font-size:20px;
