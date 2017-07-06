@@ -36,17 +36,29 @@
   <!-- 覆盖地区配置对话框      -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="province" label="省" width="200"></el-table-column>
+      <el-table-column property="province" label="省" width="200">
+          <template scope="scope">
+            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.province}}</el-tag>
+            <el-checkbox
+                  :indeterminate="isIndeterminate[scope.$index]"
+                  v-model="checkAll[scope.$index]"
+                  @change="handleCheckAllChange(scope.$index,$event)"
+               >全选</el-checkbox>
+          </template>
+      </el-table-column>
       <el-table-column property="city" label="市">
         <template scope="scope">
        <!-- <el-tag
         style="margin-right:10px;"
          v-for="(item,index) in scope.row.city"
          >{{item}}</el-tag> -->
-         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-  <div style="margin: 15px 0;"></div>
-  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-    <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+
+  <!-- <div style="margin: 15px 0;"></div> -->
+  <el-checkbox-group
+        v-model="checkedCities[scope.$index]"
+        @change="handleCheckedCitiesChange(scope.$index)"
+        >
+       <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
   </el-checkbox-group>
 
      </template>
@@ -59,7 +71,7 @@
   </el-dialog>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible" >
+  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="province" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
@@ -81,10 +93,10 @@ export default {
   data() {
     return {
       // 覆盖地区选择
-        checkAll: true,
-        checkedCities: [],
-        // cities: cityOptions,
-        isIndeterminate: true,
+      checkAll:[],
+      checkedCities: [],
+      isIndeterminate: [],
+      // cities: cityOptions,
       // value3 代表时间段选择的
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
@@ -93,8 +105,8 @@ export default {
       dialogFormVisible: false,
 
       // 查看配置地区中的表格数据 和 是否显示的标志
-      showHeader:false,
-      dialogTableVisible:false,
+      showHeader: false,
+      dialogTableVisible: false,
       gridData: [],
       form: {
         name: '',
@@ -110,40 +122,53 @@ export default {
   },
   methods: {
     // 覆盖地区选择
-    dialogConfig(){
-      var _this =this;
+    dialogConfig() {
+      var _this = this;
       _this.$http.get("/rest/list3")
-             .then(function(rsp){
-                 _this.gridData  = rsp.data.data;
-                //  _this.dialogTableVisible= true
-                 _this.dialogFormVisible = true;
-                 console.log(_this.gridData);
-             })
-             .catch(function(error){
-                  console.log(error);
-             })
+        .then(function(rsp) {
+              _this.gridData = rsp.data.data;
+              // 初始化 配置的多选框操作
+              var tableDataLength = _this.gridData.length;
+                 for(var i =0;i<tableDataLength;i++) {
+                     _this.checkAll[i] = true;
+                     _this.isIndeterminate[i] = true;
+                     _this.checkedCities[i]=[];
+                   }
+              //  _this.dialogTableVisible= true
+              _this.dialogFormVisible = true;
+              console.log(_this.gridData);
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
     },
-    handleCheckAllChange(event) {
-        this.checkedCities = event.target.checked ? 10 : [];
-        this.isIndeterminate = false;
-      },
-      handleCheckedCitiesChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === 10;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < 10;
-      },
-    dialogTable(){
-      var _this =this;
+    handleCheckAllChange(index, event) {
+      // console.log(index);
+      // console.log(event.lenth);
+      this.checkedCities[index] = event.target.checked ? this.gridData[index].city : [];
+      console.log(event.target.checked);
+      console.log(this.checkedCities[index] );
+      this.isIndeterminate[index] = false;
+    },
+    handleCheckedCitiesChange(index) {
+      // console.log(value);
+      let value = this.checkedCities[index];
+      let checkedCount = value.length;
+      this.checkAll[index] = checkedCount === this.gridData[index].city.length;
+      this.isIndeterminate[index] = checkedCount > 0 && checkedCount < this.gridData[index].city.length;
+    },
+    dialogTable() {
+      var _this = this;
       _this.$http.get("/rest/list3")
-             .then(function(rsp){
-                 _this.gridData  = rsp.data.data;
+        .then(function(rsp) {
+          _this.gridData = rsp.data.data;
 
-                 _this.dialogTableVisible= true
-                 console.log(_this.gridData);
-             })
-             .catch(function(error){
-                  console.log(error);
-             })
+          _this.dialogTableVisible = true
+          console.log(_this.gridData);
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
     },
     onSubmit() {
       console.log('submit!');
@@ -151,16 +176,16 @@ export default {
   }
 }
 </script>
-<style type="scss">
+<style  lang="scss" rel="stylesheet/scss">
 section {
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
-  border: 1px solid #D3DCE6;
-  border-radius: 4px;
-  padding: 20px;
-  background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
+    border: 1px solid #D3DCE6;
+    border-radius: 4px;
+    padding: 20px;
+    background-color: white;
 }
 
 label {
-  font-weight: bold;
+    font-weight: bold;
 }
 </style>
