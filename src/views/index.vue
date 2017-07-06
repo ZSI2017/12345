@@ -4,7 +4,7 @@
   <header class="header" :class="{ 'header-fixed' : headerFixed }" style="background-color:#5295e2;">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content" style="float:left;width:230px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">{{ title }}</div>
+        <div class="grid-content" style="float:left;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">{{ title }}</div>
         <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">123456789</div>
       </el-col>
     </el-row>
@@ -12,7 +12,7 @@
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
   <div style="display:flex;flex-direction:row;">
 
-    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:230px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;" v-show="fold">
+    <div class="main-left" style="position:fixed;top:64px;bottom:0;min-width:200px;width:200px;background-color:#fff;overflow-x: hidden; overflow-y: auto;" v-show="fold">
       <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
@@ -37,7 +37,7 @@
 
     </div>
 
-    <div style="padding:20px;padding-left:250px;padding-top:20px;flex:1;background:#f1f1f1;">
+    <div style="padding:20px;padding-left:220px;padding-top:20px;flex:1;background:#f1f1f1;">
 
       <el-breadcrumb style="padding:10px 0 30px 0;" separator="/">
         <!-- {{$route.matched[0].name}} -->
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import "@/style/common.scss";
+  //  import "./common.scss";
   // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
@@ -105,6 +105,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+
 //  设置enter 和 leave 的路由动画
 .slide-fade-enter-active {
     transition: all 0.3s ease;
@@ -149,7 +150,7 @@ header {
     z-index: 1000;
     min-width: 1200px;
     transition: all 0.5s ease;
-    // border-top: solid 4px #3091F2;
+    border-top: solid 4px #3091F2;
     background-color: #fff;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);
 }
@@ -165,21 +166,10 @@ header .el-menu-demo {
 .is-active{
   border-right: 3px solid #5295e2;
   box-sizing: border-box;
-  background: #f2f7fe;
 }
 .is-active.is-opened{
   border-right: 0;
 }
-.el-submenu .el-menu-item{
-  background: #fff;
-}
-.main-left .el-menu-item:hover{
-  color: #5295e2;
-  background: #fff;
-}
-
-
-
 //////////////// 自定义滑块样式////////////////
 ::-webkit-scrollbar
 {
