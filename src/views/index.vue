@@ -1,19 +1,19 @@
 <template type="html">
 <div id="app">
   <!-- 头部导航 -->
-  <header class="header" :class="{ 'header-fixed' : headerFixed }">
+  <header class="header" :class="{ 'header-fixed' : headerFixed }" style="background-color:#5295e2;">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content bg-purple" style="float:left;width:200px;height:60px;text-align:center;line-height:60px;background-color:#324057;color:#fff;">{{ title }}</div>
-        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#eee;color:#fff;">123456789</div>
+        <div class="grid-content" style="float:left;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">{{ title }}</div>
+        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">123456789</div>
       </el-col>
     </el-row>
   </header>
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
   <div style="display:flex;flex-direction:row;">
 
-    <div class="main-left" style="position:fixed;top:64px;bottom:0;min-width:200px;width:200px;background-color:#324157;overflow-x: hidden; overflow-y: auto;" v-show="fold">
-      <el-menu :default-active="$router.path" theme="dark" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router>
+    <div class="main-left" style="position:fixed;top:64px;bottom:0;min-width:200px;width:200px;background-color:#fff;overflow-x: hidden; overflow-y: auto;" v-show="fold">
+      <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
 
@@ -29,6 +29,7 @@
             {{items.children[0].name}}
           </el-menu-item>
         </template>
+        <el-menu-item>退出登录</el-menu-item>
       </el-menu>
     </div>
 
@@ -133,6 +134,7 @@ body {
     background-color: white;
 
 }
+
 // .header {
 //      font-size:20px;
 //      font-weight: bold;
@@ -172,7 +174,13 @@ header.header-fixed {
 header .el-menu-demo {
     padding-left: 300px !important;
 }
-
+.is-active{
+  border-right: 3px solid #5295e2;
+  box-sizing: border-box;
+}
+.is-active.is-opened{
+  border-right: 0;
+}
 //////////////// 自定义滑块样式////////////////
 ::-webkit-scrollbar
 {

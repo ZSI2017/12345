@@ -91,11 +91,13 @@ import nonServerDistrict from './page/nonServerDistrict/index.vue'
 import oneCitySend from './page/oneCitySend/index.vue'
 
 //附近快递资源管理
-import nearExpress from './page/nearExpress/index.vue'
+import nearExpress from './page/nearExpress/nearExpress.vue'
+import NEaddData from './page/nearExpress/NEaddData.vue'
+import main from './page/nearExpress/main.vue'
 
 //公告管理
 import noticeManage from './page/noticeManage/index.vue'
-import addType from './page/noticeManage/addType.vue'
+import addingValue from './page/noticeManage/addingValue.vue'
 
 //订单取消频次管理
 import orderCancle from './page/orderCancle/index.vue'
@@ -214,7 +216,7 @@ let routes =  [
           ]
       },
       {path:'chooseExpress',component:chooseExpress,name:"选择快递页"},
-      {path:'chooseExpress',component:orderManage,name:"选快递下单页"},
+      {path:'expressOrder',component:expressOrder,name:"选快递下单页"},
       {path:"addData",component:addData,name:"添加数据",isHideChild:true}
    ]
  },
@@ -229,17 +231,17 @@ let routes =  [
   //  path:'/sendExpressEnter',component:sendExpressEnter
 
  },
- //选快递下单
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'expressOrder',component:expressOrder,name:"选快递下单"}
-   ]
-  //  path:'/expressOrder',component:expressOrder
+ //选快递下单页
+//  {
+//    path:'/',
+//    name:"首页",
+//    component:index,
+//    children:[
+//       {path:'expressOrder',component:expressOrder,name:"选快递下单"}
+//    ]
+//   //  path:'/expressOrder',component:expressOrder
 
- },
+//  },
  //快递公司管理
  {
    path:'/',
@@ -335,7 +337,12 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'nearExpress',component:nearExpress,name:"附近快递资源管理"}
+      {path:'nearExpress',component:nearExpress,name:"附近快递资源管理",
+      children:[                     
+          {path:'',component:main},              
+          {path:'NEaddData',name:'添加',component:NEaddData}    
+      ]},
+      
    ]
   //  path:'/nearExpress',component:nearExpress
 
@@ -347,7 +354,7 @@ let routes =  [
    component:index,
    children:[
      {path:'noticeManage',component:noticeManage,name:"公告管理"},
-     {path:'addType',name:'添加',component:addType}    
+     {path:'addingValue',name:'添加',component:addingValue}    
   ]
 
  },
