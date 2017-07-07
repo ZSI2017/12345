@@ -13,21 +13,21 @@
   <div style="display:flex;flex-direction:row;">
 
     <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:230px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
-      <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router style="background:#fff;">
+      <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
 
           <el-submenu class="testSubmenu" @mouseover="test" :index="index+''"  v-if="items.hasChild&&!items.isHide">
             <template slot="title" >{{items.name}}</template>
-            <!-- <el-menu-item-group> -->
-            <!-- <template slot="title">分组一</template> -->
-            <el-menu-item @mouseover="test" v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
-              {{item.name}}
-            </el-menu-item>
-          </el-submenu>
-          <el-menu-item v-if="!items.hasChild&&!items.isHide" :index="items.children[0].path">
-            {{items.children[0].name}}
-          </el-menu-item>
+        <!-- <el-menu-item-group> -->
+        <!-- <template slot="title">分组一</template> -->
+        <el-menu-item @mouseover="test" v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
+          {{item.name}}
+        </el-menu-item>
+        </el-submenu>
+        <el-menu-item v-if="!items.hasChild&&!items.isHide" :index="items.children[0].path">
+          {{items.children[0].name}}
+        </el-menu-item>
         </template>
         <el-menu-item>退出登录</el-menu-item>
       </el-menu>
@@ -41,7 +41,7 @@
 
       <el-breadcrumb style="padding:10px 0 10px 0;line-height:100%;margin-bottom:20px;background:#fff;box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);border:1px solid #D3DCE6;" separator="/">
         <!-- {{$route.matched[0].name}} -->
-        <el-breadcrumb-item  v-if="index !=0" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
+        <el-breadcrumb-item v-if="index !=0" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
           {{item.name}}
         </el-breadcrumb-item>
         <!-- <el-breadcrumb-item>运营位</el-breadcrumb-item> -->
@@ -53,17 +53,23 @@
         <router-view></router-view>
       </transition>
       <!-- <tableVue></tableVue> -->
-
-
       </el-col>
     </div>
   </div>
+  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
+    <span>还没有保存,确定放弃编辑？</span>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="loadingFlag = false">取 消</el-button>
+    <el-button type="primary" @click="editSure">确 定</el-button>
+  </span>
+  </el-dialog>
 </div>
 </template>
 
 <script>
-   import "@/style/common.scss";
-  // import "../styles/usage/page/app.scss";
+import "@/style/common.scss";
+import { getLoadingFlag } from "@/vuex/getters";
+// import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
 // import Vue from 'vue'
@@ -72,25 +78,40 @@ export default {
 
   data() {
     return {
-      uniqueOpened:true,
-      fold:true,
+      defaultActive:"",
+      loadingFlag: false,
+      uniqueOpened: true,
+      fold: true,
       headerFixed: true,
       title: "我的快递",
       username: "20392030429404@alipy.com",
       addFlag: false,
       init_width: "init_width",
       input: '',
-       msg: 'Use Vue 2.0 Today!',
+      msg: 'Use Vue 2.0 Today!',
     }
   },
   ready() {
     console.log("adfsd" + this.$route.matched);
   },
+  watch: {
+    // "$route": function(to, from) {
+    //   if (from.path == "/addData") {
+    //     this.loadingFlag = true;
+    //   }
+    // }
+  },
   methods: {
-      test(){
-         alert("dsfsadf")
-      },
-
+    test() {
+      alert("dsfsadf");
+    },
+    editSure(){
+       this.loadingFlag = false;
+       this.$router.app.$store.state.loadingFlag = true;
+       console.log(this);
+       this.$router.push({ path:this.defaultActive});
+      //  this.$route.push({ path:this.defaultActive});
+    },
     startHacking() {
       this.$notify({
         title: 'It Works',
@@ -103,12 +124,24 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    handleSelect(key, keyPath) {
+       this.defaultActive =""+key;
+      if (this.$route.path == "/addData") {
+        //  alert(this.$router.app.$store.state.loadingFlag);
+          if(this.$router.app.$store.state.loadingFlag == false){
+            console.log(this.$route.matched);
+            console.log(this.$route.path);
+
+            this.loadingFlag = true;
+            // alert("loading");
+          }
+      }
     }
   }
 }
 </script>
 <style scoped lang="scss">
-
 //  设置enter 和 leave 的路由动画
 .slide-fade-enter-active {
     transition: all 0.3s ease;
@@ -121,11 +154,11 @@ export default {
     transform: translateX(10px);
     opacity: 0;
 }
-.main-left .el-menu-item,.main-left .el-submenu__title{
-  height:42px;
-  line-height:42px;
+.main-left .el-menu-item,
+.main-left .el-submenu__title {
+    height: 42px;
+    line-height: 42px;
 }
-
 
 // .header {
 //      font-size:20px;
@@ -166,23 +199,23 @@ header.header-fixed {
 header .el-menu-demo {
     padding-left: 300px !important;
 }
-.el-submenu .is-active{
-  border-right: 3px solid #5295e2;
-  box-sizing: border-box;
+.el-submenu .is-active {
+    border-right: 3px solid #5295e2;
+    box-sizing: border-box;
 }
-.is-active.is-opened{
-  border-right: 0;
+.is-active.is-opened {
+    border-right: 0;
 }
-.el-menu-item.is-active{
-  background: #f2f7fe;
-  border-right: 3px solid #5295e2;
-  box-sizing: border-box;
+.el-menu-item.is-active {
+    background: #f2f7fe;
+    border-right: 3px solid #5295e2;
+    box-sizing: border-box;
 }
-.el-submenu .el-menu-item.is-active{
-  background: #f2f7fe;
+.el-submenu .el-menu-item.is-active {
+    background: #f2f7fe;
 }
-.el-submenu .el-menu-item{
-  background: #fff;
+.el-submenu .el-menu-item {
+    background: #fff;
 }
 // .main-left .el-menu-item:hover{
 //     color:yellow;
@@ -192,27 +225,23 @@ header .el-menu-demo {
 //   color:yellow ;
 //   background-color: black !important;
 // }
-.test:hover{
-  color:yellow ;
-  background-color: blue !important;
+.test:hover {
+    color: yellow;
+    background-color: blue !important;
 }
 
-
 //////////////// 自定义滑块样式////////////////
-::-webkit-scrollbar
-{
+::-webkit-scrollbar {
     width: 3px;
     height: 3px;
     background-color: #3091F2;
 }
-::-webkit-scrollbar-track
-{
+::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     border-radius: 10px;
     background-color: #F5F5F5;
 }
-::-webkit-scrollbar-thumb
-{
+::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
     background-color: #3091F2;

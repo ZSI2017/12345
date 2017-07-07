@@ -90,13 +90,18 @@
     </el-table>
   </el-dialog>
 
+  <!-- 即将离开的 对话框  -->
+
+
 
 </section>
 </template>
 <script type="text/javascript">
+import  {getLoadingFlag } from "@/vuex/getters";
 export default {
   data() {
     return {
+
       //标签页
       activeName: 'second',
       tabPaneData:["A","B","C","D","E","F","G","H","I","J","K","L","M","N",'O',"P","Q","R"],
@@ -129,6 +134,7 @@ export default {
     }
   },
   created(){
+    console.log(this);
 
   },
   beforeMount(){
@@ -141,12 +147,12 @@ export default {
      alert("beforeDestory")
   },
   watch:{
-     $router:{
-        handler:(val,old) => {
-             console.log(val),
-             console.log(old);
-        }
-     }
+    //  loadingFlag:{
+    //     handler:(val,old) => {
+    //          alert(val),
+    //          console.log(old);
+    //     }
+    //  }
   },
   methods: {
     // 标签页选择

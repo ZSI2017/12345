@@ -10,7 +10,6 @@
   </div>
   <!--这里是新增的弹出框  -->
   <el-dialog title="寄件地址" v-model="dialogFormVisible">
-
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="姓名" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
@@ -466,6 +465,7 @@ export default {
 
   },
   created() {
+    console.log(this);
     this.table2 = this.tableData[0]
     console.log(this.$route.matched);
   },
