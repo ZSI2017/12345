@@ -17,11 +17,11 @@
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
 
-          <el-submenu :index="index+''"  v-if="items.hasChild&&!items.isHide">
+          <el-submenu class="testSubmenu" @mouseover="test" :index="index+''"  v-if="items.hasChild&&!items.isHide">
             <template slot="title" >{{items.name}}</template>
             <!-- <el-menu-item-group> -->
             <!-- <template slot="title">分组一</template> -->
-            <el-menu-item v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
+            <el-menu-item @mouseover="test" v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
               {{item.name}}
             </el-menu-item>
           </el-submenu>
@@ -37,7 +37,7 @@
 
     </div>
 
-    <div style="padding:20px;padding-left:220px;padding-top:20px;flex:1;background:#f1f1f1;">
+    <div style="padding:20px;padding-left:250px;padding-top:20px;flex:1;background:#f1f1f1;">
 
       <el-breadcrumb style="padding:10px 0 10px 0;line-height:100%;margin-bottom:20px;background:#fff;box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);border:1px solid #D3DCE6;" separator="/">
         <!-- {{$route.matched[0].name}} -->
@@ -87,6 +87,9 @@ export default {
     console.log("adfsd" + this.$route.matched);
   },
   methods: {
+      test(){
+         alert("dsfsadf")
+      },
 
     startHacking() {
       this.$notify({
@@ -181,12 +184,19 @@ header .el-menu-demo {
 .el-submenu .el-menu-item{
   background: #fff;
 }
-.main-left .el-menu-item:hover{
-  background: #eaf8fe;
+// .main-left .el-menu-item:hover{
+//     color:yellow;
+//   background: #eaf8fe;
+// }
+// .main-left .testSubmenu:hover{
+//   color:yellow ;
+//   background-color: black !important;
+// }
+.test:hover{
+  color:yellow ;
+  background-color: blue !important;
 }
-.main-left .el-submenu__title:hover{
-  background: #eaf8fe;
-}
+
 
 //////////////// 自定义滑块样式////////////////
 ::-webkit-scrollbar

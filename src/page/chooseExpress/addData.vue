@@ -41,9 +41,11 @@
          :label="item"
          :key="index"
          :name= "item"
+         style="font-size:20px;"
          >{{item}}
        </el-tab-pane>
   </el-tabs>
+   <el-checkbox v-model="checked">全选</el-checkbox>
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="province" label="省" width="200">
           <template scope="scope">
@@ -57,18 +59,12 @@
       </el-table-column>
       <el-table-column property="city" label="市">
         <template scope="scope">
-       <!-- <el-tag
-        style="margin-right:10px;"
-         v-for="(item,index) in scope.row.city"
-         >{{item}}</el-tag> -->
-
-  <!-- <div style="margin: 15px 0;"></div> -->
-  <el-checkbox-group
-        v-model="checkedCities[scope.$index]"
-        @change="handleCheckedCitiesChange(scope.$index)"
-        >
-       <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
-  </el-checkbox-group>
+            <el-checkbox-group
+                  v-model="checkedCities[scope.$index]"
+                  @change="handleCheckedCitiesChange(scope.$index)"
+                  >
+                 <el-checkbox style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
 
      </template>
       </el-table-column>
@@ -103,7 +99,7 @@ export default {
     return {
       //标签页
       activeName: 'second',
-      tabPaneData:["A","B","C","D","E","F","G","H","I","J","K","L","M","N"],
+      tabPaneData:["A","B","C","D","E","F","G","H","I","J","K","L","M","N",'O',"P","Q","R"],
       // 覆盖地区选择
       checkAll:[],
       checkedCities: [],
@@ -131,6 +127,26 @@ export default {
         desc: ''
       }
     }
+  },
+  created(){
+
+  },
+  beforeMount(){
+
+  },
+  mounted(){
+
+  },
+  beforeDestory(){
+     alert("beforeDestory")
+  },
+  watch:{
+     $router:{
+        handler:(val,old) => {
+             console.log(val),
+             console.log(old);
+        }
+     }
   },
   methods: {
     // 标签页选择
