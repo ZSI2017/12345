@@ -1,64 +1,102 @@
-<template>
-  <section>
-      <p style="color:#00b7f9;cursor:pointer;margin-left:20px;margin-bottom:20px;"><span @click="$router.go(-1)">&lt; 返回</span></p>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="padding:0 160px 0 100px;">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入公告名称"></el-input>
-        </el-form-item>
-        <el-form-item label="公告内容" prop="desc">
-          <el-input type="textarea" v-model="ruleForm.desc" placeholder="请输入公告内容"></el-input>
-        </el-form-item>
-        <el-form-item label="活动时间" required>
-          <el-col :span="24">
-            <el-form-item>
-              <el-date-picker v-model="value3" type="datetimerange" placeholder="请选择时间范围">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <!--<el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-form-item prop="date2">
-              <el-time-picker type="fixed-time" placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-            </el-form-item>
-          </el-col>-->
-        </el-form-item>
-        <!--<el-form-item label="覆盖地区" required>
-          <el-cascader expand-trigger="hover" :options="options" v-model="selectedOptions2" @change="handleChange">
-          </el-cascader>
-        </el-form-item>-->
-        <el-form-item label="覆盖地区" required>
-          <el-button size="mini" @click="dialogConfig">点击配置</el-button>
-          <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
-          <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
-        </el-form-item>
-        <el-form-item label="当前状态" prop="resource">
-          <el-radio-group v-model="ruleForm.resource">
-            <el-radio label="上架"></el-radio>
-            <el-radio label="下架"></el-radio>
-          </el-radio-group>
-        </el-form-item>       
-      </el-form>
-      <el-row>
+<template type="html">
+<section>
+  <p style="color:#00b7f9;cursor:pointer" @click="$router.go(-1)">&lt; 返回</p>
+  <el-form ref="form" :model="form" label-width="100px" label-position="right" style="padding: 0px 160px 0px 100px;">
+    <el-form-item label="资源名称" required>
+      <el-input v-model="form.name" placeholder="请输入资源名称"> </el-input>
+    </el-form-item>
+    <el-form-item label="运营图">
+      <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList">
+        <el-button size="small" type="primary">上传文件</el-button>
+        <div slot="tip" class="el-upload__tip">文件类型限：jpg,png,尺寸40*40, 请保持5kb以内</div>
+      </el-upload>
+    </el-form-item>
+    <el-form-item label="广告语">
+      <el-input v-model="form.name" placeholder="请输入广告语"> </el-input>
+    </el-form-item>
+    <el-form-item label="标签">
+      <el-tag
+        :key="tag"
+        v-for="tag in dynamicTags"
+        :closable="true"
+        :close-transition="false"
+        @close="handleClose(tag)"
+      >
+      {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="handleInputConfirm"
+        @blur="handleInputConfirm"
+        style="width:100px;"
+      >
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加</el-button>
+    </el-form-item>
+    <el-form-item label="排序值">
+      <el-input v-model="form.name" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    </el-form-item>
+    <el-form-item label="链接">
+      <el-input v-model="form.name" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+    </el-form-item>
+    <!--<el-form-item label="有效时段">
+      <el-date-picker v-model="value3" type="datetimerange" placeholder="选择时间范围">
+      </el-date-picker>
+    </el-form-item>-->
+    <el-form-item label="覆盖地区">
+      <el-button size="mini" @click="dialogConfig">点击配置</el-button>
+      <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+      <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
+    </el-form-item>
+    <el-form-item label="当前状态">
+      <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
+      <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+    </el-form-item>
+    <el-col class="line" :span="2">-</el-col>
+    <el-row>
           <el-col :span="2" :offset="10"><el-button type="primary" class="grid-content">立即提交</el-button></el-col>
-      </el-row>
+    </el-row>
+  </el-form>
 
-      <!-- 覆盖地区配置对话框      -->
+  <!-- 覆盖地区配置对话框      -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
+    <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+    <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+    <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+  </el-tabs>
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="province" label="省" width="200"></el-table-column>
+      <el-table-column property="province" label="省" width="200">
+          <template scope="scope">
+            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.province}}</el-tag>
+            <el-checkbox
+                  :indeterminate="isIndeterminate[scope.$index]"
+                  v-model="checkAll[scope.$index]"
+                  @change="handleCheckAllChange(scope.$index,$event)"
+               >全选</el-checkbox>
+          </template>
+      </el-table-column>
       <el-table-column property="city" label="市">
         <template scope="scope">
-      <!-- <el-tag
+       <!-- <el-tag
         style="margin-right:10px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag> -->
-    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-  <div style="margin: 15px 0;"></div>
-  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-    <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+         v-for="(item,index) in scope.row.city"
+         >{{item}}</el-tag> -->
+
+  <!-- <div style="margin: 15px 0;"></div> -->
+  <el-checkbox-group
+        v-model="checkedCities[scope.$index]"
+        @change="handleCheckedCitiesChange(scope.$index)"
+        >
+       <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
   </el-checkbox-group>
 
-    </template>
+     </template>
       </el-table-column>
     </el-table>
     <div slot="footer" class="dialog-footer">
@@ -68,360 +106,147 @@
   </el-dialog>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible" >
+  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="province" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
         <template scope="scope">
-      <el-tag
+       <el-tag
         style="margin-right:10px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
+         v-for="(item,index) in scope.row.city"
+         >{{item}}</el-tag>
+     </template>
       </el-table-column>
     </el-table>
   </el-dialog>
- 
-     
-  </section>
-</template>
 
-<script>
+
+</section>
+</template>
+<script type="text/javascript">
 export default {
   data() {
     return {
-      listLoading: false,
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2200, 10, 10, 10, 10)],
+      //标签页
+      activeName: 'second',
       // 覆盖地区选择
-      checkAll: true,
+      checkAll:[],
       checkedCities: [],
+      isIndeterminate: [],
       // cities: cityOptions,
-      isIndeterminate: true,
+      // value3 代表时间段选择的
+      // value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+      // radio 代表上下架状态的选择
+      radio: 1,
+      // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
-      dialogTableVisible:false,
+
+      // 查看配置地区中的表格数据 和 是否显示的标志
+      showHeader: false,
+      dialogTableVisible: false,
       gridData: [],
-      showHeader:false,
-      options2: [{
-        label: '江苏',
-        cities: []
-      }, {
-        label: '浙江',
-        cities: []
-      }],
-      props: {
-        value: 'label',
-        children: 'cities'
-      },
-      ruleForm: {
+      form: {
         name: '',
+        region: '',
         date1: '',
-        // date2: '',
+        date2: '',
         delivery: false,
         type: [],
         resource: '',
         desc: ''
       },
-      rules: {
-        name: [{
-            required: true,
-            message: '请输入公告名称',
-            trigger: 'blur'
-          },
-          {
-            min: 3,
-            max: 15,
-            message: '长度在 3 到 15 个字符',
-            trigger: 'blur'
-          }
-        ],
-        date1: [{
-          type: 'date',
-          required: true,
-          message: '请选择日期与时间',
-          trigger: 'change'
-        }],
-        // date2: [{
-        //   type: 'date',
-        //   required: true,
-        //   message: '请选择时间',
-        //   trigger: 'change'
-        // }],
-        // type: [{
-        //   type: 'array',
-        //   required: true,
-        //   message: '请至少选择一个活动性质',
-        //   trigger: 'change'
-        // }],
-        // resource: [{
-        //   required: true,
-        //   message: '请选择活动资源',
-        //   trigger: 'change'
-        // }],
-        desc: [{
-          required: true,
-          message: '请输入公告内容',
-          trigger: 'blur'
-        }]
-      },
-      formLabelWidth: '120px',
-      options: [{
-        value: 'zhinan',
-        label: '北京',
-        children: [{
-          value: 'shejiyuanze',
-          label: '朝阳区',
-          children: [{
-            value: 'yizhi',
-            label: '一致'
-          }, {
-            value: 'fankui',
-            label: '反馈'
-          }, {
-            value: 'xiaolv',
-            label: '效率'
-          }, {
-            value: 'kekong',
-            label: '可控'
-          }]
-        }, {
-          value: 'daohang',
-          label: '顺义区',
-          children: [{
-            value: 'cexiangdaohang',
-            label: '侧向导航'
-          }, {
-            value: 'dingbudaohang',
-            label: '顶部导航'
-          }]
-        }]
-      }, {
-        value: 'zujian',
-        label: '组件',
-        children: [{
-          value: 'basic',
-          label: 'Basic',
-          children: [{
-            value: 'layout',
-            label: 'Layout 布局'
-          }, {
-            value: 'color',
-            label: 'Color 色彩'
-          }, {
-            value: 'typography',
-            label: 'Typography 字体'
-          }, {
-            value: 'icon',
-            label: 'Icon 图标'
-          }, {
-            value: 'button',
-            label: 'Button 按钮'
-          }]
-        }, {
-          value: 'form',
-          label: 'Form',
-          children: [{
-            value: 'radio',
-            label: 'Radio 单选框'
-          }, {
-            value: 'checkbox',
-            label: 'Checkbox 多选框'
-          }, {
-            value: 'input',
-            label: 'Input 输入框'
-          }, {
-            value: 'input-number',
-            label: 'InputNumber 计数器'
-          }, {
-            value: 'select',
-            label: 'Select 选择器'
-          }, {
-            value: 'cascader',
-            label: 'Cascader 级联选择器'
-          }, {
-            value: 'switch',
-            label: 'Switch 开关'
-          }, {
-            value: 'slider',
-            label: 'Slider 滑块'
-          }, {
-            value: 'time-picker',
-            label: 'TimePicker 时间选择器'
-          }, {
-            value: 'date-picker',
-            label: 'DatePicker 日期选择器'
-          }, {
-            value: 'datetime-picker',
-            label: 'DateTimePicker 日期时间选择器'
-          }, {
-            value: 'upload',
-            label: 'Upload 上传'
-          }, {
-            value: 'rate',
-            label: 'Rate 评分'
-          }, {
-            value: 'form',
-            label: 'Form 表单'
-          }]
-        }, {
-          value: 'data',
-          label: 'Data',
-          children: [{
-            value: 'table',
-            label: 'Table 表格'
-          }, {
-            value: 'tag',
-            label: 'Tag 标签'
-          }, {
-            value: 'progress',
-            label: 'Progress 进度条'
-          }, {
-            value: 'tree',
-            label: 'Tree 树形控件'
-          }, {
-            value: 'pagination',
-            label: 'Pagination 分页'
-          }, {
-            value: 'badge',
-            label: 'Badge 标记'
-          }]
-        }, {
-          value: 'notice',
-          label: 'Notice',
-          children: [{
-            value: 'alert',
-            label: 'Alert 警告'
-          }, {
-            value: 'loading',
-            label: 'Loading 加载'
-          }, {
-            value: 'message',
-            label: 'Message 消息提示'
-          }, {
-            value: 'message-box',
-            label: 'MessageBox 弹框'
-          }, {
-            value: 'notification',
-            label: 'Notification 通知'
-          }]
-        }, {
-          value: 'navigation',
-          label: 'Navigation',
-          children: [{
-            value: 'menu',
-            label: 'NavMenu 导航菜单'
-          }, {
-            value: 'tabs',
-            label: 'Tabs 标签页'
-          }, {
-            value: 'breadcrumb',
-            label: 'Breadcrumb 面包屑'
-          }, {
-            value: 'dropdown',
-            label: 'Dropdown 下拉菜单'
-          }, {
-            value: 'steps',
-            label: 'Steps 步骤条'
-          }]
-        }, {
-          value: 'others',
-          label: 'Others',
-          children: [{
-            value: 'dialog',
-            label: 'Dialog 对话框'
-          }, {
-            value: 'tooltip',
-            label: 'Tooltip 文字提示'
-          }, {
-            value: 'popover',
-            label: 'Popover 弹出框'
-          }, {
-            value: 'card',
-            label: 'Card 卡片'
-          }, {
-            value: 'carousel',
-            label: 'Carousel 走马灯'
-          }, {
-            value: 'collapse',
-            label: 'Collapse 折叠面板'
-          }]
-        }]
-      }, {
-        value: 'ziyuan',
-        label: '资源',
-        children: [{
-          value: 'axure',
-          label: 'Axure Components'
-        }, {
-          value: 'sketch',
-          label: 'Sketch Templates'
-        }, {
-          value: 'jiaohu',
-          label: '组件交互文档'
-        }]
-      }],
-      selectedOptions: [],
-      selectedOptions2: []
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: ''
     }
-  },
-  computed() {
-    return {
-      // table2:function(){
-      //     return this.tableData[0]
-      // }
-    }
-
   },
   methods: {
-    handleChange(value) {
-      console.log(value);
-    },
+    // 标签页选择
+    handleClick(tab, event) {
+        console.log(tab, event);
+      },
     // 覆盖地区选择
-    dialogConfig(){
-      var _this =this;
+    dialogConfig() {
+      var _this = this;
       _this.$http.get("/rest/list3")
-             .then(function(rsp){
-                 _this.gridData  = rsp.data.data;
-                //  _this.dialogTableVisible= true
-                 _this.dialogFormVisible = true;
-                 console.log(_this.gridData);
-             })
-             .catch(function(error){
-                  console.log(error);
-             })
+        .then(function(rsp) {
+              _this.gridData = rsp.data.data;
+              // 初始化 配置的多选框操作
+              var tableDataLength = _this.gridData.length;
+                 for(var i =0;i<tableDataLength;i++) {
+                     _this.checkAll[i] = true;
+                     _this.isIndeterminate[i] = true;
+                     _this.checkedCities[i]=[];
+                   }
+              //  _this.dialogTableVisible= true
+              _this.dialogFormVisible = true;
+              console.log(_this.gridData);
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
     },
-    handleCheckAllChange(event) {
-      this.checkedCities = event.target.checked ? 10 : [];
-      this.isIndeterminate = false;
+    handleCheckAllChange(index, event) {
+      // console.log(index);
+      // console.log(event.lenth);
+      this.checkedCities[index] = event.target.checked ? this.gridData[index].city : [];
+      console.log(event.target.checked);
+      console.log(this.checkedCities[index] );
+      this.isIndeterminate[index] = false;
     },
-    handleCheckedCitiesChange(value) {
+    handleCheckedCitiesChange(index) {
+      // console.log(value);
+      let value = this.checkedCities[index];
       let checkedCount = value.length;
-      this.checkAll = checkedCount === 10;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < 10;
+      this.checkAll[index] = checkedCount === this.gridData[index].city.length;
+      this.isIndeterminate[index] = checkedCount > 0 && checkedCount < this.gridData[index].city.length;
     },
-     dialogTable(){
-      var _this =this;
+    dialogTable() {
+      var _this = this;
       _this.$http.get("/rest/list3")
-             .then(function(rsp){
-                 _this.gridData  = rsp.data.data;
+        .then(function(rsp) {
+          _this.gridData = rsp.data.data;
 
-                 _this.dialogTableVisible= true
-                 console.log(_this.gridData);
-             })
-             .catch(function(error){
-                  console.log(error);
-             })
+          _this.dialogTableVisible = true
+          console.log(_this.gridData);
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+    },
+    onSubmit() {
+      console.log('submit!');
+    },
+    handleClose(tag) {
+        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     }
-  }  
+  }
 }
 </script>
-<style>
+<style scoped lang="scss" rel="stylesheet/scss">
+section {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
+    border: 1px solid #D3DCE6;
+    border-radius: 4px;
+    padding: 20px;
+    background-color: white;
+}
 
-  section {
-      box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);
-      border:1px solid #D3DCE6;
-      border-radius: 4px;
-      padding:20px;
-      background-color: white;
-  }      
-
+label {
+    font-weight: bold;
+}
 </style>
