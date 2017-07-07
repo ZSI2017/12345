@@ -4,7 +4,7 @@
   <header class="header" :class="{ 'header-fixed' : headerFixed }" style="background-color:#5295e2;">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content" style="float:left;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">{{ title }}</div>
+        <div class="grid-content" style="float:left;width:270px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">{{ title }}</div>
         <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">123456789</div>
       </el-col>
     </el-row>
@@ -12,24 +12,27 @@
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
   <div style="display:flex;flex-direction:row;">
 
-    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:230px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
+    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:230px;width:270px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
       <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
-
-          <el-submenu class="testSubmenu" @mouseover="test" :index="index+''"  v-if="items.hasChild&&!items.isHide">
-            <template slot="title" >{{items.name}}</template>
-        <!-- <el-menu-item-group> -->
-        <!-- <template slot="title">分组一</template> -->
-        <el-menu-item @mouseover="test" v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
-          {{item.name}}
-        </el-menu-item>
-        </el-submenu>
-        <el-menu-item v-if="!items.hasChild&&!items.isHide" :index="items.children[0].path">
-          {{items.children[0].name}}
-        </el-menu-item>
+          
+          <el-submenu :index="index+''"  v-if="items.hasChild&&!items.isHide">
+            <template slot="title"><i style="width:30px;display:inline-block;"></i>{{items.name}}</template>
+            <!-- <el-menu-item-group> -->
+            <!-- <template slot="title">分组一</template> -->
+            <el-menu-item v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
+            {{item.name}}
+            </el-menu-item>
+ 
+            
+          </el-submenu>
+          <el-menu-item v-if="!items.hasChild&&!items.isHide" :index="items.children[0].path">
+            <i style="width:30px;display:inline-block;"></i>{{items.children[0].name}}
+          </el-menu-item>
+   
         </template>
-        <el-menu-item>退出登录</el-menu-item>
+        <el-menu-item><i style="width:30px;display:inline-block;"></i>退出登录</el-menu-item>
       </el-menu>
     </div>
 
@@ -37,14 +40,14 @@
 
     </div>
 
-    <div
+    <div 
         v-loading.fullscreen.lock="fullscreenLoading"
-         element-loading-text="拼命加载中"
-        style="padding:20px;padding-left:250px;padding-top:20px;flex:1;background:#f1f1f1;"
-        >
-      <el-breadcrumb style="padding:10px 0 10px 0;line-height:100%;margin-bottom:20px;background:#fff;box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);border:1px solid #D3DCE6;" separator="/">
+        element-loading-text="拼命加载中"
+        style="padding:20px;padding-left:290px;padding-top:20px;flex:1;background:#f1f1f1;">
+      <el-breadcrumb style="padding:10px 0 25px;font-size:16px;line-height:100%;margin-bottom:20px;border-bottom:1px solid #999;" separator="/">
         <!-- {{$route.matched[0].name}} -->
-        <el-breadcrumb-item v-if="index !=0" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
+        <el-breadcrumb-item  v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
+
           {{item.name}}
         </el-breadcrumb-item>
         <!-- <el-breadcrumb-item>运营位</el-breadcrumb-item> -->
@@ -220,17 +223,14 @@ header .el-menu-demo {
 .el-submenu .el-menu-item {
     background: #fff;
 }
-// .main-left .el-menu-item:hover{
-//     color:yellow;
-//   background: #eaf8fe;
-// }
-// .main-left .testSubmenu:hover{
-//   color:yellow ;
-//   background-color: black !important;
-// }
-.test:hover {
-    color: yellow;
-    background-color: blue !important;
+.main-left .el-submenu__title{
+  padding-left: 25px !important;
+}
+.main-left .el-menu-item:hover,.main-left .el-submenu__title:hover{
+   background: #eaf8fe;
+}
+.main-left div.el-submenu__title{
+  background: red !important;
 }
 
 //////////////// 自定义滑块样式////////////////

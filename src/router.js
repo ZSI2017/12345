@@ -58,6 +58,8 @@
 
 //订单管理
 import orderManage from './page/orderManage/index.vue'
+import orderDetail from './page/orderManage/orderDetail.vue'
+
 
 //寄快递首页
 import sendExpress from './page/sendExpress/index.vue'
@@ -91,9 +93,9 @@ import nonServerDistrict from './page/nonServerDistrict/index.vue'
 import oneCitySend from './page/oneCitySend/index.vue'
 
 //附近快递资源管理
-import nearExpress from './page/nearExpress/nearExpress.vue'
+// import nearExpress from './page/nearExpress/nearExpress.vue'
 import NEaddData from './page/nearExpress/NEaddData.vue'
-import main from './page/nearExpress/main.vue'
+import nearExpress from './page/nearExpress/index.vue'
 
 //公告管理
 import noticeManage from './page/noticeManage/index.vue'
@@ -198,7 +200,8 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'orderManage',component:orderManage,name:"订单管理"}
+      {path:'orderManage',component:orderManage,name:"订单管理"},
+      {path:'/orderDetail',name:'订单管理 / 查看详情',component:orderDetail}    
    ]
  },{
    path:'/',
@@ -337,15 +340,9 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'nearExpress',component:nearExpress,name:"附近快递资源管理",
-      children:[
-          {path:'/',component:main},
-          {path:'NEaddData',name:'添加',component:NEaddData}
-      ]},
-
+      {path:'/nearExpress',component:nearExpress,name:"附近快递资源管理"},
+      {path:'/NEaddData',name:'附近快递资源管理 / 添加数据',component:NEaddData}      
    ]
-  //  path:'/nearExpress',component:nearExpress
-
  },
  //公告管理
  {
@@ -356,7 +353,6 @@ let routes =  [
      {path:'noticeManage',component:noticeManage,name:"公告管理"},
     //  {path:'addingValue',name:'添加',component:addingValue}
      {path:'addingValue',name:'公告管理 / 添加数据',component:addingValue}
-
   ]
 
  },

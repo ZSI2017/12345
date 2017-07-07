@@ -444,7 +444,7 @@ export default {
       })
     },
     addType: function () {
-      this.$router.push({path:'./nearExpress/NEaddData'});
+      this.$router.push({path:'./NEaddData'});
 
     }
 
