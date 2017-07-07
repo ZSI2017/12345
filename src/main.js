@@ -15,7 +15,7 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 //  axios  加入到 vue 的原型方法中
 Object.defineProperty(Vue.prototype, '$http', { value: Axios })
-console.log(routes);
+// console.log(routes);
 
 const router = new VueRouter({
       routes,
