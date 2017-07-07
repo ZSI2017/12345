@@ -37,8 +37,11 @@
 
     </div>
 
-    <div style="padding:20px;padding-left:250px;padding-top:20px;flex:1;background:#f1f1f1;">
-
+    <div
+        v-loading.fullscreen.lock="fullscreenLoading"
+         element-loading-text="拼命加载中"
+        style="padding:20px;padding-left:250px;padding-top:20px;flex:1;background:#f1f1f1;"
+        >
       <el-breadcrumb style="padding:10px 0 10px 0;line-height:100%;margin-bottom:20px;background:#fff;box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);border:1px solid #D3DCE6;" separator="/">
         <!-- {{$route.matched[0].name}} -->
         <el-breadcrumb-item v-if="index !=0" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
@@ -78,6 +81,7 @@ export default {
 
   data() {
     return {
+      fullscreenLoading:false,
       defaultActive:"",
       loadingFlag: false,
       uniqueOpened: true,
@@ -95,11 +99,7 @@ export default {
     console.log("adfsd" + this.$route.matched);
   },
   watch: {
-    // "$route": function(to, from) {
-    //   if (from.path == "/addData") {
-    //     this.loadingFlag = true;
-    //   }
-    // }
+
   },
   methods: {
     test() {
@@ -128,14 +128,17 @@ export default {
     handleSelect(key, keyPath) {
        this.defaultActive =""+key;
       if (this.$route.path == "/addData") {
-        //  alert(this.$router.app.$store.state.loadingFlag);
           if(this.$router.app.$store.state.loadingFlag == false){
             console.log(this.$route.matched);
             console.log(this.$route.path);
-
             this.loadingFlag = true;
-            // alert("loading");
           }
+      }else {
+        this.fullscreenLoading = true;
+        var _this = this;
+        setTimeout( () => {
+            _this.fullscreenLoading = false
+        },600);
       }
     }
   }

@@ -356,7 +356,7 @@ let routes =  [
      {path:'noticeManage',component:noticeManage,name:"公告管理"},
     //  {path:'addingValue',name:'添加',component:addingValue}
      {path:'addingValue',name:'公告管理 / 添加数据',component:addingValue}
-    
+
   ]
 
  },

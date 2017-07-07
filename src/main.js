@@ -11,15 +11,13 @@ import store from "./vuex/store"
 // 引入vuex 进行全局状态管理
 import {changeIndex} from "./vuex/actions";
 import {changeLoading} from "./vuex/getters";
-
-
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 //  axios  加入到 vue 的原型方法中
 Object.defineProperty(Vue.prototype, '$http', { value: Axios })
-
 console.log(routes);
+
 const router = new VueRouter({
       routes,
       scrollBehavior(to,from,savedPosition) {
