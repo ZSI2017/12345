@@ -1,5 +1,5 @@
 <template type="html">
-<section>
+<section class="section">
   <p style="color:#00b7f9;cursor:pointer" @click="$router.go(-1)">&lt; 返回</p>
   <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
@@ -36,11 +36,16 @@
   <!-- 覆盖地区配置对话框      -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
-    <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-    <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-    <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+    <el-tab-pane
+         v-for="(item,index) in tabPaneData"
+         :label="item"
+         :key="index"
+         :name= "item"
+         style="font-size:20px;"
+         >{{item}}
+       </el-tab-pane>
   </el-tabs>
+   <el-checkbox v-model="checked">全选</el-checkbox>
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="province" label="省" width="200">
           <template scope="scope">
@@ -54,18 +59,12 @@
       </el-table-column>
       <el-table-column property="city" label="市">
         <template scope="scope">
-       <!-- <el-tag
-        style="margin-right:10px;"
-         v-for="(item,index) in scope.row.city"
-         >{{item}}</el-tag> -->
-
-  <!-- <div style="margin: 15px 0;"></div> -->
-  <el-checkbox-group
-        v-model="checkedCities[scope.$index]"
-        @change="handleCheckedCitiesChange(scope.$index)"
-        >
-       <el-checkbox v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
-  </el-checkbox-group>
+            <el-checkbox-group
+                  v-model="checkedCities[scope.$index]"
+                  @change="handleCheckedCitiesChange(scope.$index)"
+                  >
+                 <el-checkbox style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
 
      </template>
       </el-table-column>
@@ -91,15 +90,21 @@
     </el-table>
   </el-dialog>
 
+  <!-- 即将离开的 对话框  -->
+
+
 
 </section>
 </template>
 <script type="text/javascript">
+import  {getLoadingFlag } from "@/vuex/getters";
 export default {
   data() {
     return {
+
       //标签页
       activeName: 'second',
+      tabPaneData:["A","B","C","D","E","F","G","H","I","J","K","L","M","N",'O',"P","Q","R"],
       // 覆盖地区选择
       checkAll:[],
       checkedCities: [],
@@ -127,6 +132,27 @@ export default {
         desc: ''
       }
     }
+  },
+  created(){
+    console.log(this);
+
+  },
+  beforeMount(){
+
+  },
+  mounted(){
+
+  },
+  beforeDestory(){
+     alert("beforeDestory")
+  },
+  watch:{
+    //  loadingFlag:{
+    //     handler:(val,old) => {
+    //          alert(val),
+    //          console.log(old);
+    //     }
+    //  }
   },
   methods: {
     // 标签页选择
@@ -189,14 +215,6 @@ export default {
 }
 </script>
 <style scoped lang="scss" rel="stylesheet/scss">
-section {
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
-    border: 1px solid #D3DCE6;
-    border-radius: 4px;
-    padding: 20px;
-    background-color: white;
-}
-
 label {
     font-weight: bold;
 }

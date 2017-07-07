@@ -118,7 +118,7 @@
     }
     .cell-left{
         border-top: 1px solid #333;
-        text-align: center;
+        text-align: left;
         background: #e1e1e1;
         box-sizing:border-box;
     }
