@@ -6,8 +6,7 @@ import VueRouter from "vue-router"
 import routes  from "./router.js"
 import Axios from "axios";
 import Vuex from "vuex";
-import store from "./vuex/store"
-
+import store from "./vuex/store";
 // 引入vuex 进行全局状态管理
 import {changeIndex} from "./vuex/actions";
 import {changeLoading} from "./vuex/getters";
