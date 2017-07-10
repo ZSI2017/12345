@@ -17,6 +17,9 @@ Vue.use(Vuex);
 Object.defineProperty(Vue.prototype, '$http', { value: Axios })
 // console.log(routes);
 
+ // Vue的 日志与警告
+Vue.config.silent = true
+
 const router = new VueRouter({
       routes,
       scrollBehavior(to,from,savedPosition) {

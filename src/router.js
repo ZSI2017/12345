@@ -119,7 +119,7 @@ import page4 from './page/priceManage/page4.vue'
 import page5 from './page/priceManage/page5.vue'
 
 
-//
+
 // import orderManage from './page/orderManage/index.vue'
 //
 // import activePublic from './page/activePublic/step1.vue'
@@ -198,10 +198,11 @@ let routes =  [
 {
    path:'/',
    name:"首页",
+   redirect: '/orderManage',
    component:index,
    children:[
       {path:'orderManage',component:orderManage,name:"订单管理"},
-      {path:'/orderDetail',name:'订单管理 / 查看详情',component:orderDetail}    
+      {path:'/orderDetail',name:'订单管理 / 查看详情',component:orderDetail}
    ]
  },{
    path:'/',
@@ -341,7 +342,7 @@ let routes =  [
    component:index,
    children:[
       {path:'/nearExpress',component:nearExpress,name:"附近快递资源管理"},
-      {path:'/NEaddData',name:'附近快递资源管理 / 添加数据',component:NEaddData}      
+      {path:'/NEaddData',name:'附近快递资源管理 / 添加数据',component:NEaddData}
    ]
  },
  //公告管理

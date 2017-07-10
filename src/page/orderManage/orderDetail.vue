@@ -3,11 +3,10 @@
     <el-row>
         <el-col :span="24"><h1 class="grid-content bg-purple-dark orderTitle">订单号：123456789</h1></el-col>
     </el-row>
-    <el-row>
-        <el-collapse v-model="activeNames" @change="handleChange">
+    <el-row class="orderDetail">
+        <el-collapse v-model="activeNames" >
             <el-collapse-item title="基本信息" name="0">
-
-                <el-table border :show-header="showHeader" :data="items" v-loading.fullscreen.lock="listLoading" style="width: 100%" max-height="550" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+                <el-table border :show-header="showHeader" :data="items"  style="width: 100%" max-height="550" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
                   <el-table-column prop="1" label="1" >
                   </el-table-column>
                   <el-table-column prop="2" label="2" >
@@ -28,7 +27,7 @@
             </el-collapse-item>
         </el-collapse>
     </el-row>
-    <el-collapse v-model="activeNames" @change="handleChange">
+    <el-collapse v-model="activeNames">
         <el-collapse-item title="寄件人信息" name="1">
             <el-row class="sender-table">
                 <el-col :span="24" v-for="senderItem in senderItems"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
@@ -58,6 +57,17 @@
         showHeader:false,
         activeNames: ['0','1','2','3','4'],
         items:[],
+      senderItems:[{
+             name: "寄件人",
+            message: '尼古拉是凯奇',
+
+        }, {
+            name: "联系电话",
+            message: '1888888888',
+        },{
+          name: "寄件地址",
+           message: '北京市朝阳区几乎几乎没有这个地址',
+       }],
         goodsItems:[{
             type: "寄件人",
             weight: '尼古拉是凯奇',
@@ -72,10 +82,11 @@
           .then(function(rsp) {
               let data = rsp.data.data;
               let lastData = [];
-              for(var k =0;k<3;k++){
+              let row=4;
+              for(var k =0;k<data.length/row;k++){
                   var obj = {};
                   var count = 1;
-                  for(var i =k*4;i<(k*4+4);i++) {
+                  for(var i =k*row;i<(k*row+row);i++) {
                     obj[count]=data[i]["name"];
                     count ++ ;
                     obj[count]=data[i]["message"];
@@ -97,10 +108,12 @@
   }
 </script>
 
-<style>
-.el-table__row td:nth-child(2n+1){
-    background-color:#f5f5f5;
-}
+<style lang="scss">
+ .orderDetail {
+     .el-table__row td:nth-child(2n+1){
+       background-color:#f5f5f5;
+     }
+ }
     .orderTitle{
         height: 60px;
         line-height: 60px;

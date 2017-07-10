@@ -11,7 +11,7 @@ var  Mock =require("mockjs");
 
 var tableDate = [];
 
-for(var j =0;j<12;j++){
+for(var j =0;j<31;j++){
     var city = [];
     for(var i=0;i<10;i++){
            city.push(Mock.Random.city());
@@ -20,7 +20,7 @@ for(var j =0;j<12;j++){
     tableDate.push(
        Mock.mock({
          "city":city,
-         "province":Mock.Random.province()
+         "value":Mock.Random.province()
        })
     )
 }
