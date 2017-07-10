@@ -1,6 +1,6 @@
 <template type="html">
 <section class="section">
-  <p style="color:#00b7f9;cursor:pointer" @click="$router.go(-1)">&lt; 返回</p>
+  <p style="color:#00b7f9;cursor:pointer" @click="handleBackClick">&lt; 返回</p>
   <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
       <el-input v-model="form.name" placeholder="请输入运营图名称"> </el-input>
@@ -104,7 +104,13 @@
   </el-dialog>
 
   <!-- 即将离开的 对话框  -->
-
+  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
+    <span>还没有保存,确定放弃编辑？</span>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="loadingFlag = false">取 消</el-button>
+    <el-button type="primary" @click="editSure">确 定</el-button>
+  </span>
+  </el-dialog>
 
 
 </section>
@@ -116,196 +122,11 @@ import {
 export default {
   data() {
     return {
+     // 即将离开的对话框
+    loadingFlag: false,
      // 添加搜索框
      state1:"",
-    //  provinces: [{
-    //      "value": "三全鲜食（北新泾店）",
-    //      "address": "长宁区新渔路144号"
-    //    },
-    //    {
-    //      "value": "Hot honey 首尔炸鸡（仙霞路）",
-    //      "address": "上海市长宁区淞虹路661号"
-    //    },
-    //    {
-    //      "value": "新旺角茶餐厅",
-    //      "address": "上海市普陀区真北路988号创邑金沙谷6号楼113"
-    //    },
-    //    {
-    //      "value": "泷千家(天山西路店)",
-    //      "address": "天山西路438号"
-    //    },
-    //    {
-    //      "value": "胖仙女纸杯蛋糕（上海凌空店）",
-    //      "address": "上海市长宁区金钟路968号1幢18号楼一层商铺18-101"
-    //    },
-    //    {
-    //      "value": "贡茶",
-    //      "address": "上海市长宁区金钟路633号"
-    //    },
-    //    {
-    //      "value": "豪大大香鸡排超级奶爸",
-    //      "address": "上海市嘉定区曹安公路曹安路1685号"
-    //    },
-    //    {
-    //      "value": "茶芝兰（奶茶，手抓饼）",
-    //      "address": "上海市普陀区同普路1435号"
-    //    },
-    //    {
-    //      "value": "十二泷町",
-    //      "address": "上海市北翟路1444弄81号B幢-107"
-    //    },
-    //    {
-    //      "value": "星移浓缩咖啡",
-    //      "address": "上海市嘉定区新郁路817号"
-    //    },
-    //    {
-    //      "value": "阿姨奶茶/豪大大",
-    //      "address": "嘉定区曹安路1611号"
-    //    },
-    //    {
-    //      "value": "新麦甜四季甜品炸鸡",
-    //      "address": "嘉定区曹安公路2383弄55号"
-    //    },
-    //    {
-    //      "value": "Monica摩托主题咖啡店",
-    //      "address": "嘉定区江桥镇曹安公路2409号1F，2383弄62号1F"
-    //    },
-    //    {
-    //      "value": "浮生若茶（凌空soho店）",
-    //      "address": "上海长宁区金钟路968号9号楼地下一层"
-    //    },
-    //    {
-    //      "value": "NONO JUICE  鲜榨果汁",
-    //      "address": "上海市长宁区天山西路119号"
-    //    },
-    //    {
-    //      "value": "CoCo都可(北新泾店）",
-    //      "address": "上海市长宁区仙霞西路"
-    //    },
-    //    {
-    //      "value": "快乐柠檬（神州智慧店）",
-    //      "address": "上海市长宁区天山西路567号1层R117号店铺"
-    //    },
-    //    {
-    //      "value": "Merci Paul cafe",
-    //      "address": "上海市普陀区光复西路丹巴路28弄6号楼819"
-    //    },
-    //    {
-    //      "value": "猫山王（西郊百联店）",
-    //      "address": "上海市长宁区仙霞西路88号第一层G05-F01-1-306"
-    //    },
-    //    {
-    //      "value": "枪会山",
-    //      "address": "上海市普陀区棕榈路"
-    //    },
-    //    {
-    //      "value": "纵食",
-    //      "address": "元丰天山花园(东门) 双流路267号"
-    //    },
-    //    {
-    //      "value": "钱记",
-    //      "address": "上海市长宁区天山西路"
-    //    },
-    //    {
-    //      "value": "壹杯加",
-    //      "address": "上海市长宁区通协路"
-    //    },
-    //    {
-    //      "value": "唦哇嘀咖",
-    //      "address": "上海市长宁区新泾镇金钟路999号2幢（B幢）第01层第1-02A单元"
-    //    },
-    //    {
-    //      "value": "爱茜茜里(西郊百联)",
-    //      "address": "长宁区仙霞西路88号1305室"
-    //    },
-    //    {
-    //      "value": "爱茜茜里(近铁广场)",
-    //      "address": "上海市普陀区真北路818号近铁城市广场北区地下二楼N-B2-O2-C商铺"
-    //    },
-    //    {
-    //      "value": "鲜果榨汁（金沙江路和美广店）",
-    //      "address": "普陀区金沙江路2239号金沙和美广场B1-10-6"
-    //    },
-    //    {
-    //      "value": "开心丽果（缤谷店）",
-    //      "address": "上海市长宁区威宁路天山路341号"
-    //    },
-    //    {
-    //      "value": "超级鸡车（丰庄路店）",
-    //      "address": "上海市嘉定区丰庄路240号"
-    //    },
-    //    {
-    //      "value": "妙生活果园（北新泾店）"
-    //    },
-    //    {
-    //      "value": "香宜度麻辣香锅"
-    //    },
-    //    {
-    //      "value": "凡仔汉堡（老真北路店）"
-    //    },
-    //    {
-    //      "value": "港式小铺"
-    //    },
-    //    {
-    //      "value": "蜀香源麻辣香锅（剑河路店）"
-    //    },
-    //    {
-    //      "value": "北京饺子馆"
-    //    },
-    //    {
-    //      "value": "饭典*新简餐（凌空SOHO店）"
-    //    },
-    //    {
-    //      "value": "焦耳·川式快餐（金钟路店）"
-    //    },
-    //    {
-    //      "value": "动力鸡车"
-    //    },
-    //    {
-    //      "value": "浏阳蒸菜"
-    //    },
-    //    {
-    //      "value": "四海游龙（天山西路店）"
-    //    },
-    //    {
-    //      "value": "樱花食堂（凌空店）"
-    //    },
-    //    {
-    //      "value": "壹分米客家传统调制米粉(天山店)"
-    //    },
-    //    {
-    //      "value": "福荣祥烧腊（平溪路店）"
-    //    },
-    //    {
-    //      "value": "速记黄焖鸡米饭",
-    //    },
-    //    {
-    //      "value": "红辣椒麻辣烫",
-    //    },
-    //    {
-    //      "value": "(小杨生煎)西郊百联餐厅",
-     //
-    //    },
-    //    {
-    //      "value": "阳阳麻辣烫"
-    //    },
-    //    {
-    //      "value": "南拳妈妈龙虾盖浇饭",
-    //    }
-    //  ],
-     provinces:[
-    {
-      "value": "宁夏回族自治区"
-    },
-    {
-      "value": "澳门特别行政区"
-    },
-    {
-      "value": "河北省"
-    },
-    {
-      "value": "宁夏回族自治区"
-    }],
+     provinces:[],
       //标签页
       activeName: 'C',
       tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
@@ -361,6 +182,19 @@ export default {
     //  }
   },
   methods: {
+    // 点击返回 对应的事件处理
+    handleBackClick() {
+       this.loadingFlag = true;
+    },
+    // 即将离开的对话框
+    editSure(){
+       this.loadingFlag = false;
+       this.$router.app.$store.state.loadingFlag = true;
+       console.log(this);
+       this.$router.go(-1);
+      //  this.$router.push({ path:this.defaultActive});
+      //  this.$route.push({ path:this.defaultActive});
+    },
     handlePreview(){},
     handleRemove(){},
 

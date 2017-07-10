@@ -61,18 +61,16 @@ import orderManage from './page/orderManage/index.vue'
 import orderDetail from './page/orderManage/orderDetail.vue'
 
 
-//寄快递首页
+//寄快递首页    选择快递页  选快递下单  公用同一个组件  chooseExpress
+import operationPosition from './page/chooseExpress/index.vue';
 import sendExpress from './page/sendExpress/index.vue'
-// import step1 from './page/sendExpress/step1.vue'
-import step2 from './page/sendExpress/step2.vue'
-import step3 from './page/sendExpress/step3.vue'
-import step4 from './page/sendExpress/step4.vue'
 
-//选择快递页
+
 import chooseExpress from './page/chooseExpress/index.vue'
 
-//选快递下单
 import expressOrder from './page/expressOrder/index.vue'
+
+
 
 //寄快递入口
 import sendExpressEnter from './page/sendExpressEnter/index.vue'
@@ -210,17 +208,9 @@ let routes =  [
    component:index,
    hasChild:true,
    children:[
-     {   path:'sendExpress',component:sendExpress,name:"寄快递首页",
-          children:[
-            // { path: '', component: step1  },
-            // { path: 'step1', component: step1  },
-            { path: 'step2', component: step2  },
-            { path: 'step3', component: step3  },
-            { path: 'step4', component: step4  }
-          ]
-      },
-      {path:'chooseExpress',component:chooseExpress,name:"选择快递页"},
-      {path:'expressOrder',component:chooseExpress,name:"选快递下单页"},
+     { path:'sendExpress',component:operationPosition,name:"寄快递首页"},
+      {path:'chooseExpress',component:operationPosition,name:"选择快递页"},
+      {path:'expressOrder',component:operationPosition,name:"选快递下单页"},
       {path:"addData",component:addData,name:"选择快递页 / 添加数据",isHideChild:true}
    ]
  },
@@ -309,9 +299,9 @@ let routes =  [
                  children: [
                   //  {path: '', component: step1},
                   //  {path: 'step1', component: step1},
-                   {path: 'step2', component: step2},
-                   {path: 'step3', component: step3},
-                   {path: 'step4', component: step4}
+                  //  {path: 'step2', component: step2},
+                  //  {path: 'step3', component: step3},
+                  //  {path: 'step4', component: step4}
                  ]
                },
                { path: 'page2', component: page2  },
