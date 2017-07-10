@@ -1,12 +1,13 @@
 <template>
 <div class="section" style="overflow:hidden">
-  <el-row type="flex" justify="space-around" class="btn" style="margin-bottom:20px;">
-    <el-col>
+  <el-row :span="24" type="flex" justify="space-around" class="btn" style="margin-bottom:20px;">
+    <el-col :span="4">
       <el-tooltip class="item" effect="light" content="添加数据" placement="right">
         <el-button type="primary" @click="setNewData" size="large">+添加</el-button>
       </el-tooltip>
     </el-col>
-    <el-col>
+    <el-col :span="14"></el-col>
+    <el-col :span="6">
       <span>当前状态:</span>
       <el-select v-model="value" placeholder="请选择">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
