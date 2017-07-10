@@ -64,6 +64,7 @@ import main from './page/orderManage/main.vue'
 
 //寄快递首页    选择快递页  选快递下单  公用同一个组件  chooseExpress
 import operationPosition from './page/chooseExpress/index.vue';
+import operationPositionMain from "./page/chooseExpress/main.vue";
 import sendExpress from './page/sendExpress/index.vue'
 
 
@@ -230,11 +231,23 @@ let routes =  [
    component:index,
    hasChild:true,
    children:[
-     { path:'/sendExpress',component:operationPosition,name:"寄快递首页"},
-      {path:'/chooseExpress',component:operationPosition,name:"选择快递页"},
-      {path:'/expressOrder',component:operationPosition,name:"选快递下单页"},
-      {path:"/addData",component:addData,name:"选择快递页 / 添加数据",isHideChild:true}
-
+     { path:'/sendExpress',component:operationPosition,name:"寄快递首页",
+       children:[
+          {path:'',component:operationPositionMain},
+          {path:'addData',name:'添加数据',component:addData}
+       ]},
+      {path:'/chooseExpress',component:operationPosition,name:"选择快递页",
+      children:[
+         {path:'',component:operationPositionMain},
+         {path:'addData',name:'添加数据',component:addData}
+      ]
+    },
+      {path:'/expressOrder',component:operationPosition,name:"选快递下单页",
+      children:[
+         {path:'',component:operationPositionMain},
+         {path:'addData',name:'添加数据',component:addData}
+      ]
+    }
    ]
  },
  //寄快递入口
