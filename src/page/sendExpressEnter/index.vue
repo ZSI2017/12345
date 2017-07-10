@@ -41,12 +41,16 @@
     </el-row>
     <!--  下面的表格   -->
     <el-table :data="tableData" v-loading.fullscreen.lock="listLoading" style="width: 100%" max-height="550" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
-      <el-table-column prop="operationsMapName" label="运营图名称" sortable min-width="120">
-      </el-table-column>
-      <el-table-column prop="name" label="运营图" sortable min-width="100">
+      <el-table-column prop="name" label="LOGO" sortable min-width="140">
         <template scope="scope">
               <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
           </template>
+      </el-table-column>
+      <el-table-column prop="name" min-width="100" label="角标">
+      </el-table-column>
+      <el-table-column prop="name" label="入口名称">
+      </el-table-column>
+      <el-table-column prop="name" label="描述">
       </el-table-column>
       <el-table-column prop="link" min-width="200" label="链接">
       </el-table-column>
@@ -55,18 +59,12 @@
             <el-button @click="checkArea" type="text" size="small">查看</el-button>
          </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间">
-      </el-table-column>
-      <el-table-column prop="modifyTime" label="修改时间">
-      </el-table-column>
-      <el-table-column prop="activeTime" min-width="200" label="有效时段">
-      </el-table-column>
       <el-table-column prop="Forder" label="排序值">
       </el-table-column>
       <el-table-column prop="currentState" label="当前状态">
 
       </el-table-column>
-      <el-table-column prop="auditState" label="审核状态">
+      <el-table-column prop="reviewState" label="审核状态">
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template scope="scope">
@@ -180,5 +178,8 @@
      .el-tabs .el-tabs__content {
          display:none;
      }
+ }
+ .el-radio {
+   margin-right: 10px;
  }
 </style>
