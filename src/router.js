@@ -242,9 +242,9 @@ let routes =  [
           ]
       },
 
-      {path:'chooseExpress',component:chooseExpress,name:"选择快递页"},
-      {path:'expressOrder',component:chooseExpress,name:"选快递下单页"},
-      {path:"addData",component:addData,name:"选择快递页 / 添加数据",isHideChild:true}
+      {path:'/chooseExpress',component:chooseExpress,name:"选择快递页"},
+      {path:'/expressOrder',component:chooseExpress,name:"选快递下单页"},
+      {path:"/addData",component:addData,name:"选择快递页 / 添加数据",isHideChild:true}
 
    ]
  },
