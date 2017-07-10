@@ -1,6 +1,30 @@
 <template>
-<div class="section" style="overflow:hidden">
-  <el-row :span="24" type="flex" justify="space-around" class="btn" style="margin-bottom:20px;">
+<div class="section" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
+  <el-tabs
+     v-model="activeName2"
+     type="card"
+     @tab-click="handleTabClick"
+     >
+      <el-tab-pane label="配置" name="first">配置</el-tab-pane>
+      <el-tab-pane label="已上线" name="second">已上线</el-tab-pane>
+  </el-tabs>
+  <!--  单选框   -->
+  <el-row :span="24" type="flex" align="middle" v-if="showConfig">
+      <el-col :span="8">
+          <el-radio-group v-model="radio2">
+                <el-radio :label="3">审核通过</el-radio>
+                <el-radio :label="6">驳回</el-radio>
+                <el-radio :label="9">待审核</el-radio>
+                <el-radio :label="12">草稿</el-radio>
+           </el-radio-group>
+      </el-col>
+      <el-col :span="14" style="height:20px"></el-col>
+     <el-col :span="2">
+        <el-button type="primary" @click="setNewData" size="large">+添加</el-button>
+     </el-col>
+  </el-row>
+
+  <!-- <el-row :span="24" type="flex" justify="space-around" class="btn" style="margin-bottom:20px;">
     <el-col :span="4">
       <el-tooltip class="item" effect="light" content="添加数据" placement="right">
         <el-button type="primary" @click="setNewData" size="large">+添加</el-button>
@@ -14,10 +38,10 @@
         </el-option>
       </el-select>
     </el-col>
-  </el-row>
+  </el-row> -->
 
   <!-- 表格  -->
-  <el-table :data="tableData" v-loading.fullscreen.lock="listLoading" style="width: 100%" max-height="550" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table v-if="tableFalg" :data="tableData"  style="width: 100%;margin-top:10px" max-height="530" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="operationsMapName" label="运营图称" sortable min-width="120">
     </el-table-column>
     <el-table-column prop="name" label="运营图" sortable min-width="100">
@@ -43,9 +67,9 @@
     <el-table-column prop="currentState" label="当前状态">
 
     </el-table-column>
-    <el-table-column prop="auditState" label="审核状态">
+    <el-table-column v-if="showConfig" prop="auditState" label="审核状态">
     </el-table-column>
-    <el-table-column label="操作" width="200">
+    <el-table-column v-if="showConfig" label="操作" width="200">
       <template scope="scope">
            <el-button @click="handleClick" type="text" size="small">查看</el-button>
            <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
@@ -61,7 +85,7 @@
   <!--  覆盖地区 查看对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="province" label="省" width="200"></el-table-column>
+      <el-table-column property="value" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
         <template scope="scope">
        <el-tag
@@ -79,7 +103,11 @@
 export default {
   data() {
     return {
+      tableFalg:true,
+      showConfig:true,
       gridData:[],
+      radio2:3,
+      activeName2: 'first',
       showHeader:false,
       dialogTableVisible:false,
     // 下拉选择
@@ -109,94 +137,7 @@ export default {
         children: 'cities'
       },
       currentPage4: 1,
-      tableData: [{
-          date: '2016-05-01',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-05-02',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-05-03',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-05-04',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-05-05',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        },
-        {
-          date: '2016-06-01',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-06-02',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-06-03',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-06-04',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-06-05',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        },
-        {
-          date: '2016-07-01',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-07-02',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        },
-        {
-          date: '2016-07-03',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        },
-        {
-          date: '2016-07-04',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        },
-        {
-          date: '2016-07-05',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        },
-        {
-          date: '2016-08-01',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-08-02',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-08-03',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-08-04',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }, {
-          date: '2016-08-05',
-          name: 'liqi',
-          address: '北京朝阳区百子湾路12345'
-        }
-      ],
+      tableData: [ ],
       formLabelWidth: '120px',
       selectedOptions: [],
       selectedOptions2: []
@@ -208,11 +149,17 @@ export default {
       //     return this.tableData[0]
       // }
     }
-
   },
   created() {
+   console.log("$router: "+this.$route.path);
+   let url = "/rest/list2";
+   if(this.$route.path == "/chooseExpress") {
+       url ="/rest/list2-2"
+   } else if(this.$route.path == "/expressOrder") {
+        url = "/rest/list2-3";
+   }
     var _this = this;
-    _this.$http.get("/rest/list2")
+    _this.$http.get(url)
       .then(function(rsp) {
         _this.tableData = rsp.data.data
       })
@@ -222,7 +169,56 @@ export default {
 
     console.log(this.$route.matched);
   },
+  watch: {
+    '$route': function (to,from) {
+      // 默认状态是 运营位管理的 寄快递首页
+      console.log("$router: "+to.path);
+      let url = "/rest/list2";
+      if(to.path == "/chooseExpress") {
+        // 这里是运营位管理的 选择快递页面 的相关配置
+          url ="/rest/list2-2"
+      } else if(to.path == "/expressOrder") {
+        // 这里是运营位管理的 选快递下单页面的相关配置
+           url = "/rest/list2-3";
+      }
+       var _this = this;
+       _this.$http.get(url)
+         .then(function(rsp) {
+           _this.tableData = rsp.data.data
+         })
+         .catch(function(error) {
+           console.log(error);
+         })
+
+   }
+  },
   methods: {
+    // 标签页导航
+    handleTabClick(tab, event) {
+
+      var _this = this;
+      _this.listLoading = true;
+      _this.tableFalg = false
+      _this.showConfig = false;
+      console.log(tab.label);
+      var tableDataCopy = _this.tableData;
+      if(tab.label == "配置") {
+            _this.tableData = [];
+        // window.location.reload();
+         _this.showConfig = true;
+         _this.tableData = tableDataCopy;
+      } else {
+           _this.tableData = [];
+            // window.location.reload();
+          _this.showConfig = false;
+          _this.tableData = tableDataCopy;
+      }
+      setTimeout(() => {
+          _this.tableFalg = true;
+        _this.listLoading = false;
+      }, 600);
+
+    },
     // 查看覆盖地区
     checkArea() {
       var _this = this;
@@ -327,12 +323,19 @@ export default {
   }
 }
 </script>
-<style scoped>
-   .el-table__row td:nth-child(2n){
+<style>
+   /*.el-table__row td:nth-child(2n){
        background-color:#f5f5f5;
    }
    .el-table_1_column_2{
         background-color: #f5f5f5;
+   }*/
+   /*.el-tabs .el-tabs__content {
+       display:none;
    }
+   .el-table__body .el-table__row .el-table_1_column_3 .cell {
+       max-height: 150px !important;
+       overflow-y:scroll;
+   }*/
 
 </style>

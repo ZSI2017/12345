@@ -20,12 +20,16 @@
         </div>
     </div> -->
     <!--  标签页导航  -->
-    <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+    <el-tabs
+       v-model="activeName2"
+       type="card"
+       @tab-click="handleTabClick"
+       >
         <el-tab-pane label="配置" name="first">配置</el-tab-pane>
         <el-tab-pane label="已上线" name="second">已上线</el-tab-pane>
     </el-tabs>
     <!--  单选框   -->
-    <el-row :span="24" type="flex" align="middle" v-if="">
+    <el-row :span="24" type="flex" align="middle" v-if="showConfig">
         <el-col :span="8">
             <el-radio-group v-model="radio2">
                   <el-radio :label="3">审核通过</el-radio>
@@ -40,7 +44,7 @@
        </el-col>
     </el-row>
     <!--  下面的表格   -->
-    <el-table :data="tableData" v-loading.fullscreen.lock="listLoading" style="width: 100%" max-height="550" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+    <el-table :data="tableData" v-loading.fullscreen.lock="listLoading" style="width: 100%;margin-top:10px" max-height="530" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
       <el-table-column prop="operationsMapName" label="运营图名称" sortable min-width="120">
       </el-table-column>
       <el-table-column prop="name" label="运营图" sortable min-width="100">
@@ -75,7 +79,10 @@
            </template>
       </el-table-column>
     </el-table>
-
+    <div class="block pagination" style="margin-top:30px;float:right;">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="20">
+      </el-pagination>
+    </div>
   </section>
 </template>
 
@@ -83,6 +90,7 @@
   export default {
       data() {
         return {
+          showConfig:true,
           tableData:[],
           listLoading:false,
           radio2:3,
@@ -90,8 +98,20 @@
         };
       },
       methods: {
-        handleClick(tab, event) {
-          console.log(tab, event);
+        handleTabClick(tab, event) {
+          var _this = this;
+          _this.listLoading = true;
+          _this.showConfig = false;
+          console.log(tab.label);
+          if(tab.label == "配置") {
+             _this.showConfig = true;
+          } else {
+              _this.showConfig = false;
+          }
+          setTimeout(() => {
+            _this.listLoading = false;
+          }, 600);
+
         }
       },
       created() {
@@ -103,7 +123,6 @@
           .catch(function(error) {
             console.log(error);
           })
-
         console.log(this.$route.matched);
       },
   }
@@ -179,6 +198,10 @@
  .sendExpress {
      .el-tabs .el-tabs__content {
          display:none;
+     }
+     .el-table__body .el-table__row .el-table_1_column_3 .cell {
+         max-height: 150px;
+         overflow-y:scroll;
      }
  }
 </style>
