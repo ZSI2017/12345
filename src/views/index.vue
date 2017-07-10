@@ -22,7 +22,7 @@
             <!-- <el-menu-item-group> -->
             <!-- <template slot="title">分组一</template> -->
             <el-menu-item v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
-            {{item.name}}
+            <i style="width:30px;display:inline-block;"></i>{{item.name}}
             </el-menu-item>
  
             

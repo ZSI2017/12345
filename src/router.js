@@ -59,6 +59,7 @@
 //订单管理
 import orderManage from './page/orderManage/index.vue'
 import orderDetail from './page/orderManage/orderDetail.vue'
+import main from './page/orderManage/main.vue'
 
 
 //寄快递首页
@@ -198,12 +199,33 @@ let routes =  [
 {
    path:'/',
    name:"首页",
-   redirect: '/orderManage',
+   redirect: '/orderManage/main',
    component:index,
-   children:[
-      {path:'orderManage',component:orderManage,name:"订单管理"},
-      {path:'/orderDetail',name:'订单管理 / 查看详情',component:orderDetail}
+   children:[     
+      // { path: ''      , component: orderManage,name:"订单管理"},
+      {path:'/orderManage/main',component:orderManage,name:"订单管理",
+      children:[
+         {path:'',component:main},
+         {path:'/orderManage/orderDetail',name:'查看详情',component:orderDetail}
+      ]},
+      
    ]
+
+
+  //  children:[
+  //     { path: ''      , component: activeManage  },
+  //     {
+  //       path: 'detail', component: detail,
+
+  //       children: [
+  //         {path:'',component: page1},
+  //         {
+  //           path: 'page1', component: page1,
+  //         },
+  //         { path: 'page2', component: page2  },
+  //       ]
+  //     },
+  //   ]
  },{
    path:'/',
    name:"运营位管理",
@@ -219,9 +241,9 @@ let routes =  [
             { path: 'step4', component: step4  }
           ]
       },
-      {path:'chooseExpress',component:chooseExpress,name:"选择快递页"},
-      {path:'expressOrder',component:expressOrder,name:"选快递下单页"},
-      {path:"addData",component:addData,name:"选择快递页 / 添加数据",isHideChild:true}
+      {path:'/chooseExpress',component:chooseExpress,name:"选择快递页"},
+      {path:'/expressOrder',component:expressOrder,name:"选快递下单页"},
+      {path:"/addData",component:addData,name:"选择快递页 / 添加数据",isHideChild:true}
    ]
  },
  //寄快递入口
@@ -230,7 +252,7 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'sendExpressEnter',component:sendExpressEnter,name:"寄快递入口管理"}
+      {path:'/sendExpressEnter',component:sendExpressEnter,name:"寄快递入口管理"}
    ]
   //  path:'/sendExpressEnter',component:sendExpressEnter
 
@@ -252,7 +274,7 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'expressCompany',component:expressCompany,name:"快递公司管理"}
+      {path:'/expressCompany',component:expressCompany,name:"快递公司管理"}
    ]
   //  path:'/expressCompany',component:expressCompany
 
@@ -263,7 +285,7 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理"}
+      {path:'/chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理"}
    ]
   //  path:'/chooseExpressOrder',component:chooseExpressOrder
 
@@ -274,7 +296,7 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'serverTypeDiscount',component:serverTypeDiscount,name:"服务类型及折扣管理"}
+      {path:'/serverTypeDiscount',component:serverTypeDiscount,name:"服务类型及折扣管理"}
    ]
   //  path:'/serverTypeDiscount',component:serverTypeDiscount
 
@@ -285,7 +307,7 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'nonServerDistrict',component:nonServerDistrict,name:"非服务地区管理"}
+      {path:'/nonServerDistrict',component:nonServerDistrict,name:"非服务地区管理"}
    ]
   //  path:'/nonServerDistrict',component:nonServerDistrict
 
@@ -297,27 +319,27 @@ let routes =  [
    component:index,
    hasChild:true,
    children:[
-      {path:'priceManage',component:totalpages,name:"运线快递费管理",   children:[
+      {path:'/priceManage',component:totalpages,name:"运线快递费管理",   children:[
            { path: ''      , component: priceManage  },
            {
-             path: 'detail', component: detail,
+             path: '/detail', component: detail,
 
              children: [
                {path:'',component: page1},
                {
-                 path: 'page1', component: page1,
+                 path: '/page1', component: page1,
                  children: [
                   //  {path: '', component: step1},
                   //  {path: 'step1', component: step1},
-                   {path: 'step2', component: step2},
-                   {path: 'step3', component: step3},
-                   {path: 'step4', component: step4}
+                   {path: '/step2', component: step2},
+                   {path: '/step3', component: step3},
+                   {path: '/step4', component: step4}
                  ]
                },
-               { path: 'page2', component: page2  },
-               { path: 'page3', component: page3  },
-               { path: 'page4', component: page4  },
-               { path: 'page5', component: page5  }
+               { path: '/page2', component: page2  },
+               { path: '/page3', component: page3  },
+               { path: '/page4', component: page4  },
+               { path: '/page5', component: page5  }
              ]
            },
          ]
@@ -330,7 +352,7 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'oneCitySend',component:oneCitySend,name:"同城直送管理"}
+      {path:'/oneCitySend',component:oneCitySend,name:"同城直送管理"}
    ]
   //  path:'/oneCitySend',component:oneCitySend
 
@@ -351,9 +373,9 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-     {path:'noticeManage',component:noticeManage,name:"公告管理"},
+     {path:'/noticeManage',component:noticeManage,name:"公告管理"},
     //  {path:'addingValue',name:'添加',component:addingValue}
-     {path:'addingValue',name:'公告管理 / 添加数据',component:addingValue}
+     {path:'/addingValue',name:'公告管理 / 添加数据',component:addingValue}
   ]
 
  },
@@ -364,8 +386,8 @@ let routes =  [
    component:index,
    hasChild:true,
    children:[
-      {path:'orderCancle',component:orderCancle,name:"订单取消频次管理"},
-      {path:'blankList',component:blankList,name:"黑名单管理"}
+      {path:'/orderCancle',component:orderCancle,name:"订单取消频次管理"},
+      {path:'/blankList',component:blankList,name:"黑名单管理"}
    ]
   //  path:'/orderCancle',component:orderCancle
 

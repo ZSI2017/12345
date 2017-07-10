@@ -10,8 +10,8 @@
                 <el-row class="basic-table">
                     <el-col :md="12" :lg="6" v-for="item in items">
                         <div class="grid-content bg-purple">
-                            <el-col :span="12" class="cell-left">{{item.name}}</el-col >
-                            <el-col :span="12" class="cell-right">{{item.message}}</el-col>
+                            <el-col :span="9" class="cell-left">{{item.name}}</el-col >
+                            <el-col :span="15" class="cell-right">{{item.message}}</el-col>
                         </div>
                     </el-col>            
                 </el-row>
@@ -49,6 +49,8 @@
             <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
             <el-button class="complateInfo" type="primary">查看完整信息</el-button>
             <el-button class="serverRecord" type="primary">查看信息服务</el-button>
+            <el-button class="complateInfo" type="danger">取消订单</el-button>
+            <el-button class="serverRecord" type="danger">作废订单</el-button>
         </el-row>
 
     </el-collapse>
@@ -227,17 +229,13 @@
 
     @media screen and (max-width: 901px) { 
         .cell-left{
-            /*border-top: 1px solid #333;*/
             text-align: left;
             background: #e1e1e1;
             box-sizing:border-box;
             white-space:nowrap;
         }
        .cell-right{
-           /*border-top: 1px solid #333;*/
             background: #fff;
-            /*border: 1px solid #333;*/
-            /*border-bottom:0;*/
             text-align: center;
             white-space:nowrap;
         }
@@ -247,16 +245,28 @@
         .basic-table .el-col:nth-child(11){
             border-bottom: 0;
         }
-         /*
-        .basic-table .el-col:nth-child(n+9){
-            border-bottom: 1px solid #333;
-        }
-        .basic-table .el-col:nth-child(4n+1) .cell-left{
-            border-left:1px solid #333;
-        }*/
     } 
+    //    @media screen and (min-width: 901px) { 
+    //     .cell-left{
+    //         text-align: left;
+    //         background: #e1e1e1;
+    //         box-sizing:border-box;
+    //         white-space:nowrap;
+    //     }
+    //    .cell-right{
+    //         background: #fff;
+    //         text-align: center;
+    //         white-space:nowrap;
+    //     }
+    //     .basic-table .el-col:nth-child(2n+1) .cell-right{
+    //         border-right: 1px solid #333;
+    //     }
+    //     .basic-table .el-col:nth-child(11){
+    //         border-bottom: 0;
+    //     }
+    // } 
     .footer{
-        padding:20px 0;
+        padding:20px 0 20px 15px;
     }
 
  
