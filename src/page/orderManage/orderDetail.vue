@@ -6,9 +6,13 @@
     <el-row>
         <el-collapse v-model="activeNames" @change="handleChange">
             <el-collapse-item title="基本信息" name="0">
-                
                 <el-row class="basic-table">
-                    <el-col :span="6" v-for="item in items"><div class="grid-content bg-purple"><el-col :span="9" class="cell-left">{{item.name}}</el-col ><el-col :span="15" class="cell-right">{{item.message}}</el-col></div></el-col>            
+                    <el-col :md="12" :lg="6" v-for="item in items">
+                        <div class="grid-content bg-purple">
+                            <el-col :span="12" class="cell-left">{{item.name}}</el-col >
+                            <el-col :span="12" class="cell-right">{{item.message}}</el-col>
+                        </div>
+                    </el-col>            
                 </el-row>
             </el-collapse-item>
         </el-collapse>          
@@ -26,13 +30,25 @@
         </el-collapse-item>
         <el-collapse-item title="物品信息" name="3">
             <el-row class="goods-table">
-                <el-col :span="24" v-for="goodsItem in goodsItems"><div class="grid-content bg-purple"><el-col :span="3">{{goodsItem.name}}：</el-col ><el-col :span="18">{{goodsItem.message}}</el-col></div></el-col>            
+                <el-col :span="24" v-for="goodsItem in goodsItems"><div class="grid-content bg-purple"><el-col :span="3">{{goodsItem.name}}：</el-col ><el-col :span="18">{{goodsItem.message}}</el-col></div></el-col>              
             </el-row>
         </el-collapse-item>
-        <el-collapse-item title="可控 Controllability" name="4">
-            <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-            <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
+        <el-collapse-item title="揽收员信息" name="4">
+            <el-row class="courier-table">
+                <el-col :span="24" v-for="courier in couriers"><div class="grid-content bg-purple"><el-col :span="3">{{courier.name}}：</el-col ><el-col :span="18">{{courier.message}}</el-col></div></el-col>      
+            </el-row>
         </el-collapse-item>
+        <el-collapse-item title="快递费用" name="5">
+            <el-row class="expressPay-table">
+                <el-col :span="24" v-for="expressPay in expressPays"><div class="grid-content bg-purple"><el-col :span="3">{{expressPay.name}}：</el-col ><el-col :span="18">{{expressPay.message}}</el-col></div></el-col>           
+            </el-row>
+        </el-collapse-item>
+        <el-row class="footer">
+            <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
+            <el-button class="complateInfo" type="primary">查看完整信息</el-button>
+            <el-button class="serverRecord" type="primary">查看信息服务</el-button>
+        </el-row>
+
     </el-collapse>
   </div>
 </template>
@@ -40,13 +56,13 @@
   export default {
     data() {
       return {
-        activeNames: ['0','1','2','3','4'],
+        activeNames: ['0','1','2','3','4',"5"],
         items:[{
             name: "快递公司",
             message: '德邦快递',
           },
           {
-            name: "实际承运物流公司",
+            name: "实际承运公司",
             message: '暂无',
           },
           {
@@ -102,12 +118,47 @@
             message: '北京市朝阳区几乎几乎没有这个地址',
         }],
         goodsItems:[{
-            type: "寄件人",
-            weight: '尼古拉是凯奇',
-            server:""
-        }]
-      };
-    }
+            name: "类型",
+            message: '日用品',
+        },
+        {
+            name: "物品重量",
+            message: '18T',
+        },{
+            name: "额外服务",
+            message: '北京市朝阳区几乎几乎没有这个服务',
+        },{
+            name: "备注",
+            message: '北京市朝阳区几乎几乎没有这个备注',
+        }],
+        couriers:[{
+            name: "揽件员信息",
+            message: '暂无',
+        },
+        {
+            name: "联系电话",
+            message: '暂无',
+        }],
+        expressPays:[{
+            name: "支付方式",
+            message: '支付宝在线支付',
+        },
+        {
+            name: "预计费用",
+            message: "￥11.00",
+        },
+        {
+            name: "实际费用",
+            message: '未支付',
+        }],
+      }
+
+    },
+     methods: {
+
+
+     }
+
   }
 </script>
 
@@ -116,24 +167,92 @@
         height: 60px;
         line-height: 60px;
     }
-    .cell-left{
-        border-top: 1px solid #333;
-        text-align: left;
-        background: #e1e1e1;
-        box-sizing:border-box;
+    @media screen and (min-width: 1201px) { 
+        .cell-left{
+            border-top: 1px solid #333;
+            text-align: left;
+            background: #e1e1e1;
+            box-sizing:border-box;
+            white-space:nowrap;
+            text-indent: 5px;
+        }
+        .cell-right{
+            background: #fff;
+            border: 1px solid #333;
+            border-bottom:0;
+            text-align: left;
+            white-space:nowrap;
+            text-indent: 5px;
+        }
+        .basic-table .el-col:nth-child(n+9){
+            border-bottom: 1px solid #333;
+        }
+        .basic-table .el-col:nth-child(4n+1) .cell-left{
+            border-left:1px solid #333;
+        }
+    } 
+    @media screen and (max-width: 1201px) { 
+        .cell-left{
+            border-left: 1px solid #333;
+            border-top: 1px solid #333;
+            text-align: left;
+            background: #e1e1e1;
+            box-sizing:border-box;
+            white-space:nowrap;
+            text-indent: 5px;
+        }
+        .cell-right{
+            overflow: hidden;
+            background: #fff;
+            border-left: 1px solid #333;
+            border-top: 1px solid #333;
+            text-align: left;
+            white-space:nowrap;
+            text-indent: 5px;
+        }
+        .basic-table .el-col:nth-child(2n) .cell-right{
+            border-right: 1px solid #333;
+        }
+        .basic-table .el-col:nth-child(11),.basic-table .el-col:nth-child(12){
+            border-bottom:1px solid #333;
+        }
+    } 
+
+    @media screen and (max-width: 901px) { 
+        .cell-left{
+            /*border-top: 1px solid #333;*/
+            text-align: left;
+            background: #e1e1e1;
+            box-sizing:border-box;
+            white-space:nowrap;
+        }
+       .cell-right{
+           /*border-top: 1px solid #333;*/
+            background: #fff;
+            /*border: 1px solid #333;*/
+            /*border-bottom:0;*/
+            text-align: center;
+            white-space:nowrap;
+        }
+        .basic-table .el-col:nth-child(2n+1) .cell-right{
+            border-right: 1px solid #333;
+        }
+        .basic-table .el-col:nth-child(11){
+            border-bottom: 0;
+        }
+         /*
+        .basic-table .el-col:nth-child(n+9){
+            border-bottom: 1px solid #333;
+        }
+        .basic-table .el-col:nth-child(4n+1) .cell-left{
+            border-left:1px solid #333;
+        }*/
+    } 
+    .footer{
+        padding:20px 0;
     }
-    .cell-right{
-        background: #fff;
-        border: 1px solid #333;
-        border-bottom:0;
-        text-align: center;
-    }
-    .basic-table .el-col:nth-child(n+9){
-        border-bottom: 1px solid #333;
-    }
-    .basic-table .el-col:nth-child(4n+1) .cell-left{
-        border-left:1px solid #333;
-    }
+
+
 
  
 </style>
