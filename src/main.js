@@ -6,8 +6,7 @@ import VueRouter from "vue-router"
 import routes  from "./router.js"
 import Axios from "axios";
 import Vuex from "vuex";
-import store from "./vuex/store"
-
+import store from "./vuex/store";
 // 引入vuex 进行全局状态管理
 import {changeIndex} from "./vuex/actions";
 import {changeLoading} from "./vuex/getters";
@@ -16,7 +15,10 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 //  axios  加入到 vue 的原型方法中
 Object.defineProperty(Vue.prototype, '$http', { value: Axios })
-console.log(routes);
+// console.log(routes);
+
+ // Vue的 日志与警告
+Vue.config.silent = true
 
 const router = new VueRouter({
       routes,

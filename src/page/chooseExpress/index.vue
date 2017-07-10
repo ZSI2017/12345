@@ -16,8 +16,8 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table :data="tableData" stripe v-loading.fullscreen.lock="listLoading" style="width: 100%" max-height="550" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="operationsMapName" label="运营图名称" sortable min-width="120">
+  <el-table :data="tableData" v-loading.fullscreen.lock="listLoading" style="width: 100%" max-height="550" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+    <el-table-column prop="operationsMapName" label="运营图称" sortable min-width="120">
     </el-table-column>
     <el-table-column prop="name" label="运营图" sortable min-width="100">
       <template scope="scope">
@@ -326,6 +326,12 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
+   .el-table__row td:nth-child(2n){
+       background-color:#f5f5f5;
+   }
+   .el-table_1_column_2{
+        background-color: #f5f5f5;
+   }
 
 </style>

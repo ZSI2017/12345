@@ -1,11 +1,12 @@
-<<template>
+<template>
   <div class="section">
     <el-row>
         <el-col :span="24"><h1 class="grid-content bg-purple-dark orderTitle">订单号：123456789</h1></el-col>
     </el-row>
-    <el-row>
-        <el-collapse v-model="activeNames" @change="handleChange">
+    <el-row class="orderDetail">
+        <el-collapse v-model="activeNames" >
             <el-collapse-item title="基本信息" name="0">
+
                 <el-row class="basic-table">
                     <el-col :md="12" :lg="6" v-for="item in items">
                         <div class="grid-content bg-purple">
@@ -15,21 +16,22 @@
                     </el-col>            
                 </el-row>
             </el-collapse-item>
-        </el-collapse>          
+        </el-collapse>
     </el-row>
-    <el-collapse v-model="activeNames" @change="handleChange">
+    <el-collapse v-model="activeNames">
         <el-collapse-item title="寄件人信息" name="1">
             <el-row class="sender-table">
-                <el-col :span="24" v-for="senderItem in senderItems"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>            
+                <el-col :span="24" v-for="senderItem in senderItems"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-collapse-item title="收件人信息" name="2">
             <el-row class="sender-table">
-                <el-col :span="24" v-for="senderItem in senderItems"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>            
+                <el-col :span="24" v-for="senderItem in senderItems"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-collapse-item title="物品信息" name="3">
             <el-row class="goods-table">
+
                 <el-col :span="24" v-for="goodsItem in goodsItems"><div class="grid-content bg-purple"><el-col :span="3">{{goodsItem.name}}：</el-col ><el-col :span="18">{{goodsItem.message}}</el-col></div></el-col>              
             </el-row>
         </el-collapse-item>
@@ -109,14 +111,14 @@
         senderItems:[{
             name: "寄件人",
             message: '尼古拉是凯奇',
-        },
-        {
+
+        }, {
             name: "联系电话",
             message: '1888888888',
         },{
-            name: "寄件地址",
-            message: '北京市朝阳区几乎几乎没有这个地址',
-        }],
+          name: "寄件地址",
+           message: '北京市朝阳区几乎几乎没有这个地址',
+       }],
         goodsItems:[{
             name: "类型",
             message: '日用品',
@@ -162,7 +164,12 @@
   }
 </script>
 
-<style>
+<style lang="scss">
+ .orderDetail {
+     .el-table__row td:nth-child(2n+1){
+       background-color:#f5f5f5;
+     }
+ }
     .orderTitle{
         height: 60px;
         line-height: 60px;
@@ -252,8 +259,8 @@
         padding:20px 0;
     }
 
-
-
  
 </style>
 
+
+</style>
