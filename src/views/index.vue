@@ -16,7 +16,7 @@
       <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
-          
+
           <el-submenu :index="index+''"  v-if="items.hasChild&&!items.isHide">
             <template slot="title"><i style="width:30px;display:inline-block;"></i>{{items.name}}</template>
             <!-- <el-menu-item-group> -->
@@ -24,13 +24,13 @@
             <el-menu-item v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
             <i style="width:30px;display:inline-block;"></i>{{item.name}}
             </el-menu-item>
- 
-            
+
+
           </el-submenu>
           <el-menu-item v-if="!items.hasChild&&!items.isHide" :index="items.children[0].path">
             <i style="width:30px;display:inline-block;"></i>{{items.children[0].name}}
           </el-menu-item>
-   
+
         </template>
         <el-menu-item><i style="width:30px;display:inline-block;"></i>退出登录</el-menu-item>
       </el-menu>
@@ -40,13 +40,13 @@
 
     </div>
 
-    <div 
+    <div
         v-loading.fullscreen.lock="fullscreenLoading"
         element-loading-text="拼命加载中"
         style="padding:20px;padding-left:290px;padding-top:20px;flex:1;background:#f1f1f1;">
       <el-breadcrumb style="padding:10px 0 25px;font-size:16px;line-height:100%;margin-bottom:20px;border-bottom:1px solid #999;" separator="/">
         <!-- {{$route.matched[0].name}} -->
-        <el-breadcrumb-item  v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
+        <el-breadcrumb-item v-if="item.name" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
 
           {{item.name}}
         </el-breadcrumb-item>
@@ -98,8 +98,8 @@ export default {
       msg: 'Use Vue 2.0 Today!',
     }
   },
-  ready() {
-    console.log("adfsd" + this.$route.matched);
+  created() {
+    console.log(this.$route.matched);
   },
   watch: {
 
