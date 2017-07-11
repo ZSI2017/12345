@@ -4,8 +4,8 @@
   <header class="header" :class="{ 'header-fixed' : headerFixed }" style="background-color:#5295e2;">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content" style="float:left;width:270px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">{{ title }}</div>
-        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">123456789</div>
+        <div class="grid-content" @click="handleHome" style="float:left;width:270px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">{{ title }}</div>
+        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">123456789</div>
       </el-col>
     </el-row>
   </header>
@@ -108,6 +108,9 @@ export default {
     test() {
       alert("dsfsadf");
     },
+    handleHome(){
+        this.$router.push({path:'./home'});
+    },
     editSure(){
        this.loadingFlag = false;
        this.$router.app.$store.state.loadingFlag = true;
@@ -202,6 +205,10 @@ header.header-fixed {
     left: 0;
     right: 0;
 }
+
+.el-menu .el-menu-item:first-child{
+  display: none;
+}
 header .el-menu-demo {
     padding-left: 300px !important;
 }
@@ -237,17 +244,17 @@ header .el-menu-demo {
 ::-webkit-scrollbar {
     width: 3px;
     height: 3px;
-    background-color: #3091F2;
+    background-color: #ccc;
 }
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     border-radius: 10px;
-    background-color: #F5F5F5;
+    background-color: #f1f1f1;
 }
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #3091F2;
+    background-color: #ccc;
 }
 //////////////// 自定义滑块样式////////////////
 </style>

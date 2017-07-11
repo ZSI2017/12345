@@ -1,3 +1,4 @@
+import home from './page/home.vue'
 //订单管理
 import orderManage from './page/orderManage/index.vue'
 import orderDetail from './page/orderManage/orderDetail.vue'
@@ -78,24 +79,20 @@ import layout from "./views/component/layout.vue"
 
 let routes =  [
   {
-    path:'/login',
-    name:"登录页面",
-    component:login,
-    isHide:true,
-  },{
-      path:'/',
-      name:"首页",
-      component:index,
-      isHide:true,
-      children:[
-          {path:'',component:welcome}
-      ]
-  },{
+   path:'/',
+   name:"我的快递",
+   redirect: '/home',
+   isHide:true,
+   component:index,
+   children:[
+      {path:'/home',component:home},
+   ]
+ },
+{
    path:'/',
    name:"首页",
    component:index,
    children:[
-      // { path: ''      , component: orderManage,name:"订单管理"},
       {path:'/orderManage/main',component:orderManage,name:"订单管理",
       children:[
          {path:'',component:main},
