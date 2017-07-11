@@ -42,37 +42,37 @@
 
   <!-- 表格  -->
   <el-table v-if="tableFalg" :data="tableData"  style="width: 100%;margin-top:10px" max-height="530" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="operationsMapName" label="运营图称" sortable min-width="120">
+    <el-table-column prop="operationsMapName" label="运营图称" sortable width="140">
     </el-table-column>
-    <el-table-column prop="name" label="运营图" sortable min-width="100">
+    <el-table-column prop="name" label="运营图" sortable width="130">
       <template scope="scope">
             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
         </template>
     </el-table-column>
     <el-table-column prop="link" min-width="200" label="链接">
     </el-table-column>
-    <el-table-column prop="address" label="覆盖地区">
+    <el-table-column prop="address" width="50" label="覆盖地区">
       <template scope="scope">
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime" label="创建时间">
+    <el-table-column prop="createTime" label="创建时间" width="130">
     </el-table-column>
-    <el-table-column prop="modifyTime" label="修改时间">
+    <el-table-column prop="modifyTime" label="修改时间" width="130">
     </el-table-column>
-    <el-table-column prop="activeTime" min-width="200" label="有效时段">
+    <el-table-column prop="activeTime"  label="有效时段">
     </el-table-column>
-    <el-table-column prop="Forder" label="排序值">
+    <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="currentState" label="当前状态">
+    <el-table-column prop="currentState" width="100" label="当前状态">
 
     </el-table-column>
-    <el-table-column v-if="showConfig" prop="auditState" label="审核状态">
+    <el-table-column v-if="showConfig" prop="auditState" width="100" label="审核状态">
     </el-table-column>
-    <el-table-column v-if="showConfig" label="操作" width="200">
+    <el-table-column v-if="showConfig" label="操作" width="130">
       <template scope="scope">
-           <el-button @click="handleClick" type="text" size="small">查看</el-button>
-           <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
+           <el-button @click="handleClick" type="text" size="small">置为下架</el-button>
+           <el-button @click="handleEdit" type="text" size="small">修改</el-button>
          </template>
     </el-table-column>
   </el-table>
@@ -89,7 +89,7 @@
       <el-table-column property="city" label="市">
         <template scope="scope">
        <el-tag
-        style="margin-right:10px;"
+        style="margin-right:10px;margin-bottom:5px;"
          v-for="(item,index) in scope.row.city"
          >{{item}}</el-tag>
      </template>
@@ -222,10 +222,12 @@ export default {
     // 查看覆盖地区
     checkArea() {
       var _this = this;
+        _this.listLoading = true;
       _this.$http.get("/rest/list3")
         .then(function(rsp) {
           _this.gridData = rsp.data.data;
-          console.log(_this.gridData);
+          // console.log(_this.gridData);
+            _this.listLoading = false;
           _this.dialogTableVisible = true
         })
         .catch(function(error) {
@@ -334,10 +336,17 @@ export default {
    .el-tabs .el-tabs__content {
        display:none;
    }
-   /*
+   .el-table .cell, .el-table th>.cell {
+        padding:0 7px;
+   }
+
    .el-table__body .el-table__row .el-table_1_column_3 .cell {
        max-height: 150px !important;
-       overflow-y:scroll;
-   }*/
+       overflow-y:auto;
+   }
+   .el-table__body .el-table__row .el-table_1_column_14 .cell {
+       max-height: 150px !important;
+       overflow-y:auto;
+   }
 
 </style>
