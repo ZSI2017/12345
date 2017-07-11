@@ -4,8 +4,8 @@
   <header class="header" :class="{ 'header-fixed' : headerFixed }" style="background-color:#5295e2;">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content" style="float:left;width:270px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">{{ title }}</div>
-        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;">123456789</div>
+        <div class="grid-content" @click="handleHome" style="float:left;width:270px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">{{ title }}</div>
+        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">123456789</div>
       </el-col>
     </el-row>
   </header>
@@ -108,6 +108,9 @@ export default {
     test() {
       alert("dsfsadf");
     },
+    handleHome(){
+        this.$router.push({path:'./home'});
+    },
     editSure(){
        this.loadingFlag = false;
        this.$router.app.$store.state.loadingFlag = true;
@@ -201,6 +204,10 @@ header.header-fixed {
     top: 0;
     left: 0;
     right: 0;
+}
+
+.el-menu .el-menu-item:first-child{
+  display: none;
 }
 header .el-menu-demo {
     padding-left: 300px !important;

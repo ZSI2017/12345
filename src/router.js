@@ -56,6 +56,8 @@
 //
 // export default routes;
 
+import home from './page/home.vue'
+
 //订单管理
 import orderManage from './page/orderManage/index.vue'
 import orderDetail from './page/orderManage/orderDetail.vue'
@@ -195,13 +197,22 @@ import upload from "./views/component/upload.vue"
 import layout from "./views/component/layout.vue"
 
 let routes =  [
+  {
+   path:'/',
+   name:"我的快递",
+   redirect: '/home',
+   component:index,
+   children:[
+      {path:'/home',component:home},
+
+   ]
+ },
 {
    path:'/',
    name:"首页",
-   redirect: '/orderManage/main',
+  //  redirect: '/orderManage',
    component:index,
    children:[
-      // { path: ''      , component: orderManage,name:"订单管理"},
       {path:'/orderManage/main',component:orderManage,name:"订单管理",
       children:[
          {path:'',component:main},
@@ -209,22 +220,6 @@ let routes =  [
       ]},
 
    ]
-
-
-  //  children:[
-  //     { path: ''      , component: activeManage  },
-  //     {
-  //       path: 'detail', component: detail,
-
-  //       children: [
-  //         {path:'',component: page1},
-  //         {
-  //           path: 'page1', component: page1,
-  //         },
-  //         { path: 'page2', component: page2  },
-  //       ]
-  //     },
-  //   ]
  },{
    path:'/',
    name:"运营位管理",

@@ -7,6 +7,7 @@
      >
       <el-tab-pane label="配置" name="first">配置</el-tab-pane>
       <el-tab-pane label="已上线" name="second">已上线</el-tab-pane>
+      <el-tab-pane label="待审核" name="third">待审核</el-tab-pane>      
   </el-tabs>
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig">
@@ -41,7 +42,7 @@
   </el-row> -->
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" :data="tableData"  style="width: 100%;margin-top:10px" max-height="530" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table v-if="tableFalg" :data="tableData"  style="width: 98%;margin-top:10px" max-height="450" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="operationsMapName" label="运营图称" sortable width="140">
     </el-table-column>
     <el-table-column prop="name" label="运营图" sortable width="130">
