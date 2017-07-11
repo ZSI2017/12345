@@ -23,8 +23,6 @@ axios.interceptors.response.use(function(response){
     return Promise.reject(error);
 
 });
-
-
 export default {
     post(url,data,successfn,errorfn){
        axios({

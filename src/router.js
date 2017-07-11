@@ -1,61 +1,3 @@
-// import App from './App.vue';
-// import table from "./views/table/table.vue";
-// import time from "./views/table/time.vue";
-// import form from "./views/table/form.vue";
-// import index from "./views/index.vue";
-//
-// import addPage from "./views/component/addpage.vue"
-// import upload from "./views/component/upload.vue"
-// import axios  from "views/component/RainAxios.vue"
-//
-// let routes =  [
-//        {
-//             path:'/',
-//             name:"表格",
-//             component:index,
-//             hasChild:true,
-//             children: [
-//                    { path: 'table', component: table, name: '表格'},
-//                    { path: 'time', component: time, name: '时间' },
-//                    { path: 'form', component: form, name: '表单' },
-//                ]
-//       },{
-//            path:'/',
-//            name:"图片",
-//            component:index,
-//           //  hasChild:true,
-//            children: [
-//                   { path: 'upload', component: upload, name: '上传图片' },
-//               ]
-//      },{
-//        path:'/',
-//        name:"App",
-//        component:index,
-//       //  hasChild:true,
-//        children: [
-//               { path: 'addPage', component: addPage, name: 'table' },
-//           ]
-//  },{
-//    path:'/',
-//    name:"Axios",
-//    component:index,
-//   //  hasChild:true,
-//    children: [
-//           { path: 'axios', component: axios, name: 'axios' },
-//       ]
-// },{
-//           path:"/",
-//           name:'addPage',
-//           component:addPage,
-//           hasChild:true,
-//           children: [
-//               {path:'table',component:addPage,name:"addPage"}
-//           ]
-//  }
-// ];
-//
-// export default routes;
-
 //订单管理
 import orderManage from './page/orderManage/index.vue'
 import orderDetail from './page/orderManage/orderDetail.vue'
@@ -119,75 +61,15 @@ import page4 from './page/priceManage/page4.vue'
 import page5 from './page/priceManage/page5.vue'
 
 
-
-// import orderManage from './page/orderManage/index.vue'
-//
-// import activePublic from './page/activePublic/step1.vue'
-// import step1 from './page/activePublic/step1.vue'
-// import step2 from './page/activePublic/step2.vue'
-// import step3 from './page/activePublic/step3.vue'
-// import step4 from './page/activePublic/step4.vue'
-//
-// import totalpages from './page/activeManage/totalpages.vue'
-// import activeManage from './page/activeManage/index.vue'
-// import detail from './page/activeManage/detail.vue'
-//
-// import page1 from './page/activeManage/page1.vue'
-// import page2 from './page/activeManage/page2.vue'
-// import page3 from './page/activeManage/page3.vue'
-// import page4 from './page/activeManage/page4.vue'
-// import page5 from './page/activeManage/page5.vue'
-//
-//
-//
-// export default [
-//   {
-//     path:'/orderManage',component:orderManage
-//   },
-//   {
-//     path: '/activeManage',component:totalpages,
-//     children:[
-//       { path: ''      , component: activeManage  },
-//       {
-//         path: 'detail', component: detail,
-//
-//         children: [
-//           {path:'',component: page1},
-//           {
-//             path: 'page1', component: page1,
-//             children: [
-//               {path: '', component: step1},
-//               {path: 'step1', component: step1},
-//               {path: 'step2', component: step2},
-//               {path: 'step3', component: step3},
-//               {path: 'step4', component: step4}
-//             ]
-//           },
-//           { path: 'page2', component: page2  },
-//           { path: 'page3', component: page3  },
-//           { path: 'page4', component: page4  },
-//           { path: 'page5', component: page5  }
-//         ]
-//       },
-//     ]
-//   },{
-//     path:'/activePublic',component:activePublic,
-//     children:[
-//       { path: ''      , component: step1  },
-//       { path: 'step1', component: step1  },
-//       { path: 'step2', component: step2  },
-//       { path: 'step3', component: step3  },
-//       { path: 'step4', component: step4  }
-//     ]
-//   }
-// ]
-
 import App from './App.vue';
 import table from "./views/table/table.vue";
 import time from "./views/table/time.vue";
 import form from "./views/table/form.vue";
 import index from "./views/index.vue";
-import addData from "./page/chooseExpress/addData.vue"
+import addData from "./page/chooseExpress/addData.vue";
+
+import welcome from "./page/main.vue";
+import login from "./page/login.vue";
 
 
 import addPage from "./views/component/addpage.vue"
@@ -195,10 +77,22 @@ import upload from "./views/component/upload.vue"
 import layout from "./views/component/layout.vue"
 
 let routes =  [
-{
+  {
+    path:'/login',
+    name:"登录页面",
+    component:login,
+    isHide:true,
+  },{
+      path:'/',
+      name:"首页",
+      component:index,
+      isHide:true,
+      children:[
+          {path:'',component:welcome}
+      ]
+  },{
    path:'/',
    name:"首页",
-   redirect: '/orderManage/main',
    component:index,
    children:[
       // { path: ''      , component: orderManage,name:"订单管理"},
@@ -207,24 +101,7 @@ let routes =  [
          {path:'',component:main},
          {path:'/orderManage/orderDetail',name:'查看详情',component:orderDetail}
       ]},
-
    ]
-
-
-  //  children:[
-  //     { path: ''      , component: activeManage  },
-  //     {
-  //       path: 'detail', component: detail,
-
-  //       children: [
-  //         {path:'',component: page1},
-  //         {
-  //           path: 'page1', component: page1,
-  //         },
-  //         { path: 'page2', component: page2  },
-  //       ]
-  //     },
-  //   ]
  },{
    path:'/',
    name:"运营位管理",

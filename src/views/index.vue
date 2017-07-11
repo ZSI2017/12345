@@ -43,7 +43,7 @@
     <div
         v-loading.fullscreen.lock="fullscreenLoading"
         element-loading-text="拼命加载中"
-        style="padding:20px;padding-left:290px;padding-top:20px;flex:1;background:#f1f1f1;">
+        style="width:100%;box-sizing:border-box;padding:20px;padding-left:290px;padding-top:20px;flex:1;background:#f1f1f1;">
       <el-breadcrumb style="padding:10px 0 25px;font-size:16px;line-height:100%;margin-bottom:20px;border-bottom:1px solid #999;" separator="/">
         <!-- {{$route.matched[0].name}} -->
         <el-breadcrumb-item v-if="item.name" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
