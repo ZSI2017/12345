@@ -237,17 +237,17 @@ header .el-menu-demo {
 ::-webkit-scrollbar {
     width: 3px;
     height: 3px;
-    background-color: #3091F2;
+    background-color: #ccc;
 }
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     border-radius: 10px;
-    background-color: #F5F5F5;
+    background-color: #f1f1f1;
 }
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #3091F2;
+    background-color: #ccc;
 }
 //////////////// 自定义滑块样式////////////////
 </style>
