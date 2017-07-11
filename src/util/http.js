@@ -52,13 +52,11 @@ export default {
            (response) => {
                return mySuccessFn(response,successfn,errorfn);
            }
-
        ).catch(
            (error) => {
                  return myErrorFn(error)
            }
        )
-
     }
 
 };
