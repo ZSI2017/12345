@@ -3,7 +3,7 @@
     <el-table-column prop="operationsMapName" label="运营图称" sortable min-width="120">
     </el-table-column>
     <el-table-column prop="name" label="运营图" sortable min-width="100">
-      <template scope="scope">
+        <template scope="scope">
             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
         </template>
     </el-table-column>
@@ -23,7 +23,6 @@
     <el-table-column prop="Forder" label="排序值">
     </el-table-column>
     <el-table-column prop="currentState" label="当前状态">
-
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" label="审核状态">
     </el-table-column>
