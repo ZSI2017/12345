@@ -83,6 +83,12 @@ let routes =  [
    name:"我的快递",
    redirect: '/home',
    isHide:true,
+   component:login,
+ },{
+   path:'/',
+   name:"我的快递",
+   redirect: '/home',
+   isHide:true,
    component:index,
    children:[
       {path:'/home',component:home},
