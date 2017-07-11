@@ -109,7 +109,7 @@ export default {
       alert("dsfsadf");
     },
     handleHome(){
-        this.$router.push({path:'./home'});
+        this.$router.push({path:'/home'});
     },
     editSure(){
        this.loadingFlag = false;
@@ -206,9 +206,6 @@ header.header-fixed {
     right: 0;
 }
 
-.el-menu .el-menu-item:first-child{
-  display: none;
-}
 header .el-menu-demo {
     padding-left: 300px !important;
 }

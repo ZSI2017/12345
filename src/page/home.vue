@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <p>欢迎使用支付宝寄件平台管理后台</p>
+        <p class="home-font">欢迎使用支付宝寄件平台管理后台</p>
     </div>
 </template>
 
@@ -9,7 +9,7 @@
         width: 100%;
         text-align: center;
     }
-    p{
+    .home-font{
         margin-top: 200px;
         background:-webkit-linear-gradient(left,#f00,#ff0 25%,#0f0 40%,#0ff 55%,#00f 70%,#f00);
         -webkit-background-clip:text;/*只有webkit内核支持text的剪切模式*/
