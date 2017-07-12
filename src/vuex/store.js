@@ -16,7 +16,7 @@ const editForm = {
 
 const state = {
       loadingFlag :false,
-      editForm: {}
+      editForm: editForm
 };
 
 
@@ -25,7 +25,7 @@ const mutations = {
          state.loadingFlag= !state.loadingFlag
      },
      setEditForm(state,payload) {
-      //   Object.assign(state.editForm, payload);
+        Object.assign(state.editForm, payload);
       localStorage.setItem('editForm',JSON.stringify(payload));
     }
 }
