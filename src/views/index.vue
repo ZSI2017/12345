@@ -99,7 +99,8 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.matched);
+    console.log("router");
+    console.log(this.$router.options.routes);
   },
   watch: {
 

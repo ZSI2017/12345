@@ -94,13 +94,18 @@
       },
       created() {
         var _this = this;
-        _this.$http.get("/rest/list2")
-          .then(function(rsp) {
-            _this.tableData = rsp.data.data
-          })
-          .catch(function(error) {
+        _this.$http.get("/rest/list2",(rsp)=>{
+           _this.tableData = rsp.data.data
+        },(error) => {
             console.log(error);
-          })
+        })
+        // _this.$http.get("/rest/list2")
+        //   .then(function(rsp) {
+        //     _this.tableData = rsp.data.data
+        //   })
+        //   .catch(function(error) {
+        //     console.log(error);
+        //   })
 
         console.log(this.$route.matched);
       },

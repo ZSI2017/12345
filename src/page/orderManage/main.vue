@@ -2,21 +2,21 @@
 <div class="section">
   <div class="keyword-input">
     <el-row>
-      <el-col :span="4" class="import-font">关键字：</el-col>      
+      <el-col :span="4" class="import-font">关键字：</el-col>
       <el-col :span="10">
           <el-input :span="10" v-model="input" size="large" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
         <el-button type="primary" style="width:100px;">搜 索</el-button>
-      </el-col>   
+      </el-col>
     </el-row>
     <el-row style="margin-top:14px;">
-      <el-col :span="4" class="import-font"></el-col>            
+      <el-col :span="4" class="import-font"></el-col>
       <el-radio class="radio" v-model="radio" label="1">支付宝绑定手机号</el-radio>
       <el-radio class="radio" v-model="radio" label="2">订单号</el-radio>
       <el-radio class="radio" v-model="radio" label="3">运单号</el-radio>
       <el-radio class="radio" v-model="radio" label="4">UID</el-radio>
-      
+
     </el-row>
   </div>
 
@@ -67,7 +67,7 @@ export default {
       currentPage4: 1,
       // value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       tableData: [
-      
+
       ],
       ruleForm: {
         name: '',
@@ -86,14 +86,14 @@ export default {
   },
   methods: {
     //从服务器读取数据
-    loadData: function(){    
-      var _this =this;                
+    loadData: function(){
+      var _this =this;
         _this.$http.get("./rest/list5").then(function(rsp){
             _this.tableData = rsp.data.data;  //表格
             _this.totalCount = rsp.data.data.length; //获取数据长度
         },function(){
             console.log('failed');
-        });                 
+        });
     },
     handleSizeChange(val) {
       this.pageSize = val;

@@ -1,26 +1,40 @@
 <template>
-  <section class="login">
-    <h1>支付宝我的快递-- 寄件管理后台</h1>
-    <el-button type="primary" size="large" @click="loginIn">登 录</el-button>
-  </section>
+<section class="login">
+  <h1>支付宝我的快递-- 寄件管理后台</h1>
+  <el-button type="primary" size="large" @click="loginIn">登 录</el-button>
+</section>
 </template>
 <script type="text/javascript">
-   export default {
-       data(){
-          return {
+export default {
+  data() {
+    return {
 
-          }
-       },
-      methods: {
-         loginIn(){
-             this.$router.push({path:"/"})
-         }
+    }
+  },
+  created() {
+     // 模拟 权限管理
+    //  隐藏 或者显示 导航菜单 服务类型及折扣改管理
+    let routerArr = this.$router.options.routes;
+    for (var i = 0; i < routerArr.length; i++) {
+      if (typeof routerArr[i].children !== undefined && routerArr[i].children[0].name === "*务类型及折扣管*") {
+        this.$router.options.routes[i].isHide = true;
       }
-   }
+    }
+    // this.$router.options[0].name = "awdsfasdfsad";
+    console.log(this.$router.options.routes);
+  },
+  methods: {
+    loginIn() {
+      this.$router.push({
+        path: "/"
+      })
+    }
+  }
+}
 </script>
 <style lang="scss">
-    .login{
-       text-align:center;
-         margin:300px auto;
-    }
+.login {
+    text-align: center;
+    margin: 300px auto;
+}
 </style>

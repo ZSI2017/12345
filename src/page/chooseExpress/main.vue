@@ -52,12 +52,12 @@
     </el-table-column>
     <el-table-column v-if="showConfig" label="操作" width="130">
       <template scope="scope">
-           <el-button v-if="showOperation" @click="loadingTakeOffFlag = true" type="text" size="small">置为下架</el-button>
-           <el-button v-if="showOperation" @click="handleEdit" type="text" size="small">修改</el-button>
-           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small"> 通过申请</el-button><br/>
-           <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small"> 申请驳回</el-button><br/>
-           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button><br/>
-           <el-button v-if="showOperation2"@click="handleEdit" type="text" size="small">待审详情</el-button>
+           <el-button v-if="showOperation"  @click="OperationTakeOff" type="text" size="small">置为下架</el-button>
+           <el-button v-if="showOperation"  @click="Operationchange" type="text" size="small">修改</el-button>
+           <el-button v-if="showOperation2" @click="OperationApproved" type="text" size="small"> 通过申请</el-button><br/>
+           <el-button v-if="showOperation2" @click="OperationApprovedFail" type="text" size="small"> 申请驳回</el-button><br/>
+           <el-button v-if="showOperation2" @click="OperationEffectDetail" type="text" size="small">已生效详情</el-button><br/>
+           <el-button v-if="showOperation2" @click="OperationwaitDetail" type="text" size="small">待审详情</el-button>
          </template>
     </el-table-column>
   </el-table>
@@ -84,8 +84,8 @@
 
   <!-- 置为下架 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
-    <p style="font-weight:bold">确认置为下架？</p>
-    <span>确认后，该内容将提交审核，通过后变为'已下架'</span>
+    <p style="font-weight:bold">{{myDialogTitle}}</p>
+    <span>{{myDiglogContent}}</span>
     <span slot="footer" class="dialog-footer">
     <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
     <el-button type="primary" @click="loadingTakeOffFlag = false">确 定</el-button>
@@ -99,10 +99,12 @@
 export default {
   data() {
     return {
+      myDialogTitle: "确认置为下架？",
+      myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
       // 置为下架对话框
-      showOperation:false,
-      showOperation2:false,
-      loadingTakeOffFlag:false,
+      showOperation: false,
+      showOperation2: false,
+      loadingTakeOffFlag: false,
       tableFalg: true,
       showConfig: true,
       gridData: [],
@@ -148,13 +150,23 @@ export default {
       url = "/rest/list2-3";
     }
     var _this = this;
-    _this.$http.get(url)
-      .then(function(rsp) {
-        _this.tableData = rsp.data.data
-      })
-      .catch(function(error) {
-        console.log(error);
-      })
+    _this.$http.get(url, (data) => {
+      console.log("success");
+      console.log(data);
+      _this.tableData = data.data.data
+    }, (error) => {
+      console.log("error");
+      console.log(error);
+    });
+
+    // var _this = this;
+    // _this.$http.get(url)
+    //   .then(function(rsp) {
+    //     _this.tableData = rsp.data.data
+    //   })
+    //   .catch(function(error) {
+    //     console.log(error);
+    //   })
 
     console.log(this.$route.matched);
   },
@@ -171,17 +183,57 @@ export default {
         url = "/rest/list2-3";
       }
       var _this = this;
-      _this.$http.get(url)
-        .then(function(rsp) {
-          _this.tableData = rsp.data.data
-        })
-        .catch(function(error) {
-          console.log(error);
-        })
+      _this.$http.get(url, (rsp) => {
+        _this.tableData = rsp.data.data
+        //  console.log("success");
+        //  console.log(data);
+      }, (error) => {
+        console.log("error");
+        console.log(error);
+      })
+      // _this.$http.get(url)
+      //   .then(function(rsp) {
+      //     _this.tableData = rsp.data.data
+      //   })
+      //   .catch(function(error) {
+      //     console.log(error);
+      //   })
 
     }
   },
   methods: {
+    // 操作栏对应的事件响应
+    OperationTakeOff() {
+        this.loadingTakeOffFlag = true;
+        this.myDialogTitle="确认置为下架？";
+        this.myDiglogContent="确认后，该内容将提交审核，通过后变为'已下架'";
+    },
+    Operationchange() {
+       this.loadingTakeOffFlag = true;
+       this.myDialogTitle="修改？";
+       this.myDiglogContent="确认后，该内容将修改";
+    },
+    OperationApproved() {
+            this.loadingTakeOffFlag = true;
+            this.myDialogTitle="通过申请？";
+            this.myDiglogContent="确认后，该内容将通过申请";
+
+    },
+    OperationApprovedFail() {
+           this.loadingTakeOffFlag = true;
+           this.myDialogTitle="申请驳回？";
+           this.myDiglogContent="确认后，该内容将申请驳回";
+    },
+    OperationEffectDetail() {
+           this.loadingTakeOffFlag = true;
+           this.myDialogTitle="已生效详情？";
+           this.myDiglogContent="确认后，该内容将已生效";
+    },
+    OperationwaitDetail() {
+           this.loadingTakeOffFlag = true;
+           this.myDialogTitle="确认置为下架？";
+           this.myDiglogContent="确认后，该内容将待审详情";
+    },
     // 标签页导航
     handleTabClick(tab, event) {
 
@@ -199,7 +251,7 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.tableData = tableDataCopy;
-      } else if(tab.label == "已上线") {
+      } else if (tab.label == "已上线") {
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
@@ -224,17 +276,14 @@ export default {
     checkArea() {
       var _this = this;
       _this.listLoading = true;
-      _this.$http.get("/rest/list3")
-        .then(function(rsp) {
-          _this.gridData = rsp.data.data;
-          // console.log(_this.gridData);
-          _this.listLoading = false;
-          _this.dialogTableVisible = true
-        })
-        .catch(function(error) {
-          console.log(error);
-        })
-
+      _this.$http.get("/rest/list3", (rsp) => {
+        _this.gridData = rsp.data.data;
+        // console.log(_this.gridData);
+        _this.listLoading = false;
+        _this.dialogTableVisible = true
+      }, (error) => {
+        console.log(error);
+      })
     },
     setNewData() {
       var _this = this;
@@ -348,6 +397,7 @@ export default {
   max-height: 150px !important;
   overflow-y: auto;
 }
+
 
 
 /*.el-table__body .el-table__row .el-table_1_column_14 .cell {

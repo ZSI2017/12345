@@ -24,8 +24,30 @@ axios.interceptors.response.use(function(response){
 
 });
 
-  var mySuccessFn = () => {
+function checkErrorCode() {
+      let meta = arguments[0];
+      if(typeof meta !== undefined) {
+         if(meta.code == "1234"){
+            // 错误码定义的提示信息
+         } else if (meta.code == "2345") {
+            // 错误码定义的提示信息
+         }
+      }
 
+  };
+
+  var mySuccessFn = () => {
+       let response,successfn,errorfn;
+       [response,successfn,errorfn] = arguments;
+       if( typeof response.meta !== undefined && (response.meta.code == "0000" || response.meta.success)) {
+           successfn(response);
+       }else {
+            if(typeof errorfn === undefined) {
+                checkErrorCode(response.meta);
+            } else {
+               errorfn(response);
+            }
+       }
 
   }
 export default {
@@ -33,7 +55,7 @@ export default {
        axios({
             url:url,
             method:'post',
-            baseURL:"https://domain.com/api",
+            // baseURL:"https://domain.com/api",
             transformRequrest:[function(data) {
                 // before the request data is sent to the server
                 return data;
@@ -56,9 +78,26 @@ export default {
            }
        ).catch(
            (error) => {
-                 return myErrorFn(error)
+                 console.log(error);
            }
        )
-    }
+    },
+    get(url,successfn,errorfn){
+        axios({url:url,
+          method:'get',
+          baseURL:"http://localhost:8080/",
+          timeout: 10000,
+          headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          }).then( (response) => {
+             successfn(response);
+          }
+        ).catch(
+              (error) => {
+                   errorfn(error);
+              }
+        )
+       }
 
 };

@@ -10,11 +10,14 @@ import store from "./vuex/store";
 // 引入vuex 进行全局状态管理
 import {changeIndex} from "./vuex/actions";
 import {changeLoading} from "./vuex/getters";
+
+import http from "@/util/http.js"
+
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 //  axios  加入到 vue 的原型方法中
-Object.defineProperty(Vue.prototype, '$http', { value: Axios })
+Object.defineProperty(Vue.prototype, '$http', { value: http})
 // console.log(routes);
 
  // Vue的 日志与警告
@@ -32,13 +35,14 @@ const router = new VueRouter({
 });
 // 注册全局的构子 路由
  router.beforeEach((to,from,next) => {
+      // 权限管理 路由跳转前进行权限验证
       // 从运营位管理 选择快递页面的 添加返回时出现提示框
       if(from.path == "/addData" && router.app.$store.state.loadingFlag == false) {
           next({
               path:"/addData",
           })
        }else{
-         router.app.$store.state.loadingFlag = false;
+           router.app.$store.state.loadingFlag = false;
            next();
       }
   });
