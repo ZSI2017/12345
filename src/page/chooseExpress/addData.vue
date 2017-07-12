@@ -30,8 +30,8 @@
       <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
       <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
     </el-form-item>
-    <el-col class="line" :span="2">-</el-col>
-    <el-button type="primary" @click="">提交</el-button>
+    <el-col class="line" :span="2"> </el-col>
+    <el-button type="primary" @click="handleSubmit">提交</el-button>
   </el-form>
 
   <!-- 覆盖地区   配置对话框 -->
@@ -44,8 +44,8 @@
      <el-col :span = "4" style="padding-top:10px;" >
        <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
      </el-col>
-     <el-col :span="12" style="height:10px;"></el-col>
-      <el-col :span="8" style="font-weight:bold;font-size:20px;">
+     <el-col :span="8" style="height:10px;"></el-col>
+      <el-col :span="12" style="font-weight:bold;font-size:16px;">
           <span>快速搜索: </span>
           <el-autocomplete
                class="inline-input"
@@ -64,7 +64,7 @@
         <template scope="scope">
             <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
             <el-checkbox
-                  :indeterminate="isIndeterminate[scope.$index]"
+
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
                >全选</el-checkbox>
@@ -88,24 +88,20 @@
     </div>
   </el-dialog>
 
-  <!--新增内容-->
-  <el-dialog title="新增" :visible.sync="dialogFormVisible">
-    <el-form :model="form">
-      <el-form-item label="活动名称" :label-width="formLabelWidth">
-        <el-input v-model="form.name" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="活动区域" :label-width="formLabelWidth">
-        <el-select v-model="form.region" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-    </div>
-  </el-dialog>
+  <!--  覆盖地区 查看对话框 -->
+  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
+  <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+     <el-table-column property="value" label="省" width="200"></el-table-column>
+     <el-table-column property="city" label="市">
+       <template scope="scope">
+      <el-tag
+       style="margin-right:10px;margin-bottom:5px;"
+        v-for="(item,index) in scope.row.city"
+        >{{item}}</el-tag>
+    </template>
+     </el-table-column>
+  </el-table>
+    </el-dialog>
 
   <!-- 即将离开的 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
@@ -115,7 +111,6 @@
     <el-button type="primary" @click="editSure">确 定</el-button>
   </span>
   </el-dialog>
-
 
 </section>
 </template>
@@ -128,6 +123,7 @@ export default {
     return {
      // 即将离开的对话框
     loadingFlag: false,
+
      // 添加搜索框
      state1:"",
      provinces:[],
@@ -186,6 +182,12 @@ export default {
     //  }
   },
   methods: {
+    //  点击提交
+    handleSubmit() {
+      this.$router.app.$store.state.loadingFlag = true;
+      console.log(this);
+      this.$router.go(-1);
+    },
     // 点击返回 对应的事件处理
     handleBackClick() {
        this.loadingFlag = true;
@@ -252,8 +254,8 @@ export default {
           // 初始化 配置的多选框操作
           var tableDataLength = _this.gridData.length;
           for (var i = 0; i < tableDataLength; i++) {
-            _this.checkAll[i] = true;
-            _this.isIndeterminate[i] = true;
+            _this.checkAll[i] = false;
+            // _this.isIndeterminate[i] = true;
             _this.checkedCities[i] = [];
           }
           _this.dialogFormVisible = true;

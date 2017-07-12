@@ -69,7 +69,7 @@ import form from "./views/table/form.vue";
 import index from "./views/index.vue";
 import addData from "./page/chooseExpress/addData.vue";
 
-import welcome from "./page/main.vue";
+import welcome from "./page/welcome.vue";
 import login from "./page/login.vue";
 
 
@@ -79,11 +79,16 @@ import layout from "./views/component/layout.vue"
 
 let routes =  [
   {
+    path:'/login',
+    name:"我的快递",
+    isHide:true,
+    component:login,
+  }, {
    path:'/',
    name:"我的快递",
    redirect: '/home',
    isHide:true,
-   component:login,
+   component:welcome,
  },{
    path:'/',
    name:"我的快递",
@@ -275,6 +280,14 @@ let routes =  [
    ]
   //  path:'/orderCancle',component:orderCancle
 
+}, {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'/login',component:oneCitySend,name:"退出登录"}
+   ]
+  //  path:'/oneCitySend',component:oneCitySend
  }
  //黑名单管理
 //  {
