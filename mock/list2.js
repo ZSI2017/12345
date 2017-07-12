@@ -5,7 +5,7 @@
 var  Mock =require("mockjs");
 // Mock.setup({
 //      timeout:'200-600'
-// });
+// }); +Mock.Random.paragraph()
 
 var tableDate = [];
 
@@ -14,7 +14,7 @@ for(var i =0;i<60;i++){
        Mock.mock({
          "currentState":"已上架",
          "Forder":Mock.Random.natural(0, 1000),
-         "link":Mock.Random.url('http')+Mock.Random.paragraph(),
+         "link":Mock.Random.url('http'),
          "operationsMapName":Mock.Random.name(),
          "date":Mock.Random.datetime(),
          "createTime":Mock.Random.datetime(),

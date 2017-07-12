@@ -32,7 +32,7 @@
           </el-menu-item>
 
         </template>
-        <el-menu-item><i style="width:30px;display:inline-block;"></i>退出登录</el-menu-item>
+        <!-- <el-menu-item><i style="width:30px;display:inline-block;"></i>退出登录</el-menu-item> -->
       </el-menu>
     </div>
 

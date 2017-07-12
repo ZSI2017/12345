@@ -23,6 +23,11 @@ axios.interceptors.response.use(function(response){
     return Promise.reject(error);
 
 });
+
+  var mySuccessFn = () => {
+
+
+  }
 export default {
     post(url,data,successfn,errorfn){
        axios({
@@ -45,7 +50,6 @@ export default {
             xsrfHeaderName: 'X-XSRF-TOKEN', // default
             maxRedirects: 5, // default
             proxy:{ }     //  defines the hostname and port of the proxy server
-
        }).then(
            (response) => {
                return mySuccessFn(response,successfn,errorfn);
