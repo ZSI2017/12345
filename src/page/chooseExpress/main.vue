@@ -82,7 +82,6 @@
     </el-table>
   </el-dialog>
 
-<<<<<<< HEAD
   <!--  查看链接 对话框 -->
     <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
       <span>这是一段信息</span>
@@ -91,7 +90,7 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
       </div>
     </el-dialog>
-=======
+
   <!-- 置为下架 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <p style="font-weight:bold">确认置为下架？</p>
@@ -102,7 +101,6 @@
   </span>
   </el-dialog>
 
->>>>>>> 9ed783f15c68d1226f4b6942996ef5387caa7d4e
 </div>
 </template>
 
