@@ -97,6 +97,15 @@
       </el-table-column>
     </el-table>
   </el-dialog>
+
+  <!--  查看链接 对话框 -->
+    <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
+      <span>这是一段信息</span>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>        
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+      </div>
+    </el-dialog>
 </div>
 </template>
 
