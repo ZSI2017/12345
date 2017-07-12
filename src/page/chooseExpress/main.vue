@@ -217,7 +217,6 @@ export default {
             this.loadingTakeOffFlag = true;
             this.myDialogTitle="通过申请？";
             this.myDiglogContent="确认后，该内容将通过申请";
-
     },
     OperationApprovedFail() {
            this.loadingTakeOffFlag = true;
@@ -264,7 +263,6 @@ export default {
         _this.showConfig = true;
         _this.showOperation2 = true;
         _this.tableData = tableDataCopy;
-
       }
       setTimeout(() => {
         _this.listLoading = false;
@@ -298,7 +296,6 @@ export default {
       console.log(value);
     },
     getAddPage(e) {
-      -
       //  let router = new VueRouter();
       console.log(e);
       this.$router.push({

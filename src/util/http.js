@@ -24,16 +24,21 @@ axios.interceptors.response.use(function(response){
 
 });
 
+// 这里
 function checkErrorCode() {
-      let meta = arguments[0];
-      if(typeof meta !== undefined) {
+      let response = arguments[0];
+      if(typeof response.meta !== undefined) {
          if(meta.code == "1234"){
             // 错误码定义的提示信息
          } else if (meta.code == "2345") {
             // 错误码定义的提示信息
+         } else {
+            // 其他错误处理代码
          }
+      }else if(response.error === "ACL_NO_PRIVILEGE") {
+            // 没有权限时，跳转到 支付宝的权限管理页面
+              window.location.href=response.redrect;
       }
-
   };
 
   var mySuccessFn = () => {
@@ -43,7 +48,7 @@ function checkErrorCode() {
            successfn(response);
        }else {
             if(typeof errorfn === undefined) {
-                checkErrorCode(response.meta);
+                checkErrorCode(response);
             } else {
                errorfn(response);
             }

@@ -1,12 +1,5 @@
 'Cookie': {
-               'duration': 7 * 24 * 60 * 60 * 1000,
-
-               'key': {
-                   login_key: "loginKey",
-                   login_name: "login_name",
-                   user_info: "login_userinfo",
-                   goods_num: "login_goods_num",
-                   rank: "rank",
+               'duration': 7 * 24 * 60 * 60 * 1000
                },
 
                'cookieDomain': DOMAIN_CONFIG['COOKIE_DOMAIN'],
