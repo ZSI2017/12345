@@ -61,7 +61,7 @@
            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">申请驳回</el-button><br/>
            <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button><br/>
            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">待审详情</el-button>
-         </template>
+        </template>
     </el-table-column>
   </el-table>
 

@@ -172,7 +172,7 @@ export default {
     console.log(this);
     alert(this.$router.app.$store.state.editForm)
     console.log(this.$router.app.$store.state.editForm)
-    
+
   },
   beforeMount() {
 
