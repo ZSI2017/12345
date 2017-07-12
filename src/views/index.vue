@@ -4,7 +4,7 @@
   <header class="header" :class="{ 'header-fixed' : headerFixed }" style="background-color:#5295e2;">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content" @click="handleHome" style="float:left;width:270px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">{{ title }}</div>
+        <div class="grid-content" @click="handleHome" style="float:left;width:250px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">{{ title }}</div>
         <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">123456789</div>
       </el-col>
     </el-row>
@@ -12,7 +12,7 @@
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
   <div style="display:flex;flex-direction:row;">
 
-    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:230px;width:270px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
+    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:230px;width:250px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
       <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
@@ -43,7 +43,7 @@
     <div
         v-loading.fullscreen.lock="fullscreenLoading"
         element-loading-text="拼命加载中"
-        style="width:100%;box-sizing:border-box;padding:20px;padding-left:290px;padding-top:20px;flex:1;background:#f1f1f1;">
+        style="width:100%;box-sizing:border-box;padding:20px;padding-left:270px;padding-top:20px;flex:1;background:#f1f1f1;">
       <el-breadcrumb style="padding:10px 0 25px;font-size:16px;line-height:100%;margin-bottom:20px;border-bottom:1px solid #999;" separator="/">
         <!-- {{$route.matched[0].name}} -->
         <el-breadcrumb-item v-if="item.name" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
