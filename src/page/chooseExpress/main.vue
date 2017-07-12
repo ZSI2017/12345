@@ -22,42 +22,45 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" :data="tableData" style="width: 98%;margin-top:10px" max-height="450" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="operationsMapName" label="运营图称" sortable width="140">
+  <el-table v-if="tableFalg" :data="tableData" style="width: 98%;margin-top:10px;" max-height="450" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+    <el-table-column prop="operationsMapName"  label="运营图称">
     </el-table-column>
-    <el-table-column prop="name" label="运营图" sortable width="130">
+    <el-table-column prop="name" label="运营图" sortable>
       <template scope="scope">
             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
         </template>
     </el-table-column>
-    <el-table-column prop="link" min-width="200" label="链接">
+    <el-table-column prop="link" label="链接">
+      <template scope="scope">
+         <el-button @click="checkLink(scope.$index, scope.row)" type="text" size="small">查看链接</el-button>
+      </template>
     </el-table-column>
-    <el-table-column prop="address" width="50" label="覆盖地区">
+    <el-table-column prop="address" label="覆盖地区">
       <template scope="scope">
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" width="130">
+    <el-table-column prop="createTime" label="创建时间" width="160">
     </el-table-column>
-    <el-table-column prop="modifyTime" label="修改时间" width="130">
+    <el-table-column prop="modifyTime" label="修改时间" width="160">
     </el-table-column>
-    <el-table-column prop="activeTime" label="有效时段">
+    <el-table-column prop="activeTime" label="有效时段" width="220">
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="currentState" width="100" label="当前状态">
+    <el-table-column prop="currentState" width="80" label="当前状态">
 
     </el-table-column>
-    <el-table-column v-if="showConfig" prop="auditState" width="100" label="审核状态">
+    <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
     <el-table-column v-if="showConfig" label="操作" width="130">
       <template scope="scope">
-           <el-button v-if="showOperation"  @click="OperationTakeOff" type="text" size="small">置为下架</el-button>
-           <el-button v-if="showOperation"  @click="Operationchange" type="text" size="small">修改</el-button>
-           <el-button v-if="showOperation2" @click="OperationApproved" type="text" size="small"> 通过申请</el-button><br/>
-           <el-button v-if="showOperation2" @click="OperationApprovedFail" type="text" size="small"> 申请驳回</el-button><br/>
-           <el-button v-if="showOperation2" @click="OperationEffectDetail" type="text" size="small">已生效详情</el-button><br/>
-           <el-button v-if="showOperation2" @click="OperationwaitDetail" type="text" size="small">待审详情</el-button>
+           <el-button v-if="showOperation" @click="loadingTakeOffFlag = true" type="text" size="small">置为下架</el-button>
+           <el-button v-if="showOperation" @click="handleEdit(scope.$index, scope.row)" type="text" size="small">修改</el-button>
+           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">通过申请</el-button><br/>
+           <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">申请驳回</el-button><br/>
+           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button><br/>
+           <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">待审详情</el-button>
          </template>
     </el-table-column>
   </el-table>
@@ -82,20 +85,31 @@
     </el-table>
   </el-dialog>
 
+  <!--  查看链接 对话框 -->
+  <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
+    <span>{{ linkText }}</span>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="dialogLinkVisible = false">关 闭</el-button>
+    </div>
+  </el-dialog>
+
+
   <!-- 置为下架 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
-    <p style="font-weight:bold">{{myDialogTitle}}</p>
-    <span>{{myDiglogContent}}</span>
+    <p style="font-weight:bold;padding-left:20px;">确认置为下架？</p>
+    <span style="padding-left:20px;">确认后，该内容将提交审核，通过后变为 '已下架'</span>
     <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
-    <el-button type="primary" @click="loadingTakeOffFlag = false">确 定</el-button>
-  </span>
+      <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
+      <el-button type="primary" @click="loadingTakeOffFlag = false">确 定</el-button>
+    </span>
   </el-dialog>
 
 </div>
 </template>
 
 <script>
+import store from 'src/vuex/store.js'
+
 export default {
   data() {
     return {
@@ -112,6 +126,8 @@ export default {
       activeName2: 'first',
       showHeader: false,
       dialogTableVisible: false,
+      dialogLinkVisible:false,
+      linkText:"",
       value: '',
       pageSize: 5,
       listLoading: false,
@@ -131,7 +147,15 @@ export default {
       tableData: [],
       formLabelWidth: '120px',
       selectedOptions: [],
-      selectedOptions2: []
+      selectedOptions2: [],
+      editForm:{
+          operationsMapName:"",
+          link:"",
+          address:"",
+          activeTime:"",
+          currentState:"",
+          Forder:""
+      }
     }
   },
   computed() {
@@ -141,11 +165,19 @@ export default {
       // }
     }
   },
+  // watch: {
+  //     editForm: {
+  //       handler: function () {
+  //           store.commit('setEditForm',this.editForm);
+  //       },
+  //       deep:true
+  //     }
+  // },
   created() {
     console.log("$router: " + this.$route.path);
     let url = "/rest/list2";
     if (this.$route.path == "/chooseExpress") {
-      url = "/rest/list2-2"
+      url = "/rest/list2-2";
     } else if (this.$route.path == "/expressOrder") {
       url = "/rest/list2-3";
     }
@@ -199,6 +231,12 @@ export default {
       //     console.log(error);
       //   })
 
+    },
+    editForm: {
+      handler: function () {
+          store.commit('setEditForm',this.editForm);
+      },
+      deep:true
     }
   },
   methods: {
@@ -260,7 +298,7 @@ export default {
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
-        _this.showConfig = true;
+        _this.showConfig = false;
         _this.showOperation2 = true;
         _this.tableData = tableDataCopy;
       }
@@ -282,6 +320,11 @@ export default {
       }, (error) => {
         console.log(error);
       })
+    },
+    // 查看链接
+    checkLink(index,row) {
+      this.dialogLinkVisible = true
+      this.linkText = row.link
     },
     setNewData() {
       var _this = this;
@@ -364,11 +407,18 @@ export default {
         duration: 6000
       })
     },
-    handleEdit() {
-      this.$notify({
-        title: "点击了编辑",
-        message: "即将跳转到编辑界面"
-      })
+    handleEdit(index,row) {
+      this.editForm.operationsMapName = row.operationsMapName;
+      this.editForm.link = row.link;
+      this.editForm.address = row.address;
+      this.editForm.activeTime = row.activeTime;
+      this.editForm.currentState = row.currentState;
+      this.editForm.forder = row.forder;
+
+      var _this = this;
+      this.$router.push({
+        path: _this.$route.path + '/editData'
+      });
     }
   }
 }
