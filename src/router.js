@@ -68,6 +68,7 @@ import time from "./views/table/time.vue";
 import form from "./views/table/form.vue";
 import index from "./views/index.vue";
 import addData from "./page/chooseExpress/addData.vue";
+import editData from './page/chooseExpress/editData.vue';
 
 import welcome from "./page/welcome.vue";
 import login from "./page/login.vue";
@@ -83,13 +84,15 @@ let routes =  [
     name:"我的快递",
     isHide:true,
     component:login,
-  }, {
-   path:'/',
-   name:"我的快递",
-   redirect: '/home',
-   isHide:true,
-   component:welcome,
- },{
+  }, 
+//   {
+//    path:'/',
+//    name:"我的快递",
+//    redirect: '/home',
+//    isHide:true,
+//    component:welcome,
+//  },
+ {
    path:'/',
    name:"我的快递",
    redirect: '/home',
@@ -119,18 +122,21 @@ let routes =  [
      { path:'/sendExpress',component:operationPosition,name:"寄快递首页",
        children:[
           {path:'',component:operationPositionMain},
-          {path:'addData',name:'添加数据',component:addData}
+          {path:'addData',name:'添加数据',component:addData},
+          {path:'editData',name:'修改数据',component:editData}          
        ]},
       {path:'/chooseExpress',component:operationPosition,name:"选择快递页",
       children:[
          {path:'',component:operationPositionMain},
-         {path:'addData',name:'添加数据',component:addData}
+         {path:'addData',name:'添加数据',component:addData},
+          {path:'editData',name:'修改数据',component:editData}                   
       ]
     },
       {path:'/expressOrder',component:operationPosition,name:"选快递下单页",
       children:[
          {path:'',component:operationPositionMain},
-         {path:'addData',name:'添加数据',component:addData}
+         {path:'addData',name:'添加数据',component:addData},
+         {path:'editData',name:'修改数据',component:editData}                   
       ]
     }
    ]
