@@ -312,11 +312,9 @@
       },  
       created() {
         var _this = this;
-        _this.$http.get("/rest/list2")
-          .then(function(rsp) {
+        _this.$http.get("/rest/list2",(rsp)=> {
             _this.tableData = rsp.data.data
-          })
-          .catch(function(error) {
+          },(error)=>{
             console.log(error);
           })
 
