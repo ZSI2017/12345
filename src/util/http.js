@@ -90,7 +90,7 @@ export default {
     get(url,successfn,errorfn){
         axios({url:url,
           method:'get',
-          baseURL:"http://localhost:8080/",
+        //   baseURL:"http://localhost:8080/",
           timeout: 10000,
           headers: {
               'X-Requested-With': 'XMLHttpRequest'

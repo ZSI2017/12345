@@ -7,7 +7,7 @@
   </el-tabs>
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
-    <el-col :span="8">
+    <el-col :span="22">
       <el-radio-group v-model="radio2">
         <el-radio :label="3">审核通过</el-radio>
         <el-radio :label="6">驳回</el-radio>
@@ -15,14 +15,14 @@
         <el-radio :label="12">草稿</el-radio>
       </el-radio-group>
     </el-col>
-    <el-col :span="14" style="height:20px"></el-col>
+    <!--<el-col :span="8" style="height:20px"></el-col>-->
     <el-col :span="2">
-      <el-button type="primary" @click="setNewData" size="large">+添加</el-button>
+      <el-button type="primary" @click="setNewData" size="large" style="float:right;">+添加</el-button>
     </el-col>
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" :data="tableData"  @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="400" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table v-if="tableFalg" :data="tableData"  @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="500" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="operationsMapName"  label="运营图称">
     </el-table-column>
     <el-table-column prop="name" label="运营图" sortable>
@@ -33,9 +33,16 @@
     <el-table-column prop="link" label="链接">
       <template scope="scope">
          <!--<el-button @click="checkLink(scope.$index, scope.row)" type="text" size="small">查看链接</el-button>-->
-        <el-tooltip :content="link_content" placement="bottom" effect="light">
-          <el-button class="link_button">查看链接</el-button>
-        </el-tooltip>
+        <!--<el-tooltip :content="link_content" placement="bottom" effect="light">
+          <span class="link_button">查看链接</span>
+        </el-tooltip>-->
+
+        <el-popover :content="link_content" ref="popover4" width="300" trigger="click">
+            <!--<span class="link_button">{{link_content}}</span>-->
+        </el-popover>
+
+        <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
+
       </template>
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">
@@ -447,7 +454,12 @@ export default {
    .el-table_1_column_2{
         background-color: #f5f5f5;
    }*/
-
+.el-tabs__item{
+  width:90px;
+  height:30px;
+  line-height:30px;
+  text-align: center;
+}
 .el-tabs .el-tabs__content {
   display: none;
 }
