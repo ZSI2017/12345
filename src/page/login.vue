@@ -5,6 +5,7 @@
 </section>
 </template>
 <script type="text/javascript">
+import Cookie from "@/util/cookie.js"
 export default {
   data() {
     return {
@@ -25,6 +26,7 @@ export default {
   },
   methods: {
     loginIn() {
+      Cookie.set("express","abdddde",1);
       this.$router.push({
         path: "/"
       })

@@ -7,6 +7,7 @@ import routes  from "./router.js"
 import Axios from "axios";
 import Vuex from "vuex";
 import store from "./vuex/store";
+import Cookie from "@/util/cookie.js"
 // 引入vuex 进行全局状态管理
 import {changeIndex} from "./vuex/actions";
 import {changeLoading} from "./vuex/getters";
@@ -35,6 +36,21 @@ const router = new VueRouter({
 });
 // 注册全局的构子 路由
  router.beforeEach((to,from,next) => {
+
+      console.log("from.fullPath");
+      console.log(Cookie.get("express"));
+      // 这里是对于 登录时的 状态验证
+      if(to.fullPath == "/login") {
+           Cookie.delete("express");
+      }
+      if(to.fullPath != "/login" && !Cookie.get("express")) {
+              next({
+                  path:"/login",
+              })
+      }else {
+               next();
+      }
+      // 判断是否已经登录
       // 权限管理 路由跳转前进行权限验证
       // 从运营位管理 选择快递页面的 添加返回时出现提示框
       if(from.path == "/addData" && router.app.$store.state.loadingFlag == false) {

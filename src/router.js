@@ -84,7 +84,7 @@ let routes =  [
     name:"我的快递",
     isHide:true,
     component:login,
-  }, 
+  },
 //   {
 //    path:'/',
 //    name:"我的快递",
@@ -123,20 +123,20 @@ let routes =  [
        children:[
           {path:'',component:operationPositionMain},
           {path:'addData',name:'添加数据',component:addData},
-          {path:'editData',name:'修改数据',component:editData}          
+          {path:'editData',name:'修改数据',component:editData}
        ]},
       {path:'/chooseExpress',component:operationPosition,name:"选择快递页",
       children:[
-         {path:'',component:operationPositionMain},
-         {path:'addData',name:'添加数据',component:addData},
-          {path:'editData',name:'修改数据',component:editData}                   
+          {path:'',component:operationPositionMain},
+          {path:'addData',name:'添加数据',component:addData},
+          {path:'editData',name:'修改数据',component:editData}
       ]
     },
       {path:'/expressOrder',component:operationPosition,name:"选快递下单页",
       children:[
          {path:'',component:operationPositionMain},
          {path:'addData',name:'添加数据',component:addData},
-         {path:'editData',name:'修改数据',component:editData}                   
+         {path:'editData',name:'修改数据',component:editData}
       ]
     }
    ]
