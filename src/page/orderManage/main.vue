@@ -88,10 +88,10 @@ export default {
     //从服务器读取数据
     loadData: function(){
       var _this =this;
-        _this.$http.get("./rest/list5").then(function(rsp){
+        _this.$http.get("./rest/list5",(rsp)=>{
             _this.tableData = rsp.data.data;  //表格
             _this.totalCount = rsp.data.data.length; //获取数据长度
-        },function(){
+        },(error)=>{
             console.log('failed');
         });
     },

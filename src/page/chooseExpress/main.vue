@@ -6,7 +6,7 @@
     <el-tab-pane label="待审核" name="third">待审核</el-tab-pane>
   </el-tabs>
   <!--  单选框   -->
-  <el-row :span="24" type="flex" align="middle" v-if="showConfig">
+  <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
     <el-col :span="8">
       <el-radio-group v-model="radio2">
         <el-radio :label="3">审核通过</el-radio>
@@ -22,7 +22,7 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" :data="tableData" style="width: 98%;margin-top:10px;" max-height="450" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table v-if="tableFalg" :data="tableData"  @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="400" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="operationsMapName"  label="运营图称">
     </el-table-column>
     <el-table-column prop="name" label="运营图" sortable>
@@ -32,7 +32,10 @@
     </el-table-column>
     <el-table-column prop="link" label="链接">
       <template scope="scope">
-         <el-button @click="checkLink(scope.$index, scope.row)" type="text" size="small">查看链接</el-button>
+         <!--<el-button @click="checkLink(scope.$index, scope.row)" type="text" size="small">查看链接</el-button>-->
+        <el-tooltip :content="link_content" placement="bottom" effect="light">
+          <el-button class="link_button">查看链接</el-button>
+        </el-tooltip>        
       </template>
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">
@@ -128,6 +131,7 @@ export default {
       dialogTableVisible: false,
       dialogLinkVisible:false,
       linkText:"",
+      link_content:"",
       value: '',
       pageSize: 5,
       listLoading: false,
@@ -321,6 +325,10 @@ export default {
         console.log(error);
       })
     },
+    //tooltip 查看链接
+     handleMouseEnter(row, column, cell, event){
+      this.link_content = row.link;
+    },
     // 查看链接
     checkLink(index,row) {
       this.dialogLinkVisible = true
@@ -445,7 +453,12 @@ export default {
   overflow-y: auto;
 }
 
-
+.link_button{
+  border:0;
+}
+.link_button:hover{
+  background-color: no;
+}
 
 /*.el-table__body .el-table__row .el-table_1_column_14 .cell {
        max-height: 150px !important;

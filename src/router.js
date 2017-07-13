@@ -286,14 +286,16 @@ let routes =  [
    ]
   //  path:'/orderCancle',component:orderCancle
 
-}, {
+}
+, {
    path:'/',
    name:"首页",
    component:index,
+   isHide:true,
    children:[
       {path:'/login',component:oneCitySend,name:"退出登录"}
    ]
-  //  path:'/oneCitySend',component:oneCitySend
+
  }
  //黑名单管理
 //  {
