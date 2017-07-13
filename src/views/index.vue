@@ -18,7 +18,7 @@
   <div style="display:flex;flex-direction:row;">
 
     <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:180px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
-      <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
+      <el-menu  :default-active="$route.fullPath" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
 
@@ -108,8 +108,6 @@ export default {
       }else{
         this.isActive = false
       }
-
-
     }
   },
   methods: {
