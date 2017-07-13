@@ -46,13 +46,17 @@
     </el-table-column>
     <el-table-column prop="modifyTime" label="修改时间" width="160">
     </el-table-column>
-    <el-table-column prop="createTime" label="有效时段" width="220">
+
+    <el-table-column prop="activeTime" label="有效时段" width="220">
       <template scope="scope">
-        <el-row>
-          <el-col :span="12" :prop="createTime"></el-col>
-          <el-col :span="12" prop="createTime"></el-col>
-        </el-row>
-      </template>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime1}}</p>
+          <p style="padding:0;margin:0;text-align:center">至</p>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime2}}</p>
+         <!-- <el-tag
+          style="margin-right:10px;margin-bottom:5px;"
+           v-for="(item,index) in scope.row.city"
+           >{{item}}</el-tag> -->
+       </template>
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
