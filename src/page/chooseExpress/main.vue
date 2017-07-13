@@ -32,17 +32,9 @@
     </el-table-column>
     <el-table-column prop="link" label="链接">
       <template scope="scope">
-         <!--<el-button @click="checkLink(scope.$index, scope.row)" type="text" size="small">查看链接</el-button>-->
-        <!--<el-tooltip :content="link_content" placement="bottom" effect="light">
-          <span class="link_button">查看链接</span>
-        </el-tooltip>-->
-
         <el-popover :content="link_content" ref="popover4" width="300" trigger="click">
-            <!--<span class="link_button">{{link_content}}</span>-->
         </el-popover>
-
         <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
-
       </template>
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">
@@ -54,6 +46,7 @@
     </el-table-column>
     <el-table-column prop="modifyTime" label="修改时间" width="160">
     </el-table-column>
+
     <el-table-column prop="activeTime" label="有效时段" width="220">
       <template scope="scope">
           <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime1}}</p>

@@ -89,8 +89,8 @@ export default {
       fold: true,
       headerFixed: true,
       title: "我的快递",
-      input:'',
-      isActive:false,
+      input: '',
+      isActive:false
     }
   },
   created() {

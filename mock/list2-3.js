@@ -20,6 +20,8 @@ for(var i =0;i<60;i++){
          "createTime":Mock.Random.datetime(),
          "modifyTime":Mock.Random.datetime(),
          "activeTime":Mock.Random.datetime() +"至"+Mock.Random.datetime(),
+         "activeTime1":Mock.Random.datetime(),
+         "activeTime2":Mock.Random.datetime(),
          "name":Mock.Random.name(),
          "address":Mock.Random.county(true).replace(/' '/g,''),
          "reviewState":"已完成",
