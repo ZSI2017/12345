@@ -16,8 +16,8 @@
       </el-radio-group>
     </el-col>
     <!--<el-col :span="8" style="height:20px"></el-col>-->
-    <el-col :span="2">
-      <el-button type="primary" @click="setNewData" size="large" style="float:right;">+添加</el-button>
+    <el-col :span="2" style="position: relative;padding-left:20px;text-inline:right;">
+      <i class="el-icon-plus" style="position:absolute;top:10px;left:22%;color:#fff;z-index:2;"></i><el-button type="primary" @click="setNewData" style="float:right;width:100%;">添 加</el-button>
     </el-col>
   </el-row>
 
@@ -42,9 +42,9 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime"  :sortable = "showSortable" label="创建时间" width="160">
+    <el-table-column prop="createTime" label="创建时间" width="160">
     </el-table-column>
-    <el-table-column prop="modifyTime" label="修改时间" width="160">
+    <el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
     </el-table-column>
 
     <el-table-column prop="activeTime" label="有效时段" width="220">
@@ -60,8 +60,7 @@
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="currentState" :sortable = "showSortable" width="80" label="状态">
-
+    <el-table-column prop="currentState" width="100" label="状态" :sortable="showSortable">
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
@@ -81,15 +80,15 @@
            <br/>
           </div>
           <div v-if="showOperation2">
-            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">申请驳回</el-button>
+            <el-button @click="handleEdit" type="text" size="small">申请驳回</el-button>
             <br/>
           </div>
           <div v-if="showOperation2">
-           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button>
+           <el-button @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button>
            <br/>
           </div>
           <div v-if="showOperation2">
-            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">待审详情</el-button>
+            <el-button @click="handleEdit" type="text" size="small">待审详情</el-button>
             <br/>
           </div>
 
@@ -482,39 +481,39 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 .el-tabs .el-tabs__content {
   display: none;
 }
 
 .main {
 
-.cell{
-  text-align: center;
-}
-.el-tabs__item{
-  width:90px;
-  height:30px;
-  line-height:30px;
-  text-align: center;
-}
+  .cell{
+    text-align: center;
+  }
+  .el-tabs__item{
+    width:90px;
+    height:30px;
+    line-height:30px;
+    text-align: center;
+  }
 
-.el-table .cell,
-.el-table th>.cell {
-  padding: 0 7px;
-}
+  .el-table .cell,
+  .el-table th>.cell {
+    padding: 0 7px;
+  }
 
-/*.el-table__body .el-table__row .cell {
-  max-height: 150px !important;
-  overflow-y: auto;
-}*/
+  /*.el-table__body .el-table__row .cell {
+    max-height: 150px !important;
+    overflow-y: auto;
+  }*/
 
-.link_button{
-  border:0;
-}
-.link_button:hover{
-  background-color: no;
-}
+  .link_button{
+    border:0;
+  }
+  .link_button:hover{
+    background-color: no;
+  }
 }
 
 /*.el-table__body .el-table__row .el-table_1_column_14 .cell {
