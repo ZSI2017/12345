@@ -38,8 +38,9 @@ const router = new VueRouter({
  router.beforeEach((to,from,next) => {
 
       console.log("from.fullPath");
-      console.log(Cookie.get("express"));
+      // console.log(Cookie.get("express"));
       // 这里是对于 登录时的 状态验证
+      console.log(from);
       if(to.fullPath == "/login") {
            Cookie.delete("express");
       }
@@ -53,9 +54,9 @@ const router = new VueRouter({
       // 判断是否已经登录
       // 权限管理 路由跳转前进行权限验证
       // 从运营位管理 选择快递页面的 添加返回时出现提示框
-      if(from.path == "/addData" && router.app.$store.state.loadingFlag == false) {
+      if(from.path == "/sendExpress/addData" && router.app.$store.state.loadingFlag == false) {
           next({
-              path:"/addData",
+              path:"/sendExpress/addData",
           })
        }else{
            router.app.$store.state.loadingFlag = false;

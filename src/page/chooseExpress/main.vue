@@ -1,5 +1,5 @@
 <template>
-<div class="section" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
+<div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
     <el-tab-pane label="配置" name="first">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="second">已上线</el-tab-pane>
@@ -43,7 +43,7 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" width="160">
+    <el-table-column prop="createTime"  :sortable = "showSortable" label="创建时间" width="160">
     </el-table-column>
     <el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="sortable">
     </el-table-column>
@@ -62,7 +62,6 @@
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
     <el-table-column prop="currentState" width="80" label="状态" :sortable="sortable">
-
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
@@ -70,30 +69,30 @@
       <template scope="scope">
         <div>
           <div v-if="showOperation">
-            <el-button  @click="loadingTakeOffFlag = true" type="text" size="small">置为下架</el-button>   
-            <br/>           
+            <el-button  @click="loadingTakeOffFlag = true" type="text" size="small">置为下架</el-button>
+            <br/>
           </div>
           <div v-if="showOperation">
-            <el-button  @click="handleEdit(scope.$index, scope.row)" type="text" size="small">修改</el-button>    
-            <br/>           
+            <el-button  @click="handleEdit(scope.$index, scope.row)" type="text" size="small">修改</el-button>
+            <br/>
           </div>
           <div v-if="showOperation2">
-           <el-button @click="loadingTakeOffFlag = true" type="text" size="small">通过申请</el-button> 
-           <br/>              
+           <el-button @click="loadingTakeOffFlag = true" type="text" size="small">通过申请</el-button>
+           <br/>
           </div>
           <div v-if="showOperation2">
-            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">申请驳回</el-button>    
-            <br/>        
+            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">申请驳回</el-button>
+            <br/>
           </div>
           <div v-if="showOperation2">
-           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button>                       
-           <br/> 
+           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button>
+           <br/>
           </div>
           <div v-if="showOperation2">
-            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">待审详情</el-button>  
-            <br/>                    
-          </div> 
- 
+            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">待审详情</el-button>
+            <br/>
+          </div>
+
         </div>
 
         </template>
@@ -155,10 +154,13 @@ import store from 'src/vuex/store.js'
 export default {
   data() {
     return {
+      // 排序是否显示
+      showSortable:true,
+
       myDialogTitle: "确认置为下架？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
       // 置为下架对话框
-      showOperation: false,
+      showOperation: true,
       showOperation2: false,
       loadingTakeOffFlag: false,
       tableFalg: true,
@@ -175,6 +177,7 @@ export default {
       value: '',
       pageSize: 5,
       listLoading: false,
+      halfListLoading:false,
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       options2: [{
         label: '江苏',
@@ -267,7 +270,7 @@ export default {
         console.log("error");
         console.log(error);
       })
-      // _this.$http.get(url)
+      // _ZZthis.$http.get(url)
       //   .then(function(rsp) {
       //     _this.tableData = rsp.data.data
       //   })
@@ -284,6 +287,17 @@ export default {
     }
   },
   methods: {
+
+    // 操作排序值改变
+    handleSortChange(column) {
+       if(column.prop === "createTime") {
+          // 创建时间进行排序
+          console.log(column.prop,column.order);
+       }else if (column.prop === "currentState") {
+          // 状态进行排序
+          console.log(column.prop,column.order);
+       }
+    },
     // 操作栏对应的事件响应
     OperationTakeOff() {
         this.loadingTakeOffFlag = true;
@@ -325,7 +339,8 @@ export default {
       console.log(tab.label);
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
-        _this.sortable = true;
+        // 配置排序
+        _this.showSortable = true;
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = true;
@@ -333,14 +348,16 @@ export default {
         _this.showOperation2 = false;
         _this.tableData = tableDataCopy;
       } else if (tab.label == "已上线") {
-        _this.sortable = false;
+        // 配置排序
+        _this.showSortable = false;
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = false;
         _this.tableData = tableDataCopy;
       } else {
-        _this.sortable = false;
+        // 配置排序
+        _this.showSortable = false;
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
@@ -423,7 +440,7 @@ export default {
     handleCurrentChange(val) {
       this.currentPage4 = val;
       var _this = this;
-      this.listLoading = true;
+      this.halfListLoading = true;
       this.$message(`当前页${val}`);
       var count = this.pageSize / 5;
       if (count == 1) {
@@ -446,7 +463,7 @@ export default {
 
 
       setTimeout(() => {
-        _this.listLoading = false;
+        _this.halfListLoading = false;
       }, 600);
       console.log(`当前页: ${val}`);
     },
@@ -474,23 +491,20 @@ export default {
 }
 </script>
 <style>
-/*.el-table__row td:nth-child(2n){
-       background-color:#f5f5f5;
-   }
-   .el-table_1_column_2{
-        background-color: #f5f5f5;
-   }*/
+.el-tabs .el-tabs__content {
+  display: none;
+}
+
+.main {
+
 .cell{
   text-align: center;
-}   
+}
 .el-tabs__item{
   width:90px;
   height:30px;
   line-height:30px;
   text-align: center;
-}
-.el-tabs .el-tabs__content {
-  display: none;
 }
 
 .el-table .cell,
@@ -508,6 +522,7 @@ export default {
 }
 .link_button:hover{
   background-color: no;
+}
 }
 
 /*.el-table__body .el-table__row .el-table_1_column_14 .cell {
