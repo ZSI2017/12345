@@ -7,7 +7,7 @@
     </el-form-item>
     <el-form-item label="运营图">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
-        <el-button size="small" type="primary" style="width:60px;"><i class="el-icon-upload2"></i> </el-button>
+        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
     </el-form-item>
@@ -111,8 +111,8 @@
     </div>
     
     <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingFlag = false">取 消</el-button>
-    <el-button type="primary" @click="editSure">确 定</el-button>
+    <el-button @click="loadingFlag = false">编 辑</el-button>
+    <el-button type="primary" @click="editSure">放 弃</el-button>
   </span>
   </el-dialog>
 
