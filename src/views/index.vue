@@ -90,7 +90,7 @@ export default {
       headerFixed: true,
       title: "我的快递",
       input: '',
-      isActive:true
+      isActive:false
     }
   },
   created() {
