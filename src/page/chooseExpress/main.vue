@@ -22,17 +22,17 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" :data="tableData"  @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="500" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table v-if="tableFalg" @sort-change="handleSortChange" :data="tableData"   @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="500" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="operationsMapName"  label="运营图称">
     </el-table-column>
-    <el-table-column prop="name" label="运营图" sortable>
+    <el-table-column prop="name" label="运营图">
       <template scope="scope">
             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
         </template>
     </el-table-column>
     <el-table-column prop="link" label="链接">
       <template scope="scope">
-        <el-popover :content="link_content" ref="popover4" width="300" trigger="click">
+        <el-popover :content="scope.row.link" ref="popover4" width="300" trigger="click">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
       </template>
@@ -42,7 +42,7 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" width="160">
+    <el-table-column prop="createTime"  :sortable = "showSortable" label="创建时间" width="160">
     </el-table-column>
     <el-table-column prop="modifyTime" label="修改时间" width="160">
     </el-table-column>
@@ -60,7 +60,7 @@
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="currentState" width="80" label="当前状态">
+    <el-table-column prop="currentState" :sortable = "showSortable" width="80" label="状态">
 
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
@@ -125,6 +125,9 @@ import store from 'src/vuex/store.js'
 export default {
   data() {
     return {
+      // 排序是否显示
+      showSortable:true,
+
       myDialogTitle: "确认置为下架？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
       // 置为下架对话框
@@ -253,6 +256,17 @@ export default {
     }
   },
   methods: {
+
+    // 操作排序值改变
+    handleSortChange(column) {
+       if(column.prop === "createTime") {
+          // 创建时间进行排序
+          console.log(column.prop,column.order);
+       }else if (column.prop === "currentState") {
+          // 状态进行排序
+          console.log(column.prop,column.order);
+       }
+    },
     // 操作栏对应的事件响应
     OperationTakeOff() {
         this.loadingTakeOffFlag = true;
@@ -294,7 +308,8 @@ export default {
       console.log(tab.label);
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
-
+        // 配置排序
+        _this.showSortable = true;
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = true;
@@ -302,12 +317,16 @@ export default {
         _this.showOperation2 = false;
         _this.tableData = tableDataCopy;
       } else if (tab.label == "已上线") {
+        // 配置排序
+        _this.showSortable = false;
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = false;
         _this.tableData = tableDataCopy;
       } else {
+        // 配置排序
+        _this.showSortable = false;
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
