@@ -139,7 +139,9 @@ export default {
     },
     handleSelect(key, keyPath) {
        this.defaultActive =""+key;
-      if (this.$route.path == "/addData") {
+      //  console.log("this.$route.path");
+      //  console.log(this.$route.path);
+      if (this.$route.path == "/sendExpress/addData") {
           if(this.$router.app.$store.state.loadingFlag == false){
             console.log(this.$route.matched);
             console.log(this.$route.path);
