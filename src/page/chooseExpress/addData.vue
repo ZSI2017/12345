@@ -1,6 +1,6 @@
 <template type="html">
 <section class="section">
-  <p style="color:#00b7f9;cursor:pointer" @click="handleBackClick">&lt; 返回</p>
+  <p style="color:#00b7f9;cursor:pointer;margin-top:0;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
       <el-input v-model="form.name" placeholder="请输入运营图名称"> </el-input>
@@ -105,7 +105,11 @@
 
   <!-- 即将离开的 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
-    <span>还没有保存,确定放弃编辑？</span>
+    <div>
+        <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
+        <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
+    </div>
+    
     <span slot="footer" class="dialog-footer">
     <el-button @click="loadingFlag = false">取 消</el-button>
     <el-button type="primary" @click="editSure">确 定</el-button>
