@@ -36,4 +36,6 @@ export default {
                    date.getDate(date.getDate() - 10000);
                    document.cookie = cookie_name + "=; expires=" + date.toGMTString() + ";path=/;";
                }
+
+              //    store
            }
