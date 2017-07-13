@@ -67,12 +67,34 @@
     </el-table-column>
     <el-table-column v-if="showConfig" label="操作" width="130">
       <template scope="scope">
-           <el-button v-if="showOperation" @click="loadingTakeOffFlag = true" type="text" size="small">置为下架</el-button>
-           <el-button v-if="showOperation" @click="handleEdit(scope.$index, scope.row)" type="text" size="small">修改</el-button>
-           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">通过申请</el-button><br/>
-           <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">申请驳回</el-button><br/>
-           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button><br/>
-           <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">待审详情</el-button>
+        <div>
+          <div v-if="showOperation">
+            <el-button  @click="loadingTakeOffFlag = true" type="text" size="small">置为下架</el-button>   
+            <br/>           
+          </div>
+          <div v-if="showOperation">
+            <el-button  @click="handleEdit(scope.$index, scope.row)" type="text" size="small">修改</el-button>    
+            <br/>           
+          </div>
+          <div v-if="showOperation2">
+           <el-button @click="loadingTakeOffFlag = true" type="text" size="small">通过申请</el-button> 
+           <br/>              
+          </div>
+          <div v-if="showOperation2">
+            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">申请驳回</el-button>    
+            <br/>        
+          </div>
+          <div v-if="showOperation2">
+           <el-button v-if="showOperation2" @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button>                       
+           <br/> 
+          </div>
+          <div v-if="showOperation2">
+            <el-button v-if="showOperation2" @click="handleEdit" type="text" size="small">待审详情</el-button>  
+            <br/>                    
+          </div> 
+ 
+        </div>
+
         </template>
     </el-table-column>
   </el-table>
@@ -447,6 +469,9 @@ export default {
    .el-table_1_column_2{
         background-color: #f5f5f5;
    }*/
+.cell{
+  text-align: center;
+}   
 .el-tabs__item{
   width:90px;
   height:30px;
@@ -462,10 +487,10 @@ export default {
   padding: 0 7px;
 }
 
-.el-table__body .el-table__row .cell {
+/*.el-table__body .el-table__row .cell {
   max-height: 150px !important;
   overflow-y: auto;
-}
+}*/
 
 .link_button{
   border:0;
