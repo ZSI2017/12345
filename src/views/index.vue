@@ -52,9 +52,9 @@
       <!--   TODO  对表格进行各种操作     -->
 
       <!-- <router-view></router-view> -->
-      <transition name="slide-fade">
+      <!--<transition name="slide-fade">-->
         <router-view></router-view>
-      </transition>
+      <!--</transition>-->
       <!-- <tableVue></tableVue> -->
       </el-col>
     </div>
@@ -89,7 +89,7 @@ export default {
       headerFixed: true,
       title: "我的快递",
       input: '',
-      isActive:false
+      isActive:true
     }
   },
   created() {
