@@ -17,23 +17,22 @@
     </el-col>
     <!--<el-col :span="8" style="height:20px"></el-col>-->
     <el-col :span="2">
-      <el-button type="primary" @click="setNewData" size="large" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
+      <el-button type="primary" @click="setNewData" size="large" style="float:right;">+添加</el-button>
     </el-col>
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" :data="tableData" style="width: 100%;margin-top:10px;" max-height="500" empty-text="_" align="center" :default-sort="{prop: 'modifyTime', order: 'descending'}">
+  <el-table v-if="tableFalg" v-loading.body.lock="halfListLoading"  @sort-change="handleSortChange" :data="tableData"   @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="500" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="operationsMapName"  label="运营图称">
     </el-table-column>
     <el-table-column prop="name" label="运营图">
-      <template scope="scope">
+        <template scope="scope">
             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
         </template>
     </el-table-column>
     <el-table-column prop="link" label="链接">
       <template scope="scope">
-        <el-popover ref="popover4" width="300" trigger="click">
-          {{scope.row.link}}
+        <el-popover :content="scope.row.link" ref="popover4" width="300" trigger="click">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
       </template>
@@ -45,7 +44,7 @@
     </el-table-column>
     <el-table-column prop="createTime"  :sortable = "showSortable" label="创建时间" width="160">
     </el-table-column>
-    <el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="sortable">
+    <el-table-column prop="modifyTime" label="修改时间" width="160">
     </el-table-column>
 
     <el-table-column prop="activeTime" label="有效时段" width="220">
@@ -61,7 +60,8 @@
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="currentState" width="80" label="状态" :sortable="sortable">
+    <el-table-column prop="currentState" :sortable = "showSortable" width="80" label="状态">
+
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
@@ -130,15 +130,8 @@
 
   <!-- 置为下架 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
-
-    <div>
-        <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
-        <!--<span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>-->
-        <p style="font-weight:bold;padding-left:45px;">确认置为下架？</p>
-        <span style="padding-left:45px;">确认后，该内容将提交审核，通过后变为 '已下架'</span>
-    </div>
-
-    
+    <p style="font-weight:bold;padding-left:20px;">确认置为下架？</p>
+    <span style="padding-left:20px;">确认后，该内容将提交审核，通过后变为 '已下架'</span>
     <span slot="footer" class="dialog-footer">
       <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
       <el-button type="primary" @click="loadingTakeOffFlag = false">确 定</el-button>
@@ -167,7 +160,6 @@ export default {
       showConfig: true,
       gridData: [],
       radio2: 3,
-      sortable:true,
       activeName2: 'first',
       showHeader: false,
       dialogTableVisible: false,
@@ -385,14 +377,14 @@ export default {
       })
     },
     //tooltip 查看链接
-    //  handleMouseEnter(row, column, cell, event){
-    //   this.link_content = row.link;
-    // },
+     handleMouseEnter(row, column, cell, event){
+      this.link_content = row.link;
+    },
     // 查看链接
-    // checkLink(index,row) {
-    //   this.dialogLinkVisible = true
-    //   this.linkText = row.link
-    // },
+    checkLink(index,row) {
+      this.dialogLinkVisible = true
+      this.linkText = row.link
+    },
     setNewData() {
       var _this = this;
       this.$router.push({
