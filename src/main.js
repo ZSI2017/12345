@@ -27,11 +27,11 @@ Vue.config.silent = true
 const router = new VueRouter({
       routes,
       scrollBehavior(to,from,savedPosition) {
-            //    if(to.hash) {
-            //        return {
-            //            selector:to.hash
-            //        }
-            //    }
+               if(to.hash) {
+                   return {
+                       selector:to.hash
+                   }
+               }
       }
 });
 // 注册全局的构子 路由
