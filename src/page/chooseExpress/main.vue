@@ -35,7 +35,7 @@
          <!--<el-button @click="checkLink(scope.$index, scope.row)" type="text" size="small">查看链接</el-button>-->
         <el-tooltip :content="link_content" placement="bottom" effect="light">
           <el-button class="link_button">查看链接</el-button>
-        </el-tooltip>        
+        </el-tooltip>
       </template>
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">

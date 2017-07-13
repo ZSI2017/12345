@@ -1,9 +1,6 @@
-'Cookie': {
-               'duration': 7 * 24 * 60 * 60 * 1000
-               },
-
-               'cookieDomain': DOMAIN_CONFIG['COOKIE_DOMAIN'],
-
+export default {
+               'duration': 7 * 24 * 60 * 60 * 1000,
+               'cookieDomain': "localhost://8080",
                'get': function(cookie_name) {
                    if (!cookie_name || cookie_name == '') {
                        return null;
@@ -24,18 +21,19 @@
                    var cookie_str = cookie_name + "=" + escape(cookie_val) + ";";
                    if (time > 0) {
                        var date = new Date();
-                       date.setTime(date.getTime() + time);
-                       cookie_str += "expires=" + date.toGMTString() + ";";
+                       date.setDate(date.getDate() + time);
+                       cookie_str += "expires=" + date.toGMTString()+";";
+                      console.log(date.toGMTString());
                    }
-                   cookie_str += "path=/;domain=" + this.cookieDomain + ";";
-                   document.cookie = cookie_str;
+                     cookie_str += "path=/;";
+                     document.cookie = cookie_str;
                },
                'delete': function(cookie_name) {
                    if (!cookie_name || cookie_name == '') {
                        return;
                    }
                    var date = new Date();
-                   date.setTime(date.getTime() - 10000);
-                   document.cookie = cookie_name + "=; expires=" + date.toGMTString() + ";path=/;domain=" + this.cookieDomain + ";";
+                   date.getDate(date.getDate() - 10000);
+                   document.cookie = cookie_name + "=; expires=" + date.toGMTString() + ";path=/;";
                }
            }
