@@ -246,12 +246,7 @@ export default {
     // 覆盖地区选择
     dialogConfig() {
       var _this = this;
-<<<<<<< HEAD
-      _this.$http.get("/rest/list3",
-        (rsp) =>{
-=======
       _this.$http.get("/rest/list3",(rsp)=> {
->>>>>>> e9b4ce01d797951634e68bf063e819f46bed8e29
           _this.gridData = rsp.data.data;
           _this.gridDataCopy = _this.gridData;
           _this.provinces = _this.gridData;
@@ -264,11 +259,7 @@ export default {
           }
           _this.dialogFormVisible = true;
           // console.log(_this.gridData);
-<<<<<<< HEAD
-        },function(error) {
-=======
         },(error)=> {
->>>>>>> e9b4ce01d797951634e68bf063e819f46bed8e29
           console.log(error);
         })
     },
@@ -310,21 +301,12 @@ export default {
     },
     dialogTable() {
       var _this = this;
-<<<<<<< HEAD
-      _this.$http.get("/rest/list3",
-        function(rsp) {
-=======
       _this.$http.get("/rest/list3",(rsp)=>{
->>>>>>> e9b4ce01d797951634e68bf063e819f46bed8e29
           _this.gridData = rsp.data.data;
           _this.dialogTableVisible = true;
 
           console.log(_this.gridData);
-<<<<<<< HEAD
-        },function(error) {
-=======
         },(error)=> {
->>>>>>> e9b4ce01d797951634e68bf063e819f46bed8e29
           console.log(error);
         })
     },
