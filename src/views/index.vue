@@ -4,31 +4,36 @@
   <header class="header" :class="{ 'header-fixed' : headerFixed }" style="background-color:#5295e2;">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content" @click="handleHome" style="float:left;width:250px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">{{ title }}</div>
-        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;background-color:#5295e2;color:#fff;cursor: pointer;">123456789</div>
+        <div class="grid-content" @click="handleHome" style="float:left;width:230px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;">{{ title }}</div>
+        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;padding-right:20px;">
+          <el-row>
+            <el-col :span="12"><div class="grid-content">123456789</div></el-col>
+            <el-col :span="12"><div class="grid-content" @click="handleLogout">退出登录</div></el-col>
+          </el-row>
+        </div>
       </el-col>
     </el-row>
   </header>
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
   <div style="display:flex;flex-direction:row;">
 
-    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:230px;width:250px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
+    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:180px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
       <el-menu :default-active="$router.path" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
 
           <el-submenu :index="index+''"  v-if="items.hasChild&&!items.isHide">
-            <template slot="title"><i style="width:30px;display:inline-block;"></i>{{items.name}}</template>
+            <template slot="title"><i style="width:20px;display:inline-block;"></i>{{items.name}}</template>
             <!-- <el-menu-item-group> -->
             <!-- <template slot="title">分组一</template> -->
             <el-menu-item v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
-            <i style="width:30px;display:inline-block;"></i>{{item.name}}
+            <i style="width:20px;display:inline-block;"></i>{{item.name}}
             </el-menu-item>
 
 
           </el-submenu>
           <el-menu-item v-if="!items.hasChild&&!items.isHide" :index="items.children[0].path">
-            <i style="width:30px;display:inline-block;"></i>{{items.children[0].name}}
+            <i style="width:20px;display:inline-block;"></i>{{items.children[0].name}}
           </el-menu-item>
 
         </template>
@@ -40,17 +45,9 @@
 
     </div>
 
-    <div
-        v-loading.fullscreen.lock="fullscreenLoading"
-        element-loading-text="拼命加载中"
-        style="width:100%;box-sizing:border-box;padding:20px;padding-left:270px;padding-top:20px;flex:1;background:#f1f1f1;">
-      <el-breadcrumb style="padding:10px 0 25px;font-size:16px;line-height:100%;margin-bottom:20px;border-bottom:1px solid #999;" separator="/">
-        <!-- {{$route.matched[0].name}} -->
-        <el-breadcrumb-item v-if="item.name" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">
-
-          {{item.name}}
-        </el-breadcrumb-item>
-        <!-- <el-breadcrumb-item>运营位</el-breadcrumb-item> -->
+    <div style="width:100%;box-sizing:border-box;padding:20px;padding-left:250px;padding-top:20px;flex:1;background:#f1f1f1;">
+      <el-breadcrumb style="padding:20px 0 20px 25px;line-height:100%;border:1px solid #D3DCE6;border-radius: 5px 5px 0 0;border-bottom:0;background:#fff;" separator="/">
+        <el-breadcrumb-item v-if="item.name" v-for="(item,index) in $route.matched" :to="{path:item.path==''?'/':item.path}" :key="item.path">{{item.name}}</el-breadcrumb-item>
       </el-breadcrumb>
       <!--   TODO  对表格进行各种操作     -->
 
@@ -91,11 +88,7 @@ export default {
       fold: true,
       headerFixed: true,
       title: "我的快递",
-      username: "20392030429404@alipy.com",
-      addFlag: false,
-      init_width: "init_width",
       input: '',
-      msg: 'Use Vue 2.0 Today!',
     }
   },
   created() {
@@ -103,7 +96,14 @@ export default {
     console.log(this.$router.options.routes);
   },
   watch: {
+    '$route': function(to, from) {
 
+      if (to.path == "/login") {
+        
+      } 
+
+
+    }
   },
   methods: {
     test() {
@@ -147,23 +147,26 @@ export default {
             _this.fullscreenLoading = false
         },600);
       }
+    },
+    handleLogout(){
+        this.$router.push('/login')
     }
   }
 }
 </script>
 <style scoped lang="scss">
 //  设置enter 和 leave 的路由动画
-.slide-fade-enter-active {
-    transition: all 0.3s ease;
-}
-.slid-fade-leave-active {
-    transition: all 0.8s cubic-bezier(1.0,0.5,0.8,1.0);
-}
-.slide-fade-enter,
-.slide-fade-leave-to {
-    transform: translateX(10px);
-    opacity: 0;
-}
+// .slide-fade-enter-active {
+//     transition: all 0.3s ease;
+// }
+// .slid-fade-leave-active {
+//     transition: all 0.8s cubic-bezier(1.0,0.5,0.8,1.0);
+// }
+// .slide-fade-enter,
+// .slide-fade-leave-to {
+//     transform: translateX(10px);
+//     opacity: 0;
+// }
 .main-left .el-menu-item,
 .main-left .el-submenu__title {
     height: 42px;
@@ -196,7 +199,7 @@ header {
     z-index: 1000;
     min-width: 1200px;
     transition: all 0.5s ease;
-    border-top: solid 4px #3091F2;
+    // border-top: solid 4px #3091F2;
     background-color: #fff;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);
 }
@@ -205,6 +208,9 @@ header.header-fixed {
     top: 0;
     left: 0;
     right: 0;
+}
+.grid-content:hover{
+  background: #79a8eb;
 }
 
 header .el-menu-demo {
