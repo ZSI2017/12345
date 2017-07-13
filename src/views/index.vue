@@ -61,7 +61,8 @@
       </el-col>    </div>
   </div>
   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
-    <span>还没有保存,确定放弃编辑？</span>
+    <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
+    <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
     <span slot="footer" class="dialog-footer">
     <el-button @click="loadingFlag = false">取 消</el-button>
     <el-button type="primary" @click="editSure">确 定</el-button>
