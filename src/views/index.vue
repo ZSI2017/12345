@@ -97,6 +97,7 @@ export default {
     if(this.$router.currentRoute.fullPath == "/home") {
         this.isActive = true;
     }
+    console.log(this);
     // console.log("router");
     // console.log(this);
   },
