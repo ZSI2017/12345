@@ -1,11 +1,11 @@
 <template type="html">
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-alert
+  <!--<el-alert
   style="margin-left:100px;margin-bottom:30px;width:800px;"
    title="错误提示的文案"
    type="error">
- </el-alert>
+ </el-alert>-->
   <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
       <el-input v-model="form.name" placeholder="请输入运营图名称"> </el-input>

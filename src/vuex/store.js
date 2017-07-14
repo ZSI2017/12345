@@ -2,32 +2,31 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as actions from "./actions";
 import * as getters from "./getters";
+import * as func from './function';
 
 Vue.use(Vuex);
 
-const editForm = {
-          operationsMapName:"",
-          link:"",
-          address:"",
-          activeTime:"",
-          currentState:"",
-          Forder:""
-      }
+// const editForm = {
+//           operationsMapName:"",
+//           link:"",
+//           address:"",
+//           activeTime:"",
+//           currentState:"",
+//           Forder:""
+//       }
 
-const state = {
-      loadingFlag :false,
-      editForm: editForm
-};
-
+const state = func.local.get() || {
+    editform: [],
+    loadingFlag :false
+}
 
 const mutations = {
      CHANGESTATUS(state) {
          state.loadingFlag= !state.loadingFlag
      },
-     setEditForm(state,payload) {
-        Object.assign(state.editForm, payload);
-      localStorage.setItem('editForm',JSON.stringify(payload));
-    }
+     EDITFORM(states){
+        func.local.set(states);
+    },
 }
 
 /* 从本地存储读取数据 */

@@ -52,7 +52,7 @@
         <el-breadcrumb-item v-if="item.name&&item.name !='首页'" v-for="(item,index) in $route.matched" :to="{path:item.path}" :key="item.path">{{item.name}}</el-breadcrumb-item>
       </el-breadcrumb>
       <!--   TODO  对表格进行各种操作     -->
-
+ 
       <!-- <router-view></router-view> -->
       <!--<transition name="slide-fade">-->
         <router-view></router-view>

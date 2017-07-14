@@ -16,13 +16,14 @@
       </el-radio-group>
     </el-col>
     <!--<el-col :span="8" style="height:20px"></el-col>-->
-    <el-col :span="2" style="position: relative;padding-left:20px;text-inline:right;">
-      <i class="el-icon-plus" style="position:absolute;top:10px;left:22%;color:#fff;z-index:2;"></i><el-button type="primary" @click="setNewData" style="float:right;width:100%;">添 加</el-button>
+    <el-col :span="2" style="position: relative;padding-left:22px;">
+      <!--<i class="el-icon-plus" style="position:absolute;top:10px;left:36%;color:#fff;z-index:2;"></i>-->
+      <el-button type="primary" @click="setNewData"><i class="el-icon-plus"></i> &nbsp; 添加</el-button>
     </el-col>
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" v-loading.body.lock="halfListLoading"  @sort-change="handleSortChange" :data="tableData"   @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="500" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table v-if="tableFalg" v-loading.body.lock="halfListLoading"  @sort-change="handleSortChange" :data="tableData"   @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="450" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="operationsMapName"  label="运营图称">
     </el-table-column>
     <el-table-column prop="name" label="运营图">
@@ -185,15 +186,15 @@ export default {
       tableData: [],
       formLabelWidth: '120px',
       selectedOptions: [],
-      selectedOptions2: [],
-      editForm:{
-          operationsMapName:"",
-          link:"",
-          address:"",
-          activeTime:"",
-          currentState:"",
-          Forder:""
-      }
+      selectedOptions2: []
+      // editForm:{
+      //     operationsMapName:"",
+      //     link:"",
+      //     address:"",
+      //     activeTime:"",
+      //     currentState:"",
+      //     Forder:""
+      // }
     }
   },
   computed() {
@@ -269,13 +270,16 @@ export default {
       //     console.log(error);
       //   })
 
-    },
-    editForm: {
-      handler: function () {
-          store.commit('setEditForm',this.editForm);
-      },
-      deep:true
     }
+    // editForm(){ //移至缓冲
+    //     this.$store.dispatch('editForm');
+    // }
+    // editForm: {
+    //   handler: function () {
+    //       store.commit('setEditForm',this.editForm);
+    //   },
+    //   deep:true
+    // }
   },
   methods: {
 
@@ -466,12 +470,14 @@ export default {
       })
     },
     handleEdit(index,row) {
-      this.editForm.operationsMapName = row.operationsMapName;
-      this.editForm.link = row.link;
-      this.editForm.address = row.address;
-      this.editForm.activeTime = row.activeTime;
-      this.editForm.currentState = row.currentState;
-      this.editForm.forder = row.forder;
+      console.log(row)
+      // this.editForm.operationsMapName = row.operationsMapName;
+      // this.editForm.link = row.link;
+      // this.editForm.address = row.address;
+      // this.editForm.activeTime = row.activeTime;
+      // this.editForm.currentState = row.currentState;
+      // this.editForm.forder = row.forder;
+      this.$store.dispatch('editform',row);
 
       var _this = this;
       this.$router.push({

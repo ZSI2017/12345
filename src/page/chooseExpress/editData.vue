@@ -157,21 +157,21 @@ export default {
         type: [],
         resource: '',
         desc: ''
-      },
-      editForm:{
-          operationsMapName:"",
-          link:"",
-          address:"",
-          activeTime:"",
-          currentState:"",
-          Forder:""
       }
+      // editForm:{
+      //     operationsMapName:"",
+      //     link:"",
+      //     address:"",
+      //     activeTime:"",
+      //     currentState:"",
+      //     Forder:""
+      // }
     }
   },
   created() {
-    console.log(this);
-    alert(this.$router.app.$store.state.editForm)
-    console.log(this.$router.app.$store.state.editForm)
+    // console.log(this);
+    // alert(this.$router.app.$store.state.editForm)
+    // console.log(this.$router.app.$store.state.editForm)
 
   },
   beforeMount() {
@@ -190,6 +190,12 @@ export default {
     //          console.log(old);
     //     }
     //  }
+  },
+  computed: {
+      GETEDITFORM(){
+        alert(this.$store.getters.GETEDITFORM)
+          return this.$store.getters.GETEDITFORM;
+      }
   },
   methods: {
     //  点击提交
