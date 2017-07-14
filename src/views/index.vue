@@ -52,7 +52,7 @@
         <el-breadcrumb-item v-if="item.name&&item.name !='首页'" v-for="(item,index) in $route.matched" :to="{path:item.path}" :key="item.path">{{item.name}}</el-breadcrumb-item>
       </el-breadcrumb>
       <!--   TODO  对表格进行各种操作     -->
- 
+
       <!-- <router-view></router-view> -->
       <!--<transition name="slide-fade">-->
         <router-view></router-view>
@@ -147,7 +147,7 @@ export default {
        this.defaultActive =""+key;
       //  console.log("this.$route.path");
       //  console.log(this.$route.path);
-      if (this.$route.path == "/sendExpress/addData") {
+      if (this.$route.path == "/sendExpress/addData"||this.$route.path == "/chooseExpress/addData"||this.$route.path == "/expressOrder/addData") {
           if(this.$router.app.$store.state.loadingFlag == false){
             console.log(this.$route.matched);
             console.log(this.$route.path);
@@ -162,7 +162,8 @@ export default {
       }
     },
     handleLogout(){
-        this.$router.push('/login')
+        this.$router.push({name:'我的快递'});
+        // this.$router.
     }
   }
 }

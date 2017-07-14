@@ -13,3 +13,4 @@ const localEvent = function (item) {
 }
 
 export default new localEvent('editData')
+

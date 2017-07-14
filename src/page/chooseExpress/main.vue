@@ -370,7 +370,7 @@ export default {
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
-        _this.showConfig = false;
+        _this.showConfig = true;
         _this.showOperation2 = true;
         _this.tableData = tableDataCopy;
       }
