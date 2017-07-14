@@ -97,11 +97,11 @@
             <br/>
           </div>
           <div v-if="showOperation2">
-           <el-button @click="loadingTakeOffFlag = true" type="text" size="small">已生效详情</el-button>
+           <el-button @click="effectiveDetails(scope.row)" type="text" size="small">已生效详情</el-button>
            <br/>
           </div>
           <div v-if="showOperation2">
-            <el-button @click="handleEdit" type="text" size="small">待审详情</el-button>
+            <el-button @click="pendingDetails(scope.row)" type="text" size="small">待审详情</el-button>
             <br/>
           </div>
 
@@ -499,6 +499,15 @@ export default {
       this.$router.push({
         path: _this.$route.path + '/editData'
       });
+    },
+    effectiveDetails(row) {
+      localEvent.set(row);
+
+      var _this = this;
+      this.$router.push({
+        path: _this.$route.path + '/detail'
+      });
+
     }
   }
 }

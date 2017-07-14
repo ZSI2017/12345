@@ -3,37 +3,51 @@
   <p style="color:#00b7f9;cursor:pointer" @click="handleBackClick">&lt; 返回</p>
   <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
-      <el-input v-model="form.name" placeholder="请输入运营图名称"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="运营图">
-      <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
+      <el-upload  v-if="isFromAddData" class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
         <el-button size="small" type="primary">点击上传</el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
+
+      <img  v-if="!isFromAddData" width="150px" style="float:left" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
+     <el-popover
+          ref="popover4"
+          placement="right"
+          trigger="click">
+          <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
+      </el-popover>
+      <el-button style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
     <el-form-item label="排序值">
-      <el-input v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <div  class="detail-content"  v-if="!isFromAddData"> {{form.Forder}} </div>
     </el-form-item>
     <el-form-item label="链接">
-      <el-input v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
     </el-form-item>
     <el-form-item label="有效时段">
-      <el-date-picker v-model="value3" type="datetimerange" placeholder="选择时间范围">
+      <el-date-picker  v-if="isFromAddData" v-model="value3" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
+      <div  class="detail-content"  v-if="!isFromAddData">2223-11-22T14:22:00.000--3335-11-03T01:33:00.000</div>
     </el-form-item>
     <el-form-item label="覆盖地区">
-      <el-button size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+      <el-button v-if="isFromAddData"  size="mini" @click="dialogConfig">点击配置</el-button>
+      <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态">
-      <el-radio-group v-model="radio">
+      <el-radio-group v-if="isFromAddData" v-model="radio">
         <el-radio class="radio" :label="1">上架</el-radio>
         <el-radio class="radio" :label="2">下架</el-radio>
-      </el-radio-group>  
+      </el-radio-group>
+      <div  class="detail-content"  v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button type="primary" @click="handleSubmit">提交</el-button>
+    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
   </el-form>
 
   <!-- 覆盖地区   配置对话框 -->
@@ -66,7 +80,6 @@
         <template scope="scope">
             <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
             <el-checkbox
-
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
                >全选</el-checkbox>
@@ -107,7 +120,10 @@
 
   <!-- 即将离开的 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
-    <span>还没有保存,确定放弃编辑？</span>
+    <div>
+      <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
+      <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
+    </div>
     <span slot="footer" class="dialog-footer">
     <el-button @click="loadingFlag = false">取 消</el-button>
     <el-button type="primary" @click="editSure">确 定</el-button>
@@ -125,8 +141,11 @@ import {
 export default {
   data() {
     return {
+     // 从详情页面
+     isDetail:false,
+     currentStateText:'',
      // 即将离开的对话框
-    loadingFlag: false,
+     loadingFlag: false,
 
      // 添加搜索框
      state1:"",
@@ -173,16 +192,20 @@ export default {
       this.form.Forder = localData.Forder;
       this.form.link = localData.link;
       this.value3 = [new Date(2222,22,22,22,22),new Date(3333,33,33,33,33)];
+      this.currentStateText = localData.currentState;
+
       if(localData.currentState = "上架"){
           this.radio = 1;
       }else{
           this.radio = 2;
       }
-
-
   },
   created() {
-
+     if(this.$route.path == "/chooseExpress/detail") {
+          this.isFromAddData = false;
+     } else {
+          this.isFromAddData = true;
+     }
   },
   beforeMount() {
 
@@ -213,7 +236,9 @@ export default {
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
-       this.loadingFlag = true;
+      if(isFromAddData) {
+        this.loadingFlag = true;
+      }
     },
     // 即将离开的对话框
     editSure(){
