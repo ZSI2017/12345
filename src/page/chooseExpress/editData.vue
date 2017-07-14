@@ -240,7 +240,7 @@ export default {
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
-      if (isFromAddData) {
+      if (this.isFromAddData) {
         this.loadingFlag = true;
       }
     },
