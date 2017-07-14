@@ -17,6 +17,7 @@
         :file-list="fileList2">
         <i class="el-icon-plus"></i>
       </el-upload>
+        <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
       <el-dialog v-model="dialogVisible" size="tiny">
            <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
@@ -205,7 +206,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.path == "/chooseExpress/detail") {
+    if (this.$route.path == "/chooseExpress/detail" ||this.$route.path == "/sendExpress/detail"||this.$route.path == "/expressOrder/detail" ) {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
@@ -242,6 +243,8 @@ export default {
     handleBackClick() {
       if (this.isFromAddData) {
         this.loadingFlag = true;
+      } else {
+          this.$router.go(-1);
       }
     },
     // 即将离开的对话框

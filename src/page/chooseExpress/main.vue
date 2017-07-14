@@ -101,7 +101,7 @@
            <br/>
           </div>
           <div v-if="showOperation2">
-            <el-button @click="pendingDetails(scope.row)" type="text" size="small">待审详情</el-button>
+            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">待审详情</el-button>
             <br/>
           </div>
 
