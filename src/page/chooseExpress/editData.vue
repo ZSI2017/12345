@@ -1,15 +1,34 @@
 <template type="html">
 <section class="section">
-  <p style="color:#00b7f9;cursor:pointer" @click="handleBackClick">&lt; 返回</p>
+  <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
       <el-input v-model="form.name" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
-    <el-form-item label="运营图">
-      <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
-        <el-button size="small" type="primary">点击上传</el-button>
+    <el-form-item label="运营图" prop="opMap">
+      <!--<el-upload class="upload-demo" 
+      action="https://jsonplaceholder.typicode.com/posts/"
+      :on-preview="handlePreview" 
+      :on-remove="handleRemove"
+      :file-list="fileList2"
+      list-type="picture-card">
+      <el-dialog v-model="dialogVisible" size="tiny">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
+        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>-->
+      <el-upload
+        action="https://jsonplaceholder.typicode.com/posts/"
+        list-type="picture-card"
+        :on-preview="handlePictureCardPreview"
+        :on-remove="handleRemove"
+        :file-list="fileList2">
+        <i class="el-icon-plus"></i>
       </el-upload>
+      <el-dialog v-model="dialogVisible" size="tiny">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
     </el-form-item>
     <el-form-item label="排序值">
       <el-input v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
@@ -106,11 +125,15 @@
     </el-dialog>
 
   <!-- 即将离开的 对话框  -->
-  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
-    <span>还没有保存,确定放弃编辑？</span>
+   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
+    <div>
+      <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
+      <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
+    </div>
+
     <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingFlag = false">取 消</el-button>
-    <el-button type="primary" @click="editSure">确 定</el-button>
+    <el-button @click="loadingFlag = false">编 辑</el-button>
+    <el-button type="primary" @click="editSure">放 弃</el-button>
   </span>
   </el-dialog>
 
@@ -127,7 +150,9 @@ export default {
     return {
      // 即将离开的对话框
     loadingFlag: false,
-
+    dialogVisible: false,
+    // dialogImageUrl:'https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png',
+    fileList2: [{name: 'food.jpeg', url:"https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png"}],
      // 添加搜索框
      state1:"",
      provinces:[],
@@ -336,6 +361,13 @@ export default {
     },
     onSubmit() {
       console.log('submit!');
+    },
+    handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     }
   }
 }
