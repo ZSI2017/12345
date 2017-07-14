@@ -11,11 +11,11 @@
       <el-upload
         v-if="isFromAddData"
         action="https://jsonplaceholder.typicode.com/posts/"
-        list-type="picture-card"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
         :file-list="fileList2">
-        <i class="el-icon-plus"></i>
+        <!--<i class="el-icon-plus"></i>-->
+        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>        
       </el-upload>
         <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
       <el-dialog v-model="dialogVisible" size="tiny">
