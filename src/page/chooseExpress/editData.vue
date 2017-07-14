@@ -57,23 +57,22 @@
   </el-form>
 
   <!-- 覆盖地区   配置对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible">
+  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
     <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane v-for="(item,index) in tabPaneData" :label="item" :key="index" :name="item" style="font-size:20px;">{{item}}
       </el-tab-pane>
     </el-tabs> -->
-    <el-row :span="24" style="margin-bottom:20px;padding-top:5px;border-top:1px solid grey">
+    <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
       </el-col>
-      <el-col :span="8" style="height:10px;"></el-col>
-      <el-col :span="12" style="font-weight:bold;font-size:16px;">
-        <span>快速搜索: </span>
-        <el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+      <el-col :span="10" style="height:10px;"></el-col>
+      <el-col :span="10" style="font-weight:bold;font-size:16px;margin-top:2px;padding-left:20px;line-height:40px;height:40px;">
+        快速搜索:
+        <el-autocomplete class="inline-input" v-model="state1" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
       </el-col>
-
     </el-row>
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400" style="padding-top:0;">
       <el-table-column property="value" label="省" width="200">
         <template scope="scope">
             <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
@@ -379,8 +378,16 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss">
 label {
     font-weight: bold;
 }
+.dialog-class {
+    .el-dialog__body{
+       padding-top:15px !important;
+       
+    }
+}
+
+
 </style>
