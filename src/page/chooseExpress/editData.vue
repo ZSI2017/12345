@@ -3,22 +3,13 @@
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
-      <el-input v-model="form.name" placeholder="请输入运营图名称"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
+
     <el-form-item label="运营图" prop="opMap">
-      <!--<el-upload class="upload-demo" 
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :on-preview="handlePreview" 
-      :on-remove="handleRemove"
-      :file-list="fileList2"
-      list-type="picture-card">
-      <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload>-->
       <el-upload
+        v-if="isFromAddData"
         action="https://jsonplaceholder.typicode.com/posts/"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
@@ -27,32 +18,41 @@
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>        
       </el-upload>
       <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
+           <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
+      <el-popover ref="popover4" placement="right" trigger="click">
+        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
+      </el-popover>
+      <el-button  v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
+
     </el-form-item>
     <el-form-item label="排序值">
-      <el-input v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
     </el-form-item>
     <el-form-item label="链接">
-      <el-input v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
     </el-form-item>
     <el-form-item label="有效时段">
-      <el-date-picker v-model="value3" type="datetimerange" placeholder="选择时间范围">
+      <el-date-picker v-if="isFromAddData" v-model="value3" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
+      <div class="detail-content" v-if="!isFromAddData">2223-11-22T14:22:00.000--3335-11-03T01:33:00.000</div>
     </el-form-item>
     <el-form-item label="覆盖地区">
-      <el-button size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+      <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
+      <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态">
-      <el-radio-group v-model="radio">
+      <el-radio-group v-if="isFromAddData" v-model="radio">
         <el-radio class="radio" :label="1">上架</el-radio>
         <el-radio class="radio" :label="2">下架</el-radio>
-      </el-radio-group>  
+      </el-radio-group>
+      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button type="primary" @click="handleSubmit">提交</el-button>
+    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
   </el-form>
 
   <!-- 覆盖地区   配置对话框 -->
@@ -62,30 +62,21 @@
       </el-tab-pane>
     </el-tabs> -->
     <el-row :span="24" style="margin-bottom:20px;padding-top:5px;border-top:1px solid grey">
-     <el-col :span = "4" style="padding-top:10px;" >
-       <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
-     </el-col>
-     <el-col :span="8" style="height:10px;"></el-col>
+      <el-col :span="4" style="padding-top:10px;">
+        <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
+      </el-col>
+      <el-col :span="8" style="height:10px;"></el-col>
       <el-col :span="12" style="font-weight:bold;font-size:16px;">
-          <span>快速搜索: </span>
-          <el-autocomplete
-               class="inline-input"
-               v-model="state1"
-               :fetch-suggestions="querySearch"
-               placeholder="请输入搜索内容"
-                icon="close"
-               :on-icon-click = "handleIconClick"
-               @select="handleQuerySelect"
-          ></el-autocomplete>
-        </el-col>
+        <span>快速搜索: </span>
+        <el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+      </el-col>
 
-  </el-row>
+    </el-row>
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200">
         <template scope="scope">
             <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
             <el-checkbox
-
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
                >全选</el-checkbox>
@@ -111,30 +102,30 @@
 
   <!--  覆盖地区 查看对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-  <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-     <el-table-column property="value" label="省" width="200"></el-table-column>
-     <el-table-column property="city" label="市">
-       <template scope="scope">
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+      <el-table-column property="value" label="省" width="200"></el-table-column>
+      <el-table-column property="city" label="市">
+        <template scope="scope">
       <el-tag
        style="margin-right:10px;margin-bottom:5px;"
         v-for="(item,index) in scope.row.city"
         >{{item}}</el-tag>
     </template>
-     </el-table-column>
-  </el-table>
-    </el-dialog>
+      </el-table-column>
+    </el-table>
+  </el-dialog>
 
   <!-- 即将离开的 对话框  -->
-   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
+
+  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
     <div>
       <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
       <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
     </div>
-
     <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingFlag = false">编 辑</el-button>
-    <el-button type="primary" @click="editSure">放 弃</el-button>
-  </span>
+       <el-button @click="loadingFlag = false">编 辑</el-button>
+       <el-button type="primary" @click="editSure">放 弃</el-button>
+    </span>
   </el-dialog>
 
 </section>
@@ -148,14 +139,21 @@ import {
 export default {
   data() {
     return {
-     // 即将离开的对话框
-    loadingFlag: false,
-    dialogVisible: false,
-    // dialogImageUrl:'https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png',
-    fileList2: [{name: 'food.jpeg', url:"https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png"}],
-     // 添加搜索框
-     state1:"",
-     provinces:[],
+      // 从详情页面
+      isDetail: false,
+      currentStateText: '',
+      // 即将离开的对话框
+
+      loadingFlag: false,
+      dialogVisible: false,
+      // dialogImageUrl:'https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png',
+      fileList2: [{
+        name: 'food.jpeg',
+        url: "https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png"
+      }],
+      // 添加搜索框
+      state1: "",
+      provinces: [],
       //标签页
       activeName: 'C',
       tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
@@ -176,7 +174,7 @@ export default {
       showHeader: false,
       dialogTableVisible: false,
       gridData: [],
-      gridDataCopy:[],
+      gridDataCopy: [],
       form: {
         name: '',
         region: '',
@@ -186,28 +184,32 @@ export default {
         type: [],
         resource: '',
         desc: '',
-        Forder:''
+        Forder: ''
       }
     }
   },
-  mounted(){
-      var localData = localEvent.get("editData");
-      console.log(localData);
-      console.log(localData.activeTime1);
-      this.form.name = localData.operationsMapName;
-      this.form.Forder = localData.Forder;
-      this.form.link = localData.link;
-      this.value3 = [new Date(2222,22,22,22,22),new Date(3333,33,33,33,33)];
-      if(localData.currentState = "上架"){
-          this.radio = 1;
-      }else{
-          this.radio = 2;
-      }
+  mounted() {
+    var localData = localEvent.get("editData");
+    console.log(localData);
+    console.log(localData.activeTime1);
+    this.form.name = localData.operationsMapName;
+    this.form.Forder = localData.Forder;
+    this.form.link = localData.link;
+    this.value3 = [new Date(2222, 22, 22, 22, 22), new Date(3333, 33, 33, 33, 33)];
+    this.currentStateText = localData.currentState;
 
-
+    if (localData.currentState = "上架") {
+      this.radio = 1;
+    } else {
+      this.radio = 2;
+    }
   },
   created() {
-
+    if (this.$route.path == "/chooseExpress/detail") {
+      this.isFromAddData = false;
+    } else {
+      this.isFromAddData = true;
+    }
   },
   beforeMount() {
 
@@ -224,10 +226,10 @@ export default {
     //  }
   },
   computed: {
-      GETEDITFORM(){
-        alert(this.$store.getters.GETEDITFORM)
-          return this.$store.getters.GETEDITFORM;
-      }
+    GETEDITFORM() {
+      alert(this.$store.getters.GETEDITFORM)
+      return this.$store.getters.GETEDITFORM;
+    }
   },
   methods: {
     //  点击提交
@@ -238,27 +240,29 @@ export default {
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
-       this.loadingFlag = true;
+      if (this.isFromAddData) {
+        this.loadingFlag = true;
+      }
     },
     // 即将离开的对话框
-    editSure(){
-       this.loadingFlag = false;
-       this.$router.app.$store.state.loadingFlag = true;
-       console.log(this);
-       this.$router.go(-1);
+    editSure() {
+      this.loadingFlag = false;
+      this.$router.app.$store.state.loadingFlag = true;
+      console.log(this);
+      this.$router.go(-1);
       //  this.$router.push({ path:this.defaultActive});
       //  this.$route.push({ path:this.defaultActive});
     },
-    handlePreview(){},
-    handleRemove(){},
+    handlePreview() {},
+    handleRemove() {},
 
     // 标签页选择
     handleTabClick(tab, event) {
       console.log("handTabClick");
       console.log(tab.label);
     },
-    handleQueryBlur(){
-        alert("dsfasdf");
+    handleQueryBlur() {
+      alert("dsfasdf");
 
     },
     // 搜索框
@@ -280,22 +284,22 @@ export default {
         return (province.value.indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    handleQuerySelect(items){
+    handleQuerySelect(items) {
       console.log(items);
-      this.gridData = this.gridDataCopy.filter(function(item){
-             return item.value == items.value
+      this.gridData = this.gridDataCopy.filter(function(item) {
+        return item.value == items.value
       })
-        console.log(this.gridData);
+      console.log(this.gridData);
     },
     handleIconClick(ev) {
-       this.gridData = this.gridDataCopy;
-       this.state1 = '';
+      this.gridData = this.gridDataCopy;
+      this.state1 = '';
     },
     // 覆盖地区选择
     dialogConfig() {
       var _this = this;
       _this.$http.get("/rest/list3",
-        (rsp)=> {
+        (rsp) => {
           _this.gridData = rsp.data.data;
           _this.gridDataCopy = _this.gridData;
           _this.provinces = _this.gridData;
@@ -308,7 +312,7 @@ export default {
           }
           _this.dialogFormVisible = true;
           // console.log(_this.gridData);
-        },(error)=> {
+        }, (error) => {
           console.log(error);
         })
     },
@@ -350,21 +354,21 @@ export default {
     },
     dialogTable() {
       var _this = this;
-      _this.$http.get("/rest/list3",(rsp)=> {
-          _this.gridData = rsp.data.data;
-          _this.dialogTableVisible = true;
+      _this.$http.get("/rest/list3", (rsp) => {
+        _this.gridData = rsp.data.data;
+        _this.dialogTableVisible = true;
 
-          console.log(_this.gridData);
-        },(error)=>{
-          console.log(error);
-        })
+        console.log(_this.gridData);
+      }, (error) => {
+        console.log(error);
+      })
     },
     onSubmit() {
       console.log('submit!');
     },
     handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
+      console.log(file, fileList);
+    },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
