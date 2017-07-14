@@ -17,7 +17,7 @@
       </el-upload>
     </el-form-item>
     <el-form-item label="排序值" prop="number">
-      <el-input v-model.number.trim="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="link">
       <el-input  v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
@@ -172,7 +172,7 @@ export default {
              {type:"string",required:true,message:'请输入运营图名称',trigger:'blur'},
          ],
          number:[
-             {required:true,message:'请输入排序值',trigger:'blur'}
+             {type:'number',required:true,message:'请输入排序值',trigger:'blur'}
          ],
          link:[
              {required:true,message:"请输入链接",trigger:'blur'}
@@ -216,17 +216,19 @@ export default {
   methods: {
     //  点击提交
     handleSubmit(formName) {
+      var _this = this;
       this.$refs[formName].validate((valid) => {
            if(valid) {
+             console.log('error submit');
+             _this.$router.app.$store.state.loadingFlag = true;
+             _this.$router.go(-1);
               alert('sumbit');
            }else {
-             console.log('error submit');
-            return false;
+              console.log(_this);
+              return false;
            }
       })
-      this.$router.app.$store.state.loadingFlag = true;
-      console.log(this);
-      this.$router.go(-1);
+
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
