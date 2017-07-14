@@ -2,13 +2,15 @@
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-alert
-  style="margin-left:100px;margin-bottom:30px;width:800px;"
-   title="错误提示的文案"
-   type="error">
- </el-alert>
+       style="margin-left:100px;margin-bottom:30px;width:800px;"
+       title="检查表单数据"
+       type="error"
+       v-if="showAlert"
+       >
+  </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="photoName">
-       <el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称" > </el-input>
+      <el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
     <el-form-item label="运营图" prop="opMap">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
@@ -20,7 +22,7 @@
       <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="link">
-      <el-input  v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
     </el-form-item>
     <el-form-item label="有效时段" prop="date1">
       <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
@@ -32,10 +34,10 @@
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态" prop="currentState">
-        <el-radio-group v-model="ruleForm.currentState">
-          <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-          <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
-        </el-radio-group>
+      <el-radio-group v-model="ruleForm.currentState">
+        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+      </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
     <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
@@ -48,24 +50,16 @@
       </el-tab-pane>
     </el-tabs> -->
     <el-row :span="24" style="margin-bottom:20px;padding-top:5px;border-top:1px solid grey">
-     <el-col :span = "4" style="padding-top:10px;" >
-       <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
-     </el-col>
-     <el-col :span="8" style="height:10px;"></el-col>
+      <el-col :span="4" style="padding-top:10px;">
+        <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
+      </el-col>
+      <el-col :span="8" style="height:10px;"></el-col>
       <el-col :span="12" style="font-weight:bold;font-size:16px;">
-          <span>快速搜索: </span>
-          <el-autocomplete
-               class="inline-input"
-               v-model="state1"
-               :fetch-suggestions="querySearch"
-               placeholder="请输入搜索内容"
-                icon="close"
-               :on-icon-click = "handleIconClick"
-               @select="handleQuerySelect"
-          ></el-autocomplete>
-        </el-col>
+        <span>快速搜索: </span>
+        <el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+      </el-col>
 
-  </el-row>
+    </el-row>
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200">
         <template scope="scope">
@@ -97,24 +91,24 @@
 
   <!--  覆盖地区 查看对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-  <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-     <el-table-column property="value" label="省" width="200"></el-table-column>
-     <el-table-column property="city" label="市">
-       <template scope="scope">
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+      <el-table-column property="value" label="省" width="200"></el-table-column>
+      <el-table-column property="city" label="市">
+        <template scope="scope">
       <el-tag
        style="margin-right:10px;margin-bottom:5px;"
         v-for="(item,index) in scope.row.city"
         >{{item}}</el-tag>
     </template>
-     </el-table-column>
-  </el-table>
-    </el-dialog>
+      </el-table-column>
+    </el-table>
+  </el-dialog>
 
   <!-- 即将离开的 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
     <div>
-        <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
-        <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
+      <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
+      <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
     </div>
 
     <span slot="footer" class="dialog-footer">
@@ -132,12 +126,14 @@ import {
 export default {
   data() {
     return {
-     // 即将离开的对话框
-    loadingFlag: false,
+     // 展示警告信息
+      showAlert:false,
+      // 即将离开的对话框
+      loadingFlag: false,
 
-     // 添加搜索框
-     state1:"",
-     provinces:[],
+      // 添加搜索框
+      state1: "",
+      provinces: [],
       //标签页
       activeName: 'C',
       tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
@@ -158,8 +154,8 @@ export default {
       showHeader: false,
       dialogTableVisible: false,
       gridData: [],
-      gridDataCopy:[],
-    // 对输入表单进行验证
+      gridDataCopy: [],
+      // 对输入表单进行验证
       ruleForm: {
         photoName: '',
         number: '',
@@ -167,28 +163,43 @@ export default {
         date1: '',
         currentState: false,
       },
-      rules:{
-         photoName:[
-             {type:"string",required:true,message:'请输入运营图名称',trigger:'blur'},
-         ],
-         number:[
-             {type:'number',required:true,message:'请输入排序值',trigger:'blur'}
-         ],
-         link:[
-             {required:true,message:"请输入链接",trigger:'blur'}
-         ],
-         date1:[
-             {type:'date',required:true,message:'请选择日期',trigger:'change'}
-         ],
-         currentState:[
-            {required:true,message:'请选择状态',trigger:'change'}
-         ],
-         opMap:[
-             {required:true,message:'请上传图片'}
-         ],
-         coverArea:[
-             {required:true,message:'请选择覆盖地区'}
-         ]
+      rules: {
+        photoName: [{
+          type: "string",
+          required: true,
+          message: '请输入运营图名称',
+          trigger: 'blur'
+        }, ],
+        number: [{
+          type: 'number',
+          required: true,
+          message: '请输入排序值',
+          trigger: 'blur'
+        }],
+        link: [{
+          required: true,
+          message: "请输入链接",
+          trigger: 'blur'
+        }],
+        date1: [{
+          type: 'date',
+          required: true,
+          message: '请选择日期',
+          trigger: 'change'
+        }],
+        currentState: [{
+          required: true,
+          message: '请选择状态',
+          trigger: 'change'
+        }],
+        opMap: [{
+          required: true,
+          message: '请上传图片'
+        }],
+        coverArea: [{
+          required: true,
+          message: '请选择覆盖地区'
+        }]
       }
     }
   },
@@ -218,41 +229,42 @@ export default {
     handleSubmit(formName) {
       var _this = this;
       this.$refs[formName].validate((valid) => {
-           if(valid) {
-             console.log('error submit');
-             _this.$router.app.$store.state.loadingFlag = true;
-             _this.$router.go(-1);
-              alert('sumbit');
-           }else {
-              console.log(_this);
-              return false;
-           }
+        if (valid) {
+          console.log('error submit');
+          _this.$router.app.$store.state.loadingFlag = true;
+          _this.$router.go(-1);
+          alert('sumbit');
+        } else {
+          console.log(_this);
+          _this.showAlert = true;
+          return false;
+        }
       })
 
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
-       this.loadingFlag = true;
+      this.loadingFlag = true;
     },
     // 即将离开的对话框
-    editSure(){
-       this.loadingFlag = false;
-       this.$router.app.$store.state.loadingFlag = true;
-       console.log(this);
-       this.$router.go(-1);
+    editSure() {
+      this.loadingFlag = false;
+      this.$router.app.$store.state.loadingFlag = true;
+      console.log(this);
+      this.$router.go(-1);
       //  this.$router.push({ path:this.defaultActive});
       //  this.$route.push({ path:this.defaultActive});
     },
-    handlePreview(){},
-    handleRemove(){},
+    handlePreview() {},
+    handleRemove() {},
 
     // 标签页选择
     handleTabClick(tab, event) {
       console.log("handTabClick");
       console.log(tab.label);
     },
-    handleQueryBlur(){
-        alert("dsfasdf");
+    handleQueryBlur() {
+      alert("dsfasdf");
 
     },
     // 搜索框
@@ -274,36 +286,36 @@ export default {
         return (province.value.indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    handleQuerySelect(items){
+    handleQuerySelect(items) {
       console.log(items);
-      this.gridData = this.gridDataCopy.filter(function(item){
-             return item.value == items.value
+      this.gridData = this.gridDataCopy.filter(function(item) {
+        return item.value == items.value
       })
-        console.log(this.gridData);
+      console.log(this.gridData);
     },
     handleIconClick(ev) {
-       this.gridData = this.gridDataCopy;
-       this.state1 = '';
+      this.gridData = this.gridDataCopy;
+      this.state1 = '';
     },
     // 覆盖地区选择
     dialogConfig() {
       var _this = this;
-      _this.$http.get("/rest/list3",(rsp)=> {
-          _this.gridData = rsp.data.data;
-          _this.gridDataCopy = _this.gridData;
-          _this.provinces = _this.gridData;
-          // 初始化 配置的多选框操作
-          var tableDataLength = _this.gridData.length;
-          for (var i = 0; i < tableDataLength; i++) {
-            _this.checkAll[i] = false;
-            // _this.isIndeterminate[i] = true;
-            _this.checkedCities[i] = [];
-          }
-          _this.dialogFormVisible = true;
-          // console.log(_this.gridData);
-        },(error)=> {
-          console.log(error);
-        })
+      _this.$http.get("/rest/list3", (rsp) => {
+        _this.gridData = rsp.data.data;
+        _this.gridDataCopy = _this.gridData;
+        _this.provinces = _this.gridData;
+        // 初始化 配置的多选框操作
+        var tableDataLength = _this.gridData.length;
+        for (var i = 0; i < tableDataLength; i++) {
+          _this.checkAll[i] = false;
+          // _this.isIndeterminate[i] = true;
+          _this.checkedCities[i] = [];
+        }
+        _this.dialogFormVisible = true;
+        // console.log(_this.gridData);
+      }, (error) => {
+        console.log(error);
+      })
     },
     handleCheckAll(event) {
       var allCount = this.gridData.length;
@@ -343,14 +355,14 @@ export default {
     },
     dialogTable() {
       var _this = this;
-      _this.$http.get("/rest/list3",(rsp)=>{
-          _this.gridData = rsp.data.data;
-          _this.dialogTableVisible = true;
+      _this.$http.get("/rest/list3", (rsp) => {
+        _this.gridData = rsp.data.data;
+        _this.dialogTableVisible = true;
 
-          console.log(_this.gridData);
-        },(error)=> {
-          console.log(error);
-        })
+        console.log(_this.gridData);
+      }, (error) => {
+        console.log(error);
+      })
     },
     onSubmit() {
       console.log('submit!');
