@@ -6,5 +6,4 @@ export default {
     GETEDITFORM(states, row){
         func.local.set(states);
     }
-
 }
