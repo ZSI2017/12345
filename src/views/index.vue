@@ -7,7 +7,7 @@
         <div class="grid-content" @click="handleHome" style="float:left;width:230px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;">{{ title }}</div>
         <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;padding-right:20px;">
           <el-row>
-            <el-col :span="12"><div class="grid-content">123456789</div></el-col>
+            <el-col :span="12"><div class="grid-content">1234567</div></el-col>
             <el-col :span="12"><div class="grid-content" @click="handleLogout">退出登录</div></el-col>
           </el-row>
         </div>
@@ -64,8 +64,8 @@
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
     <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
     <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingFlag = false">取 消</el-button>
-    <el-button type="primary" @click="editSure">确 定</el-button>
+    <el-button @click="loadingFlag = false">编 辑</el-button>
+    <el-button type="primary" @click="editSure">放 弃</el-button>
   </span>
   </el-dialog>
 </div>
@@ -94,11 +94,19 @@ export default {
       isActive:false
     }
   },
+  computed:{
+      loadingCount(){
+          return this.$store.state.loadingFlag;
+      }
+  },
   created() {
     if(this.$router.currentRoute.fullPath == "/home") {
         this.isActive = true;
     }
-    console.log(this);
+    var _this = this;
+    setTimeout(() => {
+      console.log(_this);
+    },3000)
     // console.log("router");
     // console.log(this);
   },
@@ -112,9 +120,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      alert("dsfsadf");
-    },
     handleHome(){
         this.$router.push({path:'/home'});
     },

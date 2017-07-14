@@ -22,7 +22,7 @@ const state = func.local.get() || {
 
 const mutations = {
      CHANGESTATUS(state) {
-         state.loadingFlag= !state.loadingFlag
+         state.loadingFlag= !state.loadingFlag;
      },
      EDITFORM(states){
         func.local.set(states);

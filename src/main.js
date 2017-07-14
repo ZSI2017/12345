@@ -6,7 +6,7 @@ import VueRouter from "vue-router"
 import routes  from "./router.js"
 import Axios from "axios";
 import Vuex from "vuex";
-import store from "./vuex/store";
+import store from "./vuex/store.js";
 import Cookie from "@/util/cookie.js"
 // 引入vuex 进行全局状态管理
 import {changeIndex} from "./vuex/actions";
@@ -37,7 +37,9 @@ const router = new VueRouter({
 // 注册全局的构子 路由
  router.beforeEach((to,from,next) => {
 
-      console.log("from.fullPath");
+      // console.log("from.fullPath");
+      // store.commit('CHANGESTATUS');
+      // console.log(store.getters.getLoadingFlag);
       // console.log(Cookie.get("express"));
       // 这里是对于 登录时的 状态验证
       console.log(from);
