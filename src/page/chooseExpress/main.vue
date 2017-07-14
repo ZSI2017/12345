@@ -16,9 +16,9 @@
       </el-radio-group>
     </el-col>
     <!--<el-col :span="8" style="height:20px"></el-col>-->
-    <el-col :span="2" style="position: relative;padding-left:22px;">
+    <el-col :span="2" style="position: relative;padding-left:32px;">
       <!--<i class="el-icon-plus" style="position:absolute;top:10px;left:36%;color:#fff;z-index:2;"></i>-->
-      <el-button type="primary" @click="setNewData"><i class="el-icon-plus"></i> &nbsp; 添加</el-button>
+      <el-button type="primary" @click="setNewData"><i class="el-icon-plus"></i> 添加</el-button>
     </el-col>
   </el-row>
 
@@ -89,11 +89,11 @@
             <br/>
           </div>
           <div v-if="showOperation2">
-           <el-button @click="loadingTakeOffFlag = true" type="text" size="small">通过申请</el-button>
+           <el-button @click="OperationApproved" type="text" size="small">通过申请</el-button>
            <br/>
           </div>
           <div v-if="showOperation2">
-            <el-button @click="handleEdit" type="text" size="small">申请驳回</el-button>
+            <el-button @click="OperationApprovedFail" type="text" size="small">申请驳回</el-button>
             <br/>
           </div>
           <div v-if="showOperation2">
@@ -143,8 +143,8 @@
   <!-- 置为下架 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
-    <p style="font-weight:bold;padding-left:44px;">确认置为下架？</p>
-    <span style="padding-left:44px;">确认后，该内容将提交审核，通过后变为 '已下架'</span>
+    <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
+    <span style="padding-left:44px;">{{myDiglogContent}}</span>
     <span slot="footer" class="dialog-footer">
       <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
       <el-button type="primary" @click="loadingTakeOffFlag = false">确 定</el-button>
@@ -362,7 +362,8 @@ export default {
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
-        _this.showConfig = false;
+        _this.showConfig = true;
+        _this.showOperation = true;
         _this.tableData = tableDataCopy;
       } else {
         // 配置排序
