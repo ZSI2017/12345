@@ -7,7 +7,7 @@
         <div class="grid-content" @click="handleHome" style="float:left;width:230px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;">{{ title }}</div>
         <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;padding-right:20px;">
           <el-row>
-            <el-col :span="12"><div class="grid-content">123456789</div></el-col>
+            <el-col :span="12"><div class="grid-content">{{loadingCount}}</div></el-col>
             <el-col :span="12"><div class="grid-content" @click="handleLogout">退出登录</div></el-col>
           </el-row>
         </div>
@@ -94,11 +94,19 @@ export default {
       isActive:false
     }
   },
+  computed:{
+      loadingCount(){
+          return this.$store.state.loadingFlag;
+      }
+  },
   created() {
     if(this.$router.currentRoute.fullPath == "/home") {
         this.isActive = true;
     }
-    console.log(this);
+    var _this = this;
+    setTimeout(() => {
+      console.log(_this);
+    },3000)
     // console.log("router");
     // console.log(this);
   },
@@ -112,9 +120,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      alert("dsfsadf");
-    },
     handleHome(){
         this.$router.push({path:'/home'});
     },

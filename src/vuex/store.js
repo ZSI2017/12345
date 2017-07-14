@@ -22,7 +22,7 @@ const state = {
 
 const mutations = {
      CHANGESTATUS(state) {
-         state.loadingFlag= !state.loadingFlag
+         state.loadingFlag= !state.loadingFlag;
      },
      setEditForm(state,payload) {
         Object.assign(state.editForm, payload);

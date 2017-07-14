@@ -6,37 +6,39 @@
    title="错误提示的文案"
    type="error">
  </el-alert>
-  <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="名称">
-      <el-input v-model="form.name" placeholder="请输入运营图名称"> </el-input>
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
+    <el-form-item label="名称" prop="photoName">
+       <el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称" > </el-input>
     </el-form-item>
-    <el-form-item label="运营图">
+    <el-form-item label="运营图" prop="opMap">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
     </el-form-item>
-    <el-form-item label="排序值">
-      <el-input v-model="form.name" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    <el-form-item label="排序值" prop="number">
+      <el-input v-model.number.trim="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <el-form-item label="链接">
-      <el-input v-model="form.name" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+    <el-form-item label="链接" prop="link">
+      <el-input  v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
     </el-form-item>
-    <el-form-item label="有效时段">
-      <el-date-picker v-model="value3" type="datetimerange" placeholder="选择时间范围">
+    <el-form-item label="有效时段" prop="date1">
+      <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>
-    <el-form-item label="覆盖地区">
+    <el-form-item label="覆盖地区" prop="coverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
-    <el-form-item label="当前状态">
-      <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-      <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+    <el-form-item label="当前状态" prop="currentState">
+        <el-radio-group v-model="ruleForm.currentState">
+          <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
+          <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+        </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button type="primary" @click="handleSubmit">提交</el-button>
+    <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
 
   <!-- 覆盖地区   配置对话框 -->
@@ -157,15 +159,36 @@ export default {
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy:[],
-      form: {
-        name: '',
-        region: '',
+    // 对输入表单进行验证
+      ruleForm: {
+        photoName: '',
+        number: '',
+        link: '',
         date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        currentState: false,
+      },
+      rules:{
+         photoName:[
+             {type:"string",required:true,message:'请输入运营图名称',trigger:'blur'},
+         ],
+         number:[
+             {required:true,message:'请输入排序值',trigger:'blur'}
+         ],
+         link:[
+             {required:true,message:"请输入链接",trigger:'blur'}
+         ],
+         date1:[
+             {type:'date',required:true,message:'请选择日期',trigger:'change'}
+         ],
+         currentState:[
+            {required:true,message:'请选择状态',trigger:'change'}
+         ],
+         opMap:[
+             {required:true,message:'请上传图片'}
+         ],
+         coverArea:[
+             {required:true,message:'请选择覆盖地区'}
+         ]
       }
     }
   },
@@ -192,7 +215,15 @@ export default {
   },
   methods: {
     //  点击提交
-    handleSubmit() {
+    handleSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+           if(valid) {
+              alert('sumbit');
+           }else {
+             console.log('error submit');
+            return false;
+           }
+      })
       this.$router.app.$store.state.loadingFlag = true;
       console.log(this);
       this.$router.go(-1);

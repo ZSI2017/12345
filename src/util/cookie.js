@@ -23,7 +23,7 @@ export default {
                        var date = new Date();
                        date.setDate(date.getDate() + time);
                        cookie_str += "expires=" + date.toGMTString()+";";
-                      console.log(date.toGMTString());
+                       console.log(date.toGMTString());
                    }
                      cookie_str += "path=/;";
                      document.cookie = cookie_str;

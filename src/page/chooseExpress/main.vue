@@ -22,7 +22,19 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" v-loading.body.lock="halfListLoading"  @sort-change="handleSortChange" :data="tableData"   @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="500" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table
+      v-if="tableFalg"
+      class="mainTable"
+      v-loading.body.lock="halfListLoading"
+      @sort-change="handleSortChange"
+      :data="tableData"
+      @cell-mouse-enter="handleMouseEnter"
+      style="width: 100%;margin-top:10px;"
+      max-height="500"
+      empty-text="_"
+      align="center"
+      :default-sort="{prop: 'date', order: 'descending'}"
+      >
     <el-table-column prop="operationsMapName"  label="运营图称">
     </el-table-column>
     <el-table-column prop="name" label="运营图">
@@ -487,33 +499,34 @@ export default {
 }
 
 .main {
+  .mainTable {
+     .cell{
+        text-align: center;
+      }
+    }
+      .el-tabs__item{
+        width:90px;
+        height:30px;
+        line-height:30px;
+        text-align: center;
+      }
 
-  .cell{
-    text-align: center;
-  }
-  .el-tabs__item{
-    width:90px;
-    height:30px;
-    line-height:30px;
-    text-align: center;
-  }
+      .el-table .cell,
+      .el-table th>.cell {
+        padding: 0 7px;
+      }
 
-  .el-table .cell,
-  .el-table th>.cell {
-    padding: 0 7px;
-  }
+      /*.el-table__body .el-table__row .cell {
+        max-height: 150px !important;
+        overflow-y: auto;
+      }*/
 
-  /*.el-table__body .el-table__row .cell {
-    max-height: 150px !important;
-    overflow-y: auto;
-  }*/
-
-  .link_button{
-    border:0;
-  }
-  .link_button:hover{
-    background-color: no;
-  }
+      .link_button{
+        border:0;
+      }
+      .link_button:hover{
+        background-color: no;
+      }
 }
 
 /*.el-table__body .el-table__row .el-table_1_column_14 .cell {
