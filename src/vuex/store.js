@@ -15,7 +15,7 @@ Vue.use(Vuex);
 //           Forder:""
 //       }
 
-const state = func.local.get() || {
+const state ={
     editform: [],
     loadingFlag :false
 }

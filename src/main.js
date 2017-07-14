@@ -47,23 +47,24 @@ const router = new VueRouter({
            Cookie.delete("express");
       }
       if(to.fullPath != "/login" && !Cookie.get("express")) {
+        alert("login")
               next({
                   path:"/login",
               })
       }else {
-               next();
+        // 判断是否已经登录
+        // 权限管理 路由跳转前进行权限验证
+        // 从运营位管理 选择快递页面的 添加返回时出现提示框
+        if(((from.path == "/sendExpress/addData")||(from.path == "/chooseExpress/addData")||(from.path == "/expressOrder/addData")) && router.app.$store.state.loadingFlag == false) {
+            next({
+                path:"/sendExpress/addData",
+            })
+         }else{
+             router.app.$store.state.loadingFlag = false;
+             next();
+        }
       }
-      // 判断是否已经登录
-      // 权限管理 路由跳转前进行权限验证
-      // 从运营位管理 选择快递页面的 添加返回时出现提示框
-      if(from.path == "/sendExpress/addData" && router.app.$store.state.loadingFlag == false) {
-          next({
-              path:"/sendExpress/addData",
-          })
-       }else{
-           router.app.$store.state.loadingFlag = false;
-           next();
-      }
+
   });
 new Vue({
   // el: '#app',
