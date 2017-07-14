@@ -77,7 +77,7 @@
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
-    <el-table-column v-if="showConfig" label="操作" width="130">
+    <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
       <template scope="scope">
         <div>
           <div v-if="showOperation">
@@ -359,11 +359,12 @@ export default {
       } else if (tab.label == "已上线") {
         // 配置排序
         _this.showSortable = false;
-        _this.showOperation = true;
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = false;
-        _this.showOperation = true;
+        _this.showOperation = false;
+          _this.showOperation2 = false;
+
         _this.tableData = tableDataCopy;
       } else {
         // 配置排序
@@ -371,7 +372,7 @@ export default {
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
-        _this.showConfig = true;
+        _this.showConfig = false;
         _this.showOperation2 = true;
         _this.tableData = tableDataCopy;
       }
