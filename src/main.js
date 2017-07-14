@@ -38,8 +38,8 @@ const router = new VueRouter({
  router.beforeEach((to,from,next) => {
 
       // console.log("from.fullPath");
-      store.commit('CHANGESTATUS');
-      console.log(store.getters.getLoadingFlag);
+      // store.commit('CHANGESTATUS');
+      // console.log(store.getters.getLoadingFlag);
       // console.log(Cookie.get("express"));
       // 这里是对于 登录时的 状态验证
       console.log(from);
