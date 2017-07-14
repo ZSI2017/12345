@@ -20,11 +20,11 @@
       </el-upload>-->
       <el-upload
         action="https://jsonplaceholder.typicode.com/posts/"
-        list-type="picture-card"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
         :file-list="fileList2">
-        <i class="el-icon-plus"></i>
+        <!--<i class="el-icon-plus"></i>-->
+        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>        
       </el-upload>
       <el-dialog v-model="dialogVisible" size="tiny">
         <img width="100%" :src="dialogImageUrl" alt="">
