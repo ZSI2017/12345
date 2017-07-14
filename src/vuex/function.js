@@ -12,4 +12,5 @@ const localEvent = function (item) {
     }
 }
 
-export const local = new localEvent('editData');
+export default new localEvent('editData')
+
