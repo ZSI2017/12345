@@ -85,7 +85,7 @@
             <br/>
           </div>
           <div v-if="showOperation">
-            <el-button  @click="handleEdit(scope.$index, scope.row)" type="text" size="small">修改</el-button>
+            <el-button  @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
             <br/>
           </div>
           <div v-if="showOperation2">
@@ -142,8 +142,9 @@
 
   <!-- 置为下架 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
-    <p style="font-weight:bold;padding-left:20px;">确认置为下架？</p>
-    <span style="padding-left:20px;">确认后，该内容将提交审核，通过后变为 '已下架'</span>
+    <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
+    <p style="font-weight:bold;padding-left:44px;">确认置为下架？</p>
+    <span style="padding-left:44px;">确认后，该内容将提交审核，通过后变为 '已下架'</span>
     <span slot="footer" class="dialog-footer">
       <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
       <el-button type="primary" @click="loadingTakeOffFlag = false">确 定</el-button>
@@ -155,6 +156,7 @@
 
 <script>
 import store from 'src/vuex/store.js'
+import localEvent from 'src/vuex/function.js';
 
 export default {
   data() {
@@ -481,15 +483,17 @@ export default {
         duration: 6000
       })
     },
-    handleEdit(index,row) {
-      console.log(row)
+    handleEdit(row) {
+      // console.log(row)
       // this.editForm.operationsMapName = row.operationsMapName;
       // this.editForm.link = row.link;
       // this.editForm.address = row.address;
       // this.editForm.activeTime = row.activeTime;
       // this.editForm.currentState = row.currentState;
       // this.editForm.forder = row.forder;
-      this.$store.dispatch('editform',row);
+      // this.$store.dispatch('editform',row);
+      // console.log(localEvent);
+      localEvent.set(row);
 
       var _this = this;
       this.$router.push({

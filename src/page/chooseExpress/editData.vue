@@ -12,10 +12,10 @@
       </el-upload>
     </el-form-item>
     <el-form-item label="排序值">
-      <el-input v-model="form.name" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接">
-      <el-input v-model="form.name" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
     </el-form-item>
     <el-form-item label="有效时段">
       <el-date-picker v-model="value3" type="datetimerange" placeholder="选择时间范围">
@@ -27,8 +27,10 @@
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态">
-      <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-      <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+      <el-radio-group v-model="radio">
+        <el-radio class="radio" :label="1">上架</el-radio>
+        <el-radio class="radio" :label="2">下架</el-radio>
+      </el-radio-group>  
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
     <el-button type="primary" @click="handleSubmit">提交</el-button>
@@ -115,6 +117,8 @@
 </section>
 </template>
 <script type="text/javascript">
+import localEvent from 'src/vuex/function.js';
+
 import {
   getLoadingFlag
 } from "@/vuex/getters";
@@ -156,28 +160,31 @@ export default {
         delivery: false,
         type: [],
         resource: '',
-        desc: ''
+        desc: '',
+        Forder:''
       }
-      // editForm:{
-      //     operationsMapName:"",
-      //     link:"",
-      //     address:"",
-      //     activeTime:"",
-      //     currentState:"",
-      //     Forder:""
-      // }
     }
   },
+  mounted(){
+      var localData = localEvent.get("editData");
+      console.log(localData);
+      console.log(localData.activeTime1);
+      this.form.name = localData.operationsMapName;
+      this.form.Forder = localData.Forder;
+      this.form.link = localData.link;
+      this.value3 = [new Date(2222,22,22,22,22),new Date(3333,33,33,33,33)];
+      if(localData.currentState = "上架"){
+          this.radio = 1;
+      }else{
+          this.radio = 2;
+      }
+
+
+  },
   created() {
-    // console.log(this);
-    // alert(this.$router.app.$store.state.editForm)
-    // console.log(this.$router.app.$store.state.editForm)
 
   },
   beforeMount() {
-
-  },
-  mounted() {
 
   },
   beforeDestory() {
@@ -262,8 +269,8 @@ export default {
     // 覆盖地区选择
     dialogConfig() {
       var _this = this;
-      _this.$http.get("/rest/list3")
-        .then(function(rsp) {
+      _this.$http.get("/rest/list3",
+        (rsp)=> {
           _this.gridData = rsp.data.data;
           _this.gridDataCopy = _this.gridData;
           _this.provinces = _this.gridData;
@@ -276,8 +283,7 @@ export default {
           }
           _this.dialogFormVisible = true;
           // console.log(_this.gridData);
-        })
-        .catch(function(error) {
+        },(error)=> {
           console.log(error);
         })
     },
@@ -319,14 +325,12 @@ export default {
     },
     dialogTable() {
       var _this = this;
-      _this.$http.get("/rest/list3")
-        .then(function(rsp) {
+      _this.$http.get("/rest/list3",(rsp)=> {
           _this.gridData = rsp.data.data;
           _this.dialogTableVisible = true;
 
           console.log(_this.gridData);
-        })
-        .catch(function(error) {
+        },(error)=>{
           console.log(error);
         })
     },
