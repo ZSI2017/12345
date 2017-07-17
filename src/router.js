@@ -158,8 +158,8 @@ let routes =  [
           children:[
             {path:'',component:sendExpressEnterMain},
             {path:'addData',name:'添加数据',component:sendExpressEnterAddData},
-            {path:'editData',name:'修改数据',component:sendExpressEnterEditData}
-            // {path:'/sendExpressEnter/detail',name:'查看详情',component:sendExpressEnterEditData}
+            {path:'editData',name:'修改数据',component:sendExpressEnterEditData},
+            {path:'detail',name:'查看详情',component:sendExpressEnterEditData}
           ]
       }
    ]

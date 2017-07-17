@@ -463,11 +463,11 @@ export default {
     },
     handleEdit(row) {
       localEvent.set(row);
-      this.$router.push('/sendExpressEnter/editData')
+      this.$router.push('/sendExpressEnter/detail')
     },
     effectiveDetails(row) {
       localEvent.set(row);
-    //   this.$router.push('/sendExpressEnter/editData')     
+      this.$router.push('/sendExpressEnter/detail')     
     }
   }
 }
