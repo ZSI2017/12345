@@ -1,39 +1,31 @@
 <template>
-  <el-table  :data="tableData"  style="width: 100%;margin-top:10px" max-height="550" empty-text="_" align="center" :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="operationsMapName" label="运营图称" sortable min-width="120">
+  <div class="section" style="overflow:hidden">
+  <el-table
+      class="mainTable"
+      :data="tableData"
+      style="width: 100%;margin-top:10px"
+      max-height="500"
+      empty-text="_"
+      align="center"
+      :default-sort="{prop: 'date', order: 'descending'}"
+      >
+    <el-table-column prop="operationsMapName" label="快递公司名称" >
     </el-table-column>
-    <el-table-column prop="name" label="运营图" sortable min-width="100">
+    <el-table-column prop="name" label="非服务地区" >
         <template scope="scope">
-            <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
+         
         </template>
     </el-table-column>
-    <el-table-column prop="link" min-width="200" label="链接">
+    <el-table-column prop="link"  label="修改时间">
     </el-table-column>
-    <el-table-column prop="address" label="覆盖地区">
-      <template scope="scope">
-         <el-button @click="checkArea" type="text" size="small">查看</el-button>
-       </template>
-    </el-table-column>
-    <el-table-column prop="createTime" label="创建时间">
-    </el-table-column>
-    <el-table-column prop="modifyTime" label="修改时间">
-    </el-table-column>
-    <el-table-column prop="activeTime" min-width="200" label="有效时段">
-    </el-table-column>
-    <el-table-column prop="Forder" label="排序值">
-    </el-table-column>
-    <el-table-column prop="currentState" label="当前状态">
-    </el-table-column>
-    <el-table-column v-if="showConfig" prop="auditState" label="审核状态">
-    </el-table-column>
-    <el-table-column v-if="showConfig" label="操作" width="200">
+    <el-table-column  label="操作" >
       <template scope="scope">
            <el-button @click="handleClick" type="text" size="small">查看</el-button>
            <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
          </template>
     </el-table-column>
   </el-table>
-
+</div>
 </template>
 <script>
   export default {
@@ -46,16 +38,31 @@
   };
 </script>
 
-<style>
-.import-font{
-  height:42px;
-  line-height: 42px;
+<style lang="scss">
+.el-tabs .el-tabs__content {
+  display: none;
 }
-.order-input{
-  width: 500px;
-}
-.import-search{
-  margin-left: 20px;
-}
+  .mainTable {
+     .cell{
+        text-align: center;
+      }
+    }
+      .el-tabs__item{
+        width:90px;
+        height:30px;
+        line-height:30px;
+        text-align: center;
+      }
+
+      .el-table .cell,
+      .el-table th>.cell {
+        padding: 0 7px;
+      }
+      .link_button{
+        border:0;
+      }
+      .link_button:hover{
+        background-color: no;
+      }
 
 </style>
