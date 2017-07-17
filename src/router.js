@@ -150,7 +150,7 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'/sendExpressEnter',component:sendExpressEnter,name:"寄快递入口管理"}
+      {path:'/sendExpressEnter',component:sendExpressEnter,name:"寄快递首页管理"}
    ]
   //  path:'/sendExpressEnter',component:sendExpressEnter
 

@@ -359,11 +359,11 @@ export default {
       } else if (tab.label == "已上线") {
         // 配置排序
         _this.showSortable = false;
-        _this.showOperation = true;
         _this.tableData = [];
         // window.location.reload();
-        _this.showConfig = false;
+        _this.showConfig = true;
         _this.showOperation = true;
+        _this.showOperation2 = false;
         _this.tableData = tableDataCopy;
       } else {
         // 配置排序

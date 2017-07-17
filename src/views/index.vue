@@ -15,7 +15,7 @@
     </el-row>
   </header>
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
-  <div style="display:flex;flex-direction:row;">
+  <div style="display:flex;flex-direction:row;" v-loading.fullscreen.lock="fullscreenLoading">
 
     <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:180px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
       <el-menu  :default-active="$route.fullPath" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
