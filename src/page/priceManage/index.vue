@@ -116,6 +116,18 @@
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="20">
     </el-pagination>
   </div>
+
+  <el-dialog  title="新增运线快递费" :visible.sync="dialogTableVisible">
+    <el-form :model="form">
+        <el-form-item label="活动区域" :label-width="formLabelWidth">
+           <el-select v-model="form.region" placeholder="请选择活动区域">
+             <el-option label="区域一" value="shanghai"></el-option>
+             <el-option label="区域二" value="beijing"></el-option>
+           </el-select>
+        </el-form-item>
+  </el-form>
+
+  </el-dialog>
 </div>
 </template>
 <script>
@@ -123,6 +135,8 @@
     name:'nonServerDistrict',
     data() {
       return {
+        dialogTableVisible:false,
+        form:{region:''},
         halfListLoading:false,
         tableData:[],
         pageSize: 5,
@@ -176,15 +190,26 @@
          message: h('i', { style: 'color: teal'}, '点击了新增运线')
        });
       },
-      handleLeadLine() {
+      handleExportLine() {
          const h = this.$createElement;
+         const _this = this;
         this.$notify({
          title: '导出运线',
          message: h('i', { style: 'color: teal'}, '点击了导出运线')
        });
-
+        require.ensure([],() => {
+            const {export_json_to_excel}  = require('@/util/ExportExcel');
+            const tHeader = ['快递公司','服务类型','发货省','发货市','收货省','收货市','首重价格','首重重量','续重重量','续重价格'];
+            const filterVal = ['tableExpress','tableTypeOfService','tableSendProvince','tableSendCity','tableRecProvince','tableRecCity','tablePresetWeightPrice','tablePresetWeight','tableExtraWeight','tableExtraWeightPrice'];
+            const list = _this.tableData;
+            const data  = _this.formatJson(filterVal,list);
+            export_json_to_excel(tHeader,data,'运线快递费列表');
+        })
       },
-      handleExportLine() {
+      formatJson(filterVal,jsonData) {
+          return jsonData.map(v => filterVal.map(j=>v[j]));
+      },
+      handleLeadLine() {
          const h = this.$createElement;
         this.$notify({
          title: '导入运线',

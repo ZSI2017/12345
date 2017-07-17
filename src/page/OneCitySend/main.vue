@@ -391,7 +391,7 @@ export default {
       this.linkText = row.link
     },
     setNewData() {
-      this.$router.push('/sendExpressEnter/addData')
+      this.$router.push('/oneCitySend/addData')
     },
     handleClose() {
       alert("asdfsd");
@@ -470,11 +470,11 @@ export default {
     },
     handleEdit(row) {
       localEvent.set(row);
-      this.$router.push('/sendExpressEnter/editData')
+      this.$router.push('/oneCitySend/editData')
     },
     effectiveDetails(row) {
       localEvent.set(row);
-      this.$router.push('/sendExpressEnter/detail')
+      this.$router.push('/oneCitySend/detail')
     }
   }
 }
