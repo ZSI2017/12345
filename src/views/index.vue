@@ -58,7 +58,7 @@
         <router-view></router-view>
       <!--</transition>-->
       <!-- <tableVue></tableVue> -->
-      </el-col>    </div>
+      </el-col> </div>
   </div>
   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny" :show-close="showClose">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
@@ -74,13 +74,14 @@
 <script>
 import "@/style/common.scss";
 import { getLoadingFlag } from "@/vuex/getters";
+import {toggle} from "@/views/mixins/toggle"
 // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
 // import Vue from 'vue'
 // Vue.use(VueRouter);
 export default {
-
+  mixins:[toggle],
   data() {
     return {
       showClose:false,
@@ -99,6 +100,9 @@ export default {
       loadingFlag() {
           return this.$store.state.loadingFlag;
       }
+  },
+  mounted() {
+      this.sayHello();
   },
   created() {
     if(this.$router.currentRoute.fullPath == "/home") {
@@ -121,6 +125,9 @@ export default {
     }
   },
   methods: {
+    sayHello:function(){
+       console.log("hello from  index.vue!");
+    },
     hideCountFlag () {
         this.$store.dispatch('changeLoadingFlag');
         this.$store.dispatch('changeLoadingChange',false);
@@ -169,10 +176,10 @@ export default {
         },600);
       }
     },
-    handleLogout(){
-        this.$router.push({path:'/login'});
-        // this.$router.
-    }
+    // handleLogout(){
+    //     this.$router.push({path:'/login'});
+    //     // this.$router.
+    // }
   }
 }
 </script>

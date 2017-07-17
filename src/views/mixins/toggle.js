@@ -4,20 +4,21 @@ export const toggle = {
 
            }
        },
+       mounted(){
+          this.sayHello();
+       },
+       created(){
+
+       },
        methods:{
-         hideCountFlag () {
-             this.$store.dispatch('changeLoadingFlag');
-             this.$store.dispatch('changeLoadingChange',false);
-             // this.$router.app.$store.state.loadingChange = false;
-         },
-         editSure(){
-           this.$store.dispatch('changeLoadingFlag');
-           //  this.loadingFlag = false;
-           this.$store.dispatch('changeLoadingChange',true);
-           //  this.$router.app.$store.state.loadingChange = true;
-           //  console.log(this);
-           this.$router.push({ path:this.$store.getters.getNextRouter});
-           //  this.$route.push({ path:this.defaultActive});
-         },
+           sayHello:function(){
+              console.log("hello from toggle!");
+           },
+           handleLogout(){
+
+            //  alert("to /login")
+               this.$router.push({path:'/login'});
+               // this.$router.
+           }
        }
 }
