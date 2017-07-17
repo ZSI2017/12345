@@ -38,29 +38,39 @@
       >
     <el-table-column prop="operationsMapName"  label="LOGO">
     </el-table-column>
-    <el-table-column prop="name" label="角标">
+    <el-table-column prop="name"  label="公司名称">
+    </el-table-column>
+    <!--<el-table-column prop="name" label="角标">
         <template scope="scope">
             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
         </template>
+    </el-table-column>-->
+    <el-table-column prop="content"  label="广告语">
     </el-table-column>
-    <el-table-column prop="operationsMapName"  label="入口名称">
+    <el-table-column prop="content"  label="标签">
     </el-table-column>
-    <el-table-column prop="content"  label="描述">
+    <el-table-column prop="ordernumber"  label="客服电话">
     </el-table-column>
-    <el-table-column prop="link" label="链接">
+    <el-table-column prop="content"  label="系统发起支付">
+    </el-table-column>
+    <el-table-column prop="content"  label="允许议价">
+    </el-table-column>
+    <el-table-column prop="content"  label="是否最热">
+    </el-table-column>
+    <!--<el-table-column prop="link" label="链接">
       <template scope="scope">
         <el-popover :content="scope.row.link" ref="popover4" width="300" trigger="click">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
       </template>
-    </el-table-column>
-    <el-table-column prop="address" label="覆盖地区">
+    </el-table-column>-->
+    <!--<el-table-column prop="address" label="覆盖地区">
       <template scope="scope">
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
-    </el-table-column>
-    <!--<el-table-column prop="createTime" label="创建时间" width="160">
     </el-table-column>-->
+    <el-table-column prop="createTime" label="创建时间" width="160">
+    </el-table-column>
     <!--<el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
     </el-table-column>-->
 
@@ -77,7 +87,7 @@
     </el-table-column>-->
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="currentState" width="100" label="状态" :sortable="showSortable">
+    <el-table-column prop="currentState" width="100" label="当前状态" :sortable="showSortable">
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
@@ -396,7 +406,7 @@ export default {
       this.linkText = row.link
     },
     setNewData() {
-      this.$router.push('/sendExpressEnter/addData')
+      this.$router.push('/expressCompany/addData')
     },
     handleClose() {
       alert("asdfsd");
@@ -475,11 +485,11 @@ export default {
     },
     handleEdit(row) {
       localEvent.set(row);
-      this.$router.push('/sendExpressEnter/editData')
+      this.$router.push('/expressCompany/editData')
     },
     effectiveDetails(row) {
       localEvent.set(row);
-      this.$router.push('/sendExpressEnter/detail')
+      this.$router.push('/expressCompany/detail')
     }
   }
 }

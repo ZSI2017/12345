@@ -26,6 +26,9 @@ import sendExpressEnterEditData from "./page/sendExpressEnter/editData.vue";
 
 //快递公司管理
 import expressCompany from './page/expressCompany/index.vue'
+import expressCompanyMain from './page/expressCompany/main.vue'
+import expressCompanyAddData from "./page/expressCompany/addData.vue";
+import expressCompanyEditData from "./page/expressCompany/editData.vue";
 
 //选快递下单管理
 import chooseExpressOrder from './page/chooseExpressOrder/index.vue'
@@ -183,7 +186,14 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'/expressCompany',component:expressCompany,name:"快递公司管理"}
+      {path:'/expressCompany',component:expressCompany,name:"快递公司管理",
+        children:[
+            {path:'',component:expressCompanyMain},
+            {path:'addData',name:'添加数据',component:expressCompanyAddData},
+            {path:'editData',name:'修改数据',component:expressCompanyEditData},
+            {path:'detail',name:'查看详情',component:expressCompanyEditData}
+          ]
+      }
    ]
   //  path:'/expressCompany',component:expressCompany
 

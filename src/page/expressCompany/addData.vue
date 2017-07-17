@@ -8,40 +8,92 @@
        v-if="showAlert"
        >
   </el-alert>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="名称" prop="photoName">
-      <el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称"> </el-input>
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
+    <el-form-item label="公司名称" prop="photoName">
+      <el-input v-model.trim="ruleForm.photoName" placeholder="请输入快递公司名称"> </el-input>
     </el-form-item>
-    <el-form-item label="运营图" prop="opMap">
+    <el-form-item label="LOGO" prop="opMap">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
       </el-upload>
     </el-form-item>
-    <el-form-item label="角标" prop="cornerMark">
+    <!--<el-form-item label="角标" prop="cornerMark">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <span style="color:red;">（非必填）</span>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过3kb</div>
       </el-upload>
+    </el-form-item>-->
+    <el-form-item label="广告语" prop="content">
+      <el-input v-model.number="ruleForm.content" placeholder="请输入广告语"> </el-input>
     </el-form-item>
-    <el-form-item label="描述" prop="content">
+    <!--<el-form-item label="标签" prop="content">
       <el-input v-model.number="ruleForm.content" placeholder="请输入描述"> </el-input>
+    </el-form-item>-->
+    <el-form-item label="标签">
+      <el-tag
+        :key="tag"
+        v-for="tag in dynamicTags"
+        :closable="true"
+        :close-transition="false"
+        @close="handleClose(tag)"
+      >
+      {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="handleInputConfirm"
+        @blur="handleInputConfirm"
+        style="width:100px;"
+      >
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加</el-button>
+    </el-form-item>
+    <el-form-item label="客服电话" prop="orderNumber">
+      <el-input v-model.number="ruleForm.number" placeholder="请输入客服电话"> </el-input>
     </el-form-item>
     <el-form-item label="排序值" prop="number">
       <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <el-form-item label="链接" prop="link">
+    <!--<el-form-item label="链接" prop="link">
       <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
-    </el-form-item>
+    </el-form-item>-->
     <!--<el-form-item label="有效时段" prop="date1">
       <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>-->
-    <el-form-item label="覆盖地区" prop="coverArea">
+    <!--<el-form-item label="覆盖地区" prop="coverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
-      <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
+    </el-form-item>-->
+    <el-form-item label="是否由系统发起支付" prop="currentState">
+      <el-radio-group v-model="ruleForm.currentState">
+        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="是否允许议价" prop="currentState">
+      <el-radio-group v-model="ruleForm.currentState">
+        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="是否最热" prop="currentState">
+      <el-radio-group v-model="ruleForm.currentState">
+        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="是否最新" prop="currentState">
+      <el-radio-group v-model="ruleForm.currentState">
+        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+      </el-radio-group>
     </el-form-item>
     <el-form-item label="当前状态" prop="currentState">
       <el-radio-group v-model="ruleForm.currentState">
@@ -162,7 +214,10 @@ export default {
       radio: 1,
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
-
+      //标签数据
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
       // 查看配置地区中的表格数据 和 是否显示的标志
       showHeader: false,
       dialogTableVisible: false,
@@ -175,6 +230,7 @@ export default {
         link: '',
         date1: '',
         currentState: false,
+        content:''
       },
       rules: {
         photoName: [{
@@ -386,6 +442,26 @@ export default {
     },
     onSubmit() {
       console.log('submit!');
+    },
+    
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     }
   }
 }

@@ -108,7 +108,7 @@
 </section>
 </template>
 <script type="text/javascript">
-   import coverArea from "./coverArea.vue";
+   import coverArea from "@/page/chooseExpress/coverArea.vue";
 export default {
   components:{
      coverArea
