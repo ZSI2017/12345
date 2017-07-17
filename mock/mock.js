@@ -6,6 +6,7 @@ var mocklist23 = require("./list2-3.js");
 var mocklist3 = require('./list3.js');
 var mocklist4 = require('./list4.js');
 var mocklist5 = require('./list5.js');
+var mockPriceManage = require('./list-priceManage.js');
 
 module.exports = function(){
        return{
@@ -16,5 +17,6 @@ module.exports = function(){
             "list3":mocklist3,
             "list4":mocklist4,
             "list5":mocklist5,
+            "list6":mockPriceManage
        }
 }

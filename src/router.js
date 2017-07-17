@@ -38,6 +38,10 @@ import nonServerDistrict from './page/nonServerDistrict/index.vue'
 
 //同城直送管理
 import oneCitySend from './page/oneCitySend/index.vue'
+import oneCitySendMain from "./page/OneCitySend/main.vue"
+import oneCitySendAddData from "./page/oneCitySend/addData.vue";
+import oneCitySendEditData from "./page/oneCitySend/editData.vue";
+
 
 //附近快递资源管理
 // import nearExpress from './page/nearExpress/nearExpress.vue'
@@ -261,7 +265,14 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'/oneCitySend',component:oneCitySend,name:"同城直送管理"}
+      {path:'/oneCitySend',component:oneCitySend,name:"同城直送管理",
+      children:[
+        {path:'',component:oneCitySendMain},
+        {path:'addData',name:'添加数据',component:oneCitySendAddData},
+        {path:'editData',name:'修改数据',component:oneCitySendEditData},
+        {path:'detail',name:'查看详情',component:oneCitySendEditData}
+      ]
+    }
    ]
   //  path:'/oneCitySend',component:oneCitySend
 
