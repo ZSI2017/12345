@@ -363,10 +363,9 @@ export default {
         _this.showSortable = false;
         _this.tableData = [];
         // window.location.reload();
-        _this.showConfig = false;
-        _this.showOperation = false;
-          _this.showOperation2 = false;
-
+        _this.showConfig = true;
+        _this.showOperation = true;
+        _this.showOperation2 = false;
         _this.tableData = tableDataCopy;
       } else {
         // 配置排序
