@@ -112,8 +112,9 @@
 
   <!--  覆盖地区 查看对话框 -->
    <cover-area
-       :visible="dialogTableVisible"
-       :gridData="gridData"
+        :visible="dialogTableVisible"
+        :gridData="gridData"
+        @listenToCoverArea ="changeVisible"
        ></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
@@ -298,7 +299,10 @@ export default {
     // }
   },
   methods: {
-
+   // 监听 子组件覆盖对话框 的回调函数
+   changeVisible(flag){
+     this.dialogTableVisible = flag;
+   },
     // 操作排序值改变
     handleSortChange(column) {
        if(column.prop === "createTime") {
@@ -363,7 +367,7 @@ export default {
         _this.showSortable = false;
         _this.tableData = [];
         // window.location.reload();
-        _this.showConfig = true;
+        _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.tableData = tableDataCopy;
