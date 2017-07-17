@@ -31,7 +31,8 @@
         <el-col :span="5" style="width: 140px;">
           <el-select v-model="currentType" placeholder="请选择活动分类">
             <el-option
-              v-for="type in types"
+              v-for="(type,index) in types"
+               :key="index"
               :value="type">
             </el-option>
           </el-select>

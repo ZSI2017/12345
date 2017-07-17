@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     loginIn() {
-      Cookie.set("express","abdddde",1);
+      Cookie.set("express","mng",600000);
       this.$router.push({
         path: "/"
       })

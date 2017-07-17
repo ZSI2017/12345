@@ -36,7 +36,7 @@
             <el-radio label="上架"></el-radio>
             <el-radio label="下架"></el-radio>
           </el-radio-group>
-        </el-form-item>       
+        </el-form-item>
       </el-form>
       <el-row>
           <el-col :span="2" :offset="10"><el-button type="primary" class="grid-content">立即提交</el-button></el-col>
@@ -76,13 +76,14 @@
         <el-tag
           style="margin-right:10px;"
           v-for="(item,index) in scope.row.city"
+          :key="index"
           >{{item}}</el-tag>
       </template>
         </el-table-column>
       </el-table>
     </el-dialog>
-  
-      
+
+
   </section>
 </template>
 
@@ -90,7 +91,7 @@
 export default {
   data() {
     return {
-      
+
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2200, 10, 10, 10, 10)],
       // 覆盖地区选择
       checkAll: true,
@@ -412,7 +413,7 @@ export default {
                   console.log(error);
              })
     }
-  }  
+  }
 }
 </script>
 <style>
@@ -423,6 +424,6 @@ export default {
       border-radius: 4px;
       padding:20px;
       background-color: white;
-  }      
+  }
 
 </style>

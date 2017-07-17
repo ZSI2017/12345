@@ -59,16 +59,11 @@
     </el-table-column>
     <el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
     </el-table-column>
-
     <el-table-column prop="activeTime" label="有效时段" width="220">
       <template scope="scope">
           <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime1}}</p>
           <p style="padding:0;margin:0;text-align:center">至</p>
           <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime2}}</p>
-         <!-- <el-tag
-          style="margin-right:10px;margin-bottom:5px;"
-           v-for="(item,index) in scope.row.city"
-           >{{item}}</el-tag> -->
        </template>
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
@@ -104,7 +99,6 @@
             <el-button @click="effectiveDetails(scope.row)" type="text" size="small">待审详情</el-button>
             <br/>
           </div>
-
         </div>
 
         </template>
@@ -117,7 +111,11 @@
   </div>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
+   <cover-area
+       :visible="dialogTableVisible"
+       :gridData="gridData"
+       ></cover-area>
+  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
@@ -129,7 +127,7 @@
      </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
+  </el-dialog> -->
 
   <!--  查看链接 对话框 -->
   <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
@@ -157,8 +155,12 @@
 <script>
 import store from 'src/vuex/store.js'
 import localEvent from 'src/vuex/function.js';
+import coverArea from "./coverArea.vue";
 
 export default {
+  components: {
+    coverArea
+   },
   data() {
     return {
       // 排序是否显示

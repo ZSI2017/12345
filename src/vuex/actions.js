@@ -1,3 +1,9 @@
-export const changeLoading = function({dispatch,state},value) {
-          dispatch('CHANGESTATUS',value)
+export const changeLoadingFlag = ({commit,state},value) => {
+          commit('CHANGESTATUS',value)
+};
+export const changeNextRouter = ({commit,state},value) =>{
+          commit('SETNEXTROUTER',value)
+};
+export const changeLoadingChange = ({commit,state},value) =>{
+          commit('CHANGELOADINGCHANGE',value)
 }

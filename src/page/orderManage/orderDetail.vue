@@ -8,12 +8,12 @@
             <el-collapse-item title="基本信息" name="0">
 
                 <el-row class="basic-table">
-                    <el-col :md="12" :lg="6" v-for="item in items">
+                    <el-col :md="12" :lg="6" v-for="(item,index) in items" :key="index">
                         <div class="grid-content bg-purple">
                             <el-col :span="9" class="cell-left">{{item.name}}</el-col >
                             <el-col :span="15" class="cell-right">{{item.message}}</el-col>
                         </div>
-                    </el-col>            
+                    </el-col>
                 </el-row>
             </el-collapse-item>
         </el-collapse>
@@ -21,28 +21,28 @@
     <el-collapse v-model="activeNames">
         <el-collapse-item title="寄件人信息" name="1">
             <el-row class="sender-table">
-                <el-col :span="24" v-for="senderItem in senderItems"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
+                <el-col :span="24" v-for="(senderItem,index) in senderItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-collapse-item title="收件人信息" name="2">
             <el-row class="sender-table">
-                <el-col :span="24" v-for="senderItem in senderItems"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
+                <el-col :span="24" v-for="(senderItem,index) in senderItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-collapse-item title="物品信息" name="3">
             <el-row class="goods-table">
 
-                <el-col :span="24" v-for="goodsItem in goodsItems"><div class="grid-content bg-purple"><el-col :span="3">{{goodsItem.name}}：</el-col ><el-col :span="18">{{goodsItem.message}}</el-col></div></el-col>              
+                <el-col :span="24" v-for="(goodsItem,index) in goodsItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{goodsItem.name}}：</el-col ><el-col :span="18">{{goodsItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-collapse-item title="揽收员信息" name="4">
             <el-row class="courier-table">
-                <el-col :span="24" v-for="courier in couriers"><div class="grid-content bg-purple"><el-col :span="3">{{courier.name}}：</el-col ><el-col :span="18">{{courier.message}}</el-col></div></el-col>      
+                <el-col :span="24" v-for="(courier,index) in couriers" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{courier.name}}：</el-col ><el-col :span="18">{{courier.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-collapse-item title="快递费用" name="5">
             <el-row class="expressPay-table">
-                <el-col :span="24" v-for="expressPay in expressPays"><div class="grid-content bg-purple"><el-col :span="3">{{expressPay.name}}：</el-col ><el-col :span="18">{{expressPay.message}}</el-col></div></el-col>           
+                <el-col :span="24" v-for="(expressPay,index) in expressPays" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{expressPay.name}}：</el-col ><el-col :span="18">{{expressPay.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-row class="footer">
@@ -176,7 +176,7 @@
         height: 60px;
         line-height: 60px;
     }
-    @media screen and (min-width: 1201px) { 
+    @media screen and (min-width: 1201px) {
         .cell-left{
             border-top: 1px solid #333;
             text-align: left;
@@ -199,8 +199,8 @@
         .basic-table .el-col:nth-child(4n+1) .cell-left{
             border-left:1px solid #333;
         }
-    } 
-    @media screen and (max-width: 1201px) { 
+    }
+    @media screen and (max-width: 1201px) {
         .cell-left{
             border-left: 1px solid #333;
             border-top: 1px solid #333;
@@ -225,9 +225,9 @@
         .basic-table .el-col:nth-child(11),.basic-table .el-col:nth-child(12){
             border-bottom:1px solid #333;
         }
-    } 
+    }
 
-    @media screen and (max-width: 901px) { 
+    @media screen and (max-width: 901px) {
         .cell-left{
             text-align: left;
             background: #e1e1e1;
@@ -245,8 +245,8 @@
         .basic-table .el-col:nth-child(11){
             border-bottom: 0;
         }
-    } 
-    //    @media screen and (min-width: 901px) { 
+    }
+    //    @media screen and (min-width: 901px) {
     //     .cell-left{
     //         text-align: left;
     //         background: #e1e1e1;
@@ -264,12 +264,12 @@
     //     .basic-table .el-col:nth-child(11){
     //         border-bottom: 0;
     //     }
-    // } 
+    // }
     .footer{
         padding:20px 0 20px 15px;
     }
 
- 
+
 </style>
 
 

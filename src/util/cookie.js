@@ -21,7 +21,7 @@ export default {
                    var cookie_str = cookie_name + "=" + escape(cookie_val) + ";";
                    if (time > 0) {
                        var date = new Date();
-                       date.setDate(date.getDate() + time);
+                       date.setTime(date.getTime() + time);
                        cookie_str += "expires=" + date.toGMTString()+";";
                        console.log(date.toGMTString());
                    }
@@ -32,8 +32,8 @@ export default {
                    if (!cookie_name || cookie_name == '') {
                        return;
                    }
-                   var date = new Date();
-                   date.getDate(date.getDate() - 10000);
+                   var date = new Date(0);
+                  //  date.getDate(date.getDate() - 10000);
                    document.cookie = cookie_name + "=; expires=" + date.toGMTString() + ";path=/;";
                }
 
