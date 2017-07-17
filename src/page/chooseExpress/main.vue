@@ -204,14 +204,6 @@ export default {
       formLabelWidth: '120px',
       selectedOptions: [],
       selectedOptions2: []
-      // editForm:{
-      //     operationsMapName:"",
-      //     link:"",
-      //     address:"",
-      //     activeTime:"",
-      //     currentState:"",
-      //     Forder:""
-      // }
     }
   },
   computed() {
@@ -279,24 +271,7 @@ export default {
         console.log("error");
         console.log(error);
       })
-      // _ZZthis.$http.get(url)
-      //   .then(function(rsp) {
-      //     _this.tableData = rsp.data.data
-      //   })
-      //   .catch(function(error) {
-      //     console.log(error);
-      //   })
-
     }
-    // editForm(){ //移至缓冲
-    //     this.$store.dispatch('editForm');
-    // }
-    // editForm: {
-    //   handler: function () {
-    //       store.commit('setEditForm',this.editForm);
-    //   },
-    //   deep:true
-    // }
   },
   methods: {
    // 监听 子组件覆盖对话框 的回调函数
@@ -491,17 +466,7 @@ export default {
       })
     },
     handleEdit(row) {
-      // console.log(row)
-      // this.editForm.operationsMapName = row.operationsMapName;
-      // this.editForm.link = row.link;
-      // this.editForm.address = row.address;
-      // this.editForm.activeTime = row.activeTime;
-      // this.editForm.currentState = row.currentState;
-      // this.editForm.forder = row.forder;
-      // this.$store.dispatch('editform',row);
-      // console.log(localEvent);
       localEvent.set(row);
-
       var _this = this;
       this.$router.push({
         path: _this.$route.path + '/editData'

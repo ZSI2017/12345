@@ -121,7 +121,7 @@
   </div>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
+  <!--<el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
@@ -133,7 +133,7 @@
      </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
+  </el-dialog>-->
 
   <!--  查看链接 对话框 -->
   <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">

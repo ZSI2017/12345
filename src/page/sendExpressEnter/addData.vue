@@ -74,7 +74,6 @@
         <template scope="scope">
             <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
             <el-checkbox
-
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
                >全选</el-checkbox>
@@ -89,7 +88,7 @@
                  <el-checkbox style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
             </el-checkbox-group>
 
-     </template>
+      </template>
       </el-table-column>
     </el-table>
     <div slot="footer" class="dialog-footer">
