@@ -15,10 +15,17 @@ axios.interceptors.request.use(function(config) {
 });
 
 // add a respose interceptor
-axios.interceptors.response.use(function(response){
+axios.interceptors.response.use(
+  response =>{
       //  TODO after response
+    if(response.error === "ACL_NO_PRIVILEGE") {
+            // 没有权限时，跳转到 支付宝的权限管理页面
+        window.location.href=response.redrect;
+        return Promise.reject(error);
+    }
       return response;
-},function(error){
+},
+  error =>{
     //  TODO width response error
     return Promise.reject(error);
 
@@ -35,9 +42,6 @@ function checkErrorCode() {
          } else {
             // 其他错误处理代码
          }
-      }else if(response.error === "ACL_NO_PRIVILEGE") {
-            // 没有权限时，跳转到 支付宝的权限管理页面
-              window.location.href=response.redrect;
       }
   };
 

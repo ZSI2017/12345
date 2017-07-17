@@ -45,10 +45,7 @@
 
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
-    <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
-      <el-tab-pane v-for="(item,index) in tabPaneData" :label="item" :key="index" :name="item" style="font-size:20px;">{{item}}
-      </el-tab-pane>
-    </el-tabs> -->
+
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
@@ -89,7 +86,11 @@
   </el-dialog>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
+  <cover-area
+      :visible="dialogTableVisible"
+      :gridData="gridData"
+      ></cover-area>
+  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
@@ -101,34 +102,21 @@
     </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
+  </el-dialog> -->
 
-  <!-- 即将离开的 对话框  -->
-  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
-    <div>
-      <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
-      <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
-    </div>
-
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingFlag = false">编 辑</el-button>
-    <el-button type="primary" @click="editSure">放 弃</el-button>
-  </span>
-  </el-dialog>
 
 </section>
 </template>
 <script type="text/javascript">
-import {
-  getLoadingFlag
-} from "@/vuex/getters";
+   import coverArea from "./coverArea.vue";
 export default {
+  components:{
+     coverArea
+  },
   data() {
     return {
      // 展示警告信息
       showAlert:false,
-      // 即将离开的对话框
-      loadingFlag: false,
 
       // 添加搜索框
       state1: "",
@@ -230,9 +218,12 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
-          _this.$router.app.$store.state.loadingFlag = true;
+          // router.app.$store.state.loadingChange = true
+          // _this.$router.app.$store.state.loadingChange = true;
+          _this.$store.dispatch('changeLoadingChange',true);
+
           _this.$router.go(-1);
-          alert('sumbit');
+          // alert('sumbit');
         } else {
           console.log(_this);
           _this.showAlert = true;
@@ -243,17 +234,18 @@ export default {
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
-      this.loadingFlag = true;
+        this.$router.go(-1);
+      // this.loadingFlag = true;
     },
     // 即将离开的对话框
-    editSure() {
-      this.loadingFlag = false;
-      this.$router.app.$store.state.loadingFlag = true;
-      console.log(this);
-      this.$router.go(-1);
-      //  this.$router.push({ path:this.defaultActive});
-      //  this.$route.push({ path:this.defaultActive});
-    },
+    // editSure() {
+    //   this.loadingFlag = false;
+    //   this.$router.app.$store.state.loadingFlag = true;
+    //   console.log(this);
+    //   this.$router.go(-1);
+    //   //  this.$router.push({ path:this.defaultActive});
+    //   //  this.$route.push({ path:this.defaultActive});
+    // },
     handlePreview() {},
     handleRemove() {},
 
@@ -376,7 +368,7 @@ label {
 .dialog-class {
     .el-dialog__body{
        padding-top:15px !important;
-       
+
     }
 }
 

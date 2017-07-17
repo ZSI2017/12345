@@ -114,6 +114,7 @@
        <el-tag
         style="margin-right:10px;"
          v-for="(item,index) in scope.row.city"
+         :key="index"
          >{{item}}</el-tag>
      </template>
       </el-table-column>

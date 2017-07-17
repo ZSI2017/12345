@@ -1,30 +1,25 @@
 <template type="html">
-<section class="section">
+<section class="section editData-class">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="form" :model="form" label-width="80px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="form" :model="form" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
       <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
 
     <el-form-item label="运营图" prop="opMap">
-      <el-upload
-        v-if="isFromAddData"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :on-preview="handlePictureCardPreview"
-        :on-remove="handleRemove"
-        :file-list="fileList2">
+      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
         <!--<i class="el-icon-plus"></i>-->
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>        
+        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-        <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
+      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
       <el-dialog v-model="dialogVisible" size="tiny">
-           <img width="100%" :src="dialogImageUrl" alt="">
+        <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
       <el-popover ref="popover4" placement="right" trigger="click">
         <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
       </el-popover>
-      <el-button  v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
+      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
 
     </el-form-item>
     <el-form-item label="排序值">
@@ -58,10 +53,6 @@
 
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
-    <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
-      <el-tab-pane v-for="(item,index) in tabPaneData" :label="item" :key="index" :name="item" style="font-size:20px;">{{item}}
-      </el-tab-pane>
-    </el-tabs> -->
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
@@ -101,7 +92,11 @@
   </el-dialog>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
+  <cover-area
+      :visible="dialogTableVisible"
+      :gridData="gridData"
+      ></cover-area>
+  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
@@ -113,30 +108,16 @@
     </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
-
-  <!-- 即将离开的 对话框  -->
-
-  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
-    <div>
-      <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
-      <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
-    </div>
-    <span slot="footer" class="dialog-footer">
-       <el-button @click="loadingFlag = false">编 辑</el-button>
-       <el-button type="primary" @click="editSure">放 弃</el-button>
-    </span>
-  </el-dialog>
-
+  </el-dialog> -->
 </section>
 </template>
 <script type="text/javascript">
 import localEvent from 'src/vuex/function.js';
-
-import {
-  getLoadingFlag
-} from "@/vuex/getters";
+import coverArea from "./coverArea.vue";
 export default {
+  components:{
+    coverArea
+  },
   data() {
     return {
       // 从详情页面
@@ -205,7 +186,9 @@ export default {
     }
   },
   created() {
-    if (this.$route.path == "/chooseExpress/detail" ||this.$route.path == "/sendExpress/detail"||this.$route.path == "/expressOrder/detail" ) {
+    if ( this.$route.path == "/chooseExpress/detail"
+          || this.$route.path == "/sendExpress/detail"
+          || this.$route.path == "/expressOrder/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
@@ -234,27 +217,30 @@ export default {
   methods: {
     //  点击提交
     handleSubmit() {
-      this.$router.app.$store.state.loadingFlag = true;
+      // this.$router.app.$store.state.loadingFlag = true;
+      _this.$store.dispatch('changeLoadingChange', true);
+      // this.$router.app.$store.state.loadingChange = true;
       console.log(this);
       this.$router.go(-1);
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
-      if (this.isFromAddData) {
-        this.loadingFlag = true;
-      } else {
-          this.$router.go(-1);
-      }
+      this.$router.go(-1);
+      // if (this.isFromAddData) {
+      //   this.loadingFlag = true;
+      // } else {
+      //     this.$router.go(-1);
+      // }
     },
     // 即将离开的对话框
-    editSure() {
-      this.loadingFlag = false;
-      this.$router.app.$store.state.loadingFlag = true;
-      console.log(this);
-      this.$router.go(-1);
-      //  this.$router.push({ path:this.defaultActive});
-      //  this.$route.push({ path:this.defaultActive});
-    },
+    // editSure() {
+    //   this.loadingFlag = false;
+    //   this.$router.app.$store.state.loadingFlag = true;
+    //   console.log(this);
+    //   this.$router.go(-1);
+    //   //  this.$router.push({ path:this.defaultActive});
+    //   //  this.$route.push({ path:this.defaultActive});
+    // },
     handlePreview() {},
     handleRemove() {},
 
@@ -379,15 +365,14 @@ export default {
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-label {
-    font-weight: bold;
-}
-.dialog-class {
-    .el-dialog__body{
-       padding-top:15px !important;
-       
+.editData-class {
+    label {
+        font-weight: bold;
+    }
+    .dialog-class {
+        .el-dialog__body {
+            padding-top: 15px !important;
+        }
     }
 }
-
-
 </style>

@@ -7,7 +7,7 @@
         <div class="grid-content" @click="handleHome" style="float:left;width:230px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;">{{ title }}</div>
         <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;padding-right:20px;">
           <el-row>
-            <el-col :span="12"><div class="grid-content">1234567</div></el-col>
+            <el-col :span="12"><div class="grid-content">123456</div></el-col>
             <el-col :span="12"><div class="grid-content" @click="handleLogout">退出登录</div></el-col>
           </el-row>
         </div>
@@ -26,7 +26,7 @@
             <template slot="title"><i style="width:20px;display:inline-block;"></i>{{items.name}}</template>
             <!-- <el-menu-item-group> -->
             <!-- <template slot="title">分组一</template> -->
-            <el-menu-item v-for="item in items.children" :index="item.path" v-if="!item.isHideChild">
+            <el-menu-item v-for="(item,index) in items.children" :index="item.path" v-if="!item.isHideChild" :key="index">
             <i style="width:20px;display:inline-block;"></i>{{item.name}}
             </el-menu-item>
 
@@ -60,13 +60,13 @@
       <!-- <tableVue></tableVue> -->
       </el-col>    </div>
   </div>
-  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
+  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny" :show-close="showClose">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
     <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
     <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingFlag = false">编 辑</el-button>
-    <el-button type="primary" @click="editSure">放 弃</el-button>
-  </span>
+        <el-button @click="hideCountFlag">编 辑</el-button>
+        <el-button type="primary" @click="editSure">放 弃</el-button>
+    </span>
   </el-dialog>
 </div>
 </template>
@@ -83,9 +83,10 @@ export default {
 
   data() {
     return {
+      showClose:false,
       fullscreenLoading:false,
       defaultActive:"",
-      loadingFlag: false,
+      // loadingFlag: false,
       uniqueOpened: true,
       fold: true,
       headerFixed: true,
@@ -95,7 +96,7 @@ export default {
     }
   },
   computed:{
-      loadingCount(){
+      loadingFlag() {
           return this.$store.state.loadingFlag;
       }
   },
@@ -107,8 +108,8 @@ export default {
     setTimeout(() => {
       console.log(_this);
     },3000)
-    // console.log("router");
-    // console.log(this);
+    console.log("router");
+    console.log(this);
   },
   watch: {
     '$route': function(to, from) {
@@ -120,14 +121,21 @@ export default {
     }
   },
   methods: {
+    hideCountFlag () {
+        this.$store.dispatch('changeLoadingFlag');
+        this.$store.dispatch('changeLoadingChange',false);
+        // this.$router.app.$store.state.loadingChange = false;
+    },
     handleHome(){
         this.$router.push({path:'/home'});
     },
     editSure(){
-       this.loadingFlag = false;
-       this.$router.app.$store.state.loadingFlag = true;
+      this.$store.dispatch('changeLoadingFlag');
+      //  this.loadingFlag = false;
+      this.$store.dispatch('changeLoadingChange',true);
+      //  this.$router.app.$store.state.loadingChange = true;
       //  console.log(this);
-       this.$router.push({ path:this.defaultActive});
+      this.$router.push({ path:this.$store.getters.getNextRouter});
       //  this.$route.push({ path:this.defaultActive});
     },
     startHacking() {
@@ -144,14 +152,14 @@ export default {
       console.log(key, keyPath);
     },
     handleSelect(key, keyPath) {
-       this.defaultActive =""+key;
+      //  this.defaultActive =""+key;
       //  console.log("this.$route.path");
       //  console.log(this.$route.path);
       if (this.$route.path == "/sendExpress/addData"||this.$route.path == "/chooseExpress/addData"||this.$route.path == "/expressOrder/addData") {
-          if(this.$router.app.$store.state.loadingFlag == false){
-            console.log(this.$route.matched);
-            console.log(this.$route.path);
-            this.loadingFlag = true;
+          if(this.$store.getters.getLoadingFlag === false){
+            // console.log(this.$route.matched);
+            // console.log(this.$route.path);
+            // this.loadingFlag = true;
           }
       }else {
         this.fullscreenLoading = true;
@@ -162,7 +170,7 @@ export default {
       }
     },
     handleLogout(){
-        this.$router.push({name:'我的快递'});
+        this.$router.push({path:'/login'});
         // this.$router.
     }
   }
