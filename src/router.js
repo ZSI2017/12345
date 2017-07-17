@@ -19,6 +19,8 @@ import expressOrder from './page/expressOrder/index.vue'
 
 //寄快递入口
 import sendExpressEnter from './page/sendExpressEnter/index.vue'
+import sendExpressEnterMain from './page/sendExpressEnter/main.vue'
+import sendExpressEnterAddData from "./page/sendExpressEnter/addData.vue";
 
 //快递公司管理
 import expressCompany from './page/expressCompany/index.vue'
@@ -150,7 +152,14 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'/sendExpressEnter',component:sendExpressEnter,name:"寄快递首页管理"}
+      {path:'/sendExpressEnter/main',component:sendExpressEnter,name:"寄快递首页管理",
+          children:[
+            {path:'',component:sendExpressEnterMain},
+            {path:'/sendExpressEnter/addData',name:'添加数据',component:sendExpressEnterAddData},
+            {path:'editData',name:'修改数据',component:editData},
+            {path:'detail',name:'查看详情',component:editData}
+          ]
+      }
    ]
   //  path:'/sendExpressEnter',component:sendExpressEnter
 
