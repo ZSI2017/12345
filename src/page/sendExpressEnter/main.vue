@@ -31,17 +31,21 @@
       :data="tableData"
       @cell-mouse-enter="handleMouseEnter"
       style="width: 100%;margin-top:10px;"
-      max-height="500"
+      max-height="450"
       empty-text="_"
       align="center"
       :default-sort="{prop: 'date', order: 'descending'}"
       >
-    <el-table-column prop="operationsMapName"  label="运营图称">
+    <el-table-column prop="operationsMapName"  label="LOGO">
     </el-table-column>
-    <el-table-column prop="name" label="运营图">
+    <el-table-column prop="name" label="角标">
         <template scope="scope">
             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
         </template>
+    </el-table-column>
+    <el-table-column prop="operationsMapName"  label="入口名称">
+    </el-table-column>
+    <el-table-column prop="operationsMapName"  label="描述">
     </el-table-column>
     <el-table-column prop="link" label="链接">
       <template scope="scope">
@@ -55,22 +59,22 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" width="160">
-    </el-table-column>
-    <el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
-    </el-table-column>
+    <!--<el-table-column prop="createTime" label="创建时间" width="160">
+    </el-table-column>-->
+    <!--<el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
+    </el-table-column>-->
 
-    <el-table-column prop="activeTime" label="有效时段" width="220">
+    <!--<el-table-column prop="activeTime" label="有效时段" width="220">
       <template scope="scope">
           <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime1}}</p>
           <p style="padding:0;margin:0;text-align:center">至</p>
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime2}}</p>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime2}}</p>-->
          <!-- <el-tag
           style="margin-right:10px;margin-bottom:5px;"
            v-for="(item,index) in scope.row.city"
            >{{item}}</el-tag> -->
-       </template>
-    </el-table-column>
+       <!--</template>
+    </el-table-column>-->
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
     <el-table-column prop="currentState" width="100" label="状态" :sortable="showSortable">
@@ -81,7 +85,7 @@
       <template scope="scope">
         <div>
           <div v-if="showOperation">
-            <el-button  @click="loadingTakeOffFlag = true" type="text" size="small">置为下架</el-button>
+            <el-button  @click="OperationTakeOff" type="text" size="small">置为下架</el-button>
             <br/>
           </div>
           <div v-if="showOperation">
@@ -140,7 +144,7 @@
   </el-dialog>
 
 
-  <!-- 置为下架 对话框  -->
+  <!-- 置为下架 通过申请 申请驳回 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
@@ -260,13 +264,6 @@ export default {
       // 默认状态是 运营位管理的 寄快递首页
       console.log("$router: " + to.path);
       let url = "/rest/list2";
-      if (to.path == "/chooseExpress") {
-        // 这里是运营位管理的 选择快递页面 的相关配置
-        url = "/rest/list2-2"
-      } else if (to.path == "/expressOrder") {
-        // 这里是运营位管理的 选快递下单页面的相关配置
-        url = "/rest/list2-3";
-      }
       var _this = this;
       _this.$http.get(url, (rsp) => {
         _this.tableData = rsp.data.data
@@ -276,24 +273,7 @@ export default {
         console.log("error");
         console.log(error);
       })
-      // _ZZthis.$http.get(url)
-      //   .then(function(rsp) {
-      //     _this.tableData = rsp.data.data
-      //   })
-      //   .catch(function(error) {
-      //     console.log(error);
-      //   })
-
     }
-    // editForm(){ //移至缓冲
-    //     this.$store.dispatch('editForm');
-    // }
-    // editForm: {
-    //   handler: function () {
-    //       store.commit('setEditForm',this.editForm);
-    //   },
-    //   deep:true
-    // }
   },
   methods: {
 
@@ -482,30 +462,12 @@ export default {
       })
     },
     handleEdit(row) {
-      // console.log(row)
-      // this.editForm.operationsMapName = row.operationsMapName;
-      // this.editForm.link = row.link;
-      // this.editForm.address = row.address;
-      // this.editForm.activeTime = row.activeTime;
-      // this.editForm.currentState = row.currentState;
-      // this.editForm.forder = row.forder;
-      // this.$store.dispatch('editform',row);
-      // console.log(localEvent);
       localEvent.set(row);
-
-      var _this = this;
-      this.$router.push({
-        path: _this.$route.path + '/editData'
-      });
+      this.$router.push('/sendExpressEnter/editData')
     },
     effectiveDetails(row) {
       localEvent.set(row);
-
-      var _this = this;
-      this.$router.push({
-        path: _this.$route.path + '/detail'
-      });
-
+    //   this.$router.push('/sendExpressEnter/editData')     
     }
   }
 }
