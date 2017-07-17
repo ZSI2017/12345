@@ -45,7 +45,7 @@
     </el-table-column>
     <el-table-column prop="operationsMapName"  label="入口名称">
     </el-table-column>
-    <el-table-column prop="operationsMapName"  label="描述">
+    <el-table-column prop="content"  label="描述">
     </el-table-column>
     <el-table-column prop="link" label="链接">
       <template scope="scope">
@@ -463,7 +463,7 @@ export default {
     },
     handleEdit(row) {
       localEvent.set(row);
-      this.$router.push('/sendExpressEnter/detail')
+      this.$router.push('/sendExpressEnter/editData')
     },
     effectiveDetails(row) {
       localEvent.set(row);
