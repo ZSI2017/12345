@@ -121,7 +121,12 @@
   </div>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
+  <cover-area
+       :visible="dialogTableVisible"
+       :gridData="gridData"
+       @listenToCoverArea ="changeVisible"
+      ></cover-area>
+  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
@@ -133,7 +138,7 @@
      </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
+  </el-dialog> -->
 
   <!--  查看链接 对话框 -->
   <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
@@ -161,8 +166,12 @@
 <script>
 import store from 'src/vuex/store.js'
 import localEvent from 'src/vuex/function.js';
+import coverArea from "../chooseExpress/coverArea.vue";
 
 export default {
+  components: {
+    coverArea
+   },
   data() {
     return {
       // 排序是否显示
@@ -276,7 +285,10 @@ export default {
     }
   },
   methods: {
-
+    // 监听 子组件覆盖对话框 的回调函数
+    changeVisible(flag){
+      this.dialogTableVisible = flag;
+    },
     // 操作排序值改变
     handleSortChange(column) {
        if(column.prop === "createTime") {
@@ -467,7 +479,7 @@ export default {
     },
     effectiveDetails(row) {
       localEvent.set(row);
-      this.$router.push('/sendExpressEnter/detail')     
+      this.$router.push('/sendExpressEnter/detail')
     }
   }
 }

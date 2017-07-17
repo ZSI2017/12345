@@ -26,7 +26,7 @@
       </el-upload>
     </el-form-item>
     <el-form-item label="描述" prop="content">
-      <el-input v-model.number="ruleForm.content" placeholder="请输入描述"> </el-input>      
+      <el-input v-model.number="ruleForm.content" placeholder="请输入描述"> </el-input>
     </el-form-item>
     <el-form-item label="排序值" prop="number">
       <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
@@ -99,7 +99,11 @@
   </el-dialog>
 
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
+  <cover-area
+      :visible="dialogTableVisible"
+      :gridData="gridData"
+      ></cover-area>
+  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200"></el-table-column>
       <el-table-column property="city" label="市">
@@ -111,10 +115,10 @@
     </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
+  </el-dialog> -->
 
   <!-- 即将离开的 对话框  -->
-  <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
+  <!-- <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
     <div>
       <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
       <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
@@ -124,15 +128,16 @@
     <el-button @click="loadingFlag = false">编 辑</el-button>
     <el-button type="primary" @click="editSure">放 弃</el-button>
   </span>
-  </el-dialog>
+  </el-dialog> -->
 
 </section>
 </template>
 <script type="text/javascript">
-import {
-  getLoadingFlag
-} from "@/vuex/getters";
+ import coverArea from "@/page/chooseExpress/coverArea.vue";
 export default {
+  components:{
+     coverArea
+  },
   data() {
     return {
      // 展示警告信息
@@ -247,7 +252,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
-          _this.$router.app.$store.state.loadingFlag = true;
+          _this.$store.dispatch('changeLoadingChange',true);
           _this.$router.go(-1);
           alert('sumbit');
         } else {
@@ -260,17 +265,17 @@ export default {
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
-      this.loadingFlag = true;
+      this.$router.go(-1);
     },
     // 即将离开的对话框
-    editSure() {
-      this.loadingFlag = false;
-      this.$router.app.$store.state.loadingFlag = true;
-      console.log(this);
-      this.$router.go(-1);
-      //  this.$router.push({ path:this.defaultActive});
-      //  this.$route.push({ path:this.defaultActive});
-    },
+    // editSure() {
+    //   this.loadingFlag = false;
+    //   this.$router.app.$store.state.loadingFlag = true;
+    //   console.log(this);
+    //   this.$router.go(-1);
+    //   //  this.$router.push({ path:this.defaultActive});
+    //   //  this.$route.push({ path:this.defaultActive});
+    // },
     handlePreview() {},
     handleRemove() {},
 
@@ -393,7 +398,7 @@ label {
 .dialog-class {
     .el-dialog__body{
        padding-top:15px !important;
-       
+
     }
 }
 

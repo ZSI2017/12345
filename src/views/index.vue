@@ -162,7 +162,7 @@ export default {
       //  this.defaultActive =""+key;
       //  console.log("this.$route.path");
       //  console.log(this.$route.path);
-      if (this.$route.path == "/sendExpress/addData"||this.$route.path == "/chooseExpress/addData"||this.$route.path == "/expressOrder/addData") {
+      if (this.$route.path == "/sendExpress/addData"||this.$route.path == "/sendExpressEnter/addData"||this.$route.path == "/chooseExpress/addData"||this.$route.path == "/expressOrder/addData") {
           if(this.$store.getters.getLoadingFlag === false){
             // console.log(this.$route.matched);
             // console.log(this.$route.path);

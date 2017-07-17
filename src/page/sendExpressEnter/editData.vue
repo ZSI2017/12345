@@ -133,7 +133,7 @@ import localEvent from 'src/vuex/function.js';
 import coverArea from "../chooseExpress/coverArea.vue";
 export default {
   components:{
-    coverArea
+     coverArea
   },
   data() {
     return {
