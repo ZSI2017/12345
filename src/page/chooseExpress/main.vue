@@ -130,15 +130,6 @@
     </el-table>
   </el-dialog> -->
 
-  <!--  查看链接 对话框 -->
-  <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
-    <span>{{ linkText }}</span>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogLinkVisible = false">关 闭</el-button>
-    </div>
-  </el-dialog>
-
-
   <!-- 置为下架 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
@@ -180,9 +171,6 @@ export default {
       activeName2: 'first',
       showHeader: false,
       dialogTableVisible: false,
-      dialogLinkVisible:false,
-      linkText:"",
-      link_content:"",
       value: '',
       pageSize: 5,
       listLoading: false,
@@ -213,14 +201,6 @@ export default {
       // }
     }
   },
-  // watch: {
-  //     editForm: {
-  //       handler: function () {
-  //           store.commit('setEditForm',this.editForm);
-  //       },
-  //       deep:true
-  //     }
-  // },
   created() {
     console.log("$router: " + this.$route.path);
     let url = "/rest/list2";
@@ -238,15 +218,6 @@ export default {
       console.log("error");
       console.log(error);
     });
-
-    // var _this = this;
-    // _this.$http.get(url)
-    //   .then(function(rsp) {
-    //     _this.tableData = rsp.data.data
-    //   })
-    //   .catch(function(error) {
-    //     console.log(error);
-    //   })
 
     console.log(this.$route.matched);
   },
@@ -374,15 +345,6 @@ export default {
       }, (error) => {
         console.log(error);
       })
-    },
-    //tooltip 查看链接
-     handleMouseEnter(row, column, cell, event){
-      this.link_content = row.link;
-    },
-    // 查看链接
-    checkLink(index,row) {
-      this.dialogLinkVisible = true
-      this.linkText = row.link
     },
     setNewData() {
       var _this = this;
