@@ -10,7 +10,16 @@
   </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="公司名称" prop="photoName">
-      <el-input v-model.trim="ruleForm.photoName" placeholder="请输入快递公司名称"> </el-input>
+      <!--<el-input v-model.trim="ruleForm.photoName" placeholder="请输入快递公司名称"> </el-input>-->
+        <el-select label="复选框 A" v-model="express" placeholder="请选择" style="width:100%;">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+        </el-select>
+      </el-col>
     </el-form-item>
     <el-form-item label="LOGO" prop="opMap">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
@@ -36,8 +45,11 @@
         :key="tag"
         v-for="tag in dynamicTags"
         :closable="true"
+        hit="true"
         :close-transition="false"
         @close="handleClose(tag)"
+        type="gray"
+        style="margin-right:10px;"
       >
       {{tag}}
       </el-tag>
@@ -52,7 +64,8 @@
         style="width:100px;"
       >
       </el-input>
-      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加</el-button>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
+      <div style="color:#888;">最多添加两个标签</div>
     </el-form-item>
     <el-form-item label="客服电话" prop="orderNumber">
       <el-input v-model.number="ruleForm.number" placeholder="请输入客服电话"> </el-input>
@@ -71,34 +84,34 @@
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
     </el-form-item>-->
-    <el-form-item label="是否由系统发起支付" prop="currentState">
-      <el-radio-group v-model="ruleForm.currentState">
-        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+    <el-form-item label="是否由系统发起支付" prop="currentPay">
+      <el-radio-group v-model="ruleForm.currentPay">
+        <el-radio class="radio" v-model="payRadio" label="1">是</el-radio>
+        <el-radio class="radio" v-model="payRadio" label="2">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否允许议价" prop="currentState">
-      <el-radio-group v-model="ruleForm.currentState">
-        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+    <el-form-item label="是否允许议价" prop="currentPrice">
+      <el-radio-group v-model="ruleForm.currentPrice">
+        <el-radio class="radio" v-model="priceRadio" label="1">是</el-radio>
+        <el-radio class="radio" v-model="priceRadio" label="2">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否最热" prop="currentState">
-      <el-radio-group v-model="ruleForm.currentState">
-        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+    <el-form-item label="是否最热" prop="currentHot">
+      <el-radio-group v-model="ruleForm.currentHot">
+        <el-radio class="radio" v-model="hotRadio" label="1">是</el-radio>
+        <el-radio class="radio" v-model="hotRadio" label="2">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否最新" prop="currentState">
-      <el-radio-group v-model="ruleForm.currentState">
-        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+    <el-form-item label="是否最新" prop="currentNew">
+      <el-radio-group v-model="ruleForm.currentNew">
+        <el-radio class="radio" v-model="newRadio" label="1">是</el-radio>
+        <el-radio class="radio" v-model="newRadio" label="2">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="当前状态" prop="currentState">
       <el-radio-group v-model="ruleForm.currentState">
-        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+        <el-radio class="radio" v-model="statusRadio" label="1">上架</el-radio>
+        <el-radio class="radio" v-model="statusRadio" label="2">下架</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
@@ -195,7 +208,8 @@ export default {
       showAlert:false,
       // 即将离开的对话框
       loadingFlag: false,
-
+      //标签添加控制
+      addTag: true,
       // 添加搜索框
       state1: "",
       provinces: [],
@@ -211,7 +225,12 @@ export default {
       // value3 代表时间段选择的
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
-      radio: 1,
+      payRadio: 1,
+      pariceRadio: 1,
+      hotRadio: 1,
+      newRadio: 1,
+      statusRadio: 1,
+      
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
       //标签数据
@@ -223,6 +242,23 @@ export default {
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy: [],
+      options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+      express: '',  
       // 对输入表单进行验证
       ruleForm: {
         photoName: '',
@@ -230,6 +266,11 @@ export default {
         link: '',
         date1: '',
         currentState: false,
+        currentPay: false,
+        currentPrice: false,
+        currentHot: false,
+        currentNew: false,
+        
         content:''
       },
       rules: {
@@ -257,6 +298,26 @@ export default {
           trigger: 'change'
         }],
         currentState: [{
+          required: true,
+          message: '请选择状态',
+          trigger: 'change'
+        }],
+        currentPay: [{
+          required: true,
+          message: '请选择状态',
+          trigger: 'change'
+        }],
+        currentParice: [{
+          required: true,
+          message: '请选择状态',
+          trigger: 'change'
+        }],
+        currentHot: [{
+          required: true,
+          message: '请选择状态',
+          trigger: 'change'
+        }],
+        currentNew: [{
           required: true,
           message: '请选择状态',
           trigger: 'change'
@@ -446,6 +507,11 @@ export default {
     
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      if(this.dynamicTags.length >= 2){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }  
     },
 
     showInput() {
@@ -459,6 +525,11 @@ export default {
       let inputValue = this.inputValue;
       if (inputValue) {
         this.dynamicTags.push(inputValue);
+        if(this.dynamicTags.length >= 2){
+          this.addTag = false;
+        }else{
+          this.addTag = true;
+        }      
       }
       this.inputVisible = false;
       this.inputValue = '';
