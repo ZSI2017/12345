@@ -32,6 +32,9 @@ import expressCompanyEditData from "./page/expressCompany/editData.vue";
 
 //选快递下单管理
 import chooseExpressOrder from './page/chooseExpressOrder/index.vue'
+import chooseExpressOrderMain from './page/chooseExpressOrder/main.vue'
+import chooseExpressOrderAddData from "./page/chooseExpressOrder/addData.vue";
+import chooseExpressOrderEditData from "./page/chooseExpressOrder/editData.vue";
 
 //服务类型及折扣管理
 import serverTypeDiscount from './page/serverTypeDiscount/index.vue'
@@ -213,7 +216,15 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'/chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理"}
+      {path:'/chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理",
+          children:[
+            {path:'',component:chooseExpressOrderMain},
+            {path:'addData',name:'添加数据',component:chooseExpressOrderAddData},
+            {path:'editData',name:'修改数据',component:chooseExpressOrderEditData},
+            {path:'detail',name:'查看详情',component:chooseExpressOrderEditData}
+          ]
+  
+      }
    ]
   //  path:'/chooseExpressOrder',component:chooseExpressOrder
 

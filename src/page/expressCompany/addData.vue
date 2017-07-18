@@ -227,7 +227,7 @@ export default {
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
       payRadio: 1,
-      pariceRadio: 1,
+      priceRadio: 1,
       hotRadio: 1,
       newRadio: 1,
       statusRadio: 1,

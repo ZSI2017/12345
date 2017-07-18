@@ -8,18 +8,18 @@
     </el-form-item>
 
     <el-form-item label="LOGO" prop="opMap">
-      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
+      <!--<el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">-->
         <!--<i class="el-icon-plus"></i>-->
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-      </el-upload>
-      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
+        <!--<el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+      </el-upload>-->
+      <img width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
       <el-dialog v-model="dialogVisible" size="tiny">
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
       <el-popover ref="popover4" placement="right" trigger="click">
         <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
       </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
+      <el-button style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
     <el-form-item label="广告语">
       <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入广告语"> </el-input>
@@ -30,8 +30,11 @@
         :key="tag"
         v-for="tag in dynamicTags"
         :closable="true"
+        hit="true"
         :close-transition="false"
         @close="handleClose(tag)"
+        type="gray"
+        style="margin-right:10px;"
       >
       {{tag}}
       </el-tag>
@@ -46,7 +49,7 @@
         style="width:100px;"
       >
       </el-input>
-      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加</el-button>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
     </el-form-item>
     <el-form-item label="客服电话">
       <el-input v-if="isFromAddData" v-model="form.orderNumber" placeholder="请输入客服电话"> </el-input>
@@ -194,6 +197,7 @@ export default {
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
+      addTag:"true",
       form: {
         name: '',
         region: '',
@@ -403,20 +407,30 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-     handleClose(tag) {
+    handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      if(this.dynamicTags.length >= 2){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }  
     },
-
     showInput() {
       this.inputVisible = true;
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
+
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (inputValue) {
         this.dynamicTags.push(inputValue);
+        if(this.dynamicTags.length >= 2){
+          this.addTag = false;
+        }else{
+          this.addTag = true;
+        }      
       }
       this.inputVisible = false;
       this.inputValue = '';
