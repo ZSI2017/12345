@@ -34,7 +34,11 @@
     <el-form-item label="链接" prop="link">
       <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
     </el-form-item>
-    <el-form-item label="覆盖地区" prop="coverArea">
+    <!--<el-form-item label="有效时段" prop="date1">
+      <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
+      </el-date-picker>
+    </el-form-item>-->
+    <el-form-item label="覆盖地区" prop="formCoverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
     </el-form-item>
@@ -93,6 +97,7 @@
       :visible="dialogTableVisible"
       @listenToCoverArea ="changeVisible"
       :gridData="gridData"
+      @listenToCoverArea ="changeVisible"
       ></cover-area>
 </section>
 </template>
@@ -179,7 +184,7 @@ export default {
           required: true,
           message: '请输入描述文字'
         }],
-        coverArea: [{
+        formCoverArea: [{
           required: true,
           message: '请选择覆盖地区'
         }]

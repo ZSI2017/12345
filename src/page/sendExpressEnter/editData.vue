@@ -103,6 +103,8 @@
   <cover-area
       :visible="dialogTableVisible"
       :gridData="gridData"
+      @listenToCoverArea ="changeVisible"
+
       ></cover-area>
 </section>
 </template>
@@ -206,6 +208,9 @@ export default {
     }
   },
   methods: {
+    changeVisible(flag){
+      this.dialogTableVisible = flag;
+    },
     //  点击提交
     handleSubmit() {
       // this.$router.app.$store.state.loadingFlag = true;
