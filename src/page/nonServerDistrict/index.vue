@@ -12,15 +12,14 @@
     <el-table-column prop="operationsMapName" label="快递公司名称" >
     </el-table-column>
     <el-table-column prop="name" label="非服务地区" >
-        <template scope="scope">
-         
-        </template>
+       <template scope="scope">
+           <el-button @click="handleClick" type="text" size="small">查看</el-button>
+         </template>
     </el-table-column>
     <el-table-column prop="link"  label="修改时间">
     </el-table-column>
     <el-table-column  label="操作" >
       <template scope="scope">
-           <el-button @click="handleClick" type="text" size="small">查看</el-button>
            <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
          </template>
     </el-table-column>

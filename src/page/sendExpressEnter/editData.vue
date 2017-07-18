@@ -112,6 +112,8 @@
   <cover-area
       :visible="dialogTableVisible"
       :gridData="gridData"
+      @listenToCoverArea ="changeVisible"
+
       ></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
@@ -234,6 +236,9 @@ export default {
     }
   },
   methods: {
+    changeVisible(flag){
+      this.dialogTableVisible = flag;
+    },
     //  点击提交
     handleSubmit() {
       // this.$router.app.$store.state.loadingFlag = true;
