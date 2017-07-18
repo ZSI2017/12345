@@ -9,20 +9,20 @@
        >
   </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="名称" prop="photoName">
-      <el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称"> </el-input>
+    <el-form-item label="入口名称" prop="photoName">
+      <el-input v-model.trim="ruleForm.photoName" placeholder="请输入入口名称"> </el-input>
     </el-form-item>
     <el-form-item label="运营图" prop="opMap">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
+        <div slot="tip" class="el-upload__tip">文件类型限jpg,png,尺寸40*40，请保持5kb以内</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="角标" prop="cornerMark">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <span style="color:red;">（非必填）</span>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过3kb</div>
+        <div slot="tip" class="el-upload__tip">文件类型限jpg,png,尺寸40*40， 请保持3kb以内</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="描述" prop="content">
@@ -32,16 +32,11 @@
       <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="link">
-      <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
     </el-form-item>
-    <!--<el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
-      </el-date-picker>
-    </el-form-item>-->
     <el-form-item label="覆盖地区" prop="coverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
-      <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态" prop="currentState">
       <el-radio-group v-model="ruleForm.currentState">
@@ -183,12 +178,10 @@ export default {
           message: '请输入运营图名称',
           trigger: 'blur'
         }, ],
-        number: [{
-          type: 'number',
-          required: true,
-          message: '请输入排序值',
-          trigger: 'blur'
-        }],
+        number: [
+          { required: true, message: '排序值不能为空'},
+          { type: 'number', message: '排序值必须为数字值'}
+        ],
         link: [{
           required: true,
           message: "请输入链接",
@@ -214,7 +207,7 @@ export default {
         }],
         content:[{
           required: true,
-          message: '请上传图片'
+          message: '请输入描述文字'
         }],
         coverArea: [{
           required: true,
