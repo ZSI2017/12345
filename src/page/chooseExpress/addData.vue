@@ -28,7 +28,7 @@
       <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>
-    <el-form-item label="覆盖地区" prop="coverArea">
+    <el-form-item label="覆盖地区" prop="formCoverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
@@ -89,6 +89,7 @@
   <cover-area
       :visible="dialogTableVisible"
       :gridData="gridData"
+      @listenToCoverArea ="changeVisible"
       ></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
@@ -183,7 +184,7 @@ export default {
           required: true,
           message: '请上传图片'
         }],
-        coverArea: [{
+        formCoverArea: [{
           required: true,
           message: '请选择覆盖地区'
         }]
@@ -212,6 +213,9 @@ export default {
     //  }
   },
   methods: {
+    changeVisible(flag){
+      this.dialogTableVisible = flag;
+    },
     //  点击提交
     handleSubmit(formName) {
       var _this = this;

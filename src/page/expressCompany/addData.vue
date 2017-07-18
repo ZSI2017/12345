@@ -166,6 +166,7 @@
   <cover-area
       :visible="dialogTableVisible"
       :gridData="gridData"
+      @listenToCoverArea ="changeVisible"
       ></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
@@ -230,7 +231,7 @@ export default {
       hotRadio: 1,
       newRadio: 1,
       statusRadio: 1,
-      
+
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
       //标签数据
@@ -258,7 +259,7 @@ export default {
           value: '选项5',
           label: '北京烤鸭'
         }],
-      express: '',  
+      express: '',
       // 对输入表单进行验证
       ruleForm: {
         photoName: '',
@@ -270,7 +271,7 @@ export default {
         currentPrice: false,
         currentHot: false,
         currentNew: false,
-        
+
         content:''
       },
       rules: {
@@ -362,6 +363,9 @@ export default {
     //  }
   },
   methods: {
+    changeVisible(flag){
+      this.dialogTableVisible = flag;
+    },
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
@@ -504,14 +508,14 @@ export default {
     onSubmit() {
       console.log('submit!');
     },
-    
+
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       if(this.dynamicTags.length >= 2){
         this.addTag = false;
       }else{
         this.addTag = true;
-      }  
+      }
     },
 
     showInput() {
@@ -529,7 +533,7 @@ export default {
           this.addTag = false;
         }else{
           this.addTag = true;
-        }      
+        }
       }
       this.inputVisible = false;
       this.inputValue = '';
