@@ -25,8 +25,8 @@
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过3kb</div>
       </el-upload>
     </el-form-item> -->
-    <el-form-item label="描述" prop="content">
-      <el-input v-model.number="ruleForm.content" placeholder="请输入描述"> </el-input>
+    <el-form-item label="描述" prop="description">
+      <el-input v-model.trim="ruleForm.description" placeholder="请输入描述"> </el-input>
     </el-form-item>
     <el-form-item label="排序值" prop="number">
       <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
@@ -102,6 +102,7 @@
   <cover-area
       :visible="dialogTableVisible"
       :gridData="gridData"
+      @listenToCoverArea ="changeVisible"
       ></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
@@ -171,6 +172,7 @@ export default {
       gridDataCopy: [],
       // 对输入表单进行验证
       ruleForm: {
+        description:'',
         photoName: '',
         number: '',
         link: '',
@@ -199,6 +201,12 @@ export default {
           type: 'date',
           required: true,
           message: '请选择日期',
+          trigger: 'change'
+        }],
+        description:[{
+          type: 'string',
+          required: true,
+          message: '请输入描述',
           trigger: 'change'
         }],
         currentState: [{
@@ -246,6 +254,9 @@ export default {
     //  }
   },
   methods: {
+    changeVisible(flag){
+      this.dialogTableVisible = flag;
+    },
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
