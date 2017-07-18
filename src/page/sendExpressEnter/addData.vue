@@ -97,7 +97,6 @@
       :visible="dialogTableVisible"
       @listenToCoverArea ="changeVisible"
       :gridData="gridData"
-      @listenToCoverArea ="changeVisible"
       ></cover-area>
 </section>
 </template>
@@ -143,8 +142,8 @@ export default {
         photoName: '',
         number: '',
         link: '',
-        date1: '',
-        currentState: false,
+        content: '',
+        currentState: false
       },
       rules: {
         photoName: [{
