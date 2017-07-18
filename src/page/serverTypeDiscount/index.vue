@@ -9,8 +9,8 @@
               <el-tab-pane label="待审核" name="third">待审核</el-tab-pane>              
           </el-tabs>
        </el-col>
-       <el-col style="position: absolute;top:-13px;right:0;width:50%;"> 
-          <el-form>
+       <el-col :span="16" style="position: absolute;top:-13px;right:0;"> 
+          <el-form style="width:80%;float:right;">
             <el-form-item label-position="right" label-width="160px" label="快递公司">
               <el-select v-model="value" placeholder="请选择快递公司" style="width:100%;" @change="handleCommand">
                 <el-option
@@ -35,9 +35,7 @@
           <el-radio :label="12">草稿</el-radio>
         </el-radio-group>
       </el-col>
-      <!--<el-col :span="8" style="height:20px"></el-col>-->
       <el-col :span="2">
-        <!--<i class="el-icon-plus" style="position:absolute;top:10px;left:36%;color:#fff;z-index:2;"></i>-->
         <el-button type="primary" @click="dialogFormVisible = true" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
       </el-col>
     </el-row>
@@ -51,9 +49,6 @@
       class="mainTable"
       :default-sort="{prop: 'date', order: 'descending'}">
       <el-table-column prop="name" label="快递公司" sortable min-width="100">
-        <!--<template scope="scope">
-              <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
-          </template>-->
       </el-table-column>
       <el-table-column prop="name" min-width="100" label="服务类型">
       </el-table-column>
