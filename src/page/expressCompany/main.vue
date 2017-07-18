@@ -15,9 +15,7 @@
         <el-radio :label="12">草稿</el-radio>
       </el-radio-group>
     </el-col>
-    <!--<el-col :span="8" style="height:20px"></el-col>-->
     <el-col :span="2" style="position: relative;padding-left:32px;">
-      <!--<i class="el-icon-plus" style="position:absolute;top:10px;left:36%;color:#fff;z-index:2;"></i>-->
       <el-button type="primary" @click="setNewData"><i class="el-icon-plus"></i> 添加</el-button>
     </el-col>
   </el-row>
@@ -40,11 +38,6 @@
     </el-table-column>
     <el-table-column prop="name"  label="公司名称">
     </el-table-column>
-    <!--<el-table-column prop="name" label="角标">
-        <template scope="scope">
-            <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
-        </template>
-    </el-table-column>-->
     <el-table-column prop="content"  label="广告语">
     </el-table-column>
     <el-table-column prop="content"  label="标签">
@@ -57,34 +50,8 @@
     </el-table-column>
     <el-table-column prop="content"  label="是否最热">
     </el-table-column>
-    <!--<el-table-column prop="link" label="链接">
-      <template scope="scope">
-        <el-popover :content="scope.row.link" ref="popover4" width="300" trigger="click">
-        </el-popover>
-        <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
-      </template>
-    </el-table-column>-->
-    <!--<el-table-column prop="address" label="覆盖地区">
-      <template scope="scope">
-         <el-button @click="checkArea" type="text" size="small">查看</el-button>
-       </template>
-    </el-table-column>-->
     <el-table-column prop="createTime" label="创建时间" width="160">
     </el-table-column>
-    <!--<el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
-    </el-table-column>-->
-
-    <!--<el-table-column prop="activeTime" label="有效时段" width="220">
-      <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime1}}</p>
-          <p style="padding:0;margin:0;text-align:center">至</p>
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime2}}</p>-->
-         <!-- <el-tag
-          style="margin-right:10px;margin-bottom:5px;"
-           v-for="(item,index) in scope.row.city"
-           >{{item}}</el-tag> -->
-       <!--</template>
-    </el-table-column>-->
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
     <el-table-column prop="currentState" width="100" label="当前状态" :sortable="showSortable">
@@ -130,35 +97,6 @@
     </el-pagination>
   </div>
 
-  <!--  覆盖地区 查看对话框 -->
-  <cover-area
-       :visible="dialogTableVisible"
-       :gridData="gridData"
-       @listenToCoverArea ="changeVisible"
-      ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-       <el-tag
-        style="margin-right:10px;margin-bottom:5px;"
-         v-for="(item,index) in scope.row.city"
-         >{{item}}</el-tag>
-     </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
-
-  <!--  查看链接 对话框 -->
-  <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
-    <span>{{ linkText }}</span>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogLinkVisible = false">关 闭</el-button>
-    </div>
-  </el-dialog>
-
-
   <!-- 置为下架 通过申请 申请驳回 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
@@ -176,12 +114,12 @@
 <script>
 import store from 'src/vuex/store.js'
 import localEvent from 'src/vuex/function.js';
-import coverArea from "../chooseExpress/coverArea.vue";
+// import coverArea from "../chooseExpress/coverArea.vue";
 
 export default {
-  components: {
-    coverArea
-   },
+  // components: {
+  //   coverArea
+  //  },
   data() {
     return {
       // 排序是否显示
@@ -195,68 +133,27 @@ export default {
       loadingTakeOffFlag: false,
       tableFalg: true,
       showConfig: true,
-      gridData: [],
       radio2: 3,
       activeName2: 'first',
       showHeader: false,
-      dialogTableVisible: false,
-      dialogLinkVisible:false,
-      linkText:"",
-      link_content:"",
       value: '',
       pageSize: 5,
       listLoading: false,
       halfListLoading:false,
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      options2: [{
-        label: '江苏',
-        cities: []
-      }, {
-        label: '浙江',
-        cities: []
-      }],
-      props: {
-        value: 'label',
-        children: 'cities'
-      },
       currentPage4: 1,
       tableData: [],
-      formLabelWidth: '120px',
       selectedOptions: [],
       selectedOptions2: []
-      // editForm:{
-      //     operationsMapName:"",
-      //     link:"",
-      //     address:"",
-      //     activeTime:"",
-      //     currentState:"",
-      //     Forder:""
-      // }
     }
   },
   computed() {
     return {
-      // table2:function(){
-      //     return this.tableData[0]
-      // }
+
     }
   },
-  // watch: {
-  //     editForm: {
-  //       handler: function () {
-  //           store.commit('setEditForm',this.editForm);
-  //       },
-  //       deep:true
-  //     }
-  // },
   created() {
     console.log("$router: " + this.$route.path);
     let url = "/rest/list2";
-    if (this.$route.path == "/chooseExpress") {
-      url = "/rest/list2-2";
-    } else if (this.$route.path == "/expressOrder") {
-      url = "/rest/list2-3";
-    }
     var _this = this;
     _this.$http.get(url, (data) => {
       console.log("success");
@@ -266,16 +163,6 @@ export default {
       console.log("error");
       console.log(error);
     });
-
-    // var _this = this;
-    // _this.$http.get(url)
-    //   .then(function(rsp) {
-    //     _this.tableData = rsp.data.data
-    //   })
-    //   .catch(function(error) {
-    //     console.log(error);
-    //   })
-
     console.log(this.$route.matched);
   },
   watch: {
@@ -296,9 +183,6 @@ export default {
   },
   methods: {
     // 监听 子组件覆盖对话框 的回调函数
-    changeVisible(flag){
-      this.dialogTableVisible = flag;
-    },
     // 操作排序值改变
     handleSortChange(column) {
        if(column.prop === "createTime") {
@@ -383,48 +267,6 @@ export default {
       }, 300);
 
     },
-    // 查看覆盖地区
-    checkArea() {
-      var _this = this;
-      _this.listLoading = true;
-      _this.$http.get("/rest/list3", (rsp) => {
-        _this.gridData = rsp.data.data;
-        // console.log(_this.gridData);
-        _this.listLoading = false;
-        _this.dialogTableVisible = true
-      }, (error) => {
-        console.log(error);
-      })
-    },
-    //tooltip 查看链接
-     handleMouseEnter(row, column, cell, event){
-      this.link_content = row.link;
-    },
-    // 查看链接
-    checkLink(index,row) {
-      this.dialogLinkVisible = true
-      this.linkText = row.link
-    },
-    setNewData() {
-      this.$router.push('/expressCompany/addData')
-    },
-    handleClose() {
-      alert("asdfsd");
-    },
-    handleChange(value) {
-      console.log(value);
-    },
-    getAddPage(e) {
-      //  let router = new VueRouter();
-      console.log(e);
-      this.$router.push({
-        path: "table3",
-        query: {
-          plan: 'private'
-        }
-      });
-      this.addFlag = true;
-    },
     handleSizeChange(val) {
       this.pageSize = val;
       this.$message(`每页${val}`);
@@ -469,8 +311,6 @@ export default {
           this.table2 = temp;
         }
       }
-
-
       setTimeout(() => {
         _this.halfListLoading = false;
       }, 600);
@@ -482,6 +322,9 @@ export default {
         message: '即将跳转到查看界面',
         duration: 6000
       })
+    },
+    setNewData() {
+      this.$router.push('/expressCompany/addData')
     },
     handleEdit(row) {
       localEvent.set(row);
@@ -516,22 +359,5 @@ export default {
       .el-table th>.cell {
         padding: 0 7px;
       }
-
-      /*.el-table__body .el-table__row .cell {
-        max-height: 150px !important;
-        overflow-y: auto;
-      }*/
-
-      .link_button{
-        border:0;
-      }
-      .link_button:hover{
-        background-color: no;
-      }
 }
-
-/*.el-table__body .el-table__row .el-table_1_column_14 .cell {
-       max-height: 150px !important;
-       overflow-y:auto;
-   }*/
 </style>

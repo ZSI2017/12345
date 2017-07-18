@@ -6,10 +6,8 @@
       <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-
     <el-form-item label="运营图" prop="opMap">
       <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
-        <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
       <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
@@ -23,7 +21,6 @@
     </el-form-item>
     <el-form-item label="角标" prop="cornerMark">
       <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
-        <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
       <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
@@ -36,7 +33,7 @@
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
     <el-form-item label="描述">
-      <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输描述内容"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.content}} </div>
     </el-form-item>
     <el-form-item label="排序值">
@@ -44,18 +41,12 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
     </el-form-item>
     <el-form-item label="链接">
-      <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果跳转外部链接请以http://开头"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
     </el-form-item>
-    <!--<el-form-item label="有效时段">
-      <el-date-picker v-if="isFromAddData" v-model="value3" type="datetimerange" placeholder="选择时间范围">
-      </el-date-picker>
-      <div class="detail-content" v-if="!isFromAddData">2223-11-22T14:22:00.000--3335-11-03T01:33:00.000</div>
-    </el-form-item>-->
     <el-form-item label="覆盖地区">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
-      <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-if="isFromAddData" v-model="radio">
@@ -113,19 +104,6 @@
       :visible="dialogTableVisible"
       :gridData="gridData"
       ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <el-tag
-       style="margin-right:10px;margin-bottom:5px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
 </section>
 </template>
 <script type="text/javascript">
@@ -144,7 +122,6 @@ export default {
 
       loadingFlag: false,
       dialogVisible: false,
-      // dialogImageUrl:'https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png',
       fileList2: [{
         name: 'food.jpeg',
         url: "https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png"
@@ -220,12 +197,7 @@ export default {
     alert("beforeDestory")
   },
   watch: {
-    //  loadingFlag:{
-    //     handler:(val,old) => {
-    //          alert(val),
-    //          console.log(old);
-    //     }
-    //  }
+
   },
   computed: {
     GETEDITFORM() {
@@ -245,24 +217,9 @@ export default {
     // 点击返回 对应的事件处理
     handleBackClick() {
       this.$router.go(-1);
-      // if (this.isFromAddData) {
-      //   this.loadingFlag = true;
-      // } else {
-      //     this.$router.go(-1);
-      // }
     },
-    // 即将离开的对话框
-    // editSure() {
-    //   this.loadingFlag = false;
-    //   this.$router.app.$store.state.loadingFlag = true;
-    //   console.log(this);
-    //   this.$router.go(-1);
-    //   //  this.$router.push({ path:this.defaultActive});
-    //   //  this.$route.push({ path:this.defaultActive});
-    // },
     handlePreview() {},
     handleRemove() {},
-
     // 标签页选择
     handleTabClick(tab, event) {
       console.log("handTabClick");

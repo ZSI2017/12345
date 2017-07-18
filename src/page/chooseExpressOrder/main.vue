@@ -134,7 +134,6 @@ export default {
       loadingTakeOffFlag: false,
       tableFalg: true,
       showConfig: true,
-      gridData: [],
       radio2: 3,
       activeName2: 'first',
       showHeader: false,
@@ -143,33 +142,17 @@ export default {
       pageSize: 5,
       listLoading: false,
       halfListLoading:false,
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      options2: [{
-        label: '江苏',
-        cities: []
-      }, {
-        label: '浙江',
-        cities: []
-      }],
-      props: {
-        value: 'label',
-        children: 'cities'
-      },
       currentPage4: 1,
       tableData: [],
-      formLabelWidth: '120px',
       selectedOptions: [],
       selectedOptions2: []
     }
   },
   computed() {
     return {
-      // table2:function(){
-      //     return this.tableData[0]
-      // }
+
     }
   },
-
   created() {
     console.log("$router: " + this.$route.path);
     let url = "/rest/list2";
