@@ -48,12 +48,17 @@ import oneCitySendEditData from "./page/oneCitySend/editData.vue";
 
 //附近快递资源管理
 // import nearExpress from './page/nearExpress/nearExpress.vue'
-import NEaddData from './page/nearExpress/NEaddData.vue'
+// import NEaddData from './page/nearExpress/NEaddData.vue'
 import nearExpress from './page/nearExpress/index.vue'
+import nearExpressMain from "./page/nearExpress/main.vue"
+import nearExpressAddData from "./page/nearExpress/addData.vue";
+import nearExpressEditData from "./page/nearExpress/editData.vue";
 
 //公告管理
 import noticeManage from './page/noticeManage/index.vue'
-import addingValue from './page/noticeManage/addingValue.vue'
+import noticeManageMain from "./page/noticeManage/main.vue"
+import noticeManageAddData from "./page/noticeManage/addData.vue";
+import noticeManageEditData from "./page/noticeManage/editData.vue";
 
 //订单取消频次管理
 import orderCancle from './page/orderCancle/index.vue'
@@ -293,8 +298,14 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'/nearExpress',component:nearExpress,name:"附近快递资源管理"},
-      {path:'/NEaddData',name:'附近快递资源管理 / 添加数据',component:NEaddData}
+      {path:'/nearExpress',component:nearExpress,name:"附近快递资源管理",
+       children:[
+          {path:'',component:nearExpressMain},
+          {path:'addData',name:'添加数据',component:nearExpressAddData},
+          {path:'editData',name:'修改数据',component:nearExpressEditData},
+          {path:'detail',name:'查看详情',component:nearExpressEditData}
+       ]
+    }
    ]
  },
  //公告管理
@@ -303,9 +314,14 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-     {path:'/noticeManage',component:noticeManage,name:"公告管理"},
-    //  {path:'addingValue',name:'添加',component:addingValue}
-     {path:'/addingValue',name:'公告管理 / 添加数据',component:addingValue}
+     {path:'/noticeManage',component:noticeManage,name:"公告管理",
+     children:[
+        {path:'',component:noticeManageMain},
+        {path:'addData',name:'添加数据',component:noticeManageAddData},
+        {path:'editData',name:'修改数据',component:noticeManageEditData},
+        {path:'detail',name:'查看详情',component:noticeManageEditData}
+     ]
+    }
   ]
 
  },

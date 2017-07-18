@@ -1,58 +1,46 @@
 <template type="html">
-<section class="section editData-class">
+<section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="form" :model="form" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="名称">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
+  <el-alert
+       style="margin-left:100px;margin-bottom:30px;width:800px;"
+       title="检查表单数据"
+       type="error"
+       v-if="showAlert"
+       >
+  </el-alert>
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
+    <el-form-item label="名称" prop="photoName">
+      <el-input v-model.trim="ruleForm.Name" placeholder="请输入公告名称"> </el-input>
     </el-form-item>
-
-    <el-form-item label="运营图" prop="opMap">
-      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
-        <!--<i class="el-icon-plus"></i>-->
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-      </el-upload>
-      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
-      <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-      <el-popover ref="popover4" placement="right" trigger="click">
-        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
-      </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
-
+    <el-form-item label="公告内容" prop="content">
+       <el-input type="textarea" v-model.trim="ruleForm.content"></el-input>
     </el-form-item>
-    <el-form-item label="排序值">
-      <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
-    </el-form-item>
-    <el-form-item label="链接">
-      <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
-    </el-form-item>
-    <el-form-item label="有效时段">
-      <el-date-picker v-if="isFromAddData" v-model="value3" type="datetimerange" placeholder="选择时间范围">
+    <el-form-item label="有效时段" prop="date1">
+      <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
-      <div class="detail-content" v-if="!isFromAddData">2223-11-22T14:22:00.000--3335-11-03T01:33:00.000</div>
     </el-form-item>
-    <el-form-item label="覆盖地区">
-      <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+
+    <el-form-item label="覆盖地区" prop="formCoverArea">
+      <el-button size="mini" @click="dialogConfig">点击配置</el-button>
+      <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
-    <el-form-item label="当前状态">
-      <el-radio-group v-if="isFromAddData" v-model="radio">
-        <el-radio class="radio" :label="1">上架</el-radio>
-        <el-radio class="radio" :label="2">下架</el-radio>
+    <el-form-item label="当前状态" prop="currentState">
+      <el-radio-group v-model="ruleForm.currentState">
+        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
+    <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
 
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
+    <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
+      <el-tab-pane v-for="(item,index) in tabPaneData" :label="item" :key="index" :name="item" style="font-size:20px;">{{item}}
+      </el-tab-pane>
+    </el-tabs> -->
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
@@ -63,11 +51,12 @@
         <el-autocomplete class="inline-input" v-model="state1" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
       </el-col>
     </el-row>
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400" style="padding-top:0;">
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200">
         <template scope="scope">
             <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
             <el-checkbox
+
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
                >全选</el-checkbox>
@@ -97,42 +86,22 @@
       :gridData="gridData"
       @listenToCoverArea ="changeVisible"
       ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <el-tag
-       style="margin-right:10px;margin-bottom:5px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
+
 </section>
 </template>
 <script type="text/javascript">
-import localEvent from 'src/vuex/function.js';
-import coverArea from "./coverArea.vue";
+ import coverArea from "@/page/chooseExpress/coverArea.vue";
 export default {
   components:{
-    coverArea
+     coverArea
   },
   data() {
     return {
-      // 从详情页面
-      isDetail: false,
-      currentStateText: '',
+     // 展示警告信息
+      showAlert:false,
       // 即将离开的对话框
-
       loadingFlag: false,
-      dialogVisible: false,
-      // dialogImageUrl:'https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png',
-      fileList2: [{
-        name: 'food.jpeg',
-        url: "https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png"
-      }],
+
       // 添加搜索框
       state1: "",
       provinces: [],
@@ -157,45 +126,69 @@ export default {
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy: [],
-      form: {
-        name: '',
-        region: '',
+      // 对输入表单进行验证
+      ruleForm: {
+        photoName: '',
+        number: '',
+        link: '',
         date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
-        Forder: ''
+        currentState: false,
+      },
+      rules: {
+        photoName: [{
+          type: "string",
+          required: true,
+          message: '请输入名称',
+          trigger: 'blur'
+        }, ],
+        number: [{
+          type: 'number',
+          required: true,
+          message: '请输入排序值',
+          trigger: 'blur'
+        }],
+        link: [{
+          required: true,
+          message: "请输入链接",
+          trigger: 'blur'
+        }],
+        date1: [{
+          type: 'date',
+          required: true,
+          message: '请选择日期',
+          trigger: 'change'
+        }],
+        currentState: [{
+          required: true,
+          message: '请选择状态',
+          trigger: 'change'
+        }],
+        opMap: [{
+          required: true,
+          message: '请上传图片'
+        }],
+        cornerMark: [{
+          required: false
+        }],
+        content:[{
+          required: true,
+          message: '请输入公告内容'
+        }],
+        formCoverArea: [{
+          required: true,
+          message: '请选择覆盖地区'
+        }]
       }
     }
   },
-  mounted() {
-    var localData = localEvent.get("editData");
-    console.log(localData);
-    console.log(localData.activeTime1);
-    this.form.name = localData.operationsMapName;
-    this.form.Forder = localData.Forder;
-    this.form.link = localData.link;
-    this.value3 = [new Date(2222, 22, 22, 22, 22), new Date(3333, 33, 33, 33, 33)];
-    this.currentStateText = localData.currentState;
-
-    if (localData.currentState = "上架") {
-      this.radio = 1;
-    } else {
-      this.radio = 2;
-    }
-  },
   created() {
-    if ( this.$route.path == "/chooseExpress/detail"
-          || this.$route.path == "/sendExpress/detail"
-          || this.$route.path == "/expressOrder/detail") {
-      this.isFromAddData = false;
-    } else {
-      this.isFromAddData = true;
-    }
+    console.log(this);
+
   },
   beforeMount() {
+
+  },
+  mounted() {
 
   },
   beforeDestory() {
@@ -209,32 +202,30 @@ export default {
     //     }
     //  }
   },
-  computed: {
-    GETEDITFORM() {
-      alert(this.$store.getters.GETEDITFORM)
-      return this.$store.getters.GETEDITFORM;
-    }
-  },
-  methods: {
+  methods:{
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
     //  点击提交
-    handleSubmit() {
-      // this.$router.app.$store.state.loadingFlag = true;
-      _this.$store.dispatch('changeLoadingChange', true);
-      // this.$router.app.$store.state.loadingChange = true;
-      console.log(this);
-      this.$router.go(-1);
+    handleSubmit(formName) {
+      var _this = this;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log('error submit');
+          _this.$store.dispatch('changeLoadingChange',true);
+          _this.$router.go(-1);
+          alert('sumbit');
+        } else {
+          console.log(_this);
+          _this.showAlert = true;
+          return false;
+        }
+      })
+
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
       this.$router.go(-1);
-      // if (this.isFromAddData) {
-      //   this.loadingFlag = true;
-      // } else {
-      //     this.$router.go(-1);
-      // }
     },
     // 即将离开的对话框
     // editSure() {
@@ -290,23 +281,22 @@ export default {
     // 覆盖地区选择
     dialogConfig() {
       var _this = this;
-      _this.$http.get("/rest/list3",
-        (rsp) => {
-          _this.gridData = rsp.data.data;
-          _this.gridDataCopy = _this.gridData;
-          _this.provinces = _this.gridData;
-          // 初始化 配置的多选框操作
-          var tableDataLength = _this.gridData.length;
-          for (var i = 0; i < tableDataLength; i++) {
-            _this.checkAll[i] = false;
-            // _this.isIndeterminate[i] = true;
-            _this.checkedCities[i] = [];
-          }
-          _this.dialogFormVisible = true;
-          // console.log(_this.gridData);
-        }, (error) => {
-          console.log(error);
-        })
+      _this.$http.get("/rest/list3", (rsp) => {
+        _this.gridData = rsp.data.data;
+        _this.gridDataCopy = _this.gridData;
+        _this.provinces = _this.gridData;
+        // 初始化 配置的多选框操作
+        var tableDataLength = _this.gridData.length;
+        for (var i = 0; i < tableDataLength; i++) {
+          _this.checkAll[i] = false;
+          // _this.isIndeterminate[i] = true;
+          _this.checkedCities[i] = [];
+        }
+        _this.dialogFormVisible = true;
+        // console.log(_this.gridData);
+      }, (error) => {
+        console.log(error);
+      })
     },
     handleCheckAll(event) {
       var allCount = this.gridData.length;
@@ -357,26 +347,19 @@ export default {
     },
     onSubmit() {
       console.log('submit!');
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
     }
   }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-.editData-class {
-    label {
-        font-weight: bold;
-    }
-    .dialog-class {
-        .el-dialog__body {
-            padding-top: 15px !important;
-        }
+label {
+    font-weight: bold;
+}
+.dialog-class {
+    .el-dialog__body{
+       padding-top:15px !important;
+
     }
 }
+
 </style>
