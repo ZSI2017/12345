@@ -66,6 +66,8 @@ const router = new VueRouter({
           ||(from.path == "/noticeManage/addData")
           ||(from.path == "/nearExpress/addData")
           ||(from.path == "/oneCitySend/addData")
+          ||(from.path == '/expressCompany/addData')
+          ||(from.path == "/chooseExpressOrder/addData")
         )&&store.getters.getLoadingChange === false) {
 
             // console.log("to login");

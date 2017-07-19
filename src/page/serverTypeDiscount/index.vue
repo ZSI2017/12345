@@ -25,7 +25,7 @@
           <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
               <el-tab-pane label="配置" name="first">配置</el-tab-pane>
               <el-tab-pane label="已上线" name="second">已上线</el-tab-pane>
-              <el-tab-pane label="待审核" name="third">待审核</el-tab-pane>              
+              <el-tab-pane label="待审核" name="third">待审核</el-tab-pane>
           </el-tabs>
        </el-col>
        <el-col :span="10" style="position: absolute;top:0;right:0;">
@@ -51,10 +51,10 @@
                   <el-radio :label="6">驳回</el-radio>
                   <el-radio :label="9">待审核</el-radio>
                   <el-radio :label="12">草稿</el-radio>
-              </el-radio-group>          
+              </el-radio-group>
         </el-col>
         <el-col :span="14" style="height:40px">
-          
+
         </el-col>
        <el-col :span="2">
           <el-button type="primary" @click="dialogFormVisible = true" size="large">+新增</el-button>
@@ -116,7 +116,7 @@
         <el-form-item label="描述" prop="describe">
           <el-input v-model="formLabelAlign.describe" placeholder="请输入描述"></el-input>
         </el-form-item>
-        <el-form-item label="排序值" 
+        <el-form-item label="排序值"
           prop="sorting"
           >
           <el-input v-model.number="formLabelAlign.sorting" auto-complete="off" placeholder="请输入1-999，排序值越大越优先">
@@ -141,13 +141,13 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>        
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
         <el-button @click="dialogFormVisible = false">取 消</el-button>
       </div>
     </el-dialog>
     <!--待审核详情弹框-->
     <el-dialog :title="dialogDetails" :visible.sync="dialogFormVisible_details">
-        
+
         <el-form class='newAddedForm' label-position="right" label-width="160px" :model="formLabelAlign" style="position: relative;">
           <div class="mark"></div>
           <el-form-item label="快递公司">
@@ -184,7 +184,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogFormVisible_details = false">关 闭</el-button>  
+          <el-button type="primary" @click="dialogFormVisible_details = false">关 闭</el-button>
         </div>
     </el-dialog>
 
@@ -238,7 +238,7 @@
                 { required: true, message: '排序值不能为空'},
                 { type: 'number', message: '排序值必须为数字值'}
             ]
-          }  
+          }
         };
       },
       methods: {
@@ -286,7 +286,7 @@
           this.formLabelAlign.company = row.name;
           this.formLabelAlign.serverType = row.name;
           this.formLabelAlign.typeCode = row.name;
-          this.formLabelAlign.describe = row.name;          
+          this.formLabelAlign.describe = row.name;
           this.formLabelAlign.sorting = row.Forder;
           if(row.currentState = "已上架"){
                 this.radio3 = 1;
@@ -301,7 +301,7 @@
           this.formLabelAlign.company = row.name;
           this.formLabelAlign.serverType = row.name;
           this.formLabelAlign.typeCode = row.name;
-          this.formLabelAlign.describe = row.name;          
+          this.formLabelAlign.describe = row.name;
           this.formLabelAlign.sorting = row.Forder;
           if(row.currentState = "已上架"){
                 this.radio3 = 1;
@@ -309,7 +309,7 @@
               this.radio3 = 2;
             }
         },
-      },  
+      },
       created() {
         var _this = this;
         _this.$http.get("/rest/list2",(rsp)=> {
@@ -321,7 +321,7 @@
         console.log(this.$route.matched);
       },
   }
-   
+
 
 </script>
 <style lang="scss">

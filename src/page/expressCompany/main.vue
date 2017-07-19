@@ -32,7 +32,7 @@
       @cell-mouse-enter="handleMouseEnter"
       style="width: 100%;margin-top:10px;"
       max-height="450"
-      empty-text="_"
+      empty-text="暂无数据"
       align="center"
       :default-sort="{prop: 'date', order: 'descending'}"
       >
@@ -363,7 +363,7 @@ export default {
         _this.showSortable = false;
         _this.tableData = [];
         // window.location.reload();
-        _this.showConfig = true;
+        _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.tableData = tableDataCopy;

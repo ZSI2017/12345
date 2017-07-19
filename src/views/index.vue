@@ -168,7 +168,10 @@ export default {
          ||this.$route.path == "/expressOrder/addData"
          ||this.$route.path == "/noticeManage/addData"
          ||this.$route.path == "/nearExpress/addData"
-         ||this.$route.path == "/oneCitySend/addData") {
+         ||this.$route.path == "/oneCitySend/addData"
+          ||this.$route.path == '/expressCompany/addData'
+         ||this.$route.path == '/chooseExpressOrder/addData'
+        ) {
           if(this.$store.getters.getLoadingFlag === false){
             // console.log(this.$route.matched);
             // console.log(this.$route.path);

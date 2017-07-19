@@ -223,7 +223,7 @@ let routes =  [
             {path:'editData',name:'修改数据',component:chooseExpressOrderEditData},
             {path:'detail',name:'查看详情',component:chooseExpressOrderEditData}
           ]
-  
+
       }
    ]
   //  path:'/chooseExpressOrder',component:chooseExpressOrder
@@ -254,35 +254,10 @@ let routes =  [
  // 价格管理
  {
    path:'/',
-   name:"价格管理",
+   name:"首页",
    component:index,
-   hasChild:true,
    children:[
-      {path:'/priceManage',component:totalpages,name:"运线快递费管理",   children:[
-           { path: ''      , component: priceManage  },
-           {
-             path: '/detail', component: detail,
-
-             children: [
-               {path:'',component: page1},
-               {
-                 path: '/page1', component: page1,
-                //  children: [
-                //   //  {path: '', component: step1},
-                //   //  {path: 'step1', component: step1},
-                //    {path: '/step2', component: step2},
-                //    {path: '/step3', component: step3},
-                //    {path: '/step4', component: step4}
-                //  ]
-               },
-               { path: '/page2', component: page2  },
-               { path: '/page3', component: page3  },
-               { path: '/page4', component: page4  },
-               { path: '/page5', component: page5  }
-             ]
-           },
-         ]
-       }
+      {path:'/priceManage',component:priceManage,name:"运线快递费管理"}
    ]
  },
  //同城直送管理

@@ -32,7 +32,7 @@
       @cell-mouse-enter="handleMouseEnter"
       style="width: 100%;margin-top:10px;"
       max-height="500"
-      empty-text="_"
+      empty-text="暂无数据"
       align="center"
       :default-sort="{prop: 'date', order: 'descending'}"
       >
