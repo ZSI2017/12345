@@ -35,6 +35,9 @@
       :default-sort="{prop: 'date', order: 'descending'}"
       >
     <el-table-column prop="operationsMapName"  label="LOGO">
+        <template scope="scope">
+            <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
+        </template>
     </el-table-column>
     <el-table-column prop="name"  label="公司名称">
     </el-table-column>
@@ -56,7 +59,7 @@
     </el-table-column>
     <el-table-column prop="currentState" width="100" label="当前状态" :sortable="showSortable">
     </el-table-column>
-    <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
+    <el-table-column v-if="showConfig" prop="reviewState" width="80" label="审核状态">
     </el-table-column>
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
       <template scope="scope">
