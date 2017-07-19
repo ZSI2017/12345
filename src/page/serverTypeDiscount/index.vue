@@ -164,13 +164,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-<<<<<<< HEAD
         <el-button type="primary" @click="handleConfirm">确 定</el-button>        
         <el-button @click="handleCancle">取 消</el-button>        
-=======
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
->>>>>>> 389dddc4bc75f29d12a8743075839e420410c8b0
       </div>
     </el-dialog>
     <!--待审核详情弹框-->
