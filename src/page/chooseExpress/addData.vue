@@ -22,7 +22,7 @@
       <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="link">
-      <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
     </el-form-item>
     <el-form-item label="有效时段" prop="date1">
       <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
@@ -158,12 +158,10 @@ export default {
           message: '请输入运营图名称',
           trigger: 'blur'
         }, ],
-        number: [{
-          type: 'number',
-          required: true,
-          message: '请输入排序值',
-          trigger: 'blur'
-        }],
+        number: [
+          { required: true, message: '排序值不能为空'},
+          { type: 'number', message: '排序值必须为数字值'}
+        ],
         link: [{
           required: true,
           message: "请输入链接",

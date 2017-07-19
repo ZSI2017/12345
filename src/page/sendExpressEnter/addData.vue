@@ -54,10 +54,6 @@
 
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
-    <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
-      <el-tab-pane v-for="(item,index) in tabPaneData" :label="item" :key="index" :name="item" style="font-size:20px;">{{item}}
-      </el-tab-pane>
-    </el-tabs> -->
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
@@ -99,36 +95,9 @@
   <!--  覆盖地区 查看对话框 -->
   <cover-area
       :visible="dialogTableVisible"
-      :gridData="gridData"
       @listenToCoverArea ="changeVisible"
+      :gridData="gridData"
       ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <el-tag
-       style="margin-right:10px;margin-bottom:5px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
-
-  <!-- 即将离开的 对话框  -->
-  <!-- <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
-    <div>
-      <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
-      <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
-    </div>
-
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingFlag = false">编 辑</el-button>
-    <el-button type="primary" @click="editSure">放 弃</el-button>
-  </span>
-  </el-dialog> -->
-
 </section>
 </template>
 <script type="text/javascript">
@@ -173,8 +142,8 @@ export default {
         photoName: '',
         number: '',
         link: '',
-        date1: '',
-        currentState: false,
+        content: '',
+        currentState: false
       },
       rules: {
         photoName: [{
@@ -235,12 +204,7 @@ export default {
     alert("beforeDestory")
   },
   watch: {
-    //  loadingFlag:{
-    //     handler:(val,old) => {
-    //          alert(val),
-    //          console.log(old);
-    //     }
-    //  }
+
   },
   methods: {
     changeVisible(flag){
@@ -267,15 +231,6 @@ export default {
     handleBackClick() {
       this.$router.go(-1);
     },
-    // 即将离开的对话框
-    // editSure() {
-    //   this.loadingFlag = false;
-    //   this.$router.app.$store.state.loadingFlag = true;
-    //   console.log(this);
-    //   this.$router.go(-1);
-    //   //  this.$router.push({ path:this.defaultActive});
-    //   //  this.$route.push({ path:this.defaultActive});
-    // },
     handlePreview() {},
     handleRemove() {},
 

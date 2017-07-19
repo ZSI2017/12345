@@ -10,7 +10,6 @@
   </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="公司名称" prop="photoName">
-      <!--<el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称"> </el-input>-->
         <el-select label="复选框 A" v-model="express" placeholder="请选择快递公司" style="width:100%;">
             <el-option
               v-for="item in options"
@@ -60,13 +59,6 @@
     <el-form-item label="排序值" prop="number">
       <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <!--<el-form-item label="链接" prop="link">
-      <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
-    </el-form-item>-->
-    <!--<el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
-      </el-date-picker>
-    </el-form-item>-->
     <el-form-item label="是否最热" prop="currentHot">
       <el-radio-group v-model="ruleForm.currentHot">
         <el-radio class="radio" v-model="hotRadio" label="1">上架</el-radio>
@@ -104,21 +96,6 @@ export default {
       showAlert:false,
       // 即将离开的对话框
       loadingFlag: false,
-      addTag:true,
-      // 添加搜索框
-      state1: "",
-      provinces: [],
-      //标签页
-      activeName: 'C',
-      tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
-      // 覆盖地区选择
-      check: false,
-      checkAll: [],
-      checkedCities: [],
-      isIndeterminate: [],
-      // cities: cityOptions,
-      // value3 代表时间段选择的
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
       hotRadio: 1,
       newRadio: 1,
@@ -147,11 +124,6 @@ export default {
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
-      // 查看配置地区中的表格数据 和 是否显示的标志
-      showHeader: false,
-      dialogTableVisible: false,
-      gridData: [],
-      gridDataCopy: [],
       // 对输入表单进行验证
       ruleForm: {
         photoName: '',

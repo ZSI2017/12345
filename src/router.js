@@ -141,23 +141,23 @@ let routes =  [
      { path:'/sendExpress',component:operationPosition,name:"寄快递首页",
        children:[
           {path:'',component:operationPositionMain},
-          {path:'addData',name:'添加数据',component:addData},
-          {path:'editData',name:'修改数据',component:editData},
+          {path:'addData',name:'添加',component:addData},
+          {path:'editData',name:'修改',component:editData},
           {path:'detail',name:'查看详情',component:editData}
        ]},
       {path:'/chooseExpress',component:operationPosition,name:"选择快递页",
       children:[
           {path:'',component:operationPositionMain},
-          {path:'addData',name:'添加数据',component:addData},
-          {path:'editData',name:'修改数据',component:editData},
+          {path:'addData',name:'添加',component:addData},
+          {path:'editData',name:'修改',component:editData},
           {path:'detail',name:'查看详情',component:editData}
       ]
     },
       {path:'/expressOrder',component:operationPosition,name:"选快递下单页",
       children:[
          {path:'',component:operationPositionMain},
-         {path:'addData',name:'添加数据',component:addData},
-         {path:'editData',name:'修改数据',component:editData},
+         {path:'addData',name:'添加',component:addData},
+         {path:'editData',name:'修改',component:editData},
           {path:'detail',name:'查看详情',component:editData}
       ]
     }
@@ -172,8 +172,8 @@ let routes =  [
       {path:'/sendExpressEnter',component:sendExpressEnter,name:"寄快递首页管理",
           children:[
             {path:'',component:sendExpressEnterMain},
-            {path:'addData',name:'添加数据',component:sendExpressEnterAddData},
-            {path:'editData',name:'修改数据',component:sendExpressEnterEditData},
+            {path:'addData',name:'添加',component:sendExpressEnterAddData},
+            {path:'editData',name:'修改',component:sendExpressEnterEditData},
             {path:'detail',name:'查看详情',component:sendExpressEnterEditData}
           ]
       }
@@ -201,8 +201,8 @@ let routes =  [
       {path:'/expressCompany',component:expressCompany,name:"快递公司管理",
         children:[
             {path:'',component:expressCompanyMain},
-            {path:'addData',name:'添加数据',component:expressCompanyAddData},
-            {path:'editData',name:'修改数据',component:expressCompanyEditData},
+            {path:'addData',name:'添加',component:expressCompanyAddData},
+            {path:'editData',name:'修改',component:expressCompanyEditData},
             {path:'detail',name:'查看详情',component:expressCompanyEditData}
           ]
       }
@@ -219,8 +219,8 @@ let routes =  [
       {path:'/chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理",
           children:[
             {path:'',component:chooseExpressOrderMain},
-            {path:'addData',name:'添加数据',component:chooseExpressOrderAddData},
-            {path:'editData',name:'修改数据',component:chooseExpressOrderEditData},
+            {path:'addData',name:'添加',component:chooseExpressOrderAddData},
+            {path:'editData',name:'修改',component:chooseExpressOrderEditData},
             {path:'detail',name:'查看详情',component:chooseExpressOrderEditData}
           ]
 
@@ -269,8 +269,8 @@ let routes =  [
       {path:'/oneCitySend',component:oneCitySend,name:"同城直送管理",
       children:[
         {path:'',component:oneCitySendMain},
-        {path:'addData',name:'添加数据',component:oneCitySendAddData},
-        {path:'editData',name:'修改数据',component:oneCitySendEditData},
+        {path:'addData',name:'添加',component:oneCitySendAddData},
+        {path:'editData',name:'修改',component:oneCitySendEditData},
         {path:'detail',name:'查看详情',component:oneCitySendEditData}
       ]
     }
@@ -287,8 +287,8 @@ let routes =  [
       {path:'/nearExpress',component:nearExpress,name:"附近快递资源管理",
        children:[
           {path:'',component:nearExpressMain},
-          {path:'addData',name:'添加数据',component:nearExpressAddData},
-          {path:'editData',name:'修改数据',component:nearExpressEditData},
+          {path:'addData',name:'添加',component:nearExpressAddData},
+          {path:'editData',name:'修改',component:nearExpressEditData},
           {path:'detail',name:'查看详情',component:nearExpressEditData}
        ]
     }
@@ -303,8 +303,8 @@ let routes =  [
      {path:'/noticeManage',component:noticeManage,name:"公告管理",
      children:[
         {path:'',component:noticeManageMain},
-        {path:'addData',name:'添加数据',component:noticeManageAddData},
-        {path:'editData',name:'修改数据',component:noticeManageEditData},
+        {path:'addData',name:'添加',component:noticeManageAddData},
+        {path:'editData',name:'修改',component:noticeManageEditData},
         {path:'detail',name:'查看详情',component:noticeManageEditData}
      ]
     }
