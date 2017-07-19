@@ -121,9 +121,9 @@
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
       <el-form class='newAddedForm' :rules="rules" ref="formLabelAdding" label-position="right" label-width="160px" :model="formLabelAdding">
         <el-form-item label="快递公司" required>
-          <el-select v-model="value" placeholder="请选择快递公司" style="width:100%;">
+          <el-select v-model="valueAdd" placeholder="请选择快递公司" style="width:100%;">
             <el-option
-              v-for="item in options"
+              v-for="item in items"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -164,8 +164,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>        
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleConfirm">确 定</el-button>        
+        <el-button @click="handleCancle">取 消</el-button>        
       </div>
     </el-dialog>
     <!--待审核详情弹框-->
@@ -252,8 +252,18 @@
             value: '选项3',
             label: '蚵仔煎'
           }],
+           items: [{
+            value: '选项1',
+            label: '黄金糕'
+          }, {
+            value: '选项2',
+            label: '双皮奶'
+          }, {
+            value: '选项3',
+            label: '蚵仔煎'
+          }],
           value: '',
-          label:'',
+          valueAdd:'',
           formLabelAdding:{
             company:'',
             serverType:'',
@@ -290,7 +300,17 @@
         };
       },
       methods: {
-               //快递公司下拉选择
+        //添加内容取消事件
+        handleCancle(){
+          this.dialogFormVisible = false;
+          this.$refs['formLabelAdding'].resetFields();
+        },
+        //添加按钮确定事件
+        handleConfirm(){
+          this.dialogFormVisible = false;
+          this.$refs['formLabelAdding'].resetFields();
+        },
+        //快递公司下拉选择
         handleCommand(index) {
           console.log(index)
           this.$message('click on item ' + this.options[index].label);

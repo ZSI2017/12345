@@ -3,55 +3,19 @@
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form ref="form" :model="form" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
+      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入公告名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-
-    <el-form-item label="运营图" prop="opMap">
-      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
-        <!--<i class="el-icon-plus"></i>-->
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-      </el-upload>
-      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
-      <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-      <el-popover ref="popover4" placement="right" trigger="click">
-        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
-      </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
-    </el-form-item>
-    <el-form-item label="角标" prop="cornerMark">
-      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
-        <!--<i class="el-icon-plus"></i>-->
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-      </el-upload>
-      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
-      <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-      <el-popover ref="popover4" placement="right" trigger="click">
-        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
-      </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
-    </el-form-item>
-    <el-form-item label="描述">
-      <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    <el-form-item label="公告内容">
+      <!--<el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入公告内容"> </el-input>-->
+      <el-input type="textarea" v-if="isFromAddData" v-model="form.content" placeholder="请输入公告内容"></el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.content}} </div>
     </el-form-item>
-    <el-form-item label="排序值">
-      <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
-    </el-form-item>
-    <el-form-item label="链接">
-      <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
-    </el-form-item>
-    <!--<el-form-item label="有效时段">
+    <el-form-item label="有效时段">
       <el-date-picker v-if="isFromAddData" v-model="value3" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
       <div class="detail-content" v-if="!isFromAddData">2223-11-22T14:22:00.000--3335-11-03T01:33:00.000</div>
-    </el-form-item>-->
+    </el-form-item>
     <el-form-item label="覆盖地区">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
@@ -206,9 +170,9 @@ export default {
     }
   },
   created() {
-    if ( this.$route.path == "/sendExpressEnter/detail"
-          || this.$route.path == "/sendExpressEnter/detail"
-          || this.$route.path == "/sendExpressEnter/detail") {
+    if ( this.$route.path == "/noticeManage/detail"
+          || this.$route.path == "/noticeManage/detail"
+          || this.$route.path == "/noticeManage/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;

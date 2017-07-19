@@ -15,10 +15,8 @@
         <el-radio :label="12">草稿</el-radio>
       </el-radio-group>
     </el-col>
-    <!--<el-col :span="8" style="height:20px"></el-col>-->
     <el-col :span="2" style="position: relative;padding-left:32px;">
-      <!--<i class="el-icon-plus" style="position:absolute;top:10px;left:36%;color:#fff;z-index:2;"></i>-->
-      <el-button type="primary" @click="setNewData"><i class="el-icon-plus"></i> 添加</el-button>
+      <el-button type="primary" @click="setNewData" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
     </el-col>
   </el-row>
 
@@ -38,14 +36,14 @@
       >
     <el-table-column prop="operationsMapName"  label="公告名称">
     </el-table-column>
-    <el-table-column prop="operationsMapName"  label="内容">
+    <el-table-column prop="content" label="内容">
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">
       <template scope="scope">
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" width="160">
+    <el-table-column prop="createTime" label="创建时间">
     </el-table-column>
     <el-table-column prop="activeTime" label="有效时段" width="220">
       <template scope="scope">
@@ -54,15 +52,45 @@
           <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime2}}</p>
        </template>
     </el-table-column>
-
-
+    <el-table-column prop="currentState" label="状态" :sortable="showSortable">
+    </el-table-column>
+    <el-table-column v-if="showConfig" prop="reviewState" width="80" label="审核状态">
+    </el-table-column>
     <!-- <el-table-column prop="content"  label="标价">
     </el-table-column> -->
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
+      <template scope="scope">
+        <div>
+          <div v-if="showOperation">
+            <el-button  @click="loadingTakeOffFlag = true" type="text" size="small">置为下架</el-button>
+            <br/>
+          </div>
+          <div v-if="showOperation">
+            <el-button  @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
+            <br/>
+          </div>
+          <div v-if="showOperation2">
+           <el-button @click="OperationApproved" type="text" size="small">通过申请</el-button>
+           <br/>
+          </div>
+          <div v-if="showOperation2">
+            <el-button @click="OperationApprovedFail" type="text" size="small">申请驳回</el-button>
+            <br/>
+          </div>
+          <div v-if="showOperation2">
+           <el-button @click="effectiveDetails(scope.row)" type="text" size="small">已生效详情</el-button>
+           <br/>
+          </div>
+          <div v-if="showOperation2">
+            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">待审详情</el-button>
+            <br/>
+          </div>
+        </div>
+      </template>
     </el-table-column>
   </el-table>
 
-  <div class="block pagination" style="margin-top:30px;float:right;">
+  <div class="block pagination">
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="20">
     </el-pagination>
   </div>
@@ -73,28 +101,6 @@
        :gridData="gridData"
        @listenToCoverArea ="changeVisible"
       ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-       <el-tag
-        style="margin-right:10px;margin-bottom:5px;"
-         v-for="(item,index) in scope.row.city"
-         >{{item}}</el-tag>
-     </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
-
-  <!--  查看链接 对话框 -->
-  <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
-    <span>{{ linkText }}</span>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogLinkVisible = false">关 闭</el-button>
-    </div>
-  </el-dialog>
-
 
   <!-- 置为下架 通过申请 申请驳回 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
@@ -137,9 +143,6 @@ export default {
       activeName2: 'first',
       showHeader: false,
       dialogTableVisible: false,
-      dialogLinkVisible:false,
-      linkText:"",
-      link_content:"",
       value: '',
       pageSize: 5,
       listLoading: false,
@@ -161,39 +164,16 @@ export default {
       formLabelWidth: '120px',
       selectedOptions: [],
       selectedOptions2: []
-      // editForm:{
-      //     operationsMapName:"",
-      //     link:"",
-      //     address:"",
-      //     activeTime:"",
-      //     currentState:"",
-      //     Forder:""
-      // }
     }
   },
   computed() {
     return {
-      // table2:function(){
-      //     return this.tableData[0]
-      // }
+
     }
   },
-  // watch: {
-  //     editForm: {
-  //       handler: function () {
-  //           store.commit('setEditForm',this.editForm);
-  //       },
-  //       deep:true
-  //     }
-  // },
   created() {
     console.log("$router: " + this.$route.path);
     let url = "/rest/list2";
-    // if (this.$route.path == "/chooseExpress") {
-    //   url = "/rest/list2-2";
-    // } else if (this.$route.path == "/expressOrder") {
-    //   url = "/rest/list2-3";
-    // }
     var _this = this;
     _this.$http.get(url, (data) => {
       console.log("success");
@@ -203,16 +183,6 @@ export default {
       console.log("error");
       console.log(error);
     });
-
-    // var _this = this;
-    // _this.$http.get(url)
-    //   .then(function(rsp) {
-    //     _this.tableData = rsp.data.data
-    //   })
-    //   .catch(function(error) {
-    //     console.log(error);
-    //   })
-
     console.log(this.$route.matched);
   },
   watch: {
@@ -333,15 +303,6 @@ export default {
         console.log(error);
       })
     },
-    //tooltip 查看链接
-     handleMouseEnter(row, column, cell, event){
-      this.link_content = row.link;
-    },
-    // 查看链接
-    checkLink(index,row) {
-      this.dialogLinkVisible = true
-      this.linkText = row.link
-    },
     setNewData() {
       this.$router.push('/noticeManage/addData')
     },
@@ -352,7 +313,6 @@ export default {
       console.log(value);
     },
     getAddPage(e) {
-      //  let router = new VueRouter();
       console.log(e);
       this.$router.push({
         path: "table3",
@@ -413,13 +373,6 @@ export default {
       }, 600);
       console.log(`当前页: ${val}`);
     },
-    handleClick() {
-      this.$notify({
-        title: '点击了查看',
-        message: '即将跳转到查看界面',
-        duration: 6000
-      })
-    },
     handleEdit(row) {
       localEvent.set(row);
       this.$router.push('/noticeManage/editData')
@@ -454,21 +407,5 @@ export default {
         padding: 0 7px;
       }
 
-      /*.el-table__body .el-table__row .cell {
-        max-height: 150px !important;
-        overflow-y: auto;
-      }*/
-
-      .link_button{
-        border:0;
-      }
-      .link_button:hover{
-        background-color: no;
-      }
 }
-
-/*.el-table__body .el-table__row .el-table_1_column_14 .cell {
-       max-height: 150px !important;
-       overflow-y:auto;
-   }*/
 </style>
