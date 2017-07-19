@@ -16,7 +16,7 @@
       </el-radio-group>
     </el-col>
     <el-col :span="2">
-      <el-button type="primary" @click="dialogFormVisible = true" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
+      <el-button type="primary" @click="setNewData" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
     </el-col>
   </el-row>
 

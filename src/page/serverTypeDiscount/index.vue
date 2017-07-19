@@ -174,19 +174,19 @@
         <el-form class='newAddedForm' label-position="right" label-width="160px" :model="formLabelAlign" style="position: relative;">
           <div class="mark" v-if="showMarkVisible"></div>
           <el-form-item label="快递公司">
-              <el-input :value="formLabelAlign.company"></el-input>
+              <el-input :class="grayBg" :value="formLabelAlign.company"></el-input>
           </el-form-item>
           <el-form-item label="服务类型名称">
-            <el-input :value="formLabelAlign.serverType"></el-input>
+            <el-input :class="grayBg" :value="formLabelAlign.serverType"></el-input>
           </el-form-item>
           <el-form-item label="类型码（接口识别）">
-            <el-input :value="formLabelAlign.typeCode"></el-input>
+            <el-input :class="grayBg" :value="formLabelAlign.typeCode"></el-input>
           </el-form-item>
           <el-form-item label="描述">
-            <el-input :value="formLabelAlign.describe"></el-input>
+            <el-input :class="grayBg" :value="formLabelAlign.describe"></el-input>
           </el-form-item>
           <el-form-item label="排序值">
-            <el-input :value="formLabelAlign.sorting"></el-input>
+            <el-input :class="grayBg" :value="formLabelAlign.sorting"></el-input>
           </el-form-item>
           <!--<el-form-item label="结算折扣">
             <el-row>
@@ -200,7 +200,7 @@
             </el-row>
           </el-form-item>-->
           <el-form-item label="当前状态">
-              <el-radio-group v-model="radio3">
+              <el-radio-group :class="grayBg" v-model="radio3">
                 <el-radio :label="1">上架</el-radio>
                 <el-radio :label="2">下架</el-radio>
               </el-radio-group>
@@ -238,6 +238,10 @@
           //操作栏显示
           showOperation: true,
           showOperation2: false,
+          //详情页背景控制
+          grayBg:{
+            'grayBg':false
+          },
           options: [{
             value: '选项1',
             label: '黄金糕'
@@ -369,7 +373,8 @@
         handleEdit(row){
           // var _this = this;
           this.showMarkVisible = false;
-          this.dialogDetails = "待审核详情";
+          this.grayBg.grayBg = false;
+          this.dialogDetails = "修改";
           this.dialogFormVisible_details = true;
           this.formLabelAlign.company = row.name;
           this.formLabelAlign.serverType = row.name;
@@ -385,6 +390,7 @@
         handleCheckDetails(row){
           // var _this = this;
           this.showMarkVisible = true;
+          this.grayBg.grayBg = true;
           this.dialogDetails = "待审核详情";
           this.dialogFormVisible_details = true;
           this.formLabelAlign.company = row.name;
@@ -400,7 +406,8 @@
         },
         handleEffectDetails(row){
           // var _this = this;
-          this.showMarkVisible = true;          
+          this.showMarkVisible = true;  
+          this.grayBg.grayBg = true;        
           this.dialogDetails = "已生效详情";
           this.dialogFormVisible_details = true;
           this.formLabelAlign.company = row.name;
@@ -460,6 +467,9 @@
    opacity: 0.2;
    background: #f1f1f1;
    z-index: 999;
+ }
+ .grayBg input{
+   background-color:#c1c1c1;
  }
 
 .el-tabs .el-tabs__content {
