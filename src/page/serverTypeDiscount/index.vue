@@ -487,7 +487,6 @@
         line-height:30px;
         text-align: center;
       }
-
       .el-table .cell,
       .el-table th>.cell {
         padding: 0 7px;
