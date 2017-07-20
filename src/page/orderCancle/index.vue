@@ -1,5 +1,5 @@
 <template>
-  <div class="section main" style="height:500px;">
+  <div class="section main1" style="height:500px;">
     <el-row>
       <el-col :span="24" class="status-font">当前状态：
         当日用户取消 ≥          
@@ -11,7 +11,7 @@
         <el-button type="primary" @click="handleShift" size="large">修改</el-button>
       </el-col> 
       <el-col :span="4" v-if="!showNumber">
-        <el-button type="primary" @click="handleCtrl" size="large">保存</el-button>
+        <el-button type="primary" @click="handleCtrl" size="large">保存</el-button> 
         <el-button @click="handleCancle" size="large">取消</el-button>        
       </el-col>     
     </el-row>
@@ -53,7 +53,7 @@ import localEvent from 'src/vuex/function.js';
 </script>
 
 <style lang="scss">
-.main{
+.main1{
     .status-font{
       margin: 10px 0;
     }
