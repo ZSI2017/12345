@@ -68,6 +68,15 @@ const router = new VueRouter({
           ||(from.path == "/oneCitySend/addData")
           ||(from.path == '/expressCompany/addData')
           ||(from.path == "/chooseExpressOrder/addData")
+          ||(from.path == "/sendExpress/editData")
+          ||(from.path == "/chooseExpress/editData")
+          ||(from.path == "/expressOrder/editData")
+          ||(from.path == "/sendExpressEnter/editData")
+          ||(from.path == "/noticeManage/editData")
+          ||(from.path == "/nearExpress/editData")
+          ||(from.path == "/oneCitySend/editData")
+          ||(from.path == '/expressCompany/editData')
+          ||(from.path == "/chooseExpressOrder/editData")
         )&&store.getters.getLoadingChange === false) {
 
             // console.log("to login");

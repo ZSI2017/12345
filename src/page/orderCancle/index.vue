@@ -24,13 +24,17 @@ import localEvent from 'src/vuex/function.js';
   export default {
     data() {
       return {
-        num1: 5,
+        num1: "",
         showNumber:true
       }
     },
     mounted() {
     var localData = localEvent.get("blacklistTimes");
-    this.num1 = localData;
+    if(localData == ""){
+        this.num1 = 5;
+    }else{
+        this.num1 = localData;        
+    }
   },
     methods: {
       handleChange(value) {
