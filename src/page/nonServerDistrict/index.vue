@@ -25,17 +25,19 @@
     </el-table-column>
   </el-table>
 
-    <check-server
+    <!-- <check-server
       :visible="dialogCheckVisible"
       :gridData="gridData"
       @listenToCheck ="changeCheckVisible"
-    ></check-server>
+    ></check-server> -->
 
     <config-server
         :visible="dialogConfigVisible"
-        :gridData="gridData"
+        :sourceData="result"
+        :onlyRead ='isCheckServer'
         @listenToConfig ="changeConfigVisible"
      > </config-server>
+
 </div>
 </template>
 <script>
@@ -50,17 +52,39 @@ import configServer from "@/page/nonServerDistrict/configServer"
     data() {
       return {
         tableData:[],
+        result:{},
         input: '',
         dialogCheckVisible:false,
-        dialogConfigVisible:false
+        dialogConfigVisible:false,
+        isCheckServer:false,
       }
     },
     methods:{
         handleClick(){
-            this.dialogCheckVisible= true;
+          this.isCheckServer = true;
+          // this.dialogCheckVisible= true;
+          let url = "/rest/list7";
+          var _this = this;
+          _this.$http.get(url, (data) => {
+            _this.result = data.data.data
+            _this.dialogConfigVisible = true;
+          }, (error) => {
+            console.log("error");
+            console.log(error);
+          });
         },
         handleEdit() {
-           this.dialogConfigVisible = true;
+          this.isCheckServer = false;
+          let url = "/rest/list7";
+          var _this = this;
+          _this.$http.get(url, (data) => {
+            _this.result = data.data.data
+            _this.dialogConfigVisible = true;
+          }, (error) => {
+            console.log("error");
+            console.log(error);
+          });
+
         },
         changeCheckVisible(flag) {
                 this.dialogCheckVisible= flag;
