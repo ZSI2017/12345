@@ -469,11 +469,11 @@ export default {
       })
     },
     handleEdit(row) {
-      localEvent.set(row);
+      localEvent.set("localOnecitySend",row);
       this.$router.push('/oneCitySend/editData')
     },
     effectiveDetails(row) {
-      localEvent.set(row);
+      localEvent.set("localOnecitySend",row);
       this.$router.push('/oneCitySend/detail')
     }
   }

@@ -90,7 +90,7 @@
     </el-table-column>
   </el-table>
 
-  <div class="block pagination">
+  <div class="block pagination" style="margin-top:30px;float:right;">
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="20">
     </el-pagination>
   </div>
@@ -374,11 +374,11 @@ export default {
       console.log(`当前页: ${val}`);
     },
     handleEdit(row) {
-      localEvent.set(row);
+      localEvent.set("localNoticeManage",row);
       this.$router.push('/noticeManage/editData')
     },
     effectiveDetails(row) {
-      localEvent.set(row);
+      localEvent.set("localNoticeManage",row);
       this.$router.push('/noticeManage/detail')
     }
   }

@@ -329,11 +329,11 @@ export default {
       })
     },
     handleEdit(row) {
-      localEvent.set(row);
+      localEvent.set("localChooseExpressOrder",row);
       this.$router.push('/chooseExpressOrder/editData')
     },
     effectiveDetails(row) {
-      localEvent.set(row);
+      localEvent.set("localChooseExpressOrder",row);
       this.$router.push('/chooseExpressOrder/detail')
     }
   }

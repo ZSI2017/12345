@@ -36,7 +36,7 @@
       >
     <el-table-column prop="operationsMapName"  label="LOGO">
         <template scope="scope">
-            <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
+             <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/SendAppLogo/73d989b5-1477-4135-8679-2965eaf74224.png">
         </template>
     </el-table-column>
     <el-table-column prop="name"  label="公司名称">
@@ -330,11 +330,11 @@ export default {
       this.$router.push('/expressCompany/addData')
     },
     handleEdit(row) {
-      localEvent.set(row);
-      this.$router.push('/expressCompany/editData')
+      localEvent.set("localExpressCompany",row);
+      this.$router.push('/expressCompany/editData');
     },
     effectiveDetails(row) {
-      localEvent.set(row);
+      localEvent.set("localExpressCompany",row);
       this.$router.push('/expressCompany/detail')
     }
   }

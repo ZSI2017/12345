@@ -102,6 +102,7 @@ export default {
       statusRadio: 1,
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
+      addTag:true,
       //快递公司下拉框选择
       options: [{
           value: '选项1',

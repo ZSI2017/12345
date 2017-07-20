@@ -120,7 +120,7 @@ export default {
     }
   },
   mounted() {
-    var localData = localEvent.get("editData");
+    var localData = localEvent.get("localChooseExpressOrder");
     console.log(localData);
     console.log(localData.activeTime1);
     this.form.name = localData.operationsMapName;
