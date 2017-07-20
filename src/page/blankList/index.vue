@@ -25,7 +25,7 @@
         max-height="450"
         empty-text="暂无数据"
     >
-        <el-table-column prop="operationsMapName"  label="姓名" align="center">
+        <el-table-column prop="operationsMapName" label="姓名" align="center">
         </el-table-column>
         <el-table-column prop="ordernumber" label="手机号" align="center">
         </el-table-column>
@@ -36,7 +36,7 @@
             <div>
                 <el-button @click="loadingTakeOffFlag = true" type="text" size="small">解除黑名单</el-button>
                 <el-button @click="handleEdit(scope.row)" type="text" size="small">查看相关订单</el-button>
-                <el-button type="text" size="small">查看完整信息</el-button>
+                <el-button type="text" plain @click="showAllIfo" size="small">查看完整信息</el-button>
             </div>
           </template>
         </el-table-column>
@@ -51,6 +51,13 @@
         <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
         <el-button type="primary" @click="loadingTakeOffFlag = false">确 定</el-button>
       </span>
+    </el-dialog>
+    <!--相关订单对话框-->
+    <el-dialog title="相关订单" :visible.sync="dialogTableVisible" @close="handleClose">
+      <el-table :data="gridData">
+        <el-table-column property="ordernumber" label="订单号"></el-table-column>
+        <el-table-column property="createTime" label="取消时间"></el-table-column>
+      </el-table>
     </el-dialog>
 
   </div>
@@ -68,6 +75,11 @@ import localEvent from 'src/vuex/function.js';
         tableData: [],
         loadingTakeOffFlag: false,
         halfListLoading:false,
+        // 相关订单对话框
+        dialogTableVisible: false,
+        gridData: [],
+        orderNumber:"",
+        cancleTime:""
       }
     },
      mounted() {
@@ -91,7 +103,24 @@ import localEvent from 'src/vuex/function.js';
     },
     methods: {
       handleEdit(row) {
-        console.log(row)
+        console.log(row);   
+        this.dialogTableVisible = true;  
+        this.gridData.push(row);    
+        console.log(this.gridData)  
+        console.log(this.tableData)  
+        // this.orderNumber = row.ordernumber;
+        // this.cancleTime = row.createTime;
+        
+      },
+      handleClose(){
+        this.gridData = [];
+      },
+      showAllIfo(){
+        this.$notify({
+          title: '查看完整信息',
+          message: '点击了查看完整信息',
+          type: 'success'
+        });
       }
     }
   }    
