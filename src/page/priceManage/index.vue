@@ -81,7 +81,7 @@
       v-loading.body.lock="halfListLoading"
       style="width: 100%;margin-top:10px"
       max-height="400"
-      empty-text="暂无数据 (╯︵╰)"
+      empty-text="暂无数据"
       align="center"
       :default-sort="{prop: 'date', order: 'descending'}"
       >
