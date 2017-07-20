@@ -65,6 +65,10 @@
     </el-table-column> -->
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
+    <el-table-column prop="currentState" width="100" label="状态" :sortable="showSortable">
+    </el-table-column>
+    <el-table-column v-if="showConfig" prop="reviewState" width="80" label="审核状态">
+    </el-table-column>
     <!--<el-table-column prop="createTime" label="创建时间" width="160">
     </el-table-column>-->
     <!--<el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
@@ -82,7 +86,7 @@
        <!--</template>
     </el-table-column>-->
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
-      <!-- <template scope="scope">
+       <template scope="scope">
         <div>
           <div v-if="showOperation">
             <el-button  @click="OperationTakeOff" type="text" size="small">置为下架</el-button>
@@ -111,7 +115,7 @@
 
         </div>
 
-        </template> -->
+        </template> 
     </el-table-column>
   </el-table>
 
@@ -474,11 +478,11 @@ export default {
       })
     },
     handleEdit(row) {
-      localEvent.set(row);
+      localEvent.set("localNearExpress",row);
       this.$router.push('/nearExpress/editData')
     },
     effectiveDetails(row) {
-      localEvent.set(row);
+      localEvent.set("localNearExpress",row);
       this.$router.push('/nearExpress/detail')
     }
   }
@@ -506,22 +510,6 @@ export default {
       .el-table th>.cell {
         padding: 0 7px;
       }
-
-      /*.el-table__body .el-table__row .cell {
-        max-height: 150px !important;
-        overflow-y: auto;
-      }*/
-
-      .link_button{
-        border:0;
-      }
-      .link_button:hover{
-        background-color: no;
-      }
 }
 
-/*.el-table__body .el-table__row .el-table_1_column_14 .cell {
-       max-height: 150px !important;
-       overflow-y:auto;
-   }*/
 </style>

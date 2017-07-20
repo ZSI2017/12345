@@ -426,14 +426,14 @@ export default {
       })
     },
     handleEdit(row) {
-      localEvent.set(row);
+      localEvent.set("localChooseExpress",row);
       var _this = this;
       this.$router.push({
         path: _this.$route.path + '/editData'
       });
     },
     effectiveDetails(row) {
-      localEvent.set(row);
+      localEvent.set("localChooseExpress",row);
 
       var _this = this;
       this.$router.push({

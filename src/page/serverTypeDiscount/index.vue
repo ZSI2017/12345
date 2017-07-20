@@ -304,6 +304,7 @@
         handleCancle(){
           this.dialogFormVisible = false;
           this.$refs['formLabelAdding'].resetFields();
+          this.valueAdd = '';
         },
         //添加按钮确定事件
         handleConfirm(){

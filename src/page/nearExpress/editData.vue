@@ -21,23 +21,36 @@
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
-    <el-form-item label="角标" prop="cornerMark">
-      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
-        <!--<i class="el-icon-plus"></i>-->
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-      </el-upload>
-      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
-      <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-      <el-popover ref="popover4" placement="right" trigger="click">
-        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
-      </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
-    </el-form-item>
-    <el-form-item label="描述">
-      <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    <el-form-item label="广告语">
+      <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.content}} </div>
+    </el-form-item>
+    <el-form-item label="标签">
+      <el-tag
+        :key="tag"
+        v-for="tag in dynamicTags"
+        :closable="true"
+        hit="true"
+        :close-transition="false"
+        @close="handleClose(tag)"
+        type="gray"
+        style="margin-right:10px;"
+      >
+      {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="handleInputConfirm"
+        @blur="handleInputConfirm"
+        style="width:100px;"
+      >
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
+      <div style="color:#888;">最多添加两个标签</div>
     </el-form-item>
     <el-form-item label="排序值">
       <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
@@ -169,7 +182,11 @@ export default {
       radio: 1,
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
-
+      //标签数据
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
+      addTag: true,
       // 查看配置地区中的表格数据 和 是否显示的标志
       showHeader: false,
       dialogTableVisible: false,
@@ -190,7 +207,7 @@ export default {
     }
   },
   mounted() {
-    var localData = localEvent.get("editData");
+    var localData = localEvent.get("localNearExpress");
     console.log(localData);
     console.log(localData.activeTime1);
     this.form.name = localData.operationsMapName;
@@ -207,9 +224,9 @@ export default {
     }
   },
   created() {
-    if ( this.$route.path == "/sendExpressEnter/detail"
-          || this.$route.path == "/sendExpressEnter/detail"
-          || this.$route.path == "/sendExpressEnter/detail") {
+    if ( this.$route.path == "/nearExpress/detail"
+          || this.$route.path == "/nearExpress/detail"
+          || this.$route.path == "/nearExpress/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
@@ -265,9 +282,6 @@ export default {
     //   //  this.$router.push({ path:this.defaultActive});
     //   //  this.$route.push({ path:this.defaultActive});
     // },
-    handlePreview() {},
-    handleRemove() {},
-
     // 标签页选择
     handleTabClick(tab, event) {
       console.log("handTabClick");
@@ -384,6 +398,33 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      if(this.dynamicTags.length >= 2){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }  
+    },
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+        if(this.dynamicTags.length >= 2){
+          this.addTag = false;
+        }else{
+          this.addTag = true;
+        }      
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     }
   }
 }

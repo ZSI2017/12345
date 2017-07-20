@@ -392,11 +392,11 @@ export default {
       })
     },
     handleEdit(row) {
-      localEvent.set(row);
+      localEvent.set("localSendExpressEnter",row);
       this.$router.push('/sendExpressEnter/editData')
     },
     effectiveDetails(row) {
-      localEvent.set(row);
+      localEvent.set("localSendExpressEnter",row);
       this.$router.push('/sendExpressEnter/detail')
     }
   }
