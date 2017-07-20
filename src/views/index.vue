@@ -187,11 +187,11 @@ export default {
         var _this = this;
 
         this.fullscreenLoading = true;
-        console.log(_this.fullscreenLoading);
+        // console.log(_this.fullscreenLoading);
         setTimeout(() => {
             _this.fullscreenLoading = false;
             console.log(_this.fullscreenLoading);
-        },3000);
+        },600);
       }
     },
     // handleLogout(){

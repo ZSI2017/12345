@@ -1,5 +1,5 @@
 <template>
-  <div class="section" style="overflow:hidden">
+  <div class="section"   v-loading.body.fullscreen.lock="fullscreenLoading"   style="overflow:hidden">
   <el-table
       class="mainTable"
       :data="tableData"
@@ -57,6 +57,7 @@ import configServer from "@/page/nonServerDistrict/configServer"
         dialogCheckVisible:false,
         dialogConfigVisible:false,
         isCheckServer:false,
+        fullscreenLoading:false,
       }
     },
     methods:{
@@ -96,10 +97,12 @@ import configServer from "@/page/nonServerDistrict/configServer"
     created() {
       let url = "/rest/list2";
       var _this = this;
+      // _this.fullscreenLoading = true;
       _this.$http.get(url, (data) => {
         console.log("success");
         console.log(data);
-        _this.tableData = data.data.data
+
+        setTimeout(()=> {  _this.tableData = data.data.data;},0);
       }, (error) => {
         console.log("error");
         console.log(error);
