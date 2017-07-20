@@ -78,7 +78,7 @@
             <el-checkbox-group
                   v-model="checkedCities[scope.$index]"
                   @change="handleCheckedCitiesChange(scope.$index)"
-                  >
+                >
                  <el-checkbox style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
             </el-checkbox-group>
 

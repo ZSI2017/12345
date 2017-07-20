@@ -14,18 +14,26 @@
    <el-col :span="8" >
      <li class="commonli-class li-title">城市</li>
      <ul  class="ul-block">
+       <el-collapse-transition>
+         <div v-if="showLi">
          <li
-             v-if="showLi"
              :class="[index==li1?activeClass:'', commonliClass]"
              @click="li1Click2($event,item,index)"
              v-for="(item,index) in list2"
              >{{item}}</li>
+           </div>
+         </el-collapse-transition>
+
        </ul>
      </el-col>
      <el-col :span="8">
        <li class="commonli-class li-title">未覆盖区县</li>
        <ul  class="ul-block">
-           <li class="commonli-class"  v-if="showLi2" v-for="(item,index) in list3">{{item}}</li>
+         <el-collapse-transition>
+           <div v-if="showLi2">
+             <li class="commonli-class"   v-for="(item,index) in list3">{{item}}</li>
+           </div>
+         </el-collapse-transition>
          </ul>
        </el-col>
      </el-row>
@@ -53,6 +61,17 @@
     props:{
        visible:Boolean,
     },
+    watch:{
+       sourceData:function(newData,oldData) {
+            console.log("sourceData");
+            // for(var i =0;i<newData.noProvinces.length;i++) {
+            //
+            // }
+            // this.lists1 =
+            console.log(newData);
+            console.log(oldData);
+       }
+    },
     methods:{
       li1Click(event,index) {
         this.li0 = index;
@@ -66,13 +85,9 @@
         this.showLi2 = false;
       },
       li1Click2(event,item,index) {
-          this.li1= index;
-           let templist3 = [];
-           for(let i =0;i<24;i++) {
-               templist3 .push(item+'list3');
-           };
-           this.list3 = templist3;
-           this.showLi2 = true;
+        this.li1= index;
+        this.list3 = item.noServiceDistricts;
+        this.showLi2 = true;
       },
       dialogClose() {
          this.$emit("listenToCheck",false)
