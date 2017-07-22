@@ -42,7 +42,7 @@ import Emitter from "@/mixins/emitter"
      },
       data(){
           return {
-           checked:[],
+           checked:[],  122222222222222222222
            defaultParent:{}
 
           }
