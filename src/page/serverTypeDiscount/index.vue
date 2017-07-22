@@ -157,10 +157,8 @@
           </el-row>
         </el-form-item>
         <el-form-item label="当前状态">
-          <el-radio-group v-model="formLabelAdding.status">
-            <el-radio label="上架"></el-radio>
-            <el-radio label="下架"></el-radio>
-          </el-radio-group>
+            <el-radio label="上架" v-model="formLabelAdding.status"></el-radio>
+            <el-radio label="下架" v-model="formLabelAdding.status"></el-radio>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -305,6 +303,8 @@
           this.dialogFormVisible = false;
           this.$refs['formLabelAdding'].resetFields();
           this.valueAdd = '';
+          this.formLabelAdding.discount = "";
+          this.formLabelAdding.status = "";     
         },
         //添加按钮确定事件
         handleConfirm(){
@@ -469,10 +469,6 @@
  }
  .newAddedForm{
    padding: 0 60px 0 20px;
- }
- .el-dialog__header .el-dialog__title{
-   font-size: 20px;
-   padding-left: 20px;
  }
  .dialog-footer{
   display: flex;
