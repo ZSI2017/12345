@@ -78,14 +78,12 @@
 <script>
 import "@/style/common.scss";
 import { getLoadingFlag } from "@/vuex/getters";
-import {toggle} from "@/views/mixins/toggle"
 // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
 // import Vue from 'vue'
 // Vue.use(VueRouter);
 export default {
-  mixins:[toggle],
   data() {
     return {
       showClose:false,
@@ -95,7 +93,7 @@ export default {
       uniqueOpened: true,
       fold: true,
       headerFixed: true,
-      title: "我的快递",
+      title: "寄件平台运营管理系统",
       input: '',
       isActive:false
     }

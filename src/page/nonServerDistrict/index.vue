@@ -1,5 +1,47 @@
 <template>
   <div class="section"   v-loading.body.fullscreen.lock="fullscreenLoading"   style="overflow:hidden">
+    <!-- <input
+       type="checkbox"
+       id="jack"
+
+       :value="checkedNames1"
+       @change ="checkedNames1 = $event.target.value"
+       >
+    <label for="jack">Jack</label>
+    <input type="checkbox" id="john" value="John" v-model="checkedNames1">
+    <label for="john">John</label>
+    <input type="checkbox" id="mike" value="Mike" v-model="checkedNames1">
+    <label for="mike">Mike</label>
+    <br> -->
+   <!-- <span>Checked names: {{ checkedNames1 }}</span> -->
+    <!-- <input type="checkbox"  value="ck2" v-model="checkedNames">
+    <label for="john">John</label>
+    <input type="checkbox" value="ck3" v-model="checkedNames">
+    <label for="mike">Mike</label> -->
+    <!--  v-model = "myCheckedNames" -->
+    <span>Checked names: {{ myCheckedNames }}</span>
+    <!-- :value = "myCheckedNames"  @input = "mockInput"   等价于 v-model = ""     :value="myCheckedNames"
+       @input = "mockInput " -->
+ <checkbox-group
+       :value = "myCheckedNames"
+       @input = "myCheckedNames = arguments[0]"
+       @change = "groupEvent"
+    >
+   <li v-for="(item,index) in checkboxArr">
+  <span>
+    <span>
+     <checkbox
+       :my-message ="myMessage"
+       :label = "item"
+     >
+       {{item}}
+     </checkbox>
+   </span>
+  </span>
+   </li>
+</checkbox-group>
+
+
   <el-table
       class="mainTable"
       :data="tableData"
@@ -41,16 +83,24 @@
 </div>
 </template>
 <script>
-import checkServer from "@/page/nonServerDistrict/checkServer";
-import configServer from "@/page/nonServerDistrict/configServer"
+import configServer from "@/page/nonServerDistrict/configServer";
+import checkbox from "@/page/nonServerDistrict/checkbox";
+import checkboxGroup from "@/page/nonServerDistrict/checkboxGroup"
   export default {
     name:'nonServerDistrict',
     components:{
-       checkServer,
-       configServer
+       configServer,
+       checkbox,
+       checkboxGroup
     },
     data() {
       return {
+        checkboxArr:["A1","B1","C1"],
+        checkedNames1:[],
+        myCheckedNames:["A1","B1"],
+        checkedNames:[],
+        myChecked:true,
+        myMessage:true,
         tableData:[],
         result:{},
         input: '',
@@ -61,6 +111,16 @@ import configServer from "@/page/nonServerDistrict/configServer"
       }
     },
     methods:{
+      mockInput(val) {
+          //  console.log("mockInput");
+          //  console.log(arguments);
+          this.myCheckedNames = arguments[0]
+          console.log(this.myCheckedNames);
+      },
+      groupEvent(value){
+           console.log("____________event__________");
+            console.log(value);
+      },
         handleClick(){
           this.isCheckServer = true;
           // this.dialogCheckVisible= true;

@@ -15,7 +15,7 @@
             <el-checkbox-group v-model="checkCity">
               <li :class="[index==li1?activeClass:'', commonliClass]" @click="li1Click2($event,item,index)" v-for="(item,index) in list2" :key="index" style="position:relative">
                 <span style="margin-right:20px">{{item.cityName}}</span>
-                <el-checkbox v-if="!onlyRead" style="position:absolute;left:10px" :label="item.cityName" :key="item.cityName" @change="handleCheckAllChange(index,item,$event)" :indeterminate="isIndeterminate[index]" v-model="checkAll[index]">全选</el-checkbox>
+                <el-checkbox v-if="!onlyRead" style="position:absolute;left:10px" :label="item.cityName" :key="item.cityName" @change="handleCheckAllChange(index,item,$event)" >全选</el-checkbox>
               </li>
             </el-checkbox-group>
           </div>
@@ -29,7 +29,7 @@
           <div v-if="showLi2">
             <el-checkbox-group v-model="checkedDistric" @change="handleDistricChange">
               <li class="commonli-class" :style="{'text-align':onlyRead?'center':'left'}" v-for="(item,index) in list3">
-                <el-checkbox v-if="!onlyRead" :label="item.districName" v-model="districChecked" :key="item.districName">{{item.districName}}</el-checkbox>
+                <el-checkbox v-if="!onlyRead" :label="item.districName"  :key="item.districName">{{item.districName}}</el-checkbox>
                 <span v-if="onlyRead">{{item.districName}}</span>
               </li>
             </el-checkbox-group>
@@ -47,6 +47,8 @@
 </template>
 
 <script type="text/javascript">
+import checkbox from "@/page/nonServerDistrict/checkbox";
+import checkboxGroup from "@/page/nonServerDistrict/checkboxGroup"
 export default {
   name: 'checkServer',
   data() {
