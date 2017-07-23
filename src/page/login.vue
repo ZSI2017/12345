@@ -15,12 +15,12 @@ export default {
   created() {
      // 模拟 权限管理
     //  隐藏 或者显示 导航菜单 服务类型及折扣改管理
-    let routerArr = this.$router.options.routes;
-    for (var i = 0; i < routerArr.length; i++) {
-      if (typeof routerArr[i].children !== undefined && routerArr[i].children[0].name === "*务类型及折扣管*") {
-        this.$router.options.routes[i].isHide = true;
-      }
-    }
+    // let routerArr = this.$router.options.routes;
+    // for (var i = 0; i < routerArr.length; i++) {
+    //   if (typeof routerArr[i].children !== undefined && routerArr[i].children[0].name === "*务类型及折扣管*") {
+    //     this.$router.options.routes[i].isHide = true;
+    //   }
+    // }
     // this.$router.options[0].name = "awdsfasdfsad";
     console.log(this.$router.options.routes);
   },

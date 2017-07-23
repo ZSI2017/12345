@@ -12,12 +12,12 @@
       <ul class="ul-block">
         <el-collapse-transition>
           <div v-if="showLi">
-            <el-checkbox-group v-model="checkCity">
+            <checkbox-group v-model="checkCity">
               <li :class="[index==li1?activeClass:'', commonliClass]" @click="li1Click2($event,item,index)" v-for="(item,index) in list2" :key="index" style="position:relative">
                 <span style="margin-right:20px">{{item.cityName}}</span>
-                <el-checkbox v-if="!onlyRead" style="position:absolute;left:10px" :label="item.cityName" :key="item.cityName" @change="handleCheckAllChange(index,item,$event)" >全选</el-checkbox>
+                <checkbox v-if="!onlyRead" style="position:absolute;left:10px;top:9px;" :label="item.cityName" :key="item.cityName" @change="handleCheckAllChange(index,item,$event)" >全选</checkbox>
               </li>
-            </el-checkbox-group>
+            </checkbox-group>
           </div>
         </el-collapse-transition>
       </ul>
@@ -27,12 +27,12 @@
       <ul class="ul-block">
         <el-collapse-transition>
           <div v-if="showLi2">
-            <el-checkbox-group v-model="checkedDistric" @change="handleDistricChange">
+            <checkbox-group v-model="checkedDistric" @change="handleDistricChange">
               <li class="commonli-class" :style="{'text-align':onlyRead?'center':'left'}" v-for="(item,index) in list3">
-                <el-checkbox v-if="!onlyRead" :label="item.districName"  :key="item.districName">{{item.districName}}</el-checkbox>
+                <checkbox v-if="!onlyRead" :label="item.districName"  :key="item.districName">{{item.districName}}</checkbox>
                 <span v-if="onlyRead">{{item.districName}}</span>
               </li>
-            </el-checkbox-group>
+            </checkbox-group>
           </div>
         </el-collapse-transition>
       </ul>
@@ -51,6 +51,10 @@ import checkbox from "@/page/nonServerDistrict/checkbox";
 import checkboxGroup from "@/page/nonServerDistrict/checkboxGroup"
 export default {
   name: 'checkServer',
+  components: {
+      checkbox,
+      checkboxGroup
+  },
   data() {
     return {
       activeClass: 'activeClass',

@@ -1,27 +1,33 @@
-<template>
-    <div id="app">
-       <router-view></router-view>
+<style>
 
-    </div>
+
+
+</style>
+
+<template>
+
+<div id="app">
+    <router-view></router-view>
+
+</div>
+
 </template>
 
 <script>
-  export default {
-        data() {
+
+export default {
+    data() {
             return {
 
             }
 
         },
-        ready(){
+        ready() {
 
         },
-        methods(){
+        methods() {
 
         }
-  }
+}
 
 </script>
-
-<style>
-</style>

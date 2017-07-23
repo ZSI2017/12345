@@ -13,4 +13,3 @@ const localEvent = function () {
 }
 
 export default new localEvent();
-
