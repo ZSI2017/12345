@@ -12,21 +12,41 @@
     <el-form-item label="名称" prop="photoName">
       <el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
-    <el-form-item label="运营图" prop="opMap">
+    <el-form-item label="LOGO" prop="opMap">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
+        <div slot="tip" class="el-upload__tip">文件类型限：jpg,png,尺寸40*40, 请保持5kb以内</div>
       </el-upload>
     </el-form-item>
-    <!-- <el-form-item label="角标" prop="cornerMark">
-      <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <span style="color:red;">（非必填）</span>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过3kb</div>
-      </el-upload>
-    </el-form-item> -->
-    <el-form-item label="描述" prop="description">
-      <el-input v-model.trim="ruleForm.description" placeholder="请输入描述"> </el-input>
+    <el-form-item label="广告语" prop="description">
+      <el-input v-model.trim="ruleForm.description" placeholder="请输入广告语"> </el-input>
+    </el-form-item>
+    <el-form-item label="标签">
+      <el-tag
+        :key="tag"
+        v-for="tag in dynamicTags"
+        :closable="true"
+        hit="true"
+        :close-transition="false"
+        @close="handleClose(tag)"
+        type="gray"
+        style="margin-right:10px;"
+      >
+      {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="handleInputConfirm"
+        @blur="handleInputConfirm"
+        style="width:100px;"
+      >
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
+      <div style="color:#888;">最多添加两个标签</div>
     </el-form-item>
     <el-form-item label="排序值" prop="number">
       <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
@@ -48,6 +68,11 @@
         <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
         <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
       </el-radio-group>
+    </el-form-item>
+    <el-form-item label="标价" prop="priceUp">
+      <el-input placeholder="请输入价格" v-model="ruleForm.priceUp" style="width:200px;">
+        <template slot="append">元起</template>
+      </el-input>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
     <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
@@ -103,34 +128,8 @@
       :visible="dialogTableVisible"
       :gridData="gridData"
       @listenToCoverArea ="changeVisible"
-      ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <el-tag
-       style="margin-right:10px;margin-bottom:5px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
-
-  <!-- 即将离开的 对话框  -->
-  <!-- <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny">
-    <div>
-      <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
-      <span style="padding-left:48px;">还没有保存,确定放弃编辑？</span>
-    </div>
-
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="loadingFlag = false">编 辑</el-button>
-    <el-button type="primary" @click="editSure">放 弃</el-button>
-  </span>
-  </el-dialog> -->
-
+      >
+  </cover-area>
 </section>
 </template>
 <script type="text/javascript">
@@ -164,7 +163,11 @@ export default {
       radio: 1,
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
-
+      //标签数据
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
+      addTag:true,
       // 查看配置地区中的表格数据 和 是否显示的标志
       showHeader: false,
       dialogTableVisible: false,
@@ -177,6 +180,7 @@ export default {
         number: '',
         link: '',
         date1: '',
+        priceUp:'',
         currentState: false,
       },
       rules: {
@@ -228,6 +232,12 @@ export default {
         coverArea: [{
           required: true,
           message: '请选择覆盖地区'
+        }],
+        priceUp:[{
+          type: 'number',
+          required: true,
+          message: '请输入价格',
+          trigger: 'blur'
         }]
       }
     }
@@ -246,12 +256,7 @@ export default {
     alert("beforeDestory")
   },
   watch: {
-    //  loadingFlag:{
-    //     handler:(val,old) => {
-    //          alert(val),
-    //          console.log(old);
-    //     }
-    //  }
+
   },
   methods: {
     changeVisible(flag){
@@ -278,18 +283,6 @@ export default {
     handleBackClick() {
       this.$router.go(-1);
     },
-    // 即将离开的对话框
-    // editSure() {
-    //   this.loadingFlag = false;
-    //   this.$router.app.$store.state.loadingFlag = true;
-    //   console.log(this);
-    //   this.$router.go(-1);
-    //   //  this.$router.push({ path:this.defaultActive});
-    //   //  this.$route.push({ path:this.defaultActive});
-    // },
-    handlePreview() {},
-    handleRemove() {},
-
     // 标签页选择
     handleTabClick(tab, event) {
       console.log("handTabClick");
@@ -398,6 +391,33 @@ export default {
     },
     onSubmit() {
       console.log('submit!');
+    },
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      if(this.dynamicTags.length >= 2){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }  
+    },
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+        if(this.dynamicTags.length >= 2){
+          this.addTag = false;
+        }else{
+          this.addTag = true;
+        }      
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     }
   }
 }
