@@ -56,7 +56,7 @@ const router = new VueRouter({
       //  记录即将进入的路由
         store.dispatch('changeNextRouter',to.fullPath);
         // &&
-        // 判断是否已经登录
+        // 判断是否已经登录,,,,
         // 权限管理 路由跳转前进行权限验证
         // 从运营位管理 选择快递页面的 添加返回时出现提示框
         if(((from.path == "/sendExpress/addData")
