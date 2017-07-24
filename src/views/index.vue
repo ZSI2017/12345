@@ -15,9 +15,13 @@
     </el-row>
   </header>
   <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
-  <div style="display:flex;flex-direction:row;" v-loading.fullscreen.lock="fullscreenLoading">
+  <div style="display:flex;flex-direction:row;" >
 
-    <div class="main-left" style="position:fixed;top:60px;bottom:0;min-width:180px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;" v-show="fold">
+    <div
+      class="main-left" style="position:fixed;top:60px;bottom:0;min-width:180px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;"
+      v-loading.body.fullscreen.lock="fullscreenLoading"
+      v-show="fold"
+      >
       <el-menu  :default-active="$route.fullPath" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
@@ -75,14 +79,12 @@
 <script>
 import "@/style/common.scss";
 import { getLoadingFlag } from "@/vuex/getters";
-import {toggle} from "@/views/mixins/toggle"
 // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
 // import Vue from 'vue'
 // Vue.use(VueRouter);
 export default {
-  mixins:[toggle],
   data() {
     return {
       showClose:false,
@@ -92,7 +94,7 @@ export default {
       uniqueOpened: true,
       fold: true,
       headerFixed: true,
-      title: "我的快递",
+      title: "寄件平台运营管理系统",
       input: '',
       isActive:false
     }
@@ -160,18 +162,19 @@ export default {
       console.log(key, keyPath);
     },
     handleSelect(key, keyPath) {
+        // this.fullscreenLoading = true;
       //  this.defaultActive =""+key;
       //  console.log("this.$route.path");
       //  console.log(this.$route.path);
       if (this.$route.path == "/sendExpress/addData"
-         ||this.$route.path == "/sendExpressEnter/addData"
-         ||this.$route.path == "/chooseExpress/addData"
-         ||this.$route.path == "/expressOrder/addData"
-         ||this.$route.path == "/noticeManage/addData"
-         ||this.$route.path == "/nearExpress/addData"
-         ||this.$route.path == "/oneCitySend/addData"
-          ||this.$route.path == '/expressCompany/addData'
-         ||this.$route.path == '/chooseExpressOrder/addData'
+           ||this.$route.path == "/sendExpressEnter/addData"
+           ||this.$route.path == "/chooseExpress/addData"
+           ||this.$route.path == "/expressOrder/addData"
+           ||this.$route.path == "/noticeManage/addData"
+           ||this.$route.path == "/nearExpress/addData"
+           ||this.$route.path == "/oneCitySend/addData"
+           ||this.$route.path == '/expressCompany/addData'
+           ||this.$route.path == '/chooseExpressOrder/addData'
         ) {
           if(this.$store.getters.getLoadingFlag === false){
             // console.log(this.$route.matched);
@@ -179,10 +182,14 @@ export default {
             // this.loadingFlag = true;
           }
       }else {
-        this.fullscreenLoading = true;
+
         var _this = this;
-        setTimeout( () => {
-            _this.fullscreenLoading = false
+
+        this.fullscreenLoading = true;
+        // console.log(_this.fullscreenLoading);
+        setTimeout(() => {
+            _this.fullscreenLoading = false;
+            console.log(_this.fullscreenLoading);
         },600);
       }
     },
