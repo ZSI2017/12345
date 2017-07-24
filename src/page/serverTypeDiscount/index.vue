@@ -102,7 +102,14 @@
       </el-table-column>
     </el-table>
     <div class="block pagination" style="margin-top:30px;float:right;">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="20">
+      <el-pagination 
+      @size-change="handleSizeChange" 
+      @current-change="handleCurrentChange" 
+      :current-page="currentPage4" 
+      :page-sizes="[5,10,15,20]" 
+      :page-size="pageSize" 
+      layout="total,sizes,prev, pager, next,jumper" 
+      :total="totalCount">
       </el-pagination>
     </div>
 
@@ -186,22 +193,12 @@
           <el-form-item label="排序值">
             <el-input :class="grayBg" :value="formLabelAlign.sorting"></el-input>
           </el-form-item>
-          <!--<el-form-item label="结算折扣">
-            <el-row>
-              <el-col :span="6" style="width: 187px; height: 42.5px;line-height:42.5px;">
-                <el-radio class="radio" v-model="formLabelAlign.discount" label="有折扣">有折扣</el-radio>
-                <el-radio class="radio" v-model="formLabelAlign.discount" label="无折扣">无折扣</el-radio>
-              </el-col>
-              <el-col :span="6">
-                <el-input placeholder="0" :number="true" size="large" v-model="formLabelAlign.discountNum" :disabled=" formLabelAlign.discount == '无折扣' "><template slot="append">折</template></el-input>
-              </el-col>
-            </el-row>
-          </el-form-item>-->
           <el-form-item label="当前状态">
-              <el-radio-group :class="grayBg" v-model="radio3">
+              <el-radio-group v-model="radio3" v-if="diailogInputVisible">
                 <el-radio :label="1">上架</el-radio>
                 <el-radio :label="2">下架</el-radio>
               </el-radio-group>
+              <div v-if="!diailogInputVisible">{{ currentStatus }}</div>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer" v-if="showMarkVisible">
@@ -223,6 +220,7 @@
         return {
           //置为下架 通过申请 申请驳回
           loadingTakeOffFlag:false,
+          totalCount:1000,
           tableData:[],
           showConfig: true,
           listLoading:false,
@@ -262,6 +260,8 @@
           }],
           value: '',
           valueAdd:'',
+          diailogInputVisible:true,
+          currentStatus: "",
           formLabelAdding:{
             company:'',
             serverType:'',
@@ -402,15 +402,11 @@
           this.formLabelAlign.typeCode = row.name;
           this.formLabelAlign.describe = row.name;
           this.formLabelAlign.sorting = row.Forder;
-          if(row.currentState = "已上架"){
-                this.radio3 = 1;
-            }else{
-              this.radio3 = 2;
-            }
         },
         handleCheckDetails(row){
           // var _this = this;
           this.showMarkVisible = true;
+          this.diailogInputVisible = false;          
           this.grayBg.grayBg = true;
           this.dialogDetails = "待审核详情";
           this.dialogFormVisible_details = true;
@@ -419,15 +415,12 @@
           this.formLabelAlign.typeCode = row.name;
           this.formLabelAlign.describe = row.name;
           this.formLabelAlign.sorting = row.Forder;
-          if(row.currentState = "已上架"){
-                this.radio3 = 1;
-            }else{
-              this.radio3 = 2;
-            }
+          this.currentStatus = row.currentState;          
         },
         handleEffectDetails(row){
           // var _this = this;
           this.showMarkVisible = true;
+          this.diailogInputVisible = false;          
           this.grayBg.grayBg = true;
           this.dialogDetails = "已生效详情";
           this.dialogFormVisible_details = true;
@@ -436,17 +429,15 @@
           this.formLabelAlign.typeCode = row.name;
           this.formLabelAlign.describe = row.name;
           this.formLabelAlign.sorting = row.Forder;
-          if(row.currentState = "已上架"){
-                this.radio3 = 1;
-            }else{
-              this.radio3 = 2;
-            }
+          this.currentStatus = row.currentState;          
+
         },
       },
       created() {
         var _this = this;
         _this.$http.get("/rest/list2",(rsp)=> {
-            _this.tableData = rsp.data.data
+            _this.tableData = rsp.data.data;
+            _this.totalCount = rsp.data.data.length;
           },(error)=>{
             console.log(error);
           })

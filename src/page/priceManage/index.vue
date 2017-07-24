@@ -113,7 +113,14 @@
     </el-table-column>
   </el-table>
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="20">
+    <el-pagination 
+    @size-change="handleSizeChange" 
+    @current-change="handleCurrentChange" 
+    :current-page="currentPage4" 
+    :page-sizes="[5,10,15,20]" 
+    :page-size="pageSize" 
+    layout="total,sizes,prev, pager, next,jumper" 
+    :total="totalCount">
     </el-pagination>
   </div>
 
@@ -135,6 +142,7 @@
     name:'nonServerDistrict',
     data() {
       return {
+        totalCount:1000,
         dialogTableVisible:false,
         form:{region:''},
         halfListLoading:false,
@@ -169,7 +177,8 @@
       _this.$http.get("/rest/list6", (data) => {
         console.log("success");
         console.log(data);
-        _this.tableData = data.data.data
+        _this.tableData = data.data.data;
+        _this.totalCount = data.data.data.length;
       }, (error) => {
         console.log("error");
         console.log(error);

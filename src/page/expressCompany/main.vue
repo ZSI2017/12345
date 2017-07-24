@@ -96,7 +96,14 @@
   </el-table>
 
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="20">
+    <el-pagination 
+    @size-change="handleSizeChange" 
+    @current-change="handleCurrentChange" 
+    :current-page="currentPage4" 
+    :page-sizes="[5,10,15,20]" 
+    :page-size="pageSize" 
+    layout="total,sizes,prev, pager, next,jumper" 
+    :total="totalCount">
     </el-pagination>
   </div>
 
@@ -127,7 +134,7 @@ export default {
     return {
       // 排序是否显示
       showSortable:true,
-
+      totalCount:1000,//默认数据总数
       myDialogTitle: "确认置为下架？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
       // 置为下架对话框
@@ -162,6 +169,7 @@ export default {
       console.log("success");
       console.log(data);
       _this.tableData = data.data.data
+      _this.totalCount = data.data.data.length; //获取数据长度
     }, (error) => {
       console.log("error");
       console.log(error);

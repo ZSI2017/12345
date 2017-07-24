@@ -2,12 +2,11 @@
 <section class="section editData-class">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form ref="form" :model="form" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="名称">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
+    <el-form-item label="公司名称">
+      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入公司名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-
-    <el-form-item label="运营图" prop="opMap">
+    <el-form-item label="LOGO" prop="opMap">
       <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -21,23 +20,36 @@
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
-    <el-form-item label="角标" prop="cornerMark">
-      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
-        <!--<i class="el-icon-plus"></i>-->
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-      </el-upload>
-      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
-      <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-      <el-popover ref="popover4" placement="right" trigger="click">
-        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
-      </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
-    </el-form-item>
-    <el-form-item label="描述">
-      <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    <el-form-item label="广告语">
+      <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.content}} </div>
+    </el-form-item>
+    <el-form-item label="标签">
+      <el-tag
+        :key="tag"
+        v-for="tag in dynamicTags"
+        :closable="true"
+        hit="true"
+        :close-transition="false"
+        @close="handleClose(tag)"
+        type="gray"
+        style="margin-right:10px;"
+      >
+      {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="handleInputConfirm"
+        @blur="handleInputConfirm"
+        style="width:100px;"
+      >
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
+      <div style="color:#888;">最多添加两个标签</div>
     </el-form-item>
     <el-form-item label="排序值">
       <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
@@ -47,11 +59,6 @@
       <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
     </el-form-item>
-    <!--<el-form-item label="有效时段">
-      <el-date-picker v-if="isFromAddData" v-model="value3" type="datetimerange" placeholder="选择时间范围">
-      </el-date-picker>
-      <div class="detail-content" v-if="!isFromAddData">2223-11-22T14:22:00.000--3335-11-03T01:33:00.000</div>
-    </el-form-item>-->
     <el-form-item label="覆盖地区">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
@@ -63,6 +70,12 @@
         <el-radio class="radio" :label="2">下架</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
+    </el-form-item>
+    <el-form-item label="标价">
+      <el-input placeholder="请输入价格" v-if="isFromAddData" v-model="form.priceUp" style="width:200px;">
+        <template slot="append">元起</template>
+      </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} 元起 </div>      
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
     <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
@@ -92,7 +105,7 @@
       </el-table-column>
       <el-table-column property="city" label="市">
         <template scope="scope">
-            <el-checkbox-group
+            <el-checkbox-group 
                   v-model="checkedCities[scope.$index]"
                   @change="handleCheckedCitiesChange(scope.$index)"
                   >
@@ -113,20 +126,8 @@
       :visible="dialogTableVisible"
       :gridData="gridData"
       @listenToCoverArea ="changeVisible"
-      ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <el-tag
-       style="margin-right:10px;margin-bottom:5px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
+      >
+  </cover-area>
 </section>
 </template>
 <script type="text/javascript">
@@ -140,12 +141,9 @@ export default {
     return {
       // 从详情页面
       isDetail: false,
-      currentStateText: '',
       // 即将离开的对话框
-
       loadingFlag: false,
       dialogVisible: false,
-      // dialogImageUrl:'https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png',
       fileList2: [{
         name: 'food.jpeg',
         url: "https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png"
@@ -153,38 +151,31 @@ export default {
       // 添加搜索框
       state1: "",
       provinces: [],
-      //标签页
-      activeName: 'C',
-      tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
       // 覆盖地区选择
       check: false,
       checkAll: [],
       checkedCities: [],
       isIndeterminate: [],
-      // cities: cityOptions,
-      // value3 代表时间段选择的
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
       radio: 1,
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
-
+      //标签数据
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
+      addTag:true,
       // 查看配置地区中的表格数据 和 是否显示的标志
       showHeader: false,
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy: [],
+      currentStateText: '',      
       form: {
         name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
         Forder: '',
-        content:''
+        content:'',
+        priceUp:''
       }
     }
   },
@@ -196,7 +187,6 @@ export default {
     this.form.Forder = localData.Forder;
     this.form.link = localData.link;
     this.form.content = localData.content;
-    this.value3 = [new Date(2222, 22, 22, 22, 22), new Date(3333, 33, 33, 33, 33)];
     this.currentStateText = localData.currentState;
 
     if (localData.currentState = "上架") {
@@ -206,9 +196,9 @@ export default {
     }
   },
   created() {
-    if ( this.$route.path == "/sendExpressEnter/detail"
-          || this.$route.path == "/sendExpressEnter/detail"
-          || this.$route.path == "/sendExpressEnter/detail") {
+    if ( this.$route.path == "/oneCitySend/detail"
+          || this.$route.path == "/oneCitySend/detail"
+          || this.$route.path == "/oneCitySend/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
@@ -221,15 +211,10 @@ export default {
     alert("beforeDestory")
   },
   watch: {
-    //  loadingFlag:{
-    //     handler:(val,old) => {
-    //          alert(val),
-    //          console.log(old);
-    //     }
-    //  }
+
   },
   computed: {
-    GETEDITFORM() {
+    GETEDITFORM() { 
       alert(this.$store.getters.GETEDITFORM)
       return this.$store.getters.GETEDITFORM;
     }
@@ -249,24 +234,7 @@ export default {
     // 点击返回 对应的事件处理
     handleBackClick() {
       this.$router.go(-1);
-      // if (this.isFromAddData) {
-      //   this.loadingFlag = true;
-      // } else {
-      //     this.$router.go(-1);
-      // }
     },
-    // 即将离开的对话框
-    // editSure() {
-    //   this.loadingFlag = false;
-    //   this.$router.app.$store.state.loadingFlag = true;
-    //   console.log(this);
-    //   this.$router.go(-1);
-    //   //  this.$router.push({ path:this.defaultActive});
-    //   //  this.$route.push({ path:this.defaultActive});
-    // },
-    handlePreview() {},
-    handleRemove() {},
-
     // 标签页选择
     handleTabClick(tab, event) {
       console.log("handTabClick");
@@ -383,6 +351,33 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      if(this.dynamicTags.length >= 2){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }  
+    },
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+        if(this.dynamicTags.length >= 2){
+          this.addTag = false;
+        }else{
+          this.addTag = true;
+        }      
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     }
   }
 }
