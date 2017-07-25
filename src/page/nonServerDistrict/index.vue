@@ -40,7 +40,7 @@
     >
       <table-column
            headerName="快递公司名称"
-
+           myProps = "expressName"
            >
       </table-column>
     </my-table>

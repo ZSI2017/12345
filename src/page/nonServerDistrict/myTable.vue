@@ -5,6 +5,8 @@
           </table-header>
       </div>
       <div class="my_body">
+        <slot >
+        </slot>
            <table-body>
            </table-body>
       </div>
