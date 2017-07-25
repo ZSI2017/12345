@@ -35,6 +35,15 @@
 <template>
 
 <div class="section" v-loading.body.fullscreen.lock="fullscreenLoading" style="overflow:hidden">
+    <my-table
+       :tableData ="tableData"
+    >
+      <table-column
+           headerName="快递公司名称"
+
+           >
+      </table-column>
+    </my-table>
     <el-table class="mainTable" :data="tableData" style="width: 100%;margin-top:10px" max-height="500" empty-text="暂无数据" align="center" :default-sort="{prop: 'date', order: 'descending'}">
         <el-table-column prop="name" label="快递公司名称">
         </el-table-column>
@@ -64,22 +73,23 @@
       :onlyRead='isCheckServer'
       @listenToConfig="changeConfigVisible"
       > </config-server>
-
 </div>
 
 </template>
-
 <script>
+  import configServer from "@/page/nonServerDistrict/configServer";
+  import checkbox from "@/page/nonServerDistrict/checkbox";
+  import checkboxGroup from "@/page/nonServerDistrict/checkboxGroup"
+  import myTable from "@/page/nonServerDistrict/myTable";
+  import tableColumn from "@/page/nonServerDistrict/tableColumn";
 
-import configServer from "@/page/nonServerDistrict/configServer";
-import checkbox from "@/page/nonServerDistrict/checkbox";
-import checkboxGroup from "@/page/nonServerDistrict/checkboxGroup"
 export default {
     name: 'nonServerDistrict',
     components: {
         configServer,
         checkbox,
-        checkboxGroup
+        checkboxGroup,
+        myTable,
     },
     data() {
         return {
