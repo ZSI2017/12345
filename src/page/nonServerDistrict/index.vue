@@ -90,6 +90,7 @@ export default {
         checkbox,
         checkboxGroup,
         myTable,
+        tableColumn
     },
     data() {
         return {

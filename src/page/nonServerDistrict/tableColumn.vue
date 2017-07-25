@@ -1,5 +1,8 @@
 <template type="html">
   <section>
+    <div class="table-cell">
+      column
+    </div>
   </section>
 </template>
 
@@ -19,11 +22,12 @@
 
      },
      created(){
-        console.log("%o from tableColumn",this);
+        console.log("%oadsfasdfsd",this);
+        // console.log("%o from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn  from tableColumn",this);
 
      },
      mounted(){
-
+      //  alert("dsafsd");
      }
 
   }
