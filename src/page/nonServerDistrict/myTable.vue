@@ -5,11 +5,11 @@
           </table-header>
       </div>
       <div class="my_body">
-        <slot >
-        </slot>
            <table-body>
            </table-body>
       </div>
+      <slot >
+      </slot>
    </section>
 </template>
 <script type="text/javascript">

@@ -43,17 +43,31 @@
            myProps = "expressName"
            >
       </table-column>
+      <table-column
+           headerName="非服务地区"
+           myProps = "noServerDis"
+           >
+      </table-column>
+      <table-column
+           headerName="修改时间"
+           myProps = "changeTime"
+           >
+      </table-column>
+      <table-column
+           headerName="操作"
+           myProps = "operation"
+           >
+      </table-column>
     </my-table>
     <el-table class="mainTable" :data="tableData" style="width: 100%;margin-top:10px" max-height="500" empty-text="暂无数据" align="center" :default-sort="{prop: 'date', order: 'descending'}">
         <el-table-column prop="name" label="快递公司名称">
         </el-table-column>
-        <el-table-column label="非服务地区">
+        <el-table-column label="非服务地区" >
             <template scope="scope">
                 <el-button @click="handleClick" type="text" size="small">查看</el-button>
             </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="修改时间">
-        </el-table-column>
+        <el-table-column prop="createTime" label="修改时间" />
         <el-table-column label="操作">
             <template scope="scope">
                 <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
