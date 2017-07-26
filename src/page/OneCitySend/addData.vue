@@ -54,14 +54,9 @@
     <el-form-item label="链接" prop="link">
       <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
     </el-form-item>
-    <!--<el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
-      </el-date-picker>
-    </el-form-item>-->
     <el-form-item label="覆盖地区" prop="coverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
-      <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态" prop="currentState">
       <el-radio-group v-model="ruleForm.currentState">
@@ -80,10 +75,6 @@
 
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
-    <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
-      <el-tab-pane v-for="(item,index) in tabPaneData" :label="item" :key="index" :name="item" style="font-size:20px;">{{item}}
-      </el-tab-pane>
-    </el-tabs> -->
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
@@ -142,23 +133,14 @@ export default {
     return {
      // 展示警告信息
       showAlert:false,
-      // 即将离开的对话框
-      loadingFlag: false,
-
       // 添加搜索框
       state1: "",
       provinces: [],
-      //标签页
-      activeName: 'C',
-      tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
       // 覆盖地区选择
       check: false,
       checkAll: [],
       checkedCities: [],
       isIndeterminate: [],
-      // cities: cityOptions,
-      // value3 代表时间段选择的
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
       radio: 1,
       // dialogFormVisible 代表是否打开配置地区的对话框
