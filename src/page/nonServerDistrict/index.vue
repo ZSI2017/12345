@@ -36,27 +36,34 @@
 
 <div class="section" v-loading.body.fullscreen.lock="fullscreenLoading" style="overflow:hidden">
     <my-table
-       :tableData ="tableData"
+       :data ="tableData"
     >
       <table-column
            headerName="快递公司名称"
-           myProps = "expressName"
+           myProps = "name"
            >
       </table-column>
       <table-column
            headerName="非服务地区"
-           myProps = "noServerDis"
+            myProps = "createTime"
            >
+
+           <!-- <template scope="scope">
+               <el-button @click="handleClick" type="text" size="small">查看</el-button>
+           </template> -->
       </table-column>
       <table-column
            headerName="修改时间"
-           myProps = "changeTime"
+           myProps = "createTime"
            >
       </table-column>
       <table-column
            headerName="操作"
-           myProps = "operation"
+            myProps = "createTime"
            >
+           <!-- <template scope="scope">
+               <el-button @click="handleClick" type="text" size="small">查看</el-button>
+           </template> -->
       </table-column>
     </my-table>
     <el-table class="mainTable" :data="tableData" style="width: 100%;margin-top:10px" max-height="500" empty-text="暂无数据" align="center" :default-sort="{prop: 'date', order: 'descending'}">

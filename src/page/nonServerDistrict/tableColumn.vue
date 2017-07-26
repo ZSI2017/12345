@@ -1,35 +1,46 @@
 <template type="html">
-  <section>
     <div class="table-cell">
-      column
+       <slot text="hello from child"></slot>
     </div>
-  </section>
 </template>
 
 <script type="text/javascript">
+import {bus} from "@/page/nonServerDistrict/bus.js";
   export default {
      name: "tableColumn",
      props:{
-        label:String,
+        headerName:String,
         myProps:String
      },
      data() {
         return {
-
+           defParent:this.$parent,
+           columnConfig:''
         }
      },
      methods() {
 
      },
      created(){
-        console.log("%oadsfasdfsd",this);
-        // console.log("%o from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn  from tableColumn",this);
+       this.columnConfig = {
+           headerName:this.headerName,
+           myProps:this.myProps
+       }
+         let parent = this.$parent;
 
+         while(parent && !parent.tableId) {
+             parent = parent.$parent;
+         }
+         this.defParent =  parent;
+       // 先等到 table 父类的引用
+        // console.log("%oadsfasdfsd",this);
+        // console.log("%o from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn  from tableColumn",this);
      },
      mounted(){
-      //  alert("dsafsd");
+         //  alert("dsafsd");
+        console.log("headerName:  %o +++  myProps:  %o ++++=",this.columnConfig,this);
+         bus.$emit('fromColumn',this.columnConfig);
      }
-
   }
 </script>
 

@@ -1,5 +1,6 @@
 <template type="html">
   <section class="tableBody">
+      <!-- <table-column /> -->
     <table
         border="0"
         cellspacing="0"
@@ -8,52 +9,42 @@
         align="center"
         >
         <colgroup>
-            <col width="25%"/>
-            <col width="25%"/>
-            <col width="25%"/>
-            <col width="25%"/>
+            <col  v-for="(item,index) in store"  :key="index"/>
         </colgroup>
-          <tr>
-            <td> 1</td>
-            <td>2</td>
-            <td> 1</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td> 1</td>
-            <td>2</td>
-            <td> 1</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td> 1</td>
-            <td>2</td>
-            <td> 1</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td> 1</td>
-            <td>2</td>
-            <td> 1</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td> 1</td>
-            <td>2</td>
-            <td> 1</td>
-            <td>2</td>
+          <tr v-for="(items,indexs) in sourceData">
+            <td v-for="(item,index) in store ">
+                {{items[item.myProps]}}
+                <!-- <table-column /> -->
+             </td>
           </tr>
     </table>
 
   </section>
 </template>
 <script type="text/javascript">
+import tableColumn from "@/page/nonServerDistrict/tableColumn"
     name:"tableBody";
     export default {
+        components: {
+          tableColumn
+        },
+        props:{
+          store:Array,
+          tableData:Array
+        },
         data(){
             return {
-
+               sourceData:[],
             }
+         },
+         mounted(){
+            console.log("%c from tableBody： %o","color:pink",this.store);
+         },
+         watch:{
+             tableData(newValue) {
+                 this.sourceData = newValue;
+                  console.log("%c from tableBody： %o","color:red",newValue);
+             }
          },
          methods(){
 

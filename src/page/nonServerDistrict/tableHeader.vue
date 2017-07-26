@@ -8,17 +8,10 @@
               align="center"
               >
               <colgroup>
-                  <col width="25%"/>
-                  <col width="25%"/>
-                  <col width="25%"/>
-                  <col width="25%"/>
+                  <col width="48"  v-for="(item,index) in store"  :key="index"/>
               </colgroup>
                 <tr>
-                    <th colspan="1" > 快递公司名称</th>
-                    <th colspan="1" >非服务地区</th>
-                    <th colspan="1" > 修改时间</th>
-                    <th colspan="1" >操作</th>
-
+                    <th colspan="1" v-for="(item,index) in store" :key="index"> {{item.headerName}}</th>
                 </tr>
           </table>
      </section>
@@ -26,6 +19,10 @@
 <script type="text/javascript">
      name:"tableHeader"
      export default {
+           props:{
+             store:Array,
+             tableData:Array,
+           },
            data(){
                return {
 
