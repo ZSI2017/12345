@@ -64,7 +64,7 @@ export default {
        axios({
             url:url,
             method:'post',
-            // baseURL:"https://domain.com/api",
+            baseURL:"http://192.168.12.54:8080",
             transformRequrest:[function(data) {
                 // before the request data is sent to the server
                 return data;
@@ -73,9 +73,9 @@ export default {
                   // before get the response data
                   return data;
             }],
-            headers: {'X-Requested-With':'XMLHttpRequest'},
+            // headers: {'X-Requested-With':'XMLHttpRequest'},
             data:data,
-            timeout:10000,
+            // timeout:10000,
             responseType:'json',  // default
             xsrfCookieName:'XSRF-TOKEN',      // default
             xsrfHeaderName: 'X-XSRF-TOKEN', // default
@@ -83,7 +83,8 @@ export default {
             proxy:{ }     //  defines the hostname and port of the proxy server
        }).then(
            (response) => {
-               return mySuccessFn(response,successfn,errorfn);
+                console.log(response)
+                 mySuccessFn(response,successfn,errorfn);
            }
        ).catch(
            (error) => {

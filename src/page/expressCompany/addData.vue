@@ -10,7 +10,7 @@
   </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="公司名称" prop="photoName">
-        <el-select label="复选框 A" v-model="express" placeholder="请选择" style="width:100%;">
+        <el-select label="复选框 A" v-model="express" placeholder="请选择公司名称" style="width:100%;">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -112,20 +112,6 @@ export default {
       loadingFlag: false,
       //标签添加控制
       addTag: true,
-      // 添加搜索框
-      state1: "",
-      provinces: [],
-      //标签页
-      activeName: 'C',
-      tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
-      // 覆盖地区选择
-      check: false,
-      checkAll: [],
-      checkedCities: [],
-      isIndeterminate: [],
-      // cities: cityOptions,
-      // value3 代表时间段选择的
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
       payRadio: 1,
       priceRadio: 1,
@@ -137,11 +123,7 @@ export default {
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
-      // 查看配置地区中的表格数据 和 是否显示的标志
-      showHeader: false,
       dialogTableVisible: false,
-      gridData: [],
-      gridDataCopy: [],
       options: [{
           value: '选项1',
           label: '黄金糕'
@@ -164,21 +146,18 @@ export default {
         photoName: '',
         number: '',
         orderNumber:'',
-        link: '',
-        date1: '',
         currentState: false,
         currentPay: false,
         currentPrice: false,
         currentHot: false,
         currentNew: false,
-
         content:''
       },
       rules: {
         photoName: [{
           type: "string",
           required: true,
-          message: '请输入运营图名称',
+          message: '请选择公司名称',
           trigger: 'blur'
         }, ],
         number: [
@@ -190,17 +169,6 @@ export default {
           required: true,
           message: '请输入电话号码',
           trigger: 'blur'
-        }],
-        link: [{
-          required: true,
-          message: "请输入链接",
-          trigger: 'blur'
-        }],
-        date1: [{
-          type: 'date',
-          required: true,
-          message: '请选择日期',
-          trigger: 'change'
         }],
         currentState: [{
           required: true,

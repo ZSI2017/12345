@@ -208,21 +208,30 @@ export default {
   },
   created() {
     console.log("$router: " + this.$route.path);
-    let url = "/rest/list2";
+    let url = "/api/promotion/getList";
     if (this.$route.path == "/chooseExpress") {
       url = "/rest/list2-2";
     } else if (this.$route.path == "/expressOrder") {
       url = "/rest/list2-3";
     }
+    let data={
+      "pages":{
+        "page_num":"0",                
+        "page_size":"10"
+      },
+      "con":{
+        "pageId":"SD1010",        
+      }
+    }
     var _this = this;
-    _this.$http.get(url, (data) => {
+    _this.$http.post(url,data,(data) => {
       console.log("success");
       console.log(data);
-      _this.tableData = data.data.data;
-      _this.totalCount = data.data.data.length; //获取数据长度
+      _this.tableData = data.result.page_list;
+      _this.totalCount = data.result.page_list.length; //获取数据长度
     }, (error) => {
       console.log("error");
-      console.log(error);
+      alert("error")
     });
 
     console.log(this.$route.matched);
@@ -231,7 +240,7 @@ export default {
     '$route': function(to, from) {
       // 默认状态是 运营位管理的 寄快递首页
       console.log("$router: " + to.path);
-      let url = "/rest/list2";
+      let url = "/api/promotion/getList";
       if (to.path == "/chooseExpress") {
         // 这里是运营位管理的 选择快递页面 的相关配置
         url = "/rest/list2-2"
