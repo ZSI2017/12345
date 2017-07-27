@@ -53,21 +53,21 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="gmtCreate" label="创建时间" width="200">
+    <el-table-column prop="gmtCreate" label="创建时间" width="160">
       <template scope="scope">
-          {{new Date(scope.row.gmtCreate).toLocaleString()}}
-       </template>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtCreate | formatDate}}</p>
+      </template>
     </el-table-column>
-    <el-table-column prop="gmtModified" label="修改时间" width="200" :sortable="showSortable">
+    <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
       <template scope="scope">
-          {{new Date(scope.row.gmtModified).toLocaleString()}}
-       </template>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtModified | formatDate}}</p>
+      </template>
     </el-table-column>
     <el-table-column prop="activeTime" label="有效时段" width="220">
       <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{new Date(scope.row.gmtBegin).toLocaleString()}}</p>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtBegin | formatDate}}</p>
           <p style="padding:0;margin:0;text-align:center">至</p>
-          <p style="padding:0;margin:0;text-align:center">{{new Date(scope.row.gmtEnd).toLocaleString()}}</p>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtEnd | formatDate}}</p>
        </template>
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
@@ -159,6 +159,7 @@
 import store from 'src/vuex/store.js'
 import localEvent from 'src/vuex/function.js';
 import coverArea from "./coverArea.vue";
+import {formatDate} from 'src/util/date.js';
 
 export default {
   components: {
@@ -229,23 +230,29 @@ export default {
       _this.totalCount = result.page_list.length; //获取数据长度
     }, (error) => {
       console.log("error");
-      console.log(error);
+      alert("error")
     });
 
     console.log(this.$route.matched);
   },
+    filters: {
+        formatDate(time) {
+            var date = new Date(time);
+            return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+        }
+    },
   watch: {
     '$route': function(to, from) {
       // 默认状态是 运营位管理的 寄快递首页
       console.log("$router: " + to.path);
       let url = "/api/promotion/getList";
-      // if (to.path == "/chooseExpress") {
-      //   // 这里是运营位管理的 选择快递页面 的相关配置
-      //   url = "/rest/list2-2"
-      // } else if (to.path == "/expressOrder") {
-      //   // 这里是运营位管理的 选快递下单页面的相关配置
-      //   url = "/rest/list2-3";
-      // }
+      if (to.path == "/chooseExpress") {
+        // 这里是运营位管理的 选择快递页面 的相关配置
+        url = "/rest/list2-2"
+      } else if (to.path == "/expressOrder") {
+        // 这里是运营位管理的 选快递下单页面的相关配置
+        url = "/rest/list2-3";
+      }
       var _this = this;
       _this.$http.post(url,{"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SS1010"}}, (rsp) => {
         _this.tableData = rsp.data.data
