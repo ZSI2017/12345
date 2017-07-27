@@ -42,15 +42,15 @@
            headerName="快递公司名称"
            myProps = "name"
            >
+
       </table-column>
       <table-column
            headerName="非服务地区"
-            myProps = "createTime"
            >
 
-           <!-- <template scope="scope">
+           <template scope="scope">
                <el-button @click="handleClick" type="text" size="small">查看</el-button>
-           </template> -->
+           </template>
       </table-column>
       <table-column
            headerName="修改时间"
@@ -59,11 +59,10 @@
       </table-column>
       <table-column
            headerName="操作"
-            myProps = "createTime"
            >
-           <!-- <template scope="scope">
-               <el-button @click="handleClick" type="text" size="small">查看</el-button>
-           </template> -->
+           <template scope="scope">
+               <el-button @click="handleClick" type="text" size="small">编辑</el-button>
+           </template>
       </table-column>
     </my-table>
     <el-table class="mainTable" :data="tableData" style="width: 100%;margin-top:10px" max-height="500" empty-text="暂无数据" align="center" :default-sort="{prop: 'date', order: 'descending'}">

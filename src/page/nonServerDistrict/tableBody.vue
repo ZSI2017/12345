@@ -13,8 +13,7 @@
         </colgroup>
           <tr v-for="(items,indexs) in sourceData">
             <td v-for="(item,index) in store ">
-                {{items[item.myProps]}}
-                <!-- <table-column /> -->
+                {{item.children}}
              </td>
           </tr>
     </table>

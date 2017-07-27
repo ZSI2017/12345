@@ -1,6 +1,6 @@
 <template type="html">
     <div class="table-cell">
-       <slot text="hello from child"></slot>
+       <slot></slot>
     </div>
 </template>
 
@@ -22,24 +22,30 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
 
      },
      created(){
+       // this.columnConfig = { children : 这里定义了 table-column 中 的各种配置方法  }
        this.columnConfig = {
            headerName:this.headerName,
-           myProps:this.myProps
+           myProps:this.myProps,
+           children:this.$children
        }
+       // 这里 向上遍历，寻找 父类中的table 标签， 以tableId 为table 的标识，
+       //
          let parent = this.$parent;
 
          while(parent && !parent.tableId) {
              parent = parent.$parent;
          }
+
          this.defParent =  parent;
+         console.log("headerName:  %o +++  myProps:  %o ++++=",this.columnConfig,this);
+         bus.$emit('fromColumn',this.columnConfig);
        // 先等到 table 父类的引用
         // console.log("%oadsfasdfsd",this);
         // console.log("%o from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn  from tableColumn",this);
      },
      mounted(){
          //  alert("dsafsd");
-        console.log("headerName:  %o +++  myProps:  %o ++++=",this.columnConfig,this);
-         bus.$emit('fromColumn',this.columnConfig);
+
      }
   }
 </script>

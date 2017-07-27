@@ -39,6 +39,8 @@
           }
        },
        created() {
+         this.ColumnData=[];
+
          bus.$on("fromColumn",(columnConfig) => {
               // alert("my table");
               console.log("%c this is from MyTable.vue","background-color:black");
