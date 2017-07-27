@@ -6,17 +6,18 @@ import axios from "axios";
 // add request interceptor
 axios.interceptors.request.use(function(config) {
     // TODO  before request is sent
-    console.log("【axios log】"+JSON.stringify(config))
+    console.log("%c[axios log]before request:%s\n %o","color:green;font-size:16px;",config.url,config);
     return config;
 },function(error){
     // TODO  with request error
-      console.log("【axios error log】"+JSON.stringify(config))
+      console.log("%c[axios log]before request:\n %o","color:red;font-size:16px;",config);
      return Promise.reject(error);
 });
 
 // add a respose interceptor
 axios.interceptors.response.use(
   response =>{
+      console.log("%c[axios log] success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
     if(response.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
@@ -26,6 +27,7 @@ axios.interceptors.response.use(
       return response;
 },
   error =>{
+      console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
     //  TODO width response error
     return Promise.reject(error);
 

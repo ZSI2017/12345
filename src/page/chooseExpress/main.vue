@@ -38,7 +38,7 @@
     </el-table-column>
     <el-table-column   label="运营图">
         <template scope="scope">
-            <img width="50px" src="scope.row.imageUrl">
+            <img width="50px" :src="scope.row.imageUrl">
         </template>
     </el-table-column>
     <el-table-column  label="链接">
@@ -53,15 +53,21 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="gmtCreate" label="创建时间" width="160">
+    <el-table-column prop="gmtCreate" label="创建时间" width="200">
+      <template scope="scope">
+          {{new Date(scope.row.gmtCreate).toLocaleString()}}
+       </template>
     </el-table-column>
-    <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
+    <el-table-column prop="gmtModified" label="修改时间" width="200" :sortable="showSortable">
+      <template scope="scope">
+          {{new Date(scope.row.gmtModified).toLocaleString()}}
+       </template>
     </el-table-column>
     <el-table-column prop="activeTime" label="有效时段" width="220">
       <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtBegin}}</p>
+          <p style="padding:0;margin:0;text-align:center">{{new Date(scope.row.gmtBegin).toLocaleString()}}</p>
           <p style="padding:0;margin:0;text-align:center">至</p>
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtEnd}}</p>
+          <p style="padding:0;margin:0;text-align:center">{{new Date(scope.row.gmtEnd).toLocaleString()}}</p>
        </template>
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
