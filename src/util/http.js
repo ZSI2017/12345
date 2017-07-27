@@ -6,7 +6,7 @@ import axios from "axios";
 // add request interceptor
 axios.interceptors.request.use(function(config) {
     // TODO  before request is sent
-    console.log("%c[axios log]before request:%s\n %o","color:green;font-size:16px;",config.url,config);
+     console.log("%c[axios log]before request:%s\n %o","color:green;font-size:16px;",config.url,config);
     return config;
 },function(error){
     // TODO  with request error
@@ -48,7 +48,6 @@ function checkErrorCode() {
   };
 
   var mySuccessFn = (response,successfn,errorfn) => {
-       console.log("%c sdfasdfadfasfewdssdfs %o","color:blue",response);
        if( typeof response.data.meta !== undefined && (response.data.meta.code == "0000" || response.data.meta.success)) {
            successfn(response.data.result);
        }else {
@@ -58,7 +57,6 @@ function checkErrorCode() {
                errorfn(response);
             }
        }
-
   }
 export default {
     post(url,data,successfn,errorfn){
@@ -83,7 +81,6 @@ export default {
             proxy:{ }     //  defines the hostname and port of the proxy server
        }).then(
            (response) => {
-               console.log("%c ______ %o","color:yellow",response);
                 mySuccessFn(response,successfn,errorfn);
            }
        ).catch(
