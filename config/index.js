@@ -32,7 +32,7 @@ module.exports = {
                 target:'http://127.0.0.1:3000',
                 secure:false,
                 pathRewrite:{
-                    "^api":'/'
+                   '^/rest':''
                 }
                 // pathRewrite:{
                 //      '^/rest':''

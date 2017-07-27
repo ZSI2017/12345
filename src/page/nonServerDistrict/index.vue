@@ -35,7 +35,7 @@
 <template>
 
 <div class="section" v-loading.body.fullscreen.lock="fullscreenLoading" style="overflow:hidden">
-    <!-- <my-table
+    <my-table
        :data ="tableData"
     >
       <table-column
@@ -64,7 +64,7 @@
                <el-button @click="handleClick" type="text" size="small">编辑</el-button>
            </template>
       </table-column>
-    </my-table> -->
+    </my-table>
     <el-table class="mainTable" :data="tableData" style="width: 100%;margin-top:10px" max-height="500" empty-text="暂无数据" align="center" :default-sort="{prop: 'date', order: 'descending'}">
         <el-table-column prop="name" label="快递公司名称">
         </el-table-column>
