@@ -32,8 +32,11 @@ module.exports = {
                 target:'http://127.0.0.1:3000',
                 secure:false,
                 pathRewrite:{
-                     '^/rest':''
+                    "^api":'/'
                 }
+                // pathRewrite:{
+                //      '^/rest':''
+                // }
             }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
