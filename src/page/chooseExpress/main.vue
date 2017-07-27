@@ -34,16 +34,16 @@
       align="center"
       :default-sort="{prop: 'date', order: 'descending'}"
       >
-    <el-table-column prop="operationsMapName"  label="运营图称">
+    <el-table-column prop="name"  label="运营图称">
     </el-table-column>
-    <el-table-column prop="name" label="运营图">
+    <el-table-column   label="运营图">
         <template scope="scope">
-            <img width="50px" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
+            <img width="50px" src="scope.row.imageUrl">
         </template>
     </el-table-column>
-    <el-table-column prop="link" label="链接">
+    <el-table-column  label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.link" ref="popover4" width="300" trigger="click">
+        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
       </template>
@@ -53,15 +53,15 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" width="160">
+    <el-table-column prop="gmtCreate" label="创建时间" width="160">
     </el-table-column>
-    <el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
+    <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
     </el-table-column>
     <el-table-column prop="activeTime" label="有效时段" width="220">
       <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime1}}</p>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtBegin}}</p>
           <p style="padding:0;margin:0;text-align:center">至</p>
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime2}}</p>
+          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtEnd}}</p>
        </template>
     </el-table-column>
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
@@ -104,13 +104,13 @@
   </el-table>
 
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination 
-    @size-change="handleSizeChange" 
-    @current-change="handleCurrentChange" 
-    :current-page="currentPage4" 
-    :page-sizes="[5,10,15,20]" 
-    :page-size="pageSize" 
-    layout="total,sizes,prev, pager, next,jumper" 
+    <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page="currentPage4"
+    :page-sizes="[5,10,15,20]"
+    :page-size="pageSize"
+    layout="total,sizes,prev, pager, next,jumper"
     :total="totalCount">
     </el-pagination>
   </div>
@@ -208,27 +208,19 @@ export default {
   },
   created() {
     console.log("$router: " + this.$route.path);
-    let url = "/api/promotion/getList";
-    if (this.$route.path == "/chooseExpress") {
-      url = "/rest/list2-2";
-    } else if (this.$route.path == "/expressOrder") {
-      url = "/rest/list2-3";
-    }
-    let data={
-      "pages":{
-        "page_num":"0",                
-        "page_size":"10"
-      },
-      "con":{
-        "pageId":"SD1010",        
-      }
-    }
+    // let url = "/rest/list2";
+      let url = "/api/promotion/getList";
+    // if (this.$route.path == "/chooseExpress") {
+    //   url = "/rest/list2-2";
+    // } else if (this.$route.path == "/expressOrder") {
+    //   url = "/rest/list2-3";
+    // }
     var _this = this;
-    _this.$http.post(url,data,(data) => {
+    _this.$http.post(url, {"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SS1010"}},(result) => {
       console.log("success");
-      console.log(data);
-      _this.tableData = data.result.page_list;
-      _this.totalCount = data.result.page_list.length; //获取数据长度
+      console.log(result.page_list);
+      _this.tableData = result.page_list;
+      _this.totalCount = result.page_list.length; //获取数据长度
     }, (error) => {
       console.log("error");
       alert("error")
@@ -249,7 +241,7 @@ export default {
         url = "/rest/list2-3";
       }
       var _this = this;
-      _this.$http.get(url, (rsp) => {
+      _this.$http.post(url,{"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SS1010"}}, (rsp) => {
         _this.tableData = rsp.data.data
         //  console.log("success");
         //  console.log(data);
