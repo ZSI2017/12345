@@ -66,9 +66,9 @@
             {{ propStatus = scope.row.status==0? "草稿":(propStatus = scope.row.status==1?"已下架":"已上架")}}
         </template>
     </el-table-column>
-    <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
+    <el-table-column v-if="showConfig" prop="auditStatus" width="80" label="审核状态">
       <template scope="scope">
-          {{scope.row.auditState==0? "已驳回":(scope.row.auditState==1?"已通过":(scope.row.auditState==2?"上架待审核":(scope.row.auditState==3?"下架待审核":(scope.row.auditState==4?"新增待审核":(scope.row.auditState==5?"修改待审核":"草稿")))))}}
+          {{scope.row.auditStatus==0? "已驳回":(scope.row.auditStatus==1?"已通过":(scope.row.auditStatus==2?"上架待审核":(scope.row.auditStatus==3?"下架待审核":(scope.row.auditStatus==4?"新增待审核":(scope.row.auditStatus==5?"修改待审核":"草稿")))))}}
       </template>
     </el-table-column>
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">

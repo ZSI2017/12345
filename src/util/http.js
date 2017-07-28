@@ -17,7 +17,7 @@ axios.interceptors.request.use(function(config) {
 // add a respose interceptor
 axios.interceptors.response.use(
   response =>{
-      console.log("%c[axios log] success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
+      console.log("%c[axios log]success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
     if(response.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
