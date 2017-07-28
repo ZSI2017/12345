@@ -15,7 +15,7 @@ axios.interceptors.request.use(function(config) {
      console.log("%c[axios log]before request:%s\n %o","color:green;font-size:16px;",config.url,config);
     return config;
 },function(error){
-      vue.$message.error('调用接口出错！');
+      vue.$message.error('调用接口失败！');
     // TODO  with request error
       console.log("%c[axios log]before request:\n %o","color:red;font-size:16px;",config);
      return Promise.reject(error);
@@ -35,8 +35,7 @@ axios.interceptors.response.use(
       return response;
 },
   error =>{
-      vue.$message.error('接口调用失败！\n%o',error);
-
+      vue.$message.error('接口调用失败！');
       console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
     //  TODO width response error
     return Promise.reject(error);
@@ -87,7 +86,7 @@ export default {
                   return data;
             }],
             data:data,
-            // timeout:10000,
+            timeout:10000,
             responseType:'json',  // default
             xsrfCookieName:'XSRF-TOKEN',      // default
             xsrfHeaderName: 'X-XSRF-TOKEN', // default
@@ -100,6 +99,7 @@ export default {
        ).catch(
            (error) => {
                  console.log(error);
+                 vue.$message.error('接口调用失败');
            }
        )
     },
