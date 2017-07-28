@@ -45,7 +45,7 @@ axios.interceptors.response.use(
 
 // 这里
 function checkErrorCode(response) {
-      if(typeof response.data.meta.code !== undefined) {
+      if(typeof response.data.meta.code !== "undefined") {
          if(response.data.meta.code == "0012"){
              vue.$message.error('系统异常 code:0012');
              console.log("%c[axios log]error :\n %o","color:red;font-size:16px;",response);
@@ -62,10 +62,9 @@ function checkErrorCode(response) {
   };
 
   var mySuccessFn = (response,successfn,errorfn) => {
-       if( typeof response.data.meta !== undefined && (response.data.meta.code == "0000" || response.data.meta.success)) {
+       if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
            successfn(response.data.result);
        }else {
-             // 这
             if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
             } else {
