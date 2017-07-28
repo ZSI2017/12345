@@ -35,6 +35,7 @@ axios.interceptors.response.use(
       return response;
 },
   error =>{
+      vue.$message.error('接口调用失败！\n%o',error);
 
       console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
     //  TODO width response error
@@ -45,14 +46,18 @@ axios.interceptors.response.use(
 // 这里
 function checkErrorCode(response) {
       if(typeof response.data.meta.code !== undefined) {
-         if(meta.code == "0012"){
-          console.log("%c[axios log]error :\n %o","color:red;font-size:16px;",response);
+         if(response.data.meta.code == "0012"){
+             vue.$message.error('系统异常 code:0012');
+             console.log("%c[axios log]error :\n %o","color:red;font-size:16px;",response);
             // 错误码定义的提示信息
-         } else if (meta.code == "2345") {
+         } else if (response.data.meta.code == "2345") {
             // 错误码定义的提示信息
          } else {
+              vue.$message.error('系统异常');
             // 其他错误处理代码
          }
+      }else {
+         vue.$message.error('系统异常 code无效');
       }
   };
 
@@ -60,6 +65,7 @@ function checkErrorCode(response) {
        if( typeof response.data.meta !== undefined && (response.data.meta.code == "0000" || response.data.meta.success)) {
            successfn(response.data.result);
        }else {
+             // 这
             if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
             } else {

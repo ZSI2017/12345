@@ -224,8 +224,6 @@ export default {
       _this.tableData = result.page_list;
       _this.totalCount = parseInt(result.pages.cnt);
       // _this.totalCount = result.page_list.length; //获取数据长度
-    }, (error) => {
-      console.log("error");
     });
 
     console.log(this.$route.matched);
@@ -260,9 +258,6 @@ export default {
         _this.totalCount =  parseInt(rsp.pages.cnt);
         //  console.log("success");
         //  console.log(data);
-      }, (error) => {
-        console.log("error");
-        console.log(error);
       })
     }
   },
@@ -291,9 +286,6 @@ export default {
           _this.totalCount = parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
         })
 
 
@@ -360,9 +352,6 @@ export default {
           _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
         })
       } else if (tab.label == "已上线") {
         // 配置排序
@@ -387,9 +376,6 @@ export default {
             _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
         })
       } else {
         // 配置排序
@@ -414,9 +400,6 @@ export default {
           _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
         })
       }
       setTimeout(() => {
@@ -434,8 +417,6 @@ export default {
         // console.log(_this.gridData);
         _this.listLoading = false;
         _this.dialogTableVisible = true
-      }, (error) => {
-        console.log(error);
       })
     },
     setNewData() {
@@ -477,9 +458,6 @@ export default {
         this.totalCount =  parseInt(rsp.pages.cnt);
         //  console.log("success");
         //  console.log(data);
-      }, (error) => {
-        console.log("error");
-        console.log(error);
       })
 
 
@@ -515,9 +493,6 @@ export default {
       }, (rsp) => {
         this.tableData = rsp.page_list;
         this.totalCount =  parseInt(rsp.pages.cnt);
-      }, (error) => {
-        console.log("error");
-        console.log(error);
       })
       var _this = this;
       this.halfListLoading = true;
