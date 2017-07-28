@@ -7,7 +7,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
 
-    <el-form-item label="运营图" prop="opMap">
+    <el-form-item label="运营图">
       <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -42,8 +42,8 @@
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-if="isFromAddData" v-model="radio">
-        <el-radio class="radio" :label="1">上架</el-radio>
-        <el-radio class="radio" :label="2">下架</el-radio>
+        <el-radio class="radio" :label="2">上架</el-radio>
+        <el-radio class="radio" :label="1">下架</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
@@ -115,6 +115,7 @@
 <script type="text/javascript">
 import localEvent from 'src/vuex/function.js';
 import coverArea from "./coverArea.vue";
+
 export default {
   components:{
     coverArea
@@ -123,15 +124,14 @@ export default {
     return {
       // 从详情页面
       isDetail: false,
-      currentStateText: '',
       // 即将离开的对话框
 
       loadingFlag: false,
       dialogVisible: false,
       // dialogImageUrl:'https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png',
       fileList2: [{
-        name: 'food.jpeg',
-        url: "https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png"
+        name: '运营图.jpeg',
+        url: ""
       }],
       // 添加搜索框
       state1: "",
@@ -145,10 +145,8 @@ export default {
       checkedCities: [],
       isIndeterminate: [],
       // cities: cityOptions,
-      // value3 代表时间段选择的
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
-      radio: 1,
+      radio: "",
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
 
@@ -157,30 +155,30 @@ export default {
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy: [],
+      currentStateText: '',
+      // value3 代表时间段选择的
+      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       form: {
         name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
-        Forder: ''
+        Forder: '',
+        link:'',
+        imageUrl:''
       }
     }
   },
   mounted() {
     var localData = localEvent.get("localChooseExpress");
     console.log(localData);
-    console.log(localData.activeTime1);
-    this.form.name = localData.operationsMapName;
-    this.form.Forder = localData.Forder;
-    this.form.link = localData.link;
-    this.value3 = [new Date(2222, 22, 22, 22, 22), new Date(3333, 33, 33, 33, 33)];
-    this.currentStateText = localData.currentState;
-
-    if (localData.currentState = "上架") {
+    console.log(localData.status);
+    this.form.name = localData.name;
+    this.form.Forder = localData.sortWeight;
+    this.form.link = localData.linkUrl;
+    this.fileList2[0].url = localData.imageUrl;
+    this.form.gmtBegin = localData.gmtBegin;
+    this.form.gmtEnd = localData.gmtEnd;  
+    this.value3 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
+    this.currentStateText = localData.status;
+    if (localData.status == "1") {
       this.radio = 1;
     } else {
       this.radio = 2;

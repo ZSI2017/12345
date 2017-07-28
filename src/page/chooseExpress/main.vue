@@ -43,7 +43,7 @@
     </el-table-column>
     <el-table-column  label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click">
+        <el-popover :content="scope.row.linkUrl" ref="popover4" max-width="300" trigger="click">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
       </template>
@@ -77,7 +77,7 @@
             {{ propStatus = scope.row.status==0? "草稿":(propStatus = scope.row.status==1?"已下架":"已上架")}}
         </template>
   </el-table-column>
-    <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
+    <el-table-column v-if="showConfig" prop="auditStatus" width="80" label="审核状态">
     </el-table-column>
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
       <template scope="scope">
