@@ -215,15 +215,15 @@ export default {
   },
   created() {
     console.log("$router: " + this.$route.path);
-    // let url = "/rest/list2";
-      let url = "/api/promotion/getList";
-    // if (this.$route.path == "/chooseExpress") {
-    //   url = "/rest/list2-2";
-    // } else if (this.$route.path == "/expressOrder") {
-    //   url = "/rest/list2-3";
-    // }
+    let url = "/api/promotion/getList";
+    let pageId = "SD1010"    // 寄快递首页
+    ((this.$route.path == "/chooseExpress" &&
+      (pageId = "BM1010")) ||
+    (this.$route.path == "/expressOrder" &&
+      (pageId = "SS1010")))
+
     var _this = this;
-    _this.$http.post(url, {"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SS1010"}},(result) => {
+    _this.$http.post(url, {"pages":{"page_size":10,"page_num":0},"con":{"pageId":pageId}},(result) => {
       console.log("success");
       console.log(result.page_list);
       _this.tableData = result.page_list;
