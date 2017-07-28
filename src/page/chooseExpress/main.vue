@@ -36,7 +36,7 @@
       >
     <el-table-column prop="name"  label="运营图称">
     </el-table-column>
-    <el-table-column   label="运营图">
+    <el-table-column prop="imageUrl" label="运营图">
         <template scope="scope">
             <img width="50px" src="scope.row.imageUrl">
         </template>
@@ -55,12 +55,12 @@
     </el-table-column>
     <el-table-column prop="gmtCreate" label="创建时间" width="160">
       <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtCreate | formatDate}}</p>
+          {{scope.row.gmtCreate | formatDate}}
       </template>
     </el-table-column>
     <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
       <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtModified | formatDate}}</p>
+          {{scope.row.gmtModified | formatDate}}
       </template>
     </el-table-column>
     <el-table-column prop="activeTime" label="有效时段" width="220">
@@ -70,9 +70,12 @@
           <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtEnd | formatDate}}</p>
        </template>
     </el-table-column>
-    <el-table-column prop="Forder" width="70" align="center" label="排序值">
+    <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="currentState" width="100" label="状态" :sortable="showSortable">
+    <el-table-column prop="status" width="100" label="状态" :sortable="showSortable">
+        <template scope="scope">
+            {{ propStatus = scope.row.status==0? "草稿":(propStatus = scope.row.status==1?"已下架":"已上架")}}
+        </template>
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
@@ -167,6 +170,7 @@ export default {
    },
   data() {
     return {
+      propStatus:"",
       // 排序是否显示
       showSortable:true,
       totalCount:1000,//默认数据总数
@@ -223,7 +227,7 @@ export default {
     //   url = "/rest/list2-3";
     // }
     var _this = this;
-    _this.$http.post(url, {"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SS1010"}},(result) => {
+    _this.$http.post(url, {"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SD1010"}},(result) => {
       console.log("success");
       console.log(result.page_list);
       _this.tableData = result.page_list;
