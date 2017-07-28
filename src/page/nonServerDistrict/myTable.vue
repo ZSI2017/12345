@@ -10,11 +10,11 @@
       <div class="my_body">
            <table-body
              :store="storeData"
-             :tableData = "sourceData"
+             :tableData="sourceData"
            >
            </table-body>
       </div>
-      <slot name="noempty">
+      <slot>
       </slot>
    </section>
 </template>

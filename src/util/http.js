@@ -34,10 +34,10 @@ axios.interceptors.response.use(
 });
 
 // 这里
-function checkErrorCode() {
-      let response = arguments[0];
-      if(typeof response.meta !== undefined) {
-         if(meta.code == "1234"){
+function checkErrorCode(response) {
+      if(typeof response.data.meta.code !== undefined) {
+         if(meta.code == "0012"){
+          console.log("%c[axios log]error :\n %o","color:red;font-size:16px;",response);
             // 错误码定义的提示信息
          } else if (meta.code == "2345") {
             // 错误码定义的提示信息

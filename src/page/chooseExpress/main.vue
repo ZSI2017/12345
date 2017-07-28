@@ -25,7 +25,7 @@
     <el-table-column prop="name" label="运营图称">
     </el-table-column>
     <el-table-column prop="imageUrl" label="运营图">
-      <template scope="scope">
+       <template scope="scope">
             <img width="50px" :src="scope.row.imageUrl">
         </template>
     </el-table-column>
@@ -104,7 +104,7 @@
   </el-table>
 
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="totalCount">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,20,50]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="totalCount">
     </el-pagination>
   </div>
 
@@ -222,6 +222,7 @@ export default {
       }
     }, (result) => {
       _this.tableData = result.page_list;
+      _this.totalCount = parseInt(result.pages.cnt);
       // _this.totalCount = result.page_list.length; //获取数据长度
     }, (error) => {
       console.log("error");
@@ -256,6 +257,7 @@ export default {
         }
       }, (rsp) => {
         _this.tableData = rsp.page_list
+        _this.totalCount =  parseInt(rsp.pages.cnt);
         //  console.log("success");
         //  console.log(data);
       }, (error) => {
@@ -272,7 +274,6 @@ export default {
     // 操作排序值改变
     handleSortChange(column) {
         // 创建时间进行排序
-
         var _this = this;
         _this.$http.post(this.url, {
           "pages": {
@@ -285,7 +286,9 @@ export default {
             "orderStatus":column.order&&column.order.slice(0,4)
           }
         }, (rsp) => {
+
           _this.tableData = rsp.page_list
+          _this.totalCount = parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
         }, (error) => {
@@ -353,7 +356,8 @@ export default {
             "pageId": _this.pageId
           }
         }, (rsp) => {
-          _this.tableData = rsp.page_list
+          _this.tableData = rsp.page_list;
+          _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
         }, (error) => {
@@ -380,6 +384,7 @@ export default {
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list
+            _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
         }, (error) => {
@@ -406,6 +411,7 @@ export default {
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
+          _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
         }, (error) => {
@@ -468,6 +474,7 @@ export default {
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
+        this.totalCount =  parseInt(rsp.pages.cnt);
         //  console.log("success");
         //  console.log(data);
       }, (error) => {
@@ -507,6 +514,7 @@ export default {
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
+        this.totalCount =  parseInt(rsp.pages.cnt);
       }, (error) => {
         console.log("error");
         console.log(error);

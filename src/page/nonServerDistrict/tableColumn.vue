@@ -1,6 +1,8 @@
 <template type="html">
     <div class="table-cell">
-       <slot></slot>
+       <slot>
+         只有在没有要分发的内容时才会显示。
+       </slot>
     </div>
 </template>
 
@@ -22,7 +24,7 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
 
      },
      created(){
-      console.log("%c from table-column %o","color:blue",this)
+      console.log("%c from table-column %o","color:blue",this.$slots.default)
        // this.columnConfig = { children : 这里定义了 table-column 中 的各种配置方法  }
        this.columnConfig = {
            headerName:this.headerName,
