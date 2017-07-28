@@ -21,7 +21,15 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" class="mainTable" v-loading.body.lock="halfListLoading" @sort-change="handleSortChange" :data="tableData" @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="500" empty-text="暂无数据" align="center"
+  <el-table v-if="tableFalg" 
+    class="mainTable" 
+    @sort-change="handleSortChange" 
+    :data="tableData" 
+    @cell-mouse-enter="handleMouseEnter" 
+    style="width: 100%;margin-top:10px;" 
+    max-height="500" 
+    empty-text="暂无数据" 
+    align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="name" label="运营图称">
     </el-table-column>
@@ -32,7 +40,7 @@
     </el-table-column>
     <el-table-column label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" max-width="300" trigger="click">
+        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
       </template>
@@ -63,7 +71,7 @@
     </el-table-column>
     <el-table-column prop="status" width="100" label="状态" :sortable="showSortable">
       <template scope="scope">
-            {{ propStatus = scope.row.status==0? "草稿":(propStatus = scope.row.status==1?"已下架":"已上架")}}
+            {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下架":"已上架")}}
         </template>
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
@@ -105,7 +113,14 @@
   </el-table>
 
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,15,20]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="totalCount">
+    <el-pagination 
+        @size-change="handleSizeChange" 
+        @current-change="handleCurrentChange" 
+        :current-page="currentPage" 
+        :page-sizes="[5,10,20,50]" 
+        :page-size="pageSize" 
+        layout="total,sizes,prev, pager, next,jumper" 
+        :total="totalCount">
     </el-pagination>
   </div>
 
@@ -155,10 +170,9 @@ export default {
     return {
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
-      propStatus: "",
       // 排序是否显示
       showSortable: true,
-      totalCount: 1000, //默认数据总数
+      totalCount: 0, //默认数据总数
       myDialogTitle: "确认置为下架？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
       // 置为下架对话框
@@ -173,7 +187,6 @@ export default {
       showHeader: false,
       dialogTableVisible: false,
       value: '',
-      pageSize: 5,
       listLoading: false,
       halfListLoading: false,
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
@@ -188,6 +201,9 @@ export default {
         value: 'label',
         children: 'cities'
       },
+      orderColumn : "",//需要排序的字段，默认修改时间
+      orderStatus : "",//需要排序的状态，默认降序
+      pageSize: 5,      
       currentPage: 1,
       tableData: [],
       formLabelWidth: '120px',
@@ -222,8 +238,14 @@ export default {
       }
     }, (result) => {
       _this.tableData = result.page_list;
-      _this.totalCount = result.page_list.length; //获取数据长度
+      _this.totalCount = Number(result.pages.cnt); //获取数据长度
     }, (error) => {
+        alert("错误")
+        _this.$message({
+          showClose: true,
+          message: '错了哦，这是一条错误消息',
+          type: 'error'
+        });
       console.log("error");
     });
 
@@ -255,10 +277,16 @@ export default {
           "pageId": this.pageId
         }
       }, (rsp) => {
-        _this.tableData = rsp.page_list
+        _this.tableData = rsp.page_list;
+        _this.totalCount = Number(rsp.pages.cnt); //获取数据长度        
         //  console.log("success");
         //  console.log(data);
       }, (error) => {
+        this.$message({
+          showClose: true,
+          message: '错了哦，这是一条错误消息',
+          type: 'error'
+        });
         console.log("error");
         console.log(error);
       })
@@ -271,12 +299,56 @@ export default {
     },
     // 操作排序值改变
     handleSortChange(column) {
-      if (column.prop === "createTime") {
+      var _this = this;      
+      if (column.prop === "gmtModified") {
         // 创建时间进行排序
-        console.log(column.prop, column.order);
-      } else if (column.prop === "currentState") {
+        _this.url = "/api/promotion/getConfList";
+        console.log(_this.url)
+        this.orderColumn = "gmtModified";
+        _this.orderColumn = this.orderColumn;
+        _this.$http.post(_this.url, {
+          "pages": {
+            "page_size": this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": _this.pageId,
+            "orderColumn":_this.orderColumn
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list;
+          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度          
+          //  console.log("success");
+          //  console.log(data);
+        }, (error) => {
+          console.log("error");
+          console.log(error);
+        })
+
+      } else if (column.prop === "status") {
         // 状态进行排序
-        console.log(column.prop, column.order);
+        _this.url = "/api/promotion/getConfList";
+        this.orderStatus = "status";
+        _this.orderStatus = this.orderStatus;
+        _this.$http.post(_this.url, {
+          "pages": {
+            "page_size": this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": _this.pageId,
+            "orderStatus":_this.orderStatus
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list;
+          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度          
+          //  console.log("success");
+          //  console.log(data);
+        }, (error) => {
+          console.log("error");
+          console.log(error);
+        })
+
       }
     },
     // 操作栏对应的事件响应
@@ -337,7 +409,8 @@ export default {
             "pageId": _this.pageId
           }
         }, (rsp) => {
-          _this.tableData = rsp.page_list
+          _this.tableData = rsp.page_list;
+          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度          
           //  console.log("success");
           //  console.log(data);
         }, (error) => {
@@ -363,7 +436,8 @@ export default {
             "pageId": _this.pageId
           }
         }, (rsp) => {
-          _this.tableData = rsp.page_list
+          _this.tableData = rsp.page_list;
+          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度
           //  console.log("success");
           //  console.log(data);
         }, (error) => {
@@ -390,6 +464,7 @@ export default {
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
+          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度          
           //  console.log("success");
           //  console.log(data);
         }, (error) => {
