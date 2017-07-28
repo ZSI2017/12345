@@ -34,7 +34,7 @@
       <template scope="scope">
         <el-popover :content="scope.row.linkUrl" ref="popover4" max-width="300" trigger="click">
         </el-popover>
-        <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
+        <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">
@@ -222,7 +222,7 @@ export default {
       }
     }, (result) => {
       _this.tableData = result.page_list;
-      _this.totalCount = result.page_list.length; //获取数据长度
+      // _this.totalCount = result.page_list.length; //获取数据长度
     }, (error) => {
       console.log("error");
     });
