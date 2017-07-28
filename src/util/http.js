@@ -1,14 +1,21 @@
 'use strict'
+import Vue from 'vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 
+Vue.use(ElementUI);
+var vue = new Vue();
 import axios from "axios";
 
 
 // add request interceptor
 axios.interceptors.request.use(function(config) {
+
     // TODO  before request is sent
      console.log("%c[axios log]before request:%s\n %o","color:green;font-size:16px;",config.url,config);
     return config;
 },function(error){
+      vue.$message.error('调用接口出错！');
     // TODO  with request error
       console.log("%c[axios log]before request:\n %o","color:red;font-size:16px;",config);
      return Promise.reject(error);
@@ -17,6 +24,7 @@ axios.interceptors.request.use(function(config) {
 // add a respose interceptor
 axios.interceptors.response.use(
   response =>{
+
       console.log("%c[axios log]success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
     if(response.error === "ACL_NO_PRIVILEGE") {
@@ -27,6 +35,7 @@ axios.interceptors.response.use(
       return response;
 },
   error =>{
+
       console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
     //  TODO width response error
     return Promise.reject(error);
@@ -51,7 +60,7 @@ function checkErrorCode(response) {
        if( typeof response.data.meta !== undefined && (response.data.meta.code == "0000" || response.data.meta.success)) {
            successfn(response.data.result);
        }else {
-            if(typeof errorfn === undefined) {
+            if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
             } else {
                errorfn(response);
