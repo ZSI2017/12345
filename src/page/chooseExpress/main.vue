@@ -21,8 +21,7 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" class="mainTable" v-loading.body.lock="halfListLoading" @sort-change="handleSortChange" :data="tableData" @cell-mouse-enter="handleMouseEnter" style="width: 100%;margin-top:10px;" max-height="500" empty-text="暂无数据" align="center"
-    :default-sort="{prop: 'date', order: 'descending'}">
+  <el-table v-if="tableFalg" class="mainTable" v-loading.body.lock="halfListLoading" @sort-change="handleSortChange" :data="tableData" @cell-mouse-enter="handleMouseEnter"  style="width: 100%;margin-top:10px;" max-height="500" empty-text="暂无数据" align="center">
     <el-table-column prop="name" label="运营图称">
     </el-table-column>
     <el-table-column prop="imageUrl" label="运营图">
@@ -42,12 +41,12 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="gmtCreate" label="创建时间" width="160">
+    <el-table-column prop="gmtCreate" label="创建时间" width="160"  :sortable="showSortable">
       <template scope="scope">
           {{scope.row.gmtCreate | formatDate}}
       </template>
     </el-table-column>
-    <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
+    <el-table-column prop="gmtModified" label="修改时间" width="160">
       <template scope="scope">
           {{scope.row.gmtModified | formatDate}}
       </template>
@@ -61,7 +60,7 @@
     </el-table-column>
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="status" width="100" label="状态" :sortable="showSortable">
+    <el-table-column prop="status" width="100" label="状态" :sortable="showSortable">>
       <template scope="scope">
             {{ propStatus = scope.row.status==0? "草稿":(propStatus = scope.row.status==1?"已下架":"已上架")}}
         </template>
@@ -157,7 +156,7 @@ export default {
       url: '', // 当前页面的url
       propStatus: "",
       // 排序是否显示
-      showSortable: true,
+      showSortable: 'custom',
       totalCount: 1000, //默认数据总数
       myDialogTitle: "确认置为下架？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
@@ -203,6 +202,7 @@ export default {
     }
   },
   created() {
+
     console.log("$router: " + this.$route.path);
     this.url = "/api/promotion/getConfList"; // 默认展开 配置
     this.pageId = "SD1010"; // 寄快递首页
@@ -271,13 +271,29 @@ export default {
     },
     // 操作排序值改变
     handleSortChange(column) {
-      if (column.prop === "createTime") {
         // 创建时间进行排序
-        console.log(column.prop, column.order);
-      } else if (column.prop === "currentState") {
-        // 状态进行排序
-        console.log(column.prop, column.order);
-      }
+
+        var _this = this;
+        _this.$http.post(this.url, {
+          "pages": {
+            "page_size": this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": this.pageId,
+            "orderColumn":column.prop,
+            "orderStatus":column.order&&column.order.slice(0,4)
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list
+          //  console.log("success");
+          //  console.log(data);
+        }, (error) => {
+          console.log("error");
+          console.log(error);
+        })
+
+
     },
     // 操作栏对应的事件响应
     OperationTakeOff() {
@@ -321,7 +337,7 @@ export default {
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
         // 配置排序
-        _this.showSortable = true;
+        _this.showSortable = "custom";
         _this.tableData = [];
         _this.showConfig = true;
         _this.showOperation = true;
