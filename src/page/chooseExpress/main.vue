@@ -73,6 +73,9 @@
     <el-table-column prop="Forder" width="70" align="center" label="排序值">
     </el-table-column>
     <el-table-column prop="currentState" width="100" label="状态" :sortable="showSortable">
+      <template scope="scope">
+          {{scope.row.status == "1"? "已下架":scope.row.status == "0"?"草稿":"已下架"}}
+      </template>
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
@@ -216,7 +219,7 @@ export default {
   created() {
     console.log("$router: " + this.$route.path);
     let url = "/api/promotion/getList";
-    let pageId = "SD1010"    // 寄快递首页
+    let pageId = "SD1010";    // 寄快递首页
     ((this.$route.path == "/chooseExpress" &&
       (pageId = "BM1010")) ||
     (this.$route.path == "/expressOrder" &&
@@ -224,13 +227,10 @@ export default {
 
     var _this = this;
     _this.$http.post(url, {"pages":{"page_size":10,"page_num":0},"con":{"pageId":pageId}},(result) => {
-      console.log("success");
-      console.log(result.page_list);
       _this.tableData = result.page_list;
       _this.totalCount = result.page_list.length; //获取数据长度
     }, (error) => {
       console.log("error");
-      alert("error")
     });
 
     console.log(this.$route.matched);
@@ -244,17 +244,15 @@ export default {
   watch: {
     '$route': function(to, from) {
       // 默认状态是 运营位管理的 寄快递首页
-      console.log("$router: " + to.path);
       let url = "/api/promotion/getList";
-      if (to.path == "/chooseExpress") {
-        // 这里是运营位管理的 选择快递页面 的相关配置
-        url = "/rest/list2-2"
-      } else if (to.path == "/expressOrder") {
-        // 这里是运营位管理的 选快递下单页面的相关配置
-        url = "/rest/list2-3";
-      }
+      let pageId = "SD1010";    // 寄快递首页
+      ((this.$route.path == "/chooseExpress" &&
+        (pageId = "BM1010")) ||
+      (this.$route.path == "/expressOrder" &&
+        (pageId = "SS1010")))
+
       var _this = this;
-      _this.$http.post(url,{"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SS1010"}}, (rsp) => {
+      _this.$http.post(url,{"pages":{"page_size":10,"page_num":0},"con":{"pageId":pageId}}, (rsp) => {
         _this.tableData = rsp.data.data
         //  console.log("success");
         //  console.log(data);

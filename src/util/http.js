@@ -94,9 +94,9 @@ export default {
           method:'get',
         //   baseURL:"http://localhost:8080/",
           timeout: 10000,
-          headers: {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
+          // headers: {
+          //     'X-Requested-With': 'XMLHttpRequest'
+          //   }
           }).then( (response) => {
              successfn(response);
           }
