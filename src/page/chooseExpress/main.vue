@@ -19,7 +19,7 @@
       <el-button type="primary" @click="setNewData" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
     </el-col>
   </el-row>
-  
+
   <!-- 表格  -->
   <el-table
       v-if="tableFalg"
@@ -38,7 +38,7 @@
     </el-table-column>
     <el-table-column prop="imageUrl" label="运营图">
         <template scope="scope">
-            <img width="50px" src="scope.row.imageUrl">
+            <img width="50px" :src="scope.row.imageUrl">
         </template>
     </el-table-column>
     <el-table-column  label="链接">
@@ -76,7 +76,7 @@
         <template scope="scope">
             {{ propStatus = scope.row.status==0? "草稿":(propStatus = scope.row.status==1?"已下架":"已上架")}}
         </template>
-    </el-table-column>
+  </el-table-column>
     <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
     </el-table-column>
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
@@ -219,22 +219,19 @@ export default {
   },
   created() {
     console.log("$router: " + this.$route.path);
-    // let url = "/rest/list2";
-      let url = "/api/promotion/getList";
-    // if (this.$route.path == "/chooseExpress") {
-    //   url = "/rest/list2-2";
-    // } else if (this.$route.path == "/expressOrder") {
-    //   url = "/rest/list2-3";
-    // }
+    let url = "/api/promotion/getList";
+    let pageId = "SD1010";    // 寄快递首页
+    ((this.$route.path == "/chooseExpress" &&
+      (pageId = "BM1010")) ||
+    (this.$route.path == "/expressOrder" &&
+      (pageId = "SS1010")))
+
     var _this = this;
-    _this.$http.post(url, {"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SD1010"}},(result) => {
-      console.log("success");
-      console.log(result.page_list);
+    _this.$http.post(url, {"pages":{"page_size":10,"page_num":0},"con":{"pageId":pageId}},(result) => {
       _this.tableData = result.page_list;
       _this.totalCount = result.page_list.length; //获取数据长度
     }, (error) => {
       console.log("error");
-      alert("error")
     });
 
     console.log(this.$route.matched);
@@ -248,17 +245,15 @@ export default {
   watch: {
     '$route': function(to, from) {
       // 默认状态是 运营位管理的 寄快递首页
-      console.log("$router: " + to.path);
       let url = "/api/promotion/getList";
-      if (to.path == "/chooseExpress") {
-        // 这里是运营位管理的 选择快递页面 的相关配置
-        url = "/rest/list2-2"
-      } else if (to.path == "/expressOrder") {
-        // 这里是运营位管理的 选快递下单页面的相关配置
-        url = "/rest/list2-3";
-      }
+      let pageId = "SD1010";    // 寄快递首页
+      ((this.$route.path == "/chooseExpress" &&
+        (pageId = "BM1010")) ||
+      (this.$route.path == "/expressOrder" &&
+        (pageId = "SS1010")))
+
       var _this = this;
-      _this.$http.post(url,{"pages":{"page_size":10,"page_num":0},"con":{"pageId":"SS1010"}}, (rsp) => {
+      _this.$http.post(url,{"pages":{"page_size":10,"page_num":0},"con":{"pageId":pageId}}, (rsp) => {
         _this.tableData = rsp.data.data
         //  console.log("success");
         //  console.log(data);

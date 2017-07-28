@@ -14,7 +14,7 @@
            >
            </table-body>
       </div>
-      <slot>
+      <slot name="noempty">
       </slot>
    </section>
 </template>
