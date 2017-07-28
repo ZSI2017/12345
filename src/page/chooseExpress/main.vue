@@ -34,7 +34,7 @@
     <el-table-column prop="name" label="运营图称">
     </el-table-column>
     <el-table-column prop="imageUrl" label="运营图">
-      <template scope="scope">
+       <template scope="scope">
             <img width="50px" :src="scope.row.imageUrl">
         </template>
     </el-table-column>
@@ -42,7 +42,7 @@
       <template scope="scope">
         <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click">
         </el-popover>
-        <el-button v-popover:popover4 style="font-size:12px;">查看链接</el-button>
+        <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">
@@ -50,12 +50,12 @@
          <el-button @click="checkArea" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="gmtCreate" label="创建时间" width="160">
+    <el-table-column prop="gmtCreate" label="创建时间" width="160"  :sortable="showSortable">
       <template scope="scope">
           {{scope.row.gmtCreate | formatDate}}
       </template>
     </el-table-column>
-    <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
+    <el-table-column prop="gmtModified" label="修改时间" width="160">
       <template scope="scope">
           {{scope.row.gmtModified | formatDate}}
       </template>
@@ -69,14 +69,14 @@
     </el-table-column>
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="status" width="100" label="状态" :sortable="showSortable">
+    <el-table-column prop="status" width="100" label="状态" :sortable="showSortable">>
       <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下架":"已上架")}}
         </template>
     </el-table-column>
-    <el-table-column v-if="showConfig" prop="auditState" width="80" label="审核状态">
+    <el-table-column v-if="showConfig" prop="auditStatus" width="80" label="审核状态">
       <template scope="scope">
-          {{scope.row.auditState==0? "已驳回":(scope.row.auditState==1?"已通过":(scope.row.auditState==2?"上架待审核":(scope.row.auditState==3?"下架待审核":(scope.row.auditState==4?"新增待审核":(scope.row.auditState==5?"修改待审核":"草稿")))))}}
+          {{scope.row.auditStatus==0? "已驳回":(scope.row.auditStatus==1?"已通过":(scope.row.auditStatus==2?"上架待审核":(scope.row.auditStatus==3?"下架待审核":(scope.row.auditStatus==4?"新增待审核":(scope.row.auditStatus==5?"修改待审核":"草稿")))))}}
       </template>
     </el-table-column>
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
@@ -171,8 +171,8 @@ export default {
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
       // 排序是否显示
-      showSortable: true,
-      totalCount: 0, //默认数据总数
+      showSortable: 'custom',
+      totalCount: 1000, //默认数据总数
       myDialogTitle: "确认置为下架？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
       // 置为下架对话框
@@ -219,6 +219,7 @@ export default {
     }
   },
   created() {
+
     console.log("$router: " + this.$route.path);
     this.url = "/api/promotion/getConfList"; // 默认展开 配置
     this.pageId = "SD1010"; // 寄快递首页
@@ -238,15 +239,8 @@ export default {
       }
     }, (result) => {
       _this.tableData = result.page_list;
-      _this.totalCount = Number(result.pages.cnt); //获取数据长度
-    }, (error) => {
-        alert("错误")
-        _this.$message({
-          showClose: true,
-          message: '错了哦，这是一条错误消息',
-          type: 'error'
-        });
-      console.log("error");
+      _this.totalCount = parseInt(result.pages.cnt);
+      // _this.totalCount = result.page_list.length; //获取数据长度
     });
 
     console.log(this.$route.matched);
@@ -277,18 +271,10 @@ export default {
           "pageId": this.pageId
         }
       }, (rsp) => {
-        _this.tableData = rsp.page_list;
-        _this.totalCount = Number(rsp.pages.cnt); //获取数据长度        
+        _this.tableData = rsp.page_list
+        _this.totalCount =  parseInt(rsp.pages.cnt);
         //  console.log("success");
         //  console.log(data);
-      }, (error) => {
-        this.$message({
-          showClose: true,
-          message: '错了哦，这是一条错误消息',
-          type: 'error'
-        });
-        console.log("error");
-        console.log(error);
       })
     }
   },
@@ -299,57 +285,25 @@ export default {
     },
     // 操作排序值改变
     handleSortChange(column) {
-      var _this = this;      
-      if (column.prop === "gmtModified") {
         // 创建时间进行排序
-        _this.url = "/api/promotion/getConfList";
-        console.log(_this.url)
-        this.orderColumn = "gmtModified";
-        _this.orderColumn = this.orderColumn;
-        _this.$http.post(_this.url, {
+        var _this = this;
+        _this.$http.post(this.url, {
           "pages": {
             "page_size": this.pageSize,
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId,
-            "orderColumn":_this.orderColumn
+            "pageId": this.pageId,
+            "orderColumn":column.prop,
+            "orderStatus":column.order&&column.order.slice(0,4)
           }
         }, (rsp) => {
-          _this.tableData = rsp.page_list;
-          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度          
+
+          _this.tableData = rsp.page_list
+          _this.totalCount = parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
         })
-
-      } else if (column.prop === "status") {
-        // 状态进行排序
-        _this.url = "/api/promotion/getConfList";
-        this.orderStatus = "status";
-        _this.orderStatus = this.orderStatus;
-        _this.$http.post(_this.url, {
-          "pages": {
-            "page_size": this.pageSize,
-            "page_num": _this.currentPage - 1
-          },
-          "con": {
-            "pageId": _this.pageId,
-            "orderStatus":_this.orderStatus
-          }
-        }, (rsp) => {
-          _this.tableData = rsp.page_list;
-          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度          
-          //  console.log("success");
-          //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
-        })
-
-      }
     },
     // 操作栏对应的事件响应
     OperationTakeOff() {
@@ -393,7 +347,7 @@ export default {
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
         // 配置排序
-        _this.showSortable = true;
+        _this.showSortable = "custom";
         _this.tableData = [];
         _this.showConfig = true;
         _this.showOperation = true;
@@ -410,12 +364,9 @@ export default {
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
-          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度          
+          _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
         })
       } else if (tab.label == "已上线") {
         // 配置排序
@@ -436,13 +387,10 @@ export default {
             "pageId": _this.pageId
           }
         }, (rsp) => {
-          _this.tableData = rsp.page_list;
-          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度
+          _this.tableData = rsp.page_list
+            _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
         })
       } else {
         // 配置排序
@@ -464,12 +412,9 @@ export default {
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
-          _this.totalCount = Number(rsp.pages.cnt); //获取数据长度          
+          _this.totalCount =  parseInt(rsp.pages.cnt);
           //  console.log("success");
           //  console.log(data);
-        }, (error) => {
-          console.log("error");
-          console.log(error);
         })
       }
       setTimeout(() => {
@@ -487,8 +432,6 @@ export default {
         // console.log(_this.gridData);
         _this.listLoading = false;
         _this.dialogTableVisible = true
-      }, (error) => {
-        console.log(error);
       })
     },
     setNewData() {
@@ -527,11 +470,9 @@ export default {
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
+        this.totalCount =  parseInt(rsp.pages.cnt);
         //  console.log("success");
         //  console.log(data);
-      }, (error) => {
-        console.log("error");
-        console.log(error);
       })
 
 
@@ -566,9 +507,7 @@ export default {
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
-      }, (error) => {
-        console.log("error");
-        console.log(error);
+        this.totalCount =  parseInt(rsp.pages.cnt);
       })
       var _this = this;
       this.halfListLoading = true;

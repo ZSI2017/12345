@@ -1,14 +1,21 @@
 'use strict'
+import Vue from 'vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 
+Vue.use(ElementUI);
+var vue = new Vue();
 import axios from "axios";
 
 
 // add request interceptor
 axios.interceptors.request.use(function(config) {
+
     // TODO  before request is sent
      console.log("%c[axios log]before request:%s\n %o","color:green;font-size:16px;",config.url,config);
     return config;
 },function(error){
+      vue.$message.error('调用接口失败！');
     // TODO  with request error
       console.log("%c[axios log]before request:\n %o","color:red;font-size:16px;",config);
      return Promise.reject(error);
@@ -17,7 +24,8 @@ axios.interceptors.request.use(function(config) {
 // add a respose interceptor
 axios.interceptors.response.use(
   response =>{
-      console.log("%c[axios log] success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
+
+      console.log("%c[axios log]success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
     if(response.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
@@ -27,6 +35,7 @@ axios.interceptors.response.use(
       return response;
 },
   error =>{
+      vue.$message.error('接口调用失败！');
       console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
     //  TODO width response error
     return Promise.reject(error);
@@ -34,24 +43,28 @@ axios.interceptors.response.use(
 });
 
 // 这里
-function checkErrorCode() {
-      let response = arguments[0];
-      if(typeof response.meta !== undefined) {
-         if(meta.code == "1234"){
+function checkErrorCode(response) {
+      if(typeof response.data.meta.code !== "undefined") {
+         if(response.data.meta.code == "0012"){
+             vue.$message.error('系统异常 code:0012');
+             console.log("%c[axios log]error :\n %o","color:red;font-size:16px;",response);
             // 错误码定义的提示信息
-         } else if (meta.code == "2345") {
+         } else if (response.data.meta.code == "2345") {
             // 错误码定义的提示信息
          } else {
+              vue.$message.error('系统异常');
             // 其他错误处理代码
          }
+      }else {
+         vue.$message.error('系统异常 code无效');
       }
   };
 
   var mySuccessFn = (response,successfn,errorfn) => {
-       if( typeof response.data.meta !== undefined && (response.data.meta.code == "0000" || response.data.meta.success)) {
+       if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
            successfn(response.data.result);
        }else {
-            if(typeof errorfn === undefined) {
+            if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
             } else {
                errorfn(response);
@@ -73,7 +86,7 @@ export default {
                   return data;
             }],
             data:data,
-            // timeout:10000,
+            timeout:10000,
             responseType:'json',  // default
             xsrfCookieName:'XSRF-TOKEN',      // default
             xsrfHeaderName: 'X-XSRF-TOKEN', // default
@@ -86,6 +99,7 @@ export default {
        ).catch(
            (error) => {
                  console.log(error);
+                 vue.$message.error('接口调用失败');
            }
        )
     },
