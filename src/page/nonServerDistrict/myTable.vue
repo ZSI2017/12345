@@ -1,5 +1,8 @@
 <template type="html">
    <section class="">
+     <div class="hidden-columns">
+         <slot></slot>
+     </div>
       <div class="my_header">
           <table-header
              :store="storeData"
@@ -14,8 +17,6 @@
            >
            </table-body>
       </div>
-      <slot>
-      </slot>
    </section>
 </template>
 <script type="text/javascript">
@@ -43,7 +44,7 @@
 
          bus.$on("fromColumn",(columnConfig) => {
               // alert("my table");
-              console.log("%c this is from MyTable.vue","background-color:black");
+              // console.log("%c this is from MyTable.vue","background-color:black");
               this.ColumnData.push(columnConfig)
 
          })
@@ -74,5 +75,11 @@
   }
 </script>
 <style lang="scss">
+    .hidden-columns {
+        visibility: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
 
 </style>

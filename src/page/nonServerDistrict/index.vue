@@ -35,6 +35,15 @@
 <template>
 
 <div class="section" v-loading.body.fullscreen.lock="fullscreenLoading" style="overflow:hidden">
+     <!-- <child :level="3">
+            hello child
+     </child>
+       <mysolt>
+              <template  scope="scope">
+                 <div> 44444444444444433 </div>
+                 <div>{{scope.msg.aaa}}</div>
+              </template>
+       </mysolt> -->
     <my-table
        :data ="tableData"
     >
@@ -42,12 +51,10 @@
            headerName="快递公司名称"
            myProps = "name"
            >
-
       </table-column>
       <table-column
            headerName="非服务地区"
            >
-
            <template scope="scope">
                <el-button @click="handleClick" type="text" size="small">查看</el-button>
            </template>
@@ -61,11 +68,11 @@
            headerName="操作"
            >
            <template scope="scope">
-               <el-button @click="handleClick" type="text" size="small">编辑</el-button>
+                <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
            </template>
       </table-column>
     </my-table>
-    <el-table class="mainTable" :data="tableData" style="width: 100%;margin-top:10px" max-height="500" empty-text="暂无数据" align="center" :default-sort="{prop: 'date', order: 'descending'}">
+    <!-- <el-table class="mainTable" :data="tableData" style="width: 100%;margin-top:10px" max-height="500" empty-text="暂无数据" align="center" :default-sort="{prop: 'date', order: 'descending'}">
         <el-table-column prop="name" label="快递公司名称">
         </el-table-column>
         <el-table-column label="非服务地区" >
@@ -79,7 +86,7 @@
                 <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
             </template>
         </el-table-column>
-    </el-table>
+    </el-table> -->
 
     <!-- <check-server
       :visible="dialogCheckVisible"
@@ -102,7 +109,8 @@
   import checkboxGroup from "@/page/nonServerDistrict/checkboxGroup"
   import myTable from "@/page/nonServerDistrict/myTable";
   import tableColumn from "@/page/nonServerDistrict/tableColumn";
-
+  import mysolt from "@/page/nonServerDistrict/mysolt";
+  import  child from "@/page/nonServerDistrict/render2.vue"
 export default {
     name: 'nonServerDistrict',
     components: {
@@ -110,7 +118,9 @@ export default {
         checkbox,
         checkboxGroup,
         myTable,
-        tableColumn
+        tableColumn,
+        mysolt,
+        child
     },
     data() {
         return {
