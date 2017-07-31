@@ -80,8 +80,8 @@
               {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":"已上线")}}
             </div>
             <div v-else>
-              {{scope.row.auditStatus==7? "已驳回":(scope.row.auditStatus==1?"已通过":(scope.row.auditStatus==2?"上线待审核":(scope.row.auditStatus==3?"下线待审核":"草稿")))}}              
-            </div>      
+              {{scope.row.auditStatus==7? "已驳回":(scope.row.auditStatus==1?"已通过":(scope.row.auditStatus==2?"上线待审核":(scope.row.auditStatus==3?"下线待审核":"草稿")))}}
+            </div>
       </template>
     </el-table-column>
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
@@ -265,9 +265,9 @@ export default {
       // 默认状态是 运营位管理的 寄快递首页
       this.url = "/api/promotion/getConfList";
       this.pageId = "SD1010"; // 寄快递首页
-      this.activeName2 = "first";  
+      this.activeName2 = "first";
       this.radio2 = 1;
-      this.showConfig = true;            
+      this.showConfig = true;
       ((this.$route.path == "/chooseExpress" &&
           (this.pageId = "BM1010")) ||
         (this.$route.path == "/expressOrder" &&
@@ -392,9 +392,9 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.currentPage = 1;
-        _this.radio2 = "";      
-        _this.auditState = "审核状态";   
-        _this.auditStatusFlage = false;             
+        _this.radio2 = "";
+        _this.auditState = "审核状态";
+        _this.auditStatusFlage = false;
         _this.url = "/api/promotion/getList";
         _this.$http.post(_this.url, {
           "pages": {
@@ -420,8 +420,8 @@ export default {
         _this.showOperation2 = true;
         _this.currentPage = 1;
         _this.radio2 = "";
-        _this.auditState = "待审核状态";    
-        _this.auditStatusFlage = true;            
+        _this.auditState = "待审核状态";
+        _this.auditStatusFlage = true;
         _this.url = "/api/promotion/getAuditList"
         _this.$http.post(_this.url, {
           "pages": {
@@ -585,7 +585,7 @@ export default {
     },
     handleRadio(){
       var _this = this;
-      _this.currentPage = 1;    
+      _this.currentPage = 1;
       _this.url = "/api/promotion/getConfList"
         _this.$http.post(_this.url, {
           "pages": {
