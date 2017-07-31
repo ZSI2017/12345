@@ -8,11 +8,11 @@
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
     <el-col :span="22">
-      <el-radio-group v-model="radio2">
-        <el-radio :label="3">审核通过</el-radio>
-        <el-radio :label="6">驳回</el-radio>
-        <el-radio :label="9">待审核</el-radio>
-        <el-radio :label="12">草稿</el-radio>
+      <el-radio-group v-model="radio2" @change="handleRadio">
+        <el-radio :label="1">审核通过</el-radio>
+        <el-radio :label="2">驳回</el-radio>
+        <el-radio :label="3">待审核</el-radio>
+        <el-radio :label="4">草稿</el-radio>
       </el-radio-group>
     </el-col>
     <el-col :span="2">
@@ -21,7 +21,16 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" class="mainTable" v-loading.body.lock="halfListLoading" @sort-change="handleSortChange" :data="tableData" @cell-mouse-enter="handleMouseEnter"  style="width: 100%;margin-top:10px;" max-height="500" empty-text="暂无数据" align="center">
+  <el-table v-if="tableFalg" 
+    class="mainTable" 
+    @sort-change="handleSortChange" 
+    :data="tableData" 
+    @cell-mouse-enter="handleMouseEnter" 
+    style="width: 100%;margin-top:10px;" 
+    max-height="500" 
+    empty-text="暂无数据" 
+    align="center"
+    :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="name" label="运营图称">
     </el-table-column>
     <el-table-column prop="imageUrl" label="运营图">
@@ -31,7 +40,7 @@
     </el-table-column>
     <el-table-column label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" max-width="300" trigger="click">
+        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
@@ -62,7 +71,7 @@
     </el-table-column>
     <el-table-column prop="status" width="100" label="状态" :sortable="showSortable">>
       <template scope="scope">
-            {{ propStatus = scope.row.status==0? "草稿":(propStatus = scope.row.status==1?"已下架":"已上架")}}
+            {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下架":"已上架")}}
         </template>
     </el-table-column>
     <el-table-column v-if="showConfig" prop="auditStatus" width="80" label="审核状态">
@@ -104,7 +113,14 @@
   </el-table>
 
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,20,50]" :page-size="pageSize" layout="total,sizes,prev, pager, next,jumper" :total="totalCount">
+    <el-pagination 
+        @size-change="handleSizeChange" 
+        @current-change="handleCurrentChange" 
+        :current-page="currentPage" 
+        :page-sizes="[5,10,20,50]" 
+        :page-size="pageSize" 
+        layout="total,sizes,prev, pager, next,jumper" 
+        :total="totalCount">
     </el-pagination>
   </div>
 
@@ -154,10 +170,9 @@ export default {
     return {
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
-      propStatus: "",
       // 排序是否显示
       showSortable: 'custom',
-      totalCount: 1000, //默认数据总数
+      totalCount: 0, //默认数据总数
       myDialogTitle: "确认置为下架？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
       // 置为下架对话框
@@ -167,12 +182,11 @@ export default {
       tableFalg: true,
       showConfig: true,
       gridData: [],
-      radio2: 3,
+      radio2: 1,
       activeName2: 'first',
       showHeader: false,
       dialogTableVisible: false,
       value: '',
-      pageSize: 5,
       listLoading: false,
       halfListLoading: false,
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
@@ -187,6 +201,9 @@ export default {
         value: 'label',
         children: 'cities'
       },
+      orderColumn : "",//需要排序的字段，默认修改时间
+      orderStatus : "",//需要排序的状态，默认降序
+      pageSize: 5,      
       currentPage: 1,
       tableData: [],
       formLabelWidth: '120px',
@@ -287,8 +304,6 @@ export default {
           //  console.log("success");
           //  console.log(data);
         })
-
-
     },
     // 操作栏对应的事件响应
     OperationTakeOff() {
@@ -337,7 +352,8 @@ export default {
         _this.showConfig = true;
         _this.showOperation = true;
         _this.showOperation2 = false;
-
+        _this.currentPage = 1;
+        this.radio = 1;
         _this.url = "/api/promotion/getConfList"
         _this.$http.post(_this.url, {
           "pages": {
@@ -361,7 +377,8 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
-
+        _this.currentPage = 1;
+        this.radio = "";
         _this.url = "/api/promotion/getList"
         _this.$http.post(_this.url, {
           "pages": {
@@ -385,7 +402,8 @@ export default {
         // window.location.reload();
         _this.showConfig = false;
         _this.showOperation2 = true;
-
+        _this.currentPage = 1;
+        this.radio = "";
         _this.url = "/api/promotion/getAuditList"
         _this.$http.post(_this.url, {
           "pages": {
@@ -451,7 +469,8 @@ export default {
           "page_num": this.currentPage - 1
         },
         "con": {
-          "pageId": this.pageId
+          "pageId": this.pageId,
+          "status": this.radio2          
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
@@ -488,7 +507,8 @@ export default {
           "page_num": this.currentPage - 1
         },
         "con": {
-          "pageId": this.pageId
+          "pageId": this.pageId,
+          "status": this.radio2
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
@@ -544,6 +564,25 @@ export default {
         path: _this.$route.path + '/detail'
       });
 
+    },
+    handleRadio(){
+      var _this = this;
+      _this.url = "/api/promotion/getConfList"
+        _this.$http.post(_this.url, {
+          "pages": {
+            "page_size": this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": this.pageId,
+            "status":this.radio2
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list;
+          _this.totalCount =  parseInt(rsp.pages.cnt);
+          //  console.log("success");
+          //  console.log(data);
+        })
     }
   }
 }
