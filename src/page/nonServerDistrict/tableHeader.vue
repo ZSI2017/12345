@@ -17,11 +17,12 @@
      </section>
 </template> -->
 <script type="text/javascript">
-name: "tableHeader"
+import scrollbarWidth from 'element-ui/src/utils/scrollbar-width';
 export default {
   props: {
     store: Array,
     tableData: Array,
+    scrollY:Boolean
   },
   data() {
     return {
@@ -31,7 +32,8 @@ export default {
   render(h) {
     return (
       h('section', {
-        "class": 'tableHeader'
+        "class": 'tableHeader',
+         style:{paddingRight:this.scrollY?'0px':this.gutterWidth+'px' }
       }, [h('table', {
         attrs: {
           border: "0",
@@ -52,12 +54,23 @@ export default {
   methods: {
 
   },
-
+  watch:{
+      // store(newVal){
+      //
+      // }
+  },
+  mounted(){
+    // alert(this.scrollY);
+  },
+   computed:{
+     gutterWidth(){
+         return scrollbarWidth();
+     }
+   }
 }
 </script>
 <style lang="scss">
 .tableHeader {
-    padding-right:21px;
     table {
         table-layout:fixed;
         border: 1px solid #dfe6ec;

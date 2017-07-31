@@ -23,6 +23,7 @@
 <script type="text/javascript">
 import scrollbarWidth from 'element-ui/src/utils/scrollbar-width';
 import tableColumn from "@/page/nonServerDistrict/tableColumn"
+import {bus}  from "@/page/nonServerDistrict/bus"
 name: "tableBody";
 export default {
   components: {
@@ -30,7 +31,8 @@ export default {
   },
   props: {
     store: Array,
-    tableData: Array
+    tableData: Array,
+    scrollY:Boolean,
   },
   data() {
     return {
@@ -43,8 +45,9 @@ export default {
       h(
         "section", {
           'class': "tableBody",
-          "ref":''
+          "ref":'tableBody'
         }, [h('table', {
+           "ref":"mytable",
             attrs: {
               border: "0",
               cellspacing: "0",
@@ -75,8 +78,17 @@ export default {
       )
     )
   },
-  mounted() {
-    // console.log("%c from tableBody： %o","color:pink",this.store);
+  mounted(){
+    // alert(bus.bodyWarpper);
+    // alert(scrollbarWidth())
+    //  this.$nextTick(()=>{alert(this.$refs.mytable.offsetHeight);alert(this.$refs.tableBody.offsetHeight)});
+    //  let _selt = this;
+    // setTimeout(function(){
+    //      alert(_selt.$refs.mytable.offsetHeight);
+    //      alert(_selt.$refs.tableBody.offsetHeight);
+    // },10000)
+    // alert(scrollY)
+    // console.log("%c from tableBody： %o","color:pink",this.store);  .querySelector("table")
   },
   watch: {
     tableData(newValue) {
@@ -86,12 +98,17 @@ export default {
     store(newValue) {
       console.log();
       this.column = newValue;
+      this.scrollY = this.$refs.tableBody.querySelector("table").offsetHeight> this.$refs.tableBody.offsetHeight;
     }
   },
   methods() {
 
   },
-
+  computed:{
+        gutterWidth(){
+            return scrollbarWidth();
+        }
+  }
 }
 </script>
 <style lang ="scss">
@@ -102,7 +119,7 @@ export default {
     table {
         border: 1px solid #dfe6ec;
         text-align: center;
-        height: 100px;
+        /*height: 100px;*/
         table-layout:fixed;
     }
     ,

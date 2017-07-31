@@ -21,14 +21,14 @@
   </el-row>
 
   <!-- 表格  -->
-  <el-table v-if="tableFalg" 
-    class="mainTable" 
-    @sort-change="handleSortChange" 
-    :data="tableData" 
-    @cell-mouse-enter="handleMouseEnter" 
-    style="width: 100%;margin-top:10px;" 
-    max-height="500" 
-    empty-text="暂无数据" 
+  <el-table v-if="tableFalg"
+    class="mainTable"
+    @sort-change="handleSortChange"
+    :data="tableData"
+    @cell-mouse-enter="handleMouseEnter"
+    style="width: 100%;margin-top:10px;"
+    max-height="500"
+    empty-text="暂无数据"
     align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="name" label="运营图称">
@@ -113,13 +113,13 @@
   </el-table>
 
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination 
-        @size-change="handleSizeChange" 
-        @current-change="handleCurrentChange" 
-        :current-page="currentPage" 
-        :page-sizes="[5,10,20,50]" 
-        :page-size="pageSize" 
-        layout="total,sizes,prev, pager, next,jumper" 
+    <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5,10,20,50]"
+        :page-size="pageSize"
+        layout="total,sizes,prev, pager, next,jumper"
         :total="totalCount">
     </el-pagination>
   </div>
@@ -203,7 +203,7 @@ export default {
       },
       orderColumn : "",//需要排序的字段，默认修改时间
       orderStatus : "",//需要排序的状态，默认降序
-      pageSize: 5,      
+      pageSize: 5,
       currentPage: 1,
       tableData: [],
       formLabelWidth: '120px',
@@ -229,7 +229,7 @@ export default {
         (this.pageId = "SS1010")))
 
     var _this = this;
-    _this.$http.post(_this.url, {
+    _this.$http.post(_this.url,{
       "pages": {
         "page_size": this.pageSize,
         "page_num": this.currentPage - 1
@@ -470,7 +470,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": this.radio2          
+          "status": this.radio2
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;

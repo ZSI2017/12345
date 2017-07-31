@@ -7,13 +7,19 @@
           <table-header
              :store="storeData"
              :tableData = "sourceData"
+             :scrollY= "scrollY"
+             :bodyWarpper= "bodyWarpper"
           >
           </table-header>
       </div>
-      <div class="my_body">
+      <div
+          class="my_body"
+          ref="mybody"
+         >
            <table-body
              :store="storeData"
              :tableData="sourceData"
+             :scrollY= "scrollY"
            >
            </table-body>
       </div>
@@ -23,7 +29,7 @@
    import tableBody from "@/page/nonServerDistrict/tableBody";
    import tableHeader from "@/page/nonServerDistrict/tableHeader";
    import {bus}  from "@/page/nonServerDistrict/bus"
-  export default {
+   export default {
     name:'table',
     components: {
         tableBody,
@@ -37,17 +43,24 @@
             sourceData:[],
              tableId:"myTable",
              ColumnData:[],
+             scrollY:false
           }
        },
        created() {
          this.ColumnData=[];
-
+         bus.$data.bodyWrapper = this.$refs.mybody;
          bus.$on("fromColumn",(columnConfig) => {
               // alert("my table");
               // console.log("%c this is from MyTable.vue","background-color:black");
-              this.ColumnData.push(columnConfig)
-
-         })
+              this.ColumnData.push(columnConfig);
+              let _self = this;
+              setTimeout(function(){
+                  // alert(_self.$refs.mybody.querySelector("table").offsetHeight> _self.$refs.mybody.offsetHeight);
+               },10000);
+            //  this.scrollY = this.$refs.mybody.querySelector("table").offsetHeight> this.$refs.mybody.offsetHeight;
+            //  this.$nextTick(()=> {alert(this.scrollY)});
+           })
+           ()
          console.log(" %cthis is from MyTable:%o ","color:green",this.ColumnData);
        },
        mounted(){
@@ -65,6 +78,9 @@
        computed:{
            storeData() {
                return this.ColumnData
+           },
+           bodyWarpper(){
+                return this.$refs.mybody
            }
           //  sourceData(){
           //         console.log("%cthis is from MyTable:%o ","color:yellow",this.data)

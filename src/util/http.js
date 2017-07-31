@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import $ from'jquery';
 
 Vue.use(ElementUI);
 var vue = new Vue();
@@ -32,11 +33,13 @@ axios.interceptors.response.use(
         window.location.href=response.redrect;
         return Promise.reject(error);
     }
-      return response;
+    return response;
 },
-  error =>{
-      vue.$message.error('接口调用失败！');
+  (error) =>{
+      // if(error.response)
+      // vue.$message.error('接口调用失败！sdfasd');
       console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
+      // console.log(code);
     //  TODO width response error
     return Promise.reject(error);
 
@@ -73,33 +76,68 @@ function checkErrorCode(response) {
   }
 export default {
     post(url,data,successfn,errorfn){
+        //  $.ajax({
+        //    type: "post",
+        //     timeout : 10000,
+        //     dataType: "json",
+        //     crossDomain: true,
+        //     contentType: "application/json; charset=utf-8",
+        //     data: JSON.stringify(data),
+        //     xhrFields: {
+        //       withCredentials: true
+        //     },
+        //      data:data,
+        //      url:'http://sendexmng-sit.alipay-eco.com/api/promotion/getConfList',
+        //      success:function(){
+        //        alert("success")
+        //      },
+        //      error:function(jsXHR){
+        //         alert("jsXHR")
+        //         console.log(jsXHR);
+        //      },
+        //      complete:function(e){
+        //          console.log("complete %o",e);
+        //      }
+        //  })
        axios({
             url:url,
             method:'post',
-            baseURL:"http://192.168.12.54:8080/",
+            baseURL:'http://sendexmng-sit.alipay-eco.com/',
+            // baseURL:"http://192.168.12.54:8080/",
             transformRequrest:[function(data) {
                 // before the request data is sent to the server
                 return data;
             }],
+            // headers: {
+            //     'X-Requested-With': 'XMLHttpRequest'
+            //   },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
             }],
+            // withCredentials: false,   //  默认false
             data:data,
-            timeout:10000,
-            responseType:'json',  // default
+            // timeout:10000,
+            // responseType:'json',  // default
+          //  contentType: "application/json; charset=utf-8",
             xsrfCookieName:'XSRF-TOKEN',      // default
             xsrfHeaderName: 'X-XSRF-TOKEN', // default
+            validateStatus: function (status) {
+                   return status>=0 && status  < 600;  // 默认的
+            },
+            // headers: {'X-Requested-With': 'XMLHttpRequest'},
+            // headers: {'contentType': "application/json; charset=utf-8"},
             maxRedirects: 5, // default
             proxy:{ }     //  defines the hostname and port of the proxy server
        }).then(
            (response) => {
+               console.log("success");
                 mySuccessFn(response,successfn,errorfn);
            }
        ).catch(
            (error) => {
-                 console.log(error);
-                 vue.$message.error('接口调用失败');
+                 console.log("error %o",error);
+                //  vue.$message.error('接口调用失败22222');
            }
        )
     },
@@ -116,6 +154,7 @@ export default {
           }
         ).catch(
               (error) => {
+
                    errorfn(error);
               }
         )

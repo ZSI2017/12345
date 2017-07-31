@@ -17,7 +17,6 @@
               'div',
               [
                 this.$scopedSlots.default({msg:{aaa:"90999999"}}),
-                // this.$slots.default
               ]
           )
 

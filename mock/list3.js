@@ -16,7 +16,6 @@ for(var j =0;j<31;j++){
     for(var i=0;i<10;i++){
            city.push(Mock.Random.city());
     }
-
     tableDate.push(
        Mock.mock({
          "city":city,
@@ -24,6 +23,14 @@ for(var j =0;j<31;j++){
        })
     )
 }
+
+
+
+
+
+
+
+
 module.exports = {
       "data":tableDate
 

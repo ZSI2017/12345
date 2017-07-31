@@ -8,7 +8,7 @@
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
     <el-col :span="22">
-      <el-radio-group v-model="radio2">
+      <el-radio-group v-model="radio2" @change="handleRadio">
         <el-radio :label="3">审核通过</el-radio>
         <el-radio :label="6">驳回</el-radio>
         <el-radio :label="9">待审核</el-radio>
@@ -69,27 +69,11 @@
     </el-table-column>
     <el-table-column v-if="showConfig" prop="reviewState" width="80" label="审核状态">
     </el-table-column>
-    <!--<el-table-column prop="createTime" label="创建时间" width="160">
-    </el-table-column>-->
-    <!--<el-table-column prop="modifyTime" label="修改时间" width="160" :sortable="showSortable">
-    </el-table-column>-->
-
-    <!--<el-table-column prop="activeTime" label="有效时段" width="220">
-      <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime1}}</p>
-          <p style="padding:0;margin:0;text-align:center">至</p>
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.activeTime2}}</p>-->
-         <!-- <el-tag
-          style="margin-right:10px;margin-bottom:5px;"
-           v-for="(item,index) in scope.row.city"
-           >{{item}}</el-tag> -->
-       <!--</template>
-    </el-table-column>-->
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
        <template scope="scope">
         <div>
           <div v-if="showOperation">
-            <el-button  @click="OperationTakeOff" type="text" size="small">置为下架</el-button>
+            <el-button  @click="OperationTakeOff" type="text" size="small">置为下线</el-button>
             <br/>
           </div>
           <div v-if="showOperation">
@@ -115,18 +99,18 @@
 
         </div>
 
-        </template> 
+        </template>
     </el-table-column>
   </el-table>
 
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination 
-    @size-change="handleSizeChange" 
-    @current-change="handleCurrentChange" 
-    :current-page="currentPage4" 
-    :page-sizes="[5,10,15,20]" 
-    :page-size="pageSize" 
-    layout="total,sizes,prev, pager, next,jumper" 
+    <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page="currentPage4"
+    :page-sizes="[5,10,15,20]"
+    :page-size="pageSize"
+    layout="total,sizes,prev, pager, next,jumper"
     :total="totalCount">
     </el-pagination>
   </div>
@@ -137,19 +121,6 @@
        :gridData="gridData"
        @listenToCoverArea ="changeVisible"
       ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-       <el-tag
-        style="margin-right:10px;margin-bottom:5px;"
-         v-for="(item,index) in scope.row.city"
-         >{{item}}</el-tag>
-     </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
 
   <!--  查看链接 对话框 -->
   <el-dialog title="查看链接" :visible.sync="dialogLinkVisible">
@@ -160,7 +131,7 @@
   </el-dialog>
 
 
-  <!-- 置为下架 通过申请 申请驳回 对话框  -->
+  <!-- 置为下线 通过申请 申请驳回 对话框  -->
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
@@ -185,12 +156,15 @@ export default {
    },
   data() {
     return {
+      pageId: '', // 当前页的id
+      url: '', // 当前页面的url
+      status:'1',  // 分页配置中的 审核通过
       // 排序是否显示
-      showSortable:true,
-      totalCount:1000,
-      myDialogTitle: "确认置为下架？",
-      myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
-      // 置为下架对话框
+      showSortable:"custom",
+      totalCount:0,
+      myDialogTitle: "确认置为下线？",
+      myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下线'",
+      // 置为下线对话框
       showOperation: true,
       showOperation2: false,
       loadingTakeOffFlag: false,
@@ -209,13 +183,6 @@ export default {
       listLoading: false,
       halfListLoading:false,
       value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      options2: [{
-        label: '江苏',
-        cities: []
-      }, {
-        label: '浙江',
-        cities: []
-      }],
       props: {
         value: 'label',
         children: 'cities'
@@ -223,16 +190,6 @@ export default {
       currentPage4: 1,
       tableData: [],
       formLabelWidth: '120px',
-      selectedOptions: [],
-      selectedOptions2: []
-      // editForm:{
-      //     operationsMapName:"",
-      //     link:"",
-      //     address:"",
-      //     activeTime:"",
-      //     currentState:"",
-      //     Forder:""
-      // }
     }
   },
   computed() {
@@ -242,59 +199,41 @@ export default {
       // }
     }
   },
-  // watch: {
-  //     editForm: {
-  //       handler: function () {
-  //           store.commit('setEditForm',this.editForm);
-  //       },
-  //       deep:true
-  //     }
-  // },
   created() {
     console.log("$router: " + this.$route.path);
-    let url = "/rest/list2";
-    if (this.$route.path == "/chooseExpress") {
-      url = "/rest/list2-2";
-    } else if (this.$route.path == "/expressOrder") {
-      url = "/rest/list2-3";
-    }
+    this.url = "/api/sendApp/getConfList"; // 默认展开 配置
+    this.pageId = "NE1010";                // 附近快递资源
     var _this = this;
-    _this.$http.get(url, (data) => {
-      console.log("success");
-      console.log(data);
-      _this.tableData = data.data.data;
-      _this.totalCount = data.data.data.length;
-    }, (error) => {
-      console.log("error");
-      console.log(error);
+    _this.$http.post(_this.url, {
+      "pages": {
+        "page_size": this.pageSize,
+        "page_num": this.currentPage - 1
+      },
+      "con": {
+        "pageId": this.pageId,
+        "status":this.status
+      }
+    }, (result) => {
+      _this.tableData = result.page_list;
+      _this.totalCount = parseInt(result.pages.cnt);
+      // _this.totalCount = result.page_list.length; //获取数据长度
     });
-
-    // var _this = this;
-    // _this.$http.get(url)
-    //   .then(function(rsp) {
-    //     _this.tableData = rsp.data.data
-    //   })
-    //   .catch(function(error) {
-    //     console.log(error);
-    //   })
-
-    console.log(this.$route.matched);
   },
   watch: {
-    '$route': function(to, from) {
-      // 默认状态是 运营位管理的 寄快递首页
-      console.log("$router: " + to.path);
-      let url = "/rest/list2";
-      var _this = this;
-      _this.$http.get(url, (rsp) => {
-        _this.tableData = rsp.data.data
-        //  console.log("success");
-        //  console.log(data);
-      }, (error) => {
-        console.log("error");
-        console.log(error);
-      })
-    }
+    // '$route': function(to, from) {
+    //   // 默认状态是 运营位管理的 寄快递首页
+    //   console.log("$router: " + to.path);
+    //   let url = "/rest/list2";
+    //   var _this = this;
+    //   _this.$http.get(url, (rsp) => {
+    //     _this.tableData = rsp.data.data
+    //     //  console.log("success");
+    //     //  console.log(data);
+    //   }, (error) => {
+    //     console.log("error");
+    //     console.log(error);
+    //   })
+    // }
   },
   methods: {
     // 监听 子组件覆盖对话框 的回调函数
@@ -314,8 +253,8 @@ export default {
     // 操作栏对应的事件响应
     OperationTakeOff() {
         this.loadingTakeOffFlag = true;
-        this.myDialogTitle="确认置为下架？";
-        this.myDiglogContent="确认后，该内容将提交审核，通过后变为'已下架'";
+        this.myDialogTitle="确认置为下线？";
+        this.myDiglogContent="确认后，该内容将提交审核，通过后变为'已下线'";
     },
     Operationchange() {
        this.loadingTakeOffFlag = true;
@@ -339,7 +278,7 @@ export default {
     },
     OperationwaitDetail() {
            this.loadingTakeOffFlag = true;
-           this.myDialogTitle="确认置为下架？";
+           this.myDialogTitle="确认置为下线？";
            this.myDiglogContent="确认后，该内容将待审详情";
     },
     // 标签页导航
@@ -349,17 +288,32 @@ export default {
       _this.listLoading = true;
       _this.tableFalg = false
       _this.showConfig = false;
-      console.log(tab.label);
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
         // 配置排序
-        _this.showSortable = true;
+        _this.showSortable = "custom";
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = true;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.tableData = tableDataCopy;
+        _this.currentPage = 1;
+        this.radio = 1;
+        _this.url = "/api/sendApp/getConfList"
+        _this.$http.post(_this.url, {
+          "pages": {
+            "page_size": this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": _this.pageId
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list;
+          _this.totalCount =  parseInt(rsp.pages.cnt);
+          //  console.log("success");
+          //  console.log(data);
+        })
       } else if (tab.label == "已上线") {
         // 配置排序
         _this.showSortable = false;
@@ -368,7 +322,21 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.tableData = tableDataCopy;
+        _this.url = "api/sendApp/getConfList"
+        _this.$http.post(_this.url, {
+          "pages": {
+            "page_size": _this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": _this.pageId
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list
+            _this.totalCount =  parseInt(rsp.pages.cnt);
+          //  console.log("success");
+          //  console.log(data);
+        })
       } else {
         // 配置排序
         _this.showSortable = false;
@@ -377,7 +345,23 @@ export default {
         // window.location.reload();
         _this.showConfig = false;
         _this.showOperation2 = true;
-        _this.tableData = tableDataCopy;
+        _this.currentPage = 1;
+        _this.radio = 1;
+        _this.url = "api/sendApp/getConfList"
+        _this.$http.post(_this.url, {
+          "pages": {
+            "page_size": _this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": _this.pageId
+          }
+        }, (rsp) => {
+             _this.tableData = rsp.page_list
+             _this.totalCount =  parseInt(rsp.pages.cnt);
+          //  console.log("success");
+          //  console.log(data);
+        })
       }
       setTimeout(() => {
         _this.listLoading = false;
@@ -492,6 +476,26 @@ export default {
     effectiveDetails(row) {
       localEvent.set("localNearExpress",row);
       this.$router.push('/nearExpress/detail')
+    },
+    handleRadio() {
+      var _this = this;
+      _this.url = "/api/sendApp/getConfList"
+        _this.$http.post(_this.url, {
+          "pages": {
+            "page_size": this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": this.pageId,
+            "status":this.radio2
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list;
+          _this.totalCount =  parseInt(rsp.pages.cnt);
+          //  console.log("success");
+          //  console.log(data);
+        })
+
     }
   }
 }
