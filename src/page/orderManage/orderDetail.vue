@@ -1,7 +1,7 @@
 <template>
   <div class="section">
     <el-row>
-        <el-col :span="24"><h1 class="grid-content bg-purple-dark orderTitle">订单号：123456789</h1></el-col>
+        <el-col :span="24"><h1 class="grid-content bg-purple-dark orderTitle">订单号：{{orderNo}}</h1></el-col>
     </el-row>
     <el-row class="orderDetail">
         <el-collapse v-model="activeNames" >
@@ -47,20 +47,23 @@
         </el-collapse-item>
         <el-row class="footer">
             <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
-            <el-button class="complateInfo" type="primary">查看完整信息</el-button>
-            <el-button class="serverRecord" type="primary">查看信息服务</el-button>
-            <el-button class="complateInfo" type="danger">取消订单</el-button>
-            <el-button class="serverRecord" type="danger">作废订单</el-button>
+            <el-button class="complateInfo" @click="handleShowIfo" type="primary">查看完整信息</el-button>
+            <el-button class="serverRecord" @click="handleShowServer" type="primary">查看信息服务</el-button>
+            <el-button class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
+            <el-button class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
         </el-row>
 
     </el-collapse>
   </div>
 </template>
 <script>
+import localEvent from 'src/vuex/function.js';
+
   export default {
     data() {
       return {
         activeNames: ['0','1','2','3','4',"5"],
+        orderNo:'',
         items:[{
             name: "快递公司",
             message: '德邦快递',
@@ -158,8 +161,40 @@
       }
 
     },
-     methods: {
+    mounted() {
+        var localData = localEvent.get("localorderManage");
+        console.log(localData);
+        console.log(localData.orderNo);
+        this.items[0].message = localData.expName;
+        this.items[1].message = localData.actCarrierName;
+        this.items[2].message = localData.waybillNo;
+        this.items[3].message = localData.pickUpCode;
+        this.items[4].message = localData.gmtExp;
+        this.items[5].message = localData.gmtSuc;
+        this.items[6].message = localData.gmtAccept;
+        this.items[7].message = localData.waybillDate;
+        this.items[8].message = localData.outOrderNo;
+        this.items[9].message = localData.waybillDate;//是否转运快递
+        this.items[10].message = localData.billDate;
+        this.items[11].message = localData.waybillDate;
+        this.items[12].message = localData.orderStatus;
+        
+        this.orderNo = localData.orderNo;
 
+    },
+     methods: {      
+        handleShowIfo(){
+            
+        },
+        handleShowServer(){
+
+        },
+        handleCancleOrder(){
+
+        },
+        handleInvalidorder(){
+
+        }
 
      }
 

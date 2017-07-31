@@ -76,7 +76,8 @@ export default {
        axios({
             url:url,
             method:'post',
-            baseURL:"http://192.168.12.54:8080/",
+            // baseURL:"http://192.168.12.54:8080/",
+            baseURL:"http://sendexmng-sit.alipay-eco.com",            
             transformRequrest:[function(data) {
                 // before the request data is sent to the server
                 return data;

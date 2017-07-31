@@ -9,8 +9,8 @@
        >
   </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="名称" prop="photoName">
-      <el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称"> </el-input>
+    <el-form-item label="名称" prop="name">
+      <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
     <el-form-item label="运营图" prop="opMap">
       <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
@@ -28,13 +28,13 @@
       <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>
-    <el-form-item label="覆盖地区" prop="formCoverArea">
+    <el-form-item label="覆盖地区" prop="coverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
-    <el-form-item label="当前状态" prop="currentState">
-      <el-radio-group v-model="ruleForm.currentState">
+    <el-form-item label="当前状态" prop="status">
+      <el-radio-group v-model="ruleForm.status">
         <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
         <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
       </el-radio-group>
@@ -145,14 +145,14 @@ export default {
       gridDataCopy: [],
       // 对输入表单进行验证
       ruleForm: {
-        photoName: '',
+        name: '',
         number: '',
         link: '',
         date1: '',
-        currentState: false,
+        status: false,
       },
       rules: {
-        photoName: [{
+        name: [{
           type: "string",
           required: true,
           message: '请输入运营图名称',
@@ -173,7 +173,7 @@ export default {
           message: '请选择日期',
           trigger: 'change'
         }],
-        currentState: [{
+        status: [{
           required: true,
           message: '请选择状态',
           trigger: 'change'
@@ -182,7 +182,7 @@ export default {
           required: true,
           message: '请上传图片'
         }],
-        formCoverArea: [{
+        coverArea: [{
           required: true,
           message: '请选择覆盖地区'
         }]
@@ -223,6 +223,9 @@ export default {
           // router.app.$store.state.loadingChange = true
           // _this.$router.app.$store.state.loadingChange = true;
           _this.$store.dispatch('changeLoadingChange',true);
+
+          
+
 
           _this.$router.go(-1);
           // alert('sumbit');
