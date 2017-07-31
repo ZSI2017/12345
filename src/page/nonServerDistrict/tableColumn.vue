@@ -1,10 +1,8 @@
-<template type="html">
+<!-- <template type="html">
     <div class="table-cell">
-       <slot>
-         只有在没有要分发的内容时才会显示。
-       </slot>
+       <solt></solt>
     </div>
-</template>
+</template> -->
 
 <script type="text/javascript">
 import {bus} from "@/page/nonServerDistrict/bus.js";
@@ -13,6 +11,15 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
      props:{
         headerName:String,
         myProps:String
+     },
+     render(h) {
+        return h(
+           'div',
+           {
+             'class' :'table-cell'
+            },
+           [this.$scopedSlots.default()]
+        )
      },
      data() {
         return {
@@ -23,13 +30,27 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
      methods() {
 
      },
-     created(){
-      console.log("%c from table-column %o","color:blue",this.$slots.default)
+     mounted(){
+       let _self = this;
+       let renderCell =function(h,data,item){
+              return h(
+                "div",
+                {
+                  "class":"cell"
+                },
+                [
+                  _self.$scopedSlots.default? _self.$scopedSlots.default(data):data[item.myProps]
+                ]
+              )
+
+       }
+      console.log("%c from table-column %o","color:blue",  this.$scopedSlots.default? this.$scopedSlots.default():this.$slots.default)
        // this.columnConfig = { children : 这里定义了 table-column 中 的各种配置方法  }
        this.columnConfig = {
            headerName:this.headerName,
            myProps:this.myProps,
-           children:this.$children
+           children:this.$children,
+           scope:renderCell
        }
        // 这里 向上遍历，寻找 父类中的table 标签， 以tableId 为table 的标识，
        //
@@ -46,10 +67,10 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
         // console.log("%oadsfasdfsd",this);
         // console.log("%o from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn from tableColumn  from tableColumn",this);
      },
-     mounted(){
-         //  alert("dsafsd");
-
-     }
+    //  mounted(){
+    //      //  alert("dsafsd");
+     //
+    //  }
   }
 </script>
 
