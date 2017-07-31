@@ -8,11 +8,11 @@
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
     <el-col :span="22">
-      <el-radio-group v-model="radio2">
-        <el-radio :label="3">审核通过</el-radio>
-        <el-radio :label="6">驳回</el-radio>
-        <el-radio :label="9">待审核</el-radio>
-        <el-radio :label="12">草稿</el-radio>
+      <el-radio-group v-model="radio2" @change="handleRadio">
+        <el-radio :label="1">审核通过</el-radio>
+        <el-radio :label="2">驳回</el-radio>
+        <el-radio :label="3">待审核</el-radio>
+        <el-radio :label="4">草稿</el-radio>
       </el-radio-group>
     </el-col>
     <el-col :span="2">
@@ -172,7 +172,7 @@ export default {
       url: '', // 当前页面的url
       // 排序是否显示
       showSortable: 'custom',
-      totalCount: 1000, //默认数据总数
+      totalCount: 0, //默认数据总数
       myDialogTitle: "确认置为下架？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下架'",
       // 置为下架对话框
@@ -182,7 +182,7 @@ export default {
       tableFalg: true,
       showConfig: true,
       gridData: [],
-      radio2: 3,
+      radio2: 1,
       activeName2: 'first',
       showHeader: false,
       dialogTableVisible: false,
@@ -352,7 +352,8 @@ export default {
         _this.showConfig = true;
         _this.showOperation = true;
         _this.showOperation2 = false;
-
+        _this.currentPage = 1;
+        this.radio = 1;
         _this.url = "/api/promotion/getConfList"
         _this.$http.post(_this.url, {
           "pages": {
@@ -376,7 +377,8 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
-
+        _this.currentPage = 1;
+        this.radio = "";
         _this.url = "/api/promotion/getList"
         _this.$http.post(_this.url, {
           "pages": {
@@ -400,7 +402,8 @@ export default {
         // window.location.reload();
         _this.showConfig = false;
         _this.showOperation2 = true;
-
+        _this.currentPage = 1;
+        this.radio = "";
         _this.url = "/api/promotion/getAuditList"
         _this.$http.post(_this.url, {
           "pages": {
@@ -466,7 +469,8 @@ export default {
           "page_num": this.currentPage - 1
         },
         "con": {
-          "pageId": this.pageId
+          "pageId": this.pageId,
+          "status": this.radio2          
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
@@ -503,7 +507,8 @@ export default {
           "page_num": this.currentPage - 1
         },
         "con": {
-          "pageId": this.pageId
+          "pageId": this.pageId,
+          "status": this.radio2
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
@@ -559,6 +564,25 @@ export default {
         path: _this.$route.path + '/detail'
       });
 
+    },
+    handleRadio(){
+      var _this = this;
+      _this.url = "/api/promotion/getConfList"
+        _this.$http.post(_this.url, {
+          "pages": {
+            "page_size": this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": this.pageId,
+            "status":this.radio2
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list;
+          _this.totalCount =  parseInt(rsp.pages.cnt);
+          //  console.log("success");
+          //  console.log(data);
+        })
     }
   }
 }
