@@ -109,8 +109,8 @@
   import checkboxGroup from "@/page/nonServerDistrict/checkboxGroup"
   import myTable from "@/page/nonServerDistrict/myTable";
   import tableColumn from "@/page/nonServerDistrict/tableColumn";
-  import mysolt from "@/page/nonServerDistrict/mysolt";
-  import  child from "@/page/nonServerDistrict/render2.vue"
+  // import mysolt from "@/page/nonServerDistrict/mysolt";
+  // import  child from "@/page/nonServerDistrict/render2.vue"
 export default {
     name: 'nonServerDistrict',
     components: {
@@ -119,8 +119,6 @@ export default {
         checkboxGroup,
         myTable,
         tableColumn,
-        mysolt,
-        child
     },
     data() {
         return {
