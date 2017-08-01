@@ -22,9 +22,11 @@
 
   <!-- 表格  -->
   <el-table v-if="tableFalg"
+    v-loading.body.lock="halfListLoading"
     class="mainTable"
     @sort-change="handleSortChange"
     :data="tableData"
+    ref="tableDom"
     @cell-mouse-enter="handleMouseEnter"
     style="width: 100%;margin-top:10px;"
     max-height="500"
@@ -518,6 +520,10 @@ export default {
       //  console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      let _self = this;
+      // setInterval(function(){
+      //    console.log(_self.$refs.tableDom.layout.tableHeight)
+      // },1000)
       this.currentPage = val;
       this.$http.post(this.url, {
         "pages": {
@@ -531,6 +537,8 @@ export default {
       }, (rsp) => {
         this.tableData = rsp.page_list;
         this.totalCount =  parseInt(rsp.pages.cnt);
+
+        // this.$nextTick( () => {this.halfListLoading = false;} )
       })
       var _this = this;
       this.halfListLoading = true;
@@ -555,8 +563,9 @@ export default {
       // }
 
 
+
       setTimeout(() => {
-        _this.halfListLoading = false;
+          this.halfListLoading = false
       }, 600);
       console.log(`当前页: ${val}`);
     },

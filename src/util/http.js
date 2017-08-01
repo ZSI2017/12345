@@ -123,14 +123,14 @@ export default {
                 // before the request data is sent to the server
                 return data;
             }],
-            // headers: {
-            //     'X-Requested-With': 'XMLHttpRequest'
-            //   },
+            headers:{
+                 'X-Requested-With': 'XMLHttpRequest'
+              },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
             }],
-            withCredentials: true,   //  默认false
+            withCredentials: false,   //  默认false
             data:data,
             // timeout:10000,
             responseType:'json',  // default
@@ -140,7 +140,6 @@ export default {
             validateStatus: function (status) {
                    return status>=0 && status  < 600;  // 默认的
             },
-            // headers: {'X-Requested-With': 'XMLHttpRequest'},
             // headers: {'contentType': "application/json; charset=utf-8"},
             maxRedirects: 5, // default
             proxy:{ }     //  defines the hostname and port of the proxy server
