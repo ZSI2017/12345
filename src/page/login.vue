@@ -26,6 +26,12 @@ export default {
   },
   methods: {
     loginIn() {
+      const URL = "/loginProxy"
+      this.$http.get(URL,{
+        "realUrl":"http://192.168.11.88:8080/#/home"
+      }, (result) => {
+          // _this.totalCount = result.page_list.length; //获取数据长度
+      });
       Cookie.set("express","mng",600000);
       this.$router.push({
         path: "/"

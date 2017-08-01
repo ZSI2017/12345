@@ -67,7 +67,7 @@
   <el-dialog title="提示" :visible.sync="loadingFlag" size="tiny" :show-close="showClose">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 33%;"></i>
     <p style="font-weight:bold;padding-left:44px;">您还没有保存,确定放弃编辑？</p>
-    <span style="padding-left:44px;">放弃后，将不会保存您刚才所编辑的内容</span>    
+    <span style="padding-left:44px;">放弃后，将不会保存您刚才所编辑的内容</span>
     <span slot="footer" class="dialog-footer">
         <el-button @click="hideCountFlag">编 辑</el-button>
         <el-button type="primary" @click="editSure">放 弃</el-button>
@@ -162,7 +162,8 @@ export default {
       console.log(key, keyPath);
     },
     handleSelect(key, keyPath) {
-        // this.fullscreenLoading = true;
+         this.PageStore.commit("setPage",1);
+      // this.fullscreenLoading = true;
       //  this.defaultActive =""+key;
       //  console.log("this.$route.path");
       //  console.log(this.$route.path);

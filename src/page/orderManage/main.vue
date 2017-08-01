@@ -28,19 +28,19 @@
     <el-table-column align="center" label="相关订单号" sortable width="160">
       <template scope="scope">
           <p>{{scope.row.orderNo}}</p>
-          <p>{{scope.row.waybillNo}}</p>          
+          <p>{{scope.row.waybillNo}}</p>
       </template>
     </el-table-column>
     <el-table-column align="center" label="寄件人信息">
       <template scope="scope">
           <p>{{scope.row.snderName}} {{scope.row.snderPhone}}</p>
-          <p>{{scope.row.snderAddress}}</p>          
+          <p>{{scope.row.snderAddress}}</p>
       </template>
     </el-table-column>
     <el-table-column align="center" label="收件人信息">
       <template scope="scope">
           <p>{{scope.row.rcvrName}} {{scope.row.rcvrPhone}}</p>
-          <p>{{scope.row.rcvrAddress}}</p>          
+          <p>{{scope.row.rcvrAddress}}</p>
       </template>
     </el-table-column>
     <el-table-column prop="expName" align="center" label="快递公司">
@@ -75,7 +75,7 @@ import localEvent from 'src/vuex/function.js';
 export default {
   data() {
     return {
-      pageSize: 5,      
+      pageSize: 5,
       currentPage: 1,
       //输入框关键字
       type:"1", //检索类型（支付宝绑定手机号：1，订单号：2，运单号：3，UID：4）
@@ -104,7 +104,7 @@ export default {
     //从服务器读取数据
     loadData: function(){
       var _this =this;
-      _this.url = "/api/order/getList"; // 默认展开 
+      _this.url = "/api/order/getList"; // 默认展开
       _this.$http.post(this.url,{
         "pages": {
           "page_size": this.pageSize,
@@ -121,7 +121,7 @@ export default {
           console.log('failed');
       });
     },
-    handleSizeChange(val) { 
+    handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
       this.loadData();
@@ -132,7 +132,7 @@ export default {
       //   },
       //   "con": {
       //     "type": this.type,
-      //     "keyword": this.keyword         
+      //     "keyword": this.keyword
       //   }
       // }, (rsp) => {
       //   this.tableData = rsp.page_list;
@@ -145,7 +145,7 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.loadData();
-      
+
       // this.$http.post(this.url, {
       //   "pages": {
       //     "page_size": this.pageSize,
@@ -153,7 +153,7 @@ export default {
       //   },
       //   "con": {
       //     "type": this.type,
-      //     "keyword": this.keyword   
+      //     "keyword": this.keyword
       //   }
       // }, (rsp) => {
       //   this.tableData = rsp.page_list;
@@ -184,12 +184,12 @@ export default {
 
 
       setTimeout(() => {
-        _this.listLoading = false;
+          this.listLoading = false;
       }, 600);
       console.log(`当前页: ${val}`);
     },
     handleClick(row) {
-      localEvent.set("localorderManage", row);      
+      localEvent.set("localorderManage", row);
       this.$router.push({path:'/orderManage/orderDetail'});
     },
     handleEdit() {
