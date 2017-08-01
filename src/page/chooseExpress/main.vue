@@ -20,6 +20,18 @@
     </el-col>
   </el-row>
 
+  <!--<div class="block pagination" style="margin: 5px 0 5px 0;float:right;">
+    <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5,10,20,50]"
+        :page-size="pageSize"
+        layout="total,sizes,prev, pager, next,jumper"
+        :total="totalCount">
+    </el-pagination>
+  </div>-->
+
   <!-- 表格  -->
   <el-table v-if="tableFalg"
     v-loading.body.lock="halfListLoading"
@@ -29,7 +41,7 @@
     ref="tableDom"
     @cell-mouse-enter="handleMouseEnter"
     style="width: 100%;margin-top:10px;"
-    max-height="500"
+    max-height="3000"
     empty-text="暂无数据"
     align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
@@ -119,7 +131,7 @@
     </el-table-column>
   </el-table>
 
-  <div class="block pagination" style="margin-top:30px;float:right;">
+  <div class="block pagination" style="margin-top:5px;float:right;">
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -249,6 +261,7 @@ export default {
         "pageId": this.pageId
       }
     }, (result) => {
+   
       _this.tableData = result.page_list;
       _this.totalCount = parseInt(result.pages.cnt);
       // _this.totalCount = result.page_list.length; //获取数据长度
@@ -264,10 +277,13 @@ export default {
   },
   watch: {
     '$route': function(to, from) {
+      // console.log(to)
+      // console.log(from)
       // 默认状态是 运营位管理的 寄快递首页
       this.url = "/api/promotion/getConfList";
       this.pageId = "SD1010"; // 寄快递首页
-      this.activeName2 = "first";
+      this.activeName2 = "first";  
+      this.currentPage = 1;
       this.radio2 = 1;
       this.showConfig = true;
       ((this.$route.path == "/chooseExpress" &&
@@ -357,6 +373,7 @@ export default {
       _this.listLoading = true;
       _this.tableFalg = false
       _this.showConfig = false;
+      _this.currentPage = 1;    //跳转标签页 页码归 1  
       console.log(tab.label);
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
@@ -366,7 +383,6 @@ export default {
         _this.showConfig = true;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.currentPage = 1;
         _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
@@ -393,10 +409,9 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.currentPage = 1;
-        _this.radio2 = "";
-        _this.auditState = "审核状态";
-        _this.auditStatusFlage = false;
+        _this.radio2 = "";      
+        _this.auditState = "审核状态";   
+        _this.auditStatusFlage = false;             
         _this.url = "/api/promotion/getList";
         _this.$http.post(_this.url, {
           "pages": {
@@ -420,7 +435,6 @@ export default {
         // window.location.reload();
         _this.showConfig = false;
         _this.showOperation2 = true;
-        _this.currentPage = 1;
         _this.radio2 = "";
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
