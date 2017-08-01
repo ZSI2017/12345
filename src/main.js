@@ -13,6 +13,8 @@ import store from "@/vuex/store.js";
 import {changeLoading} from "@/vuex/actions";
 import {getLoadingFlag} from "@/vuex/getters";
 
+import PageStore from "@/util/table-store.js"
+
 
 
 import http from "@/util/http.js"
@@ -23,6 +25,7 @@ Vue.use(Vuex);
 //  axios  加入到 vue 的原型方法中
 Object.defineProperty(Vue.prototype, '$http', { value: http})
 // console.log(routes);
+Object.defineProperty(Vue.prototype,'PageStore',{value:PageStore})
 
  // Vue的 日志与警告
 Vue.config.silent = true

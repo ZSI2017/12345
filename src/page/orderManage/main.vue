@@ -81,7 +81,7 @@ import localEvent from 'src/vuex/function.js';
 export default {
   data() {
     return {
-      pageSize: 5,      
+      pageSize: 5,
       currentPage: 1,
       //输入框关键字
       type:"1", //检索类型（支付宝绑定手机号：1，订单号：2，运单号：3，UID：4）
@@ -126,7 +126,7 @@ export default {
           console.log('failed');
       });
     },
-    handleSizeChange(val) { 
+    handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
       this.loadData();

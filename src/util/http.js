@@ -125,8 +125,8 @@ export default {
                 return data;
             }],
             headers:{
-                 'X-Requested-With': 'XMLHttpRequest'
-              },
+                 'X-Requested-With':'XMLHttpRequest'
+            },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
@@ -176,12 +176,15 @@ export default {
     },
     get(url,successfn,errorfn){
         axios({url:url,
-          method:'get',
-        //   baseURL:"http://localhost:8080/",
-          timeout: 10000,
-          // headers: {
-          //     'X-Requested-With': 'XMLHttpRequest'
-          //   }
+              method:'get',
+              baseURL:URL,
+              timeout: 10000,
+              headers: {
+                  'X-Requested-With': 'XMLHttpRequest'
+                },
+              validateStatus: function (status) {
+                       return status>=0 && status  < 600;  // 默认的
+               }
           }).then( (response) => {
              successfn(response);
           }

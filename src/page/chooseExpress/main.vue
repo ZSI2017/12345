@@ -176,6 +176,7 @@
 import store from 'src/vuex/store.js'
 import localEvent from 'src/vuex/function.js';
 import coverArea from "./coverArea.vue";
+// import PageStore from "@/page/chooseExpress/table-store.js"
 import {
   formatDate
 } from 'src/util/date.js';
@@ -241,8 +242,9 @@ export default {
     }
   },
   created() {
-
-    console.log("$router: " + this.$route.path);
+    // 在页面初始化时，获取pageName,
+    this.currentPage = this.PageStore.pageCount
+    console.log("$router: %o",this.$route);
     this.url = "/api/promotion/getConfList"; // 默认展开 配置
     this.pageId = "SD1010"; // 寄快递首页
     ((this.$route.path == "/chooseExpress" &&
@@ -260,7 +262,7 @@ export default {
         "pageId": this.pageId
       }
     }, (result) => {
-   
+
       _this.tableData = result.page_list;
       _this.totalCount = parseInt(result.pages.cnt);
       // _this.totalCount = result.page_list.length; //获取数据长度
@@ -281,7 +283,8 @@ export default {
       // 默认状态是 运营位管理的 寄快递首页
       this.url = "/api/promotion/getConfList";
       this.pageId = "SD1010"; // 寄快递首页
-      this.activeName2 = "first";  
+      this.activeName2 = "first";
+      this.PageStore.commit("setPage",1);
       this.currentPage = 1;
       this.radio2 = 1;
       this.showConfig = true;
@@ -372,7 +375,7 @@ export default {
       _this.listLoading = true;
       _this.tableFalg = false
       _this.showConfig = false;
-      _this.currentPage = 1;    //跳转标签页 页码归 1  
+      _this.currentPage = 1;    //跳转标签页 页码归 1
       console.log(tab.label);
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
@@ -477,7 +480,7 @@ export default {
       });
     },
     handleClose() {
-      alert("asdfsd");
+      // alert("asdfsd");
     },
     handleChange(value) {
       console.log(value);
@@ -538,6 +541,7 @@ export default {
       //    console.log(_self.$refs.tableDom.layout.tableHeight)
       // },1000)
       this.currentPage = val;
+      this.PageStore.commit("setPage",val);
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
