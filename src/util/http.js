@@ -3,11 +3,16 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import $ from'jquery';
-
 Vue.use(ElementUI);
 var vue = new Vue();
 import axios from "axios";
 
+let URL = "http://sendexmng-sit.alipay-eco.com"
+
+if(process.env.NODE_ENV === "development"){
+      // 开发环境下调用
+      URL = "http://sendexmng-sit.alipay-eco.com"
+}
 
 // add request interceptor
 axios.interceptors.request.use(function(config) {
@@ -64,9 +69,10 @@ function checkErrorCode(response) {
   };
 
   var mySuccessFn = (response,successfn,errorfn) => {
-      //  alert(response);
+        // console.log("mySuccessFn %o",response);
        if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
            successfn(response.data.result);
+           console.log(successfn(response.data.result))
        }else {
             if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
@@ -78,55 +84,63 @@ function checkErrorCode(response) {
 export default {
     post(url,data,successfn,errorfn){
         //  $.ajax({
-        //    type: "post",
+        //     type: "post",
         //     timeout : 10000,
+        //     url:URL+url,
         //     dataType: "json",
+        //     async: false,
         //     crossDomain: true,
         //     contentType: "application/json; charset=utf-8",
         //     data: JSON.stringify(data),
         //     xhrFields: {
         //       withCredentials: true
         //     },
-        //      data:data,
-        //      url:'http://sendexmng-sit.alipay-eco.com/api/promotion/getConfList',
-        //      success:function(){
-        //        alert("success")
+        //     data:JSON.stringify(data),
+        //      success:function(response){
+        //         // alert("success")
+        //         console.log("success ----- %o",response);
+        //         mySuccessFn({data:response},successfn,errorfn);
         //      },
         //      error:function(jsXHR){
         //         alert("jsXHR")
         //         console.log(jsXHR);
         //      },
-        //      complete:function(e){
-        //          console.log("complete %o",e);
+        //      complete:function(jqXHR,textStatus){
+        //        if(jqXHR.status == 0){
+        //              alert("登录超时")
+        //        }
+        //        if(JSON.parse(jqXHR.responseText).meta.message=="login_err") {
+        //             window.location.href="./login"
+        //        }
+        //         console.log("complete %o",e);
         //      }
         //  })
        axios({
             url:url,
             method:'post',
-            baseURL:'http://sendexmng-sit.alipay-eco.com/',
+            baseURL:URL,
             // baseURL:"http://192.168.12.54:8080/",
             transformRequrest:[function(data) {
                 // before the request data is sent to the server
                 return data;
             }],
-            // headers: {
-            //     'X-Requested-With': 'XMLHttpRequest'
-            //   },
+            headers:{
+                 'X-Requested-With':'XMLHttpRequest'
+            },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
             }],
-            // withCredentials: false,   //  默认false
+            withCredentials: false,   //  默认false
             data:data,
             // timeout:10000,
             responseType:'json',  // default
-            contentType: "application/json; charset=utf-8",
+            // contentType: "application/json; charset=utf-8",
             xsrfCookieName:'XSRF-TOKEN',      // default
             xsrfHeaderName: 'X-XSRF-TOKEN', // default
             validateStatus: function (status) {
                    return status>=0 && status  < 600;  // 默认的
             },
-            // headers: {'X-Requested-With': 'XMLHttpRequest'},
             // headers: {'contentType': "application/json; charset=utf-8"},
             maxRedirects: 5, // default
             proxy:{ }     //  defines the hostname and port of the proxy server
@@ -136,27 +150,65 @@ export default {
                 mySuccessFn(response,successfn,errorfn);
            }
        ).catch(
-           (response) => {
-                 console.log("error %o",response);
-                //  vue.$message.error('接口调用失败22222');
+           (error) => {
+                    if(error.response) {
+                      //  发出了请求，服务端返回了 状态码 2xx
+                      console.log("%cresponse error %o","color:red;font-size:16px;",error.response.data)
+                      if(error.response.status === 0){
+                            vue.$message.error('登录超时');
+                        }
+                    } else if(error.request) {
+                      if(error.request.status === 0){
+                            vue.$message.error('登录超时');
+                        }
+                         // 请求发出了，但是没有接受到 响应
+                        //  'error.request' 是一个 浏览器中的XMLHttpRequest 实例，
+                        //   在node.js 中 就是 http.ClientRequest 实例；
+                           console.log("%crequest error %o","color:red;font-size:16px;",error.request);
+                      } else {
+                          vue.$message.error('接口调用失败');
+                          console.log("Error",error.message);
+                      }
+                  // console.log(error.config);
+                //  console.log("error %o",error);
            }
        )
     },
     get(url,successfn,errorfn){
         axios({url:url,
-          method:'get',
-        //   baseURL:"http://localhost:8080/",
-          timeout: 10000,
-          // headers: {
-          //     'X-Requested-With': 'XMLHttpRequest'
-          //   }
+              method:'get',
+              baseURL:URL,
+              timeout: 10000,
+              headers: {
+                  'X-Requested-With': 'XMLHttpRequest'
+                },
+              validateStatus: function (status) {
+                       return status>=0 && status  < 600;  // 默认的
+               }
           }).then( (response) => {
              successfn(response);
           }
         ).catch(
               (error) => {
-                 console.log(error);
-                  //  errorfn(error);
+                if(error.response) {
+                  //  发出了请求，服务端返回了 状态码 2xx
+                  console.log("%cresponse error %o","color:red;font-size:16px;",error.response.data)
+                  if(error.response.status === 0){
+                        vue.$message.error('登录超时');
+                    }
+                } else if(error.request) {
+                  if(error.request.status === 0){
+                        vue.$message.error('登录超时');
+                    }
+                     // 请求发出了，但是没有接受到 响应
+                    //  'error.request' 是一个 浏览器中的XMLHttpRequest 实例，
+                    //   在node.js 中 就是 http.ClientRequest 实例；
+                       console.log("%crequest error %o","color:red;font-size:16px;",error.request);
+                  } else {
+                      vue.$message.error('接口调用失败');
+                      console.log("Error",error.message);
+                  }
+                   errorfn(error);
               }
         )
        }

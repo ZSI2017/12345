@@ -20,14 +20,28 @@
     </el-col>
   </el-row>
 
+  <!--<div class="block pagination" style="margin: 5px 0 5px 0;float:right;">
+    <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5,10,20,50]"
+        :page-size="pageSize"
+        layout="total,sizes,prev, pager, next,jumper"
+        :total="totalCount">
+    </el-pagination>
+  </div>-->
+
   <!-- 表格  -->
   <el-table v-if="tableFalg"
+    v-loading.body.lock="halfListLoading"
     class="mainTable"
     @sort-change="handleSortChange"
     :data="tableData"
+    ref="tableDom"
     @cell-mouse-enter="handleMouseEnter"
     style="width: 100%;margin-top:10px;"
-    max-height="500"
+    max-height="3000"
     empty-text="暂无数据"
     align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
@@ -70,7 +84,7 @@
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
     <el-table-column prop="status" width="110" v-if="showConfig" label="状态" :sortable="showSortable">>
-      <template scope="scope">
+       <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下架":"待上架")))}}
         </template>
     </el-table-column>
@@ -117,18 +131,17 @@
     </el-table-column>
   </el-table>
 
-  <div class="block pagination" style="margin-top:30px;float:right;">
+  <div class="block pagination" style="margin-top:5px;float:right;">
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-sizes="[5,10,20,50]"
         :page-size="pageSize"
-        layout="total,sizes,prev, pager, next,jumper"
+         layout="total,sizes,prev, pager, next,jumper"
         :total="totalCount">
     </el-pagination>
   </div>
-
   <!--  覆盖地区 查看对话框 -->
   <cover-area :visible="dialogTableVisible" :gridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
@@ -146,6 +159,7 @@
   </el-dialog> -->
 
   <!-- 置为下线 对话框  -->
+
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
@@ -163,6 +177,7 @@
 import store from 'src/vuex/store.js'
 import localEvent from 'src/vuex/function.js';
 import coverArea from "./coverArea.vue";
+// import PageStore from "@/page/chooseExpress/table-store.js"
 import {
   formatDate
 } from 'src/util/date.js';
@@ -228,8 +243,9 @@ export default {
     }
   },
   created() {
-
-    console.log("$router: " + this.$route.path);
+    // 在页面初始化时，获取pageName,
+    this.currentPage = this.PageStore.pageCount
+    console.log("$router: %o",this.$route);
     this.url = "/api/promotion/getConfList"; // 默认展开 配置
     this.pageId = "SD1010"; // 寄快递首页
     ((this.$route.path == "/chooseExpress" &&
@@ -247,6 +263,7 @@ export default {
         "pageId": this.pageId
       }
     }, (result) => {
+
       _this.tableData = result.page_list;
       _this.totalCount = parseInt(result.pages.cnt);
       // _this.totalCount = result.page_list.length; //获取数据长度
@@ -262,10 +279,14 @@ export default {
   },
   watch: {
     '$route': function(to, from) {
+      // console.log(to)
+      // console.log(from)
       // 默认状态是 运营位管理的 寄快递首页
       this.url = "/api/promotion/getConfList";
       this.pageId = "SD1010"; // 寄快递首页
       this.activeName2 = "first";
+      this.PageStore.commit("setPage",1);
+      this.currentPage = 1;
       this.radio2 = 1;
       this.showConfig = true;
       ((this.$route.path == "/chooseExpress" &&
@@ -355,6 +376,7 @@ export default {
       _this.listLoading = true;
       _this.tableFalg = false
       _this.showConfig = false;
+      _this.currentPage = 1;    //跳转标签页 页码归 1
       console.log(tab.label);
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
@@ -364,7 +386,6 @@ export default {
         _this.showConfig = true;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.currentPage = 1;
         _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
@@ -391,7 +412,6 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.currentPage = 1;
         _this.radio2 = "";
         _this.auditState = "审核状态";
         _this.auditStatusFlage = false;
@@ -418,7 +438,6 @@ export default {
         // window.location.reload();
         _this.showConfig = false;
         _this.showOperation2 = true;
-        _this.currentPage = 1;
         _this.radio2 = "";
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
@@ -462,7 +481,7 @@ export default {
       });
     },
     handleClose() {
-      alert("asdfsd");
+      // alert("asdfsd");
     },
     handleChange(value) {
       console.log(value);
@@ -518,7 +537,12 @@ export default {
       //  console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      let _self = this;
+      // setInterval(function(){
+      //    console.log(_self.$refs.tableDom.layout.tableHeight)
+      // },1000)
       this.currentPage = val;
+      this.PageStore.commit("setPage",val);
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -531,6 +555,8 @@ export default {
       }, (rsp) => {
         this.tableData = rsp.page_list;
         this.totalCount =  parseInt(rsp.pages.cnt);
+
+        // this.$nextTick( () => {this.halfListLoading = false;} )
       })
       var _this = this;
       this.halfListLoading = true;
@@ -555,8 +581,9 @@ export default {
       // }
 
 
+
       setTimeout(() => {
-        _this.halfListLoading = false;
+          this.halfListLoading = false
       }, 600);
       console.log(`当前页: ${val}`);
     },
