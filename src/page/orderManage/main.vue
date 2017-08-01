@@ -22,24 +22,30 @@
   </div>
 
   <!-- 表格  -->
-  <el-table :data="tableData" stripe v-loading.body="listLoading" lement-loading-text="拼命加载中" style="width: 100%" max-height="400" :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="gmtCreate" align="center" label="下单时间" sortable>
+  <el-table 
+    :data="tableData" 
+    stripe v-loading.body="listLoading" 
+    lement-loading-text="拼命加载中" 
+    style="width: 100%" 
+    max-height="3000" 
+  >
+    <el-table-column prop="gmtCreate" align="center" label="下单时间">
     </el-table-column>
-    <el-table-column align="center" label="相关订单号" sortable width="160">
+    <el-table-column align="center" label="相关订单号" width="260">
       <template scope="scope">
-          <p>{{scope.row.orderNo}}</p>
-          <p>{{scope.row.waybillNo}}</p>          
+          <p>订单号：{{scope.row.orderNo}}</p>
+          <p>运单号：{{scope.row.waybillNo || "-"}}</p>          
       </template>
     </el-table-column>
     <el-table-column align="center" label="寄件人信息">
       <template scope="scope">
-          <p>{{scope.row.snderName}} {{scope.row.snderPhone}}</p>
+          <p><span>{{scope.row.snderName}}</span> <span>{{scope.row.snderMobile}}</span></p>
           <p>{{scope.row.snderAddress}}</p>          
       </template>
     </el-table-column>
     <el-table-column align="center" label="收件人信息">
       <template scope="scope">
-          <p>{{scope.row.rcvrName}} {{scope.row.rcvrPhone}}</p>
+          <p>{{scope.row.rcvrName}} {{scope.row.rcvrMobile}}</p>
           <p>{{scope.row.rcvrAddress}}</p>          
       </template>
     </el-table-column>
@@ -60,7 +66,7 @@
        @size-change="handleSizeChange"
        @current-change="handleCurrentChange"
        :current-page="currentPage"
-       :page-sizes="[5,10,20,50]"
+       :page-sizes="[5,10,20,30]"
        :page-size="pageSize"
        layout="total,sizes,prev, pager, next,jumper" :total="totalCount">
     </el-pagination>
@@ -84,17 +90,7 @@ export default {
       radio: '1',
       totalCount:0,//默认数据总数
       listLoading: false, //loading框
-      // value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       tableData: [],
-      // ruleForm: {
-      //   name: '',
-      //   region: '',
-      //   date1: '',
-      //   date2: '',
-      //   delivery: false,
-      //   resource: '',
-      //   desc: ''
-      // },
     }
   },
   created() {
@@ -104,6 +100,8 @@ export default {
     //从服务器读取数据
     loadData: function(){
       var _this =this;
+      _this.currentPage = 1;
+      _this.listLoading = true;      
       _this.url = "/api/order/getList"; // 默认展开 
       _this.$http.post(this.url,{
         "pages": {
@@ -115,8 +113,15 @@ export default {
           "keyword": this.keyword
         }
       },(rsp)=>{
-              _this.tableData = rsp.page_list;
-              _this.totalCount = parseInt(rsp.pages.cnt);
+        _this.listLoading = false;              
+        _this.tableData = rsp.page_list;
+        _this.totalCount = parseInt(rsp.pages.cnt);
+        if(_this.totalCount == "0"){
+          this.$message({
+            message: '未查询到内容，请重新输入！',
+            type: 'warning'
+          });        
+        }
       },(error)=>{
           console.log('failed');
       });
@@ -125,71 +130,35 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
       this.loadData();
-      // this.$http.post(this.url, {
-      //   "pages": {
-      //     "page_size": this.pageSize,
-      //     "page_num": this.currentPage - 1
-      //   },
-      //   "con": {
-      //     "type": this.type,
-      //     "keyword": this.keyword         
-      //   }
-      // }, (rsp) => {
-      //   this.tableData = rsp.page_list;
-      //   this.totalCount =  parseInt(rsp.pages.cnt);
-      // })
-
-      // this.$message(`每页${val}`);
-      // var count = this.pageSize / 5;
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.loadData();
-      
-      // this.$http.post(this.url, {
-      //   "pages": {
-      //     "page_size": this.pageSize,
-      //     "page_num": this.currentPage - 1
-      //   },
-      //   "con": {
-      //     "type": this.type,
-      //     "keyword": this.keyword   
-      //   }
-      // }, (rsp) => {
-      //   this.tableData = rsp.page_list;
-      //   this.totalCount =  parseInt(rsp.pages.cnt);
-      // })
-
-      // var _this = this;
       this.listLoading = true;
-      this.$message(`当前页${val}`);
-      // var count = this.pageSize / 5;
-      // if (count == 1) {
-      //   this.table2 = this.tableData[val - 1];
-      // } else {
-      //   if (val == 1) {
-      //     var temp = [];
-      //     for (var i = 0; i < count; i++) {
-      //       temp = temp.concat(this.tableData[i]);
-      //     }
-      //     this.table2 = temp;
-      //   } else {
-      //     var temp = [];
-      //     for (var i = count; i < 4; i++) {
-      //       temp = temp.concat(this.tableData[i]);
-      //     }
-      //     this.table2 = temp;
-      //   }
-      // }
-
-
-      setTimeout(() => {
-        _this.listLoading = false;
-      }, 600);
+      this.$message(`当前页${val}`);   
+      var _this = this;
+      _this.$http.post(this.url,{
+        "pages": {
+          "page_size": this.pageSize,
+          "page_num": this.currentPage - 1
+        },
+        "con": {
+          "type": this.type,
+          "keyword": this.keyword
+        }
+      },(rsp)=>{
+        _this.listLoading = false;              
+        _this.tableData = rsp.page_list;
+        _this.totalCount = parseInt(rsp.pages.cnt);
+      },(error)=>{
+          console.log('failed');
+      });
+      // setTimeout(() => {
+      //   this.listLoading = false;
+      // }, 600);
       console.log(`当前页: ${val}`);
     },
     handleClick(row) {
-      localEvent.set("localorderManage", row);      
+      localEvent.set("localorderManage", row.orderNo);      
       this.$router.push({path:'/orderManage/orderDetail'});
     },
     handleEdit() {
