@@ -136,8 +136,8 @@ export default {
                 mySuccessFn(response,successfn,errorfn);
            }
        ).catch(
-           (error) => {
-                 console.log("error %o",error);
+           (response) => {
+                 console.log("error %o",response);
                 //  vue.$message.error('接口调用失败22222');
            }
        )
@@ -155,8 +155,8 @@ export default {
           }
         ).catch(
               (error) => {
-
-                   errorfn(error);
+                 console.log(error);
+                  //  errorfn(error);
               }
         )
        }
