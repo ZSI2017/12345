@@ -90,9 +90,7 @@
             <el-button @click="effectiveDetails(scope.row)" type="text" size="small">待审详情</el-button>
             <br/>
           </div>
-
         </div>
-
         </template>
     </el-table-column>
   </el-table>

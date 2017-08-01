@@ -124,8 +124,8 @@ export default {
                 return data;
             }],
             headers:{
-                 'X-Requested-With': 'XMLHttpRequest'
-              },
+                 'X-Requested-With':'XMLHttpRequest'
+            },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
