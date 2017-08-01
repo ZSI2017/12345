@@ -26,7 +26,7 @@
         </el-collapse-item>
         <el-collapse-item title="收件人信息" name="2">
             <el-row class="sender-table">
-                <el-col :span="24" v-for="(senderItem,index) in senderItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
+                <el-col :span="24" v-for="(rcvrItem,index) in rcvrItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{rcvrItem.name}}：</el-col ><el-col :span="18">{{rcvrItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-collapse-item title="物品信息" name="3">
@@ -116,12 +116,21 @@ import localEvent from 'src/vuex/function.js';
         senderItems:[{
             name: "寄件人",
             message: '尼古拉是凯奇',
-
         }, {
             name: "联系电话",
             message: '1888888888',
         },{
           name: "寄件地址",
+           message: '北京市朝阳区几乎几乎没有这个地址',
+       }],
+       rcvrItems:[{
+            name: "收件人",
+            message: '尼古拉是凯奇',
+        }, {
+            name: "联系电话",
+            message: '1888888888',
+        },{
+          name: "收件地址",
            message: '北京市朝阳区几乎几乎没有这个地址',
        }],
         goodsItems:[{
@@ -165,6 +174,8 @@ import localEvent from 'src/vuex/function.js';
         var localData = localEvent.get("localorderManage");
         console.log(localData);
         console.log(localData.orderNo);
+        this.orderNo = localData.orderNo;
+        //基本信息
         this.items[0].message = localData.expName;
         this.items[1].message = localData.actCarrierName;
         this.items[2].message = localData.waybillNo;
@@ -178,9 +189,27 @@ import localEvent from 'src/vuex/function.js';
         this.items[10].message = localData.billDate;
         this.items[11].message = localData.waybillDate;
         this.items[12].message = localData.orderStatus;
+        //寄件人信息
+        this.senderItems[0].message = localData.snderName;
+        this.senderItems[1].message = localData.snderMobile;
+        this.senderItems[2].message = localData.snderAddress;
+        //收件人信息
+        this.rcvrItems[0].message = localData.rcvrName;
+        this.rcvrItems[1].message = localData.rcvrMobile;
+        this.rcvrItems[2].message = localData.rcvrAddress;
+        //物品信息
+        this.goodsItems[0].message = localData.goodsType;
+        this.goodsItems[1].message = localData.goodsWeight;
+        this.goodsItems[2].message = localData.addService;
+        this.goodsItems[3].message = localData.remark;
+        //揽件员信息
+        this.couriers[0].message = localData.acppeter;
+        this.couriers[1].message = localData.acppetermobile;
+        //快递费用
+        this.expressPays[1].message = localData.estimatePrice;
+        this.expressPays[2].message = localData.orderAmount;
+        this.expressPays[3].message = localData.receiptAmount;
         
-        this.orderNo = localData.orderNo;
-
     },
      methods: {      
         handleShowIfo(){

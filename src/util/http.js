@@ -66,6 +66,7 @@ function checkErrorCode(response) {
   var mySuccessFn = (response,successfn,errorfn) => {
        if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
            successfn(response.data.result);
+           console.log(successfn(response.data.result))
        }else {
             if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
@@ -117,9 +118,9 @@ export default {
             }],
             // withCredentials: false,   //  默认false
             data:data,
-            // timeout:10000,
-            // responseType:'json',  // default
-          //  contentType: "application/json; charset=utf-8",
+            timeout:10000,
+            responseType:'json',  // default
+            contentType: "application/json; charset=utf-8",
             xsrfCookieName:'XSRF-TOKEN',      // default
             xsrfHeaderName: 'X-XSRF-TOKEN', // default
             validateStatus: function (status) {
