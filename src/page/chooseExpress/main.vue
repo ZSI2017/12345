@@ -34,9 +34,11 @@
 
   <!-- 表格  -->
   <el-table v-if="tableFalg"
+    v-loading.body.lock="halfListLoading"
     class="mainTable"
     @sort-change="handleSortChange"
     :data="tableData"
+    ref="tableDom"
     @cell-mouse-enter="handleMouseEnter"
     style="width: 100%;margin-top:10px;"
     max-height="3000"
@@ -92,8 +94,8 @@
               {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":"已上线")}}
             </div>
             <div v-else>
-              {{scope.row.auditStatus==7? "已驳回":(scope.row.auditStatus==1?"已通过":(scope.row.auditStatus==2?"上线待审核":(scope.row.auditStatus==3?"下线待审核":"草稿")))}}              
-            </div>      
+              {{scope.row.auditStatus==7? "已驳回":(scope.row.auditStatus==1?"已通过":(scope.row.auditStatus==2?"上线待审核":(scope.row.auditStatus==3?"下线待审核":"草稿")))}}
+            </div>
       </template>
     </el-table-column>
     <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
@@ -283,7 +285,7 @@ export default {
       this.activeName2 = "first";  
       this.currentPage = 1;
       this.radio2 = 1;
-      this.showConfig = true;            
+      this.showConfig = true;
       ((this.$route.path == "/chooseExpress" &&
           (this.pageId = "BM1010")) ||
         (this.$route.path == "/expressOrder" &&
@@ -434,8 +436,8 @@ export default {
         _this.showConfig = false;
         _this.showOperation2 = true;
         _this.radio2 = "";
-        _this.auditState = "待审核状态";    
-        _this.auditStatusFlage = true;            
+        _this.auditState = "待审核状态";
+        _this.auditStatusFlage = true;
         _this.url = "/api/promotion/getAuditList"
         _this.$http.post(_this.url, {
           "pages": {
@@ -532,6 +534,10 @@ export default {
       //  console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      let _self = this;
+      // setInterval(function(){
+      //    console.log(_self.$refs.tableDom.layout.tableHeight)
+      // },1000)
       this.currentPage = val;
       this.$http.post(this.url, {
         "pages": {
@@ -545,6 +551,8 @@ export default {
       }, (rsp) => {
         this.tableData = rsp.page_list;
         this.totalCount =  parseInt(rsp.pages.cnt);
+
+        // this.$nextTick( () => {this.halfListLoading = false;} )
       })
       var _this = this;
       this.halfListLoading = true;
@@ -569,8 +577,9 @@ export default {
       // }
 
 
+
       setTimeout(() => {
-        _this.halfListLoading = false;
+          this.halfListLoading = false
       }, 600);
       console.log(`当前页: ${val}`);
     },
@@ -599,7 +608,7 @@ export default {
     },
     handleRadio(){
       var _this = this;
-      _this.currentPage = 1;    
+      _this.currentPage = 1;
       _this.url = "/api/promotion/getConfList"
         _this.$http.post(_this.url, {
           "pages": {
