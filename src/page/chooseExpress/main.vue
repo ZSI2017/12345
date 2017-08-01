@@ -84,7 +84,7 @@
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
     <el-table-column prop="status" width="110" v-if="showConfig" label="状态" :sortable="showSortable">>
-      <template scope="scope">
+       <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下架":"待上架")))}}
         </template>
     </el-table-column>
@@ -138,11 +138,10 @@
         :current-page="currentPage"
         :page-sizes="[5,10,20,50]"
         :page-size="pageSize"
-        layout="total,sizes,prev, pager, next,jumper"
+         layout="total,sizes,prev, pager, next,jumper"
         :total="totalCount">
     </el-pagination>
   </div>
-
   <!--  覆盖地区 查看对话框 -->
   <cover-area :visible="dialogTableVisible" :gridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
@@ -160,6 +159,7 @@
   </el-dialog> -->
 
   <!-- 置为下线 对话框  -->
+
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
