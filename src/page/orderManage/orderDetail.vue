@@ -6,7 +6,6 @@
     <el-row class="orderDetail">
         <el-collapse v-model="activeNames" >
             <el-collapse-item title="基本信息" name="0">
-
                 <el-row class="basic-table">
                     <el-col :md="12" :lg="6" v-for="(item,index) in items" :key="index">
                         <div class="grid-content bg-purple">
@@ -64,6 +63,7 @@ import localEvent from 'src/vuex/function.js';
       return {
         activeNames: ['0','1','2','3','4',"5"],
         orderNo:'',
+        url:'',
         items:[{
             name: "快递公司",
             message: '德邦快递',
@@ -171,44 +171,54 @@ import localEvent from 'src/vuex/function.js';
 
     },
     mounted() {
+        var _this = this;        
         var localData = localEvent.get("localorderManage");
         console.log(localData);
-        console.log(localData.orderNo);
-        this.orderNo = localData.orderNo;
-        //基本信息
-        this.items[0].message = localData.expName;
-        this.items[1].message = localData.actCarrierName;
-        this.items[2].message = localData.waybillNo;
-        this.items[3].message = localData.pickUpCode;
-        this.items[4].message = localData.gmtExp;
-        this.items[5].message = localData.gmtSuc;
-        this.items[6].message = localData.gmtAccept;
-        this.items[7].message = localData.waybillDate;
-        this.items[8].message = localData.outOrderNo;
-        this.items[9].message = localData.waybillDate;//是否转运快递
-        this.items[10].message = localData.billDate;
-        this.items[11].message = localData.waybillDate;
-        this.items[12].message = localData.orderStatus;
-        //寄件人信息
-        this.senderItems[0].message = localData.snderName;
-        this.senderItems[1].message = localData.snderMobile;
-        this.senderItems[2].message = localData.snderAddress;
-        //收件人信息
-        this.rcvrItems[0].message = localData.rcvrName;
-        this.rcvrItems[1].message = localData.rcvrMobile;
-        this.rcvrItems[2].message = localData.rcvrAddress;
-        //物品信息
-        this.goodsItems[0].message = localData.goodsType;
-        this.goodsItems[1].message = localData.goodsWeight;
-        this.goodsItems[2].message = localData.addService;
-        this.goodsItems[3].message = localData.remark;
-        //揽件员信息
-        this.couriers[0].message = localData.acppeter;
-        this.couriers[1].message = localData.acppetermobile;
-        //快递费用
-        this.expressPays[1].message = localData.estimatePrice;
-        this.expressPays[2].message = localData.orderAmount;
-        this.expressPays[3].message = localData.receiptAmount;
+        _this.orderNo = localData;
+        _this.url = "/api/order/detail"; // 默认展开 
+        _this.$http.post(this.url,{
+            orderNo:this.orderNo
+        },(rsp)=>{
+            console.log(rsp);
+
+            //基本信息
+            this.items[0].message = rsp.page_list.expName;
+            this.items[1].message = rsp.page_list.actCarrierName;
+            this.items[2].message = rsp.page_list.waybillNo;
+            this.items[3].message = rsp.page_list.pickUpCode;
+            this.items[4].message = rsp.page_list.gmtExp;
+            this.items[5].message = rsp.page_list.gmtSuc;
+            this.items[6].message = rsp.page_list.gmtAccept;
+            this.items[7].message = rsp.page_list.waybillDate;
+            this.items[8].message = rsp.page_list.outOrderNo;
+            this.items[9].message = rsp.page_list.waybillDate;//是否转运快递
+            this.items[10].message = rsp.page_list.billDate;
+            this.items[11].message = rsp.page_list.waybillDate;
+            this.items[12].message = rsp.page_list.orderStatus;
+            //寄件人信息
+            this.senderItems[0].message = rsp.page_list.snderName;
+            this.senderItems[1].message = rsp.page_list.snderMobile;
+            this.senderItems[2].message = rsp.page_list.snderAddress;
+            //收件人信息
+            this.rcvrItems[0].message = rsp.page_list.rcvrName;
+            this.rcvrItems[1].message = rsp.page_list.rcvrMobile;
+            this.rcvrItems[2].message = rsp.page_list.rcvrAddress;
+            //物品信息
+            this.goodsItems[0].message = rsp.page_list.goodsType;
+            this.goodsItems[1].message = rsp.page_list.goodsWeight;
+            this.goodsItems[2].message = rsp.page_list.addService;
+            this.goodsItems[3].message = rsp.page_list.remark;
+            //揽件员信息
+            this.couriers[0].message = rsp.page_list.acppeter;
+            this.couriers[1].message = rsp.page_list.acppetermobile;
+            //快递费用
+            this.expressPays[1].message = rsp.page_list.estimatePrice;
+            this.expressPays[2].message = rsp.page_list.orderAmount;
+            this.expressPays[3].message = rsp.page_list.receiptAmount;
+        },(error)=>{
+            console.log('failed');
+        });
+
         
     },
      methods: {      
@@ -291,7 +301,7 @@ import localEvent from 'src/vuex/function.js';
         }
     }
 
-    @media screen and (max-width: 901px) {
+    @media screen and (max-width: 999px) {
         .cell-left{
             text-align: left;
             background: #e1e1e1;

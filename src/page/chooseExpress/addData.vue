@@ -118,7 +118,6 @@ export default {
     return {
      // 展示警告信息
       showAlert:false,
-
       // 添加搜索框
       state1: "",
       provinces: [],

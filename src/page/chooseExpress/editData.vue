@@ -163,7 +163,7 @@ export default {
         Forder: '',
         link:'',
         imageUrl:''
-      }
+      },
     }
   },
   mounted() {
@@ -183,6 +183,7 @@ export default {
     } else {
       this.radio = 2;
     }
+
   },
   created() {
     if ( this.$route.path == "/chooseExpress/detail"

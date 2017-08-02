@@ -39,7 +39,6 @@
     @sort-change="handleSortChange"
     :data="tableData"
     ref="tableDom"
-    @cell-mouse-enter="handleMouseEnter"
     style="width: 100%;margin-top:10px;"
     max-height="3000"
     empty-text="暂无数据"
@@ -412,9 +411,9 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.radio2 = "";
-        _this.auditState = "审核状态";
-        _this.auditStatusFlage = false;
+        _this.radio2 = "";      
+        _this.auditState = "状态";   
+        _this.auditStatusFlage = false;             
         _this.url = "/api/promotion/getList";
         _this.$http.post(_this.url, {
           "pages": {
