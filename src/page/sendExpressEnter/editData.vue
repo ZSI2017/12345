@@ -87,7 +87,7 @@
                   v-model="checkedCities[scope.$index]"
                   @change="handleCheckedCitiesChange(scope.$index)"
                   >
-                 <el-checkbox style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+                 <el-checkbox  style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
             </el-checkbox-group>
 
      </template>
@@ -319,6 +319,7 @@ export default {
       this.checkAll.splice(index, 1, checkedCount === this.gridData[index].city.length)
       console.log(checkedCount + "  " + this.gridData[index].city.length + " " + this.checkAll[index]);
       this.isIndeterminate.splice(index, 1, checkedCount > 0 && checkedCount < this.gridData[index].city.length);
+      this.gridData[index].check = checkedCount>0 ;
       this.observeCheckAll();
     },
     dialogTable() {
