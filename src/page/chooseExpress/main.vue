@@ -8,12 +8,14 @@
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
     <el-col :span="22">
-      <el-radio-group v-model="radio2" @change="handleRadio">
-        <el-radio :label="1">审核通过</el-radio>
-        <el-radio :label="2">驳回</el-radio>
-        <el-radio :label="3">待审核</el-radio>
-        <el-radio :label="4">草稿</el-radio>
-      </el-radio-group>
+      <keep-alive>
+        <el-radio-group v-model="radio2" @change="handleRadio">
+          <el-radio :label="1">审核通过</el-radio>
+          <el-radio :label="2">驳回</el-radio>
+          <el-radio :label="3">待审核</el-radio>
+          <el-radio :label="4">草稿</el-radio>
+        </el-radio-group>
+    </keep-alive>
     </el-col>
     <el-col :span="2">
       <el-button type="primary" @click="setNewData" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>

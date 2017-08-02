@@ -95,13 +95,13 @@
   </el-table>
 
   <div class="block pagination" style="margin-top:30px;float:right;">
-    <el-pagination 
-    @size-change="handleSizeChange" 
-    @current-change="handleCurrentChange" 
-    :current-page="currentPage4" 
-    :page-sizes="[5,10,15,20]" 
-    :page-size="pageSize" 
-    layout="total,sizes,prev, pager, next,jumper" 
+    <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page="currentPage4"
+    :page-sizes="[5,10,15,20]"
+    :page-size="pageSize"
+    layout="total,sizes,prev, pager, next,jumper"
     :total="totalCount">
     </el-pagination>
   </div>
@@ -161,6 +161,7 @@ export default {
     }
   },
   created() {
+    alert("created....")
     console.log("$router: " + this.$route.path);
     let url = "/rest/list2";
     var _this = this;
