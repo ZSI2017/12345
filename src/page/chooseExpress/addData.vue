@@ -223,7 +223,7 @@ export default {
           // _this.$router.app.$store.state.loadingChange = true;
           _this.$store.dispatch('changeLoadingChange',true);
 
-          
+
 
 
           _this.$router.go(-1);
@@ -234,7 +234,6 @@ export default {
           return false;
         }
       })
-
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
