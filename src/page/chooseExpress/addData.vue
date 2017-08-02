@@ -12,20 +12,29 @@
     <el-form-item label="名称" prop="name">
       <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
-    <el-form-item label="运营图" prop="opMap">
-      <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
+    <el-form-item label="运营图" prop="imageUrl">
+      <el-upload 
+        class="upload-demo" 
+        action="https://jsonplaceholder.typicode.com/posts/" 
+        :on-preview="handlePreview" 
+        :on-remove="handleRemove"
+        :file-list="ruleForm.fileList">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
     </el-form-item>
-    <el-form-item label="排序值" prop="number">
-      <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    <el-form-item label="排序值" prop="sortWeight">
+      <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <el-form-item label="链接" prop="link">
-      <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+    <el-form-item label="链接" prop="linkUrl">
+      <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
     </el-form-item>
-    <el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
+    <el-form-item label="有效时段">
+      <el-date-picker 
+        v-model="ruleForm.date1" 
+        type="datetimerange" 
+        :picker-options="pickerOptions2"
+        placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>
     <el-form-item label="覆盖地区" prop="coverArea">
@@ -91,25 +100,13 @@
       :gridData="gridData"
       @listenToCoverArea ="changeVisible"
       ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <el-tag
-       style="margin-right:10px;margin-bottom:5px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
-
-
 </section>
 </template>
 <script type="text/javascript">
-   import coverArea from "@/page/chooseExpress/coverArea.vue";
+  import {
+    formatDate
+  } from 'src/util/date.js';
+  import coverArea from "@/page/chooseExpress/coverArea.vue";
 export default {
   components:{
      coverArea
@@ -121,22 +118,16 @@ export default {
       // 添加搜索框
       state1: "",
       provinces: [],
-      //标签页
-      activeName: 'C',
-      tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
       // 覆盖地区选择
       check: false,
       checkAll: [],
       checkedCities: [],
       isIndeterminate: [],
-      // cities: cityOptions,
-      // value3 代表时间段选择的
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       // radio 代表上下架状态的选择
       radio: 1,
+      url:'/api/promotion/saveAudit',
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
-
       // 查看配置地区中的表格数据 和 是否显示的标志
       showHeader: false,
       dialogTableVisible: false,
@@ -145,10 +136,27 @@ export default {
       // 对输入表单进行验证
       ruleForm: {
         name: '',
-        number: '',
-        link: '',
+        sortWeight: '',
+        linkUrl: '',
         date1: '',
-        status: false,
+        gmtBegin:'',
+        gmtEnd:'',
+        status: '',
+        fileList: []
+ 
+      },
+      pickerOptions2: {
+        onPick:function({ maxDate, minDate }){
+          // var minDate = new Date(minDate);
+          // var maxDate = new Date(maxDate);   
+          console.log(minDate)     
+          console.log(maxDate)       
+          this.ruleForm.gmtBegin = formatDate(minDate);
+          this.ruleForm.gmtEnd = formatDate(maxDate);          
+          console.log(this.ruleForm.gmtBegin)
+          console.log(this.ruleForm.gmtEnd)
+          
+        }
       },
       rules: {
         name: [{
@@ -157,11 +165,11 @@ export default {
           message: '请输入运营图名称',
           trigger: 'blur'
         }, ],
-        number: [
+        sortWeight: [
           { required: true, message: '排序值不能为空'},
           { type: 'number', message: '排序值必须为数字值'}
         ],
-        link: [{
+        linkUrl: [{
           required: true,
           message: "请输入链接",
           trigger: 'blur'
@@ -177,14 +185,14 @@ export default {
           message: '请选择状态',
           trigger: 'change'
         }],
-        opMap: [{
-          required: true,
-          message: '请上传图片'
-        }],
-        coverArea: [{
-          required: true,
-          message: '请选择覆盖地区'
-        }]
+        // imageUrl: [{
+        //   required: true,
+        //   message: '请上传图片'
+        // }],
+        // coverArea: [{
+        //   required: true,
+        //   message: '请选择覆盖地区'
+        // }]
       }
     }
   },
@@ -213,21 +221,38 @@ export default {
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
+    formatDate(time) {
+      var date = new Date(time);
+      return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+    },
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
+      console.log(formName)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
           // router.app.$store.state.loadingChange = true
           // _this.$router.app.$store.state.loadingChange = true;
           _this.$store.dispatch('changeLoadingChange',true);
-
-          
-
-
           _this.$router.go(-1);
-          // alert('sumbit');
+          
+          _this.$http.post(_this.url,{
+            "pages": {
+              "page_size": this.pageSize,
+              "page_num": this.currentPage - 1
+            },
+            "con": {
+              "pageId": this.pageId
+            }
+          }, (result) => {
+
+            _this.tableData = result.page_list;
+            _this.totalCount = parseInt(result.pages.cnt);
+          });
+
+          console.log(this.$route.matched);
+
         } else {
           console.log(_this);
           _this.showAlert = true;
@@ -241,15 +266,6 @@ export default {
         this.$router.go(-1);
       // this.loadingFlag = true;
     },
-    // 即将离开的对话框
-    // editSure() {
-    //   this.loadingFlag = false;
-    //   this.$router.app.$store.state.loadingFlag = true;
-    //   console.log(this);
-    //   this.$router.go(-1);
-    //   //  this.$router.push({ path:this.defaultActive});
-    //   //  this.$route.push({ path:this.defaultActive});
-    // },
     handlePreview() {},
     handleRemove() {},
 

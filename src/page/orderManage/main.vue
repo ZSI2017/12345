@@ -2,16 +2,16 @@
 <div class="section">
   <div class="keyword-input">
     <el-row>
-      <el-col :span="4" class="import-font">关键字：</el-col>
+      <el-col :span="6" class="import-font">关键字：</el-col>
       <el-col :span="10">
-          <el-input :span="10" v-model="keyword" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
+          <el-input :span="10" v-model="keyword" type="number" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
         <el-button type="primary" @click="loadData" style="width:100px;">搜 索</el-button>
       </el-col>
     </el-row>
     <el-row style="margin-top:14px;">
-      <el-col :span="4" class="import-font"></el-col>
+      <el-col :span="6" style="height:26px;"></el-col>
       <el-radio-group v-model="radio" @change="handleRadio">
         <el-radio class="radio" label="1">支付宝绑定手机号</el-radio>
         <el-radio class="radio" label="2">订单号</el-radio>
@@ -103,6 +103,14 @@ export default {
       _this.currentPage = 1;
       _this.listLoading = true;      
       _this.url = "/api/order/getList"; // 默认展开 
+      if(this.keyword == ""){
+        this.$message({
+          message: '请输入关键字查询！',
+          type: 'warning'
+        }); 
+        _this.listLoading = false;                        
+        return;
+      }
       _this.$http.post(this.url,{
         "pages": {
           "page_size": this.pageSize,
@@ -123,7 +131,13 @@ export default {
           });        
         }
       },(error)=>{
-          console.log('failed');
+        console.log(error)
+        _this.listLoading = false;   
+        this.$message({
+            message: '未查询到内容，请重新输入！',
+            type: 'warning'
+          });                    
+        console.log('failed');
       });
     },
     handleSizeChange(val) {
@@ -168,7 +182,7 @@ export default {
       })
     },
     handleRadio(){
-      this.type = toString(this.radio)
+      this.type = this.radio.toString()
     }
   }
 }
@@ -191,5 +205,15 @@ export default {
 .import-search{
   margin-left: 20px;
 }
+
+  /*// 去掉input[type=number]默认的加减号*/
+  input[type=‘number‘] {
+      -moz-appearance:textfield;
+  }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  }
 
 </style>
