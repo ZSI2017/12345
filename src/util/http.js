@@ -190,7 +190,24 @@ export default {
           }
         ).catch(
               (error) => {
-
+                if(error.response) {
+                  //  发出了请求，服务端返回了 状态码 2xx
+                  console.log("%cresponse error %o","color:red;font-size:16px;",error.response.data)
+                  if(error.response.status === 0){
+                        vue.$message.error('登录超时');
+                    }
+                } else if(error.request) {
+                  if(error.request.status === 0){
+                        vue.$message.error('登录超时');
+                    }
+                     // 请求发出了，但是没有接受到 响应
+                    //  'error.request' 是一个 浏览器中的XMLHttpRequest 实例，
+                    //   在node.js 中 就是 http.ClientRequest 实例；
+                       console.log("%crequest error %o","color:red;font-size:16px;",error.request);
+                  } else {
+                      vue.$message.error('接口调用失败');
+                      console.log("Error",error.message);
+                  }
                    errorfn(error);
               }
         )

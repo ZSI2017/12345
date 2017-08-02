@@ -259,7 +259,6 @@ export default {
           return false;
         }
       })
-
     },
     // 点击返回 对应的事件处理
     handleBackClick() {

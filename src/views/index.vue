@@ -5,10 +5,10 @@
     <el-row>
       <el-col :span="24">
         <div class="grid-content" @click="handleHome" style="float:left;width:230px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;">{{ title }}</div>
-        <div class="header-right" style="float:right;width:200px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;padding-right:20px;">
+        <div class="header-right" style="float:right;width:400px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;padding-right:20px;">
           <el-row>
-            <el-col :span="12"><div class="grid-content">123456</div></el-col>
-            <el-col :span="12"><div class="grid-content" @click="handleLogout">退出登录</div></el-col>
+            <el-col :span="17"><div class="grid-content">当前用户: {{userID}}</div></el-col>
+            <el-col :span="7"><div class="grid-content" @click="handleLogout">退出登录</div></el-col>
           </el-row>
         </div>
       </el-col>
@@ -52,14 +52,14 @@
     <div style="width:100%;box-sizing:border-box;padding:20px;padding-left:250px;padding-top:20px;flex:1;background:#f1f1f1;">
 
       <el-breadcrumb v-bind:class="{ active: isActive }" style="padding:20px 0 20px 25px;line-height:100%;border:1px solid #D3DCE6;border-radius: 5px 5px 0 0;border-bottom:0;background:#fff;" separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item v-if="item.name&&item.name !='首页'" v-for="(item,index) in $route.matched" :to="{path:item.path}" :key="item.path">{{item.name}}</el-breadcrumb-item>
       </el-breadcrumb>
       <!--   TODO  对表格进行各种操作     -->
 
       <!-- <router-view></router-view> -->
       <!--<transition name="slide-fade">-->
-        <router-view></router-view>
+          <router-view></router-view>
       <!--</transition>-->
       <!-- <tableVue></tableVue> -->
       </el-col> </div>
@@ -94,6 +94,7 @@ export default {
       uniqueOpened: true,
       fold: true,
       headerFixed: true,
+      userID:"2088702773405612@alipay",
       title: "寄件平台运营管理系统",
       input: '',
       isActive:false

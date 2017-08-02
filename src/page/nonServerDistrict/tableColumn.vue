@@ -9,8 +9,9 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
   export default {
      name: "tableColumn",
      props:{
-        headerName:String,
-        myProps:String
+         headerName:String,
+         myProps:String,
+         width:Number
      },
      render(h) {
         return h(

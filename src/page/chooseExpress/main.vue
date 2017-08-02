@@ -1,19 +1,19 @@
 <template>
 <div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
-    <el-tab-pane label="配置" name="first">配置</el-tab-pane>
-    <el-tab-pane label="已上线" name="second">已上线</el-tab-pane>
-    <el-tab-pane label="待审核" name="third">待审核</el-tab-pane>
+    <el-tab-pane label="配置" name="配置">配置</el-tab-pane>
+    <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
+    <el-tab-pane label="待审核" name="待审核">待审核</el-tab-pane>
   </el-tabs>
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
     <el-col :span="22">
-      <el-radio-group v-model="radio2" @change="handleRadio">
-        <el-radio :label="1">审核通过</el-radio>
-        <el-radio :label="2">驳回</el-radio>
-        <el-radio :label="3">待审核</el-radio>
-        <el-radio :label="4">草稿</el-radio>
-      </el-radio-group>
+          <el-radio-group v-model="radio2" @change="handleRadio">
+            <el-radio :label="1">审核通过</el-radio>
+            <el-radio :label="2">驳回</el-radio>
+            <el-radio :label="3">待审核</el-radio>
+            <el-radio :label="4">草稿</el-radio>
+          </el-radio-group>
     </el-col>
     <el-col :span="2">
       <el-button type="primary" @click="setNewData" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
@@ -34,7 +34,6 @@
 
   <!-- 表格  -->
   <el-table v-if="tableFalg"
-    v-loading.body.lock="halfListLoading"
     class="mainTable"
     @sort-change="handleSortChange"
     :data="tableData"
@@ -59,8 +58,8 @@
       </template>
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">
-      <template scope="scope">
-         <el-button @click="checkArea" type="text" size="small">查看</el-button>
+       <template scope="scope">
+         <el-button @click="checkArea(scope.row.id)" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
     <el-table-column prop="gmtCreate" label="创建时间" width="160"  :sortable="showSortable">
@@ -83,7 +82,7 @@
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
     <el-table-column prop="status" width="110" v-if="showConfig" label="状态" :sortable="showSortable">>
-      <template scope="scope">
+       <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下架":"待上架")))}}
         </template>
     </el-table-column>
@@ -139,11 +138,10 @@
         :current-page="currentPage"
         :page-sizes="[5,10,20,50]"
         :page-size="pageSize"
-        layout="total,sizes,prev, pager, next,jumper"
+         layout="total,sizes,prev, pager, next,jumper"
         :total="totalCount">
     </el-pagination>
   </div>
-
   <!--  覆盖地区 查看对话框 -->
   <cover-area :visible="dialogTableVisible" :gridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
@@ -161,6 +159,7 @@
   </el-dialog> -->
 
   <!-- 置为下线 对话框  -->
+
   <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
@@ -206,7 +205,7 @@ export default {
       showConfig: true,
       gridData: [],
       radio2: 1,
-      activeName2: 'first',
+      activeName2: '配置',
       showHeader: false,
       dialogTableVisible: false,
       //审核状态分类显示
@@ -235,9 +234,18 @@ export default {
       // }
     }
   },
+  activated(){
+    // alert(this.activeName2);
+    // alert("activated ....")
+  },
+  deactivated(){
+    // alert("deactivated....")
+  },
   created() {
+    //  alert("created...")
+    //  alert(this.$store.state.loadingFlag)
     // 在页面初始化时，获取pageName,
-    this.currentPage = this.PageStore.pageCount
+    this.currentPage = this.PageStore.pageCount;
     console.log("$router: %o",this.$route);
     this.url = "/api/promotion/getConfList"; // 默认展开 配置
     this.pageId = "SD1010"; // 寄快递首页
@@ -259,7 +267,6 @@ export default {
       _this.tableData = result.page_list;
       _this.totalCount = parseInt(result.pages.cnt);
     });
-
     console.log(this.$route.matched);
   },
   filters: {
@@ -270,12 +277,10 @@ export default {
   },
   watch: {
     '$route': function(to, from) {
-      // console.log(to)
-      // console.log(from)
       // 默认状态是 运营位管理的 寄快递首页
       this.url = "/api/promotion/getConfList";
       this.pageId = "SD1010"; // 寄快递首页
-      this.activeName2 = "first";
+      this.activeName2 = "配置";
       this.PageStore.commit("setPage",1);
       this.currentPage = 1;
       this.radio2 = 1;
@@ -320,15 +325,13 @@ export default {
           },
           "con": {
             "pageId": this.pageId,
-            "orderColumn":column.prop,
-            "orderStatus":column.order&&column.order.slice(0,4)
+            "sortBy":column.prop,
+            "sortType":column.order&&column.order.slice(0,4),
+            "status":this.radio2
           }
         }, (rsp) => {
-
           _this.tableData = rsp.page_list
           _this.totalCount = parseInt(rsp.pages.cnt);
-          //  console.log("success");
-          //  console.log(data);
         })
     },
     //dialog 确认按钮
@@ -465,9 +468,9 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.radio2 = "";      
-        _this.auditState = "状态";   
-        _this.auditStatusFlage = false;             
+        _this.radio2 = "";
+        _this.auditState = "状态";
+        _this.auditStatusFlage = false;
         _this.url = "/api/promotion/getList";
         _this.$http.post(_this.url, {
           "pages": {
@@ -517,14 +520,18 @@ export default {
 
     },
     // 查看覆盖地区
-    checkArea() {
-      var _this = this;
-      _this.listLoading = true;
-      _this.$http.get("/rest/list3", (rsp) => {
-        _this.gridData = rsp.data.data;
+    checkArea(id) {
+      // var _this = this;
+      this.listLoading = true;
+      let URL= "/api/promotion/areaAudit";
+      if(this.activeName2 === "已上线") {
+          URL =  "/api/promotion/area";
+      }
+      this.$http.post(URL,{id:id.toString()},(rsp) => {
+        this.gridData = rsp.provinces;
         // console.log(_this.gridData);
-        _this.listLoading = false;
-        _this.dialogTableVisible = true
+        this.listLoading = false;
+        this.dialogTableVisible = true
       })
     },
     setNewData() {
