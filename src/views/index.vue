@@ -59,9 +59,7 @@
 
       <!-- <router-view></router-view> -->
       <!--<transition name="slide-fade">-->
-      <keep-alive>
         <router-view></router-view>
-      </keep-alive>
       <!--</transition>-->
       <!-- <tableVue></tableVue> -->
       </el-col> </div>
