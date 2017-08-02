@@ -7,21 +7,31 @@
 
 
 const PageStore = function(pageCount) {
-     this.pageCount = "1";
+       this.pageCount = "1";    // 默认的数据类型
+       this.tabName =  "配置";  // tab 菜单页
+       this.radio=  "1";       // 单选按钮
 }
 PageStore.prototype.mutations = {
      setPage(pageCount){
        this.pageCount = pageCount;
+     },
+     setTabName(tabName) {
+         this.tabName  =  tabName;
+     },
+     setRadio(radio) {
+         this.radio = radio;
      }
 },
+
 PageStore.prototype.commit = function(name,args) {
     // 这里模拟 commit  事件触发
     const mutations = this.mutations;
     if(mutations[name]) {
-         mutations[name].apply(this,[args]);
-    }else {
+        mutations[name].apply(this,[args]);
+    }else{
        console.log("action not found");
     }
 }
 const pageStore = new PageStore();
+
 export default pageStore;

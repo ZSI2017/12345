@@ -201,7 +201,7 @@ export default {
   },
   created() {
     console.log("$router: " + this.$route.path);
-    this.url = "/api/sendApp/getConfList"; // 默认展开 配置
+    this.url = "/api/sendApp/getList"; // 默认展开 配置
     this.pageId = "NE1010";                // 附近快递资源
     var _this = this;
     _this.$http.post(_this.url, {
