@@ -159,7 +159,8 @@ export default {
         imageUrl:'',
         promotionId:'',
         gmtBegin:'',
-        gmtEnd:''
+        gmtEnd:'',
+        pageId:''
       },
 
     }
@@ -239,11 +240,12 @@ export default {
 
     //  点击提交
     handleSubmit() {
+      console.log(this.localData.promotionId)
        var result = {
            "data":{
                "id":this.id,
-               "pageId":this.localData.pageId,
-               "promotionId":this.localData.promotionId,
+               "pageId":this.form.pageId,
+               "promotionId":this.form.promotionId,
                "name":this.form.name,
                "imageUrl":this.form.link,
                "sortWeight":this.form.Forder,
