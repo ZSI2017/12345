@@ -177,7 +177,7 @@ import localEvent from 'src/vuex/function.js';
         _this.orderNo = localData;
         _this.url = "/api/order/detail"; // 默认展开 
         _this.$http.post(this.url,{
-            orderNo:this.orderNo
+            orderNo:_this.orderNo
         },(rsp)=>{
             console.log(rsp);
 

@@ -47,7 +47,10 @@
     </el-table-column>
     <el-table-column prop="imageUrl" label="运营图">
        <template scope="scope">
-            <img width="50px" :src="scope.row.imageUrl">
+            <img width="50px" style="cursor:pointer;" :src="scope.row.imageUrl" trigger="click" placement="right" @click="showImg(scope.row.imageUrl)">
+            <el-dialog v-model="dialogVisible" size="tiny">
+              <img width="100%" :src="bigImageUrl" alt="">
+            </el-dialog>
         </template>
     </el-table-column>
     <el-table-column label="链接">
@@ -62,12 +65,12 @@
          <el-button @click="checkArea(scope.row.id)" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
-    <el-table-column prop="gmtCreate" label="创建时间" width="160"  :sortable="showSortable">
+    <el-table-column prop="gmtCreate" label="创建时间" width="160">
       <template scope="scope">
           {{scope.row.gmtCreate | formatDate}}
       </template>
     </el-table-column>
-    <el-table-column prop="gmtModified" label="修改时间" width="160">
+    <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
       <template scope="scope">
           {{scope.row.gmtModified | formatDate}}
       </template>
@@ -121,10 +124,10 @@
            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">已生效详情</el-button>
            <br/>
           </div>
-          <div v-if="showOperation2 || showOperation3">
+          <!--<div v-if="showOperation2 || showOperation3">
             <el-button @click="effectiveDetails(scope.row)" type="text" size="small">待审详情</el-button>
             <br/>
-          </div>
+          </div>-->
         </div>
 
         </template>
@@ -225,7 +228,8 @@ export default {
       promotionURL: '', // url
       promotionMessage: '', // message
       promotionType: '', // message
-
+      dialogVisible:false,
+      bigImageUrl:'',
     }
   },
   computed() {
@@ -309,6 +313,11 @@ export default {
     }
   },
   methods: {
+    //点击图片显示大图
+    showImg(row){
+      this.dialogVisible = true;
+      this.bigImageUrl = row;
+    },
     // 监听 子组件覆盖对话框 的回调函数
     changeVisible(flag) {
       this.dialogTableVisible = flag;
@@ -316,7 +325,7 @@ export default {
     // 操作排序值改变
     handleSortChange(column) {
         console.log(column.prop)
-        console.log(column.order)
+        console.log(column.order)       
         // 创建时间进行排序
         var _this = this;
         _this.$http.post(this.url, {
@@ -327,7 +336,7 @@ export default {
           "con": {
             "pageId": this.pageId,
             "sortBy":column.prop,
-            "sortType":column.order&&column.order.slice(0,4),
+            "sortType":column.order == 'ascending'?'asc':'desc',
             "status":this.radio2
           }
         }, (rsp) => {
