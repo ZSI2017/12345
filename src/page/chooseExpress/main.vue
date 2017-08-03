@@ -96,7 +96,7 @@
             </div>
       </template>
     </el-table-column>
-    <el-table-column v-if="showOperation||showOperation2" label="操作" width="130">
+    <el-table-column v-if="showOperation||showOperation2||showOperation3" label="操作" width="130">
       <template scope="scope">
         <div>
           <div v-if="showOperation">
@@ -121,7 +121,7 @@
            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">已生效详情</el-button>
            <br/>
           </div>
-          <div v-if="showOperation2">
+          <div v-if="showOperation2 || showOperation3">
             <el-button @click="effectiveDetails(scope.row)" type="text" size="small">待审详情</el-button>
             <br/>
           </div>
@@ -200,6 +200,7 @@ export default {
       // 置为下线对话框
       showOperation: true,
       showOperation2: false,
+      showOperation3: false,      
       loadingTakeOffFlag: false,
       tableFalg: true,
       showConfig: true,
@@ -645,6 +646,14 @@ export default {
     },
     handleRadio(){
       var _this = this;
+      if(this.radio2 == 3){
+          this.showOperation = false;
+          this.showOperation3 = true;
+      }else{
+          this.showOperation = true;
+          this.showOperation3 = false;
+          
+      }
       _this.currentPage = 1;
       _this.url = "/api/promotion/getConfList"
         _this.$http.post(_this.url, {
