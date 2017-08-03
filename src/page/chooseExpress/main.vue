@@ -528,7 +528,7 @@ export default {
           URL =  "/api/promotion/area";
       }
       this.$http.post(URL,{id},(rsp) => {
-        this.gridData = rsp.provinces;
+        this.gridData = this.filterProvinces(rsp.provinces);
 
         // console.log(_this.gridData);
         this.listLoading = false;
