@@ -13,10 +13,10 @@
       <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
     <el-form-item label="运营图" prop="imageUrl">
-      <el-upload 
-        class="upload-demo" 
-        action="https://jsonplaceholder.typicode.com/posts/" 
-        :on-preview="handlePreview" 
+      <el-upload
+        class="upload-demo"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-preview="handlePreview"
         :on-remove="handleRemove"
         :file-list="ruleForm.fileList">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -30,9 +30,9 @@
       <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
     </el-form-item>
     <el-form-item label="有效时段">
-      <el-date-picker 
-        v-model="ruleForm.date1" 
-        type="datetimerange" 
+      <el-date-picker
+        v-model="ruleForm.date1"
+        type="datetimerange"
         :picker-options="pickerOptions2"
         placeholder="选择时间范围">
       </el-date-picker>
@@ -143,19 +143,19 @@ export default {
         gmtEnd:'',
         status: '',
         fileList: []
- 
+
       },
       pickerOptions2: {
         onPick:function({ maxDate, minDate }){
           // var minDate = new Date(minDate);
-          // var maxDate = new Date(maxDate);   
-          console.log(minDate)     
-          console.log(maxDate)       
+          // var maxDate = new Date(maxDate);
+          console.log(minDate)
+          console.log(maxDate)
           this.ruleForm.gmtBegin = formatDate(minDate);
-          this.ruleForm.gmtEnd = formatDate(maxDate);          
+          this.ruleForm.gmtEnd = formatDate(maxDate);
           console.log(this.ruleForm.gmtBegin)
           console.log(this.ruleForm.gmtEnd)
-          
+
         }
       },
       rules: {
@@ -236,8 +236,11 @@ export default {
           // _this.$router.app.$store.state.loadingChange = true;
           _this.$store.dispatch('changeLoadingChange',true);
           _this.$router.go(-1);
-          
+
           _this.$http.post(_this.url,{
+              "data":{
+                 "pageId":pageId
+              },
             "pages": {
               "page_size": this.pageSize,
               "page_num": this.currentPage - 1

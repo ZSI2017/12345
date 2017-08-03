@@ -224,7 +224,7 @@ export default {
       promotionURL: '', // url
       promotionMessage: '', // message
       promotionType: '', // message
-      
+
     }
   },
   computed() {
@@ -315,7 +315,7 @@ export default {
     // 操作排序值改变
     handleSortChange(column) {
         console.log(column.prop)
-        console.log(column.order)        
+        console.log(column.order)
         // 创建时间进行排序
         var _this = this;
         _this.$http.post(this.url, {
@@ -344,7 +344,7 @@ export default {
         this.$message({
           message: this.promotionMessage,
           type: this.promotionType
-        }); 
+        });
 
         this.pageId = "SD1010"; // 寄快递首页
         ((this.$route.path == "/chooseExpress" &&
@@ -401,7 +401,7 @@ export default {
       this.promotionMessage = '已通过申请';
       this.promotionType = 'success';
       this.url = "/api/promotion/getAuditList"; // 默认展开 配置
-      
+
     },
     OperationApprovedFail(row) {
       console.log(row)
@@ -413,7 +413,7 @@ export default {
       this.promotionMessage = '申请已驳回！';
       this.promotionType = 'success';
       this.url = "/api/promotion/getAuditList"; // 默认展开 配置
-      
+
     },
     OperationEffectDetail() {
       this.loadingTakeOffFlag = true;
@@ -527,7 +527,7 @@ export default {
       if(this.activeName2 === "已上线") {
           URL =  "/api/promotion/area";
       }
-      this.$http.post(URL,{id:id.toString()},(rsp) => {
+      this.$http.post(URL,{id},(rsp) => {
         this.gridData = rsp.provinces;
         // console.log(_this.gridData);
         this.listLoading = false;
@@ -597,7 +597,7 @@ export default {
         this.totalCount =  parseInt(rsp.pages.cnt);
       },(error)=>{
         console.log(error)
-        _this.listLoading = false;   
+        _this.listLoading = false;
       })
       var _this = this;
       this.halfListLoading = true;
