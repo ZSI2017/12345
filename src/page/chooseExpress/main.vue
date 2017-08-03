@@ -203,7 +203,7 @@ export default {
       // 置为下线对话框
       showOperation: true,
       showOperation2: false,
-      showOperation3: false,      
+      showOperation3: false,
       loadingTakeOffFlag: false,
       tableFalg: true,
       showConfig: true,
@@ -325,7 +325,7 @@ export default {
     // 操作排序值改变
     handleSortChange(column) {
         console.log(column.prop)
-        console.log(column.order)       
+        console.log(column.order)
         // 创建时间进行排序
         var _this = this;
         _this.$http.post(this.url, {
@@ -661,7 +661,7 @@ export default {
       }else{
           this.showOperation = true;
           this.showOperation3 = false;
-          
+
       }
       _this.currentPage = 1;
       _this.url = "/api/promotion/getConfList"
