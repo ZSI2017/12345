@@ -33,7 +33,6 @@
       <el-date-picker 
         v-model="ruleForm.date1" 
         type="datetimerange" 
-        :picker-options="pickerOptions2"
         placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>
@@ -145,19 +144,6 @@ export default {
         fileList: []
  
       },
-      pickerOptions2: {
-        onPick:function({ maxDate, minDate }){
-          // var minDate = new Date(minDate);
-          // var maxDate = new Date(maxDate);   
-          console.log(minDate)     
-          console.log(maxDate)       
-          this.ruleForm.gmtBegin = formatDate(minDate);
-          this.ruleForm.gmtEnd = formatDate(maxDate);          
-          console.log(this.ruleForm.gmtBegin)
-          console.log(this.ruleForm.gmtEnd)
-          
-        }
-      },
       rules: {
         name: [{
           type: "string",
@@ -221,14 +207,9 @@ export default {
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
-    formatDate(time) {
-      var date = new Date(time);
-      return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
-    },
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
-      console.log(formName)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
@@ -236,22 +217,59 @@ export default {
           // _this.$router.app.$store.state.loadingChange = true;
           _this.$store.dispatch('changeLoadingChange',true);
           _this.$router.go(-1);
-          
-          _this.$http.post(_this.url,{
-            "pages": {
-              "page_size": this.pageSize,
-              "page_num": this.currentPage - 1
-            },
-            "con": {
-              "pageId": this.pageId
-            }
-          }, (result) => {
+          //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
+          let submitDate = _this.ruleForm.date1;
+          console.log(submitDate)
+          this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
+          this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
+          console.log(this.ruleForm.gmtBegin)
+          console.log(this.ruleForm.gmtEnd)
+
+          let httpData = {
+                "data": {
+                  "pageId": "",
+                  "name": this.ruleForm.name,
+                  "imageUrl": this.ruleForm.fileList,
+                  "sortWeight": this.ruleFrom.sortWeight,
+                  "linkUrl": this.ruleFrom.linkUrl,
+                  "gmtBegin": this.ruleFrom.gmtBegin,
+                  "gmtEnd": this.ruleFrom.gmtEnd,
+                  "opStatus": this.ruleFrom.Status
+                },
+                "area": {
+                  "code": "000000",
+                  "check": true,
+                  "provinces": [
+                    {
+                      "provinceNo": "",
+                      "provinceName": "",
+                      "check": true,
+                      "citys": [
+                        {
+                          "cityNo": "",
+                          "cityName": "",
+                          "check": true,
+                          "currStatus": ""
+                        }
+                      ],
+                      "currStatus": ""
+                    }
+                  ],
+                  "currStatus": ""
+                }
+              }
+
+          _this.$http.post(_this.url,httpData, (result) => {
 
             _this.tableData = result.page_list;
             _this.totalCount = parseInt(result.pages.cnt);
+          },(error)=>{
+            
+            console.log(error)
+
           });
 
-          console.log(this.$route.matched);
+          // console.log(this.$route.matched);
 
         } else {
           console.log(_this);
