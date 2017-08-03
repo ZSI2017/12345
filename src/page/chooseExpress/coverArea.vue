@@ -1,7 +1,7 @@
 <template type="html">
   <!--  覆盖地区 查看对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="visible" @close="dialogClose">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+    <el-table :data="transformGridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="provinceName" label="省" width="200"></el-table-column>
       <el-table-column property="citys" label="市">
         <template scope="scope">
@@ -25,16 +25,42 @@
             },
             props:{
                visible:Boolean,
-               gridData:Array
+               coverGridData:Array,
             },
             methods:{
               dialogClose(event){
                  this.$emit("listenToCoverArea",false)
+              },
+              filterProvinces(list){
+                var tempArr = list.slice(0);
+                console.log("temparr123333 %o",tempArr)
+                 for(let i =0;i<tempArr.length;i++) {
+                     console.log(!tempArr[i].check);
+                      if(!tempArr[i].check){
+                          console.log(tempArr[i]);
+                          tempArr[i].citys = tempArr[i].citys.filter(function(val){return val.check == true})
+                      }
+                      if(tempArr[i].citys.length === 0) {
+                           tempArr.splice(i,1)
+                            i--;
+                      }
+                 }
+                //  for(let j =0;j<tempArr.length;j++) {
+                //     if(tempArr[j].citys.length === 0) {
+                //          tempArr.splice(j,1)
+                //     }
+                //  }
+                 console.log("temparr %o",tempArr);
+                 return tempArr;
               }
-
             },
             created(){
 
+            },
+            computed:{
+               transformGridData(){
+                  return this.filterProvinces(this.coverGridData)
+               }
             },
             mounted(){
 

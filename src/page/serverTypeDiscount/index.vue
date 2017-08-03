@@ -102,13 +102,13 @@
       </el-table-column>
     </el-table>
     <div class="block pagination" style="margin-top:30px;float:right;">
-      <el-pagination 
-      @size-change="handleSizeChange" 
-      @current-change="handleCurrentChange" 
-      :current-page="currentPage4" 
-      :page-sizes="[5,10,15,20]" 
-      :page-size="pageSize" 
-      layout="total,sizes,prev, pager, next,jumper" 
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[5,10,15,20]"
+      :page-size="pageSize"
+      layout="total,sizes,prev, pager, next,jumper"
       :total="totalCount">
       </el-pagination>
     </div>
@@ -169,8 +169,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleConfirm">确 定</el-button>        
-        <el-button @click="handleCancle">取 消</el-button>        
+        <el-button type="primary" @click="handleConfirm">确 定</el-button>
+        <el-button @click="handleCancle">取 消</el-button>
       </div>
     </el-dialog>
     <!--待审核详情弹框-->
@@ -304,7 +304,7 @@
           this.$refs['formLabelAdding'].resetFields();
           this.valueAdd = '';
           this.formLabelAdding.discount = "";
-          this.formLabelAdding.status = "";     
+          this.formLabelAdding.status = "";
         },
         //添加按钮确定事件
         handleConfirm(){
@@ -406,7 +406,7 @@
         handleCheckDetails(row){
           // var _this = this;
           this.showMarkVisible = true;
-          this.diailogInputVisible = false;          
+          this.diailogInputVisible = false;
           this.grayBg.grayBg = true;
           this.dialogDetails = "待审核详情";
           this.dialogFormVisible_details = true;
@@ -415,12 +415,12 @@
           this.formLabelAlign.typeCode = row.name;
           this.formLabelAlign.describe = row.name;
           this.formLabelAlign.sorting = row.Forder;
-          this.currentStatus = row.currentState;          
+          this.currentStatus = row.currentState;
         },
         handleEffectDetails(row){
           // var _this = this;
           this.showMarkVisible = true;
-          this.diailogInputVisible = false;          
+          this.diailogInputVisible = false;
           this.grayBg.grayBg = true;
           this.dialogDetails = "已生效详情";
           this.dialogFormVisible_details = true;
@@ -429,7 +429,7 @@
           this.formLabelAlign.typeCode = row.name;
           this.formLabelAlign.describe = row.name;
           this.formLabelAlign.sorting = row.Forder;
-          this.currentStatus = row.currentState;          
+          this.currentStatus = row.currentState;
 
         },
       },

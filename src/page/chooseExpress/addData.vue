@@ -35,9 +35,10 @@
       <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
     </el-form-item>
     <el-form-item label="有效时段">
-      <el-date-picker 
-        v-model="ruleForm.date1" 
-        type="datetimerange" 
+      <el-date-picker
+        v-model="ruleForm.date1"
+        type="datetimerange"
+        :picker-options="pickerOptions2"
         placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>
@@ -148,7 +149,6 @@ export default {
         gmtEnd:'',
         status: '',
         fileList: ''
- 
       },
       rules: {
         name: [{

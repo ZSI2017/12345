@@ -43,7 +43,7 @@
     </el-form-item>
     <el-form-item label="覆盖地区">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+      <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态">
@@ -70,37 +70,36 @@
       </el-col>
     </el-row>
     <el-table :data="gridData" border :show-header="showHeader" max-height="400" style="padding-top:0;">
-      <el-table-column property="value" label="省" width="200">
+      <el-table-column property="provinceName" label="省" width="200">
         <template scope="scope">
-            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
+            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.provinceName}}</el-tag>
             <el-checkbox
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
                >全选</el-checkbox>
           </template>
       </el-table-column>
-      <el-table-column property="city" label="市">
+      <el-table-column property="citys" label="市">
         <template scope="scope">
             <el-checkbox-group
                   v-model="checkedCities[scope.$index]"
                   @change="handleCheckedCitiesChange(scope.$index)"
                 >
-                 <el-checkbox style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+                 <el-checkbox style="margin-left:0;margin-right:15px;" @change="handleCheckedEveryChange(scope.$index,index,$event)"  v-for="(city,index) in scope.row.citys" :label="city.cityName" :key="city.cityName">{{city.cityName}}</el-checkbox>
             </el-checkbox-group>
-
      </template>
       </el-table-column>
     </el-table>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">保 存</el-button>
+      <el-button @click="handleDialogConfigCancel">取 消</el-button>
+      <el-button type="primary" @click="handleDialogConfigSave">保 存</el-button>
     </div>
   </el-dialog>
 
   <!--  覆盖地区 查看对话框 -->
   <cover-area
       :visible="dialogTableVisible"
-      :gridData="gridData"
+      :coverGridData="CoverData"
       @listenToCoverArea ="changeVisible"
       ></cover-area>
 </section>
@@ -119,8 +118,14 @@ export default {
   data() {
     return {
       url: '', // 待审详情的 url
-      loadingFlag: false, // 即将离开的对话框
+      id:'',
+      tabName:'', // 标签页 名称
+      localData:{}, // 上一个页面的数据
+      // 即将离开的对话框
+      loadingFlag: false,
       dialogVisible: false,
+      CoverData:[],
+      DialogConfigSaveFlag:false,  // 配置覆盖地区
       fileList2: [{
         name: '',
         url: ""
@@ -170,7 +175,7 @@ export default {
     console.log(localData);
     console.log(localData.promotionId);
     this.form.promotionId = localData.promotionId;
-
+    this.id = localData.id;
     console.log(this.form.promotionId)
     var _this =this;    
     _this.url = "/api/promotion/getById"; 
@@ -199,9 +204,6 @@ export default {
       console.log(error)                
       console.log('failed');
     });
-
-
-
 
   },
   created() {
@@ -234,13 +236,39 @@ export default {
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
+
     //  点击提交
     handleSubmit() {
+       var result = {
+           "data":{
+               "id":this.id,
+               "pageId":this.localData.pageId,
+               "promotionId":this.localData.promotionId,
+               "name":this.form.name,
+               "imageUrl":this.form.link,
+               "sortWeight":this.form.Forder,
+               "linkUrl":this.form.link,
+               "gmtBegin": formatDate(this.value3[0], 'yyyy-MM-dd hh:mm:ss'),
+               "gmtEnd":formatDate(this.value3[0], 'yyyy-MM-dd hh:mm:ss'),
+               'opStatus':this.radio,
+             },
+           "area":{
+              "code":"0000",
+              "check":false,
+              "provinces":this.gridData,
+               "currStatus":this.check
+           },
+
+       }
+       console.log("result%o ",result);
+      this.$http.post("/api/promotion/updateAudit",result,(result) => {
+                  alert(result);
+      });
       // this.$router.app.$store.state.loadingFlag = true;
-      _this.$store.dispatch('changeLoadingChange', true);
-      // this.$router.app.$store.state.loadingChange = true;
-      console.log(this);
-      this.$router.go(-1);
+      // this.$store.dispatch('changeLoadingChange', true);
+      // // this.$router.app.$store.state.loadingChange = true;
+      // console.log(this);
+      // this.$router.go(-1);
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
@@ -312,19 +340,59 @@ export default {
     },
     // 覆盖地区选择
     dialogConfig() {
+      // if(this.gridData.length>0){
+      //     if(this.DialogConfigSaveFlag){
+      //         this.dialogFormVisible = true;
+      //         return;
+      //     }else {
+      //       this.gridData = this.gridDataCopy.slice(0);
+      //       console.log(this.gridDataCopy)
+      //
+      //       for (var i = 0; i < this.gridData.length; i++) {
+      //         // _this.isIndeterminate[i] = true;
+      //           this.checkedCities.splice(i, 1, []);
+      //            if(this.gridData[i].check){
+      //                 this.checkAll.splice(i, 1, true);
+      //               for(let j = 0;j<this.gridData[i].citys.length;j++) {
+      //                   this.checkedCities[i].push(this.gridData[i].citys[j].cityName)
+      //               }
+      //            }else {
+      //                console.log(this.gridData[i].check);
+      //                this.checkAll.splice(i, 1, false);
+      //            }
+      //
+      //       }
+      //       this.dialogFormVisible = true;
+      //       return;
+      //     }
+      // }
       var _this = this;
-      _this.$http.get("/rest/list3",
+      var URL = "/api/promotion/areaAudit";   // 默认是 配置 中的覆盖地区
+      if(this.tabName === "已上线") {
+          URL = "/api/promotion/area";
+      }
+      _this.$http.post(URL,{id:this.id},
         (rsp) => {
-          _this.gridData = rsp.data.data;
-          _this.gridDataCopy = _this.gridData;
+          _this.gridData = rsp.provinces.slice(0);
+          _this.gridDataCopy = rsp.provinces.slice(0);
+          console.log(_this.gridDataCopy);
           _this.provinces = _this.gridData;
           // 初始化 配置的多选框操作
-          var tableDataLength = _this.gridData.length;
-          for (var i = 0; i < tableDataLength; i++) {
-            _this.checkAll[i] = false;
+          this.check = rsp.check;
+          for (var i = 0; i < _this.gridData.length; i++) {
             // _this.isIndeterminate[i] = true;
-            _this.checkedCities[i] = [];
+              _this.checkedCities[i] = [];
+               if(_this.gridData[i].check){
+                  _this.checkAll[i] = true;
+                  for(let j = 0;j<_this.gridData[i].citys.length;j++) {
+                      _this.checkedCities[i].push(_this.gridData[i].citys[j].cityName)
+                  }
+               }else {
+                  _this.checkAll[i] = false;
+               }
+
           }
+          console.log(_this.checkAll);
           _this.dialogFormVisible = true;
           // console.log(_this.gridData);
         }, (error) => {
@@ -336,8 +404,19 @@ export default {
       for (var m = 0; m < allCount; m++) {
         this.isIndeterminate.splice(m, 1, !event.target.checked)
         this.checkAll.splice(m, 1, event.target.checked);
-        this.checkedCities.splice(m, 1, event.target.checked ? this.gridData[m].city : [])
+        this.checkedCities.splice(m, 1, event.target.checked ? this.gridData[m].citys : [])
       }
+    },
+    // 配置覆盖地区 取消
+    handleDialogConfigCancel(){
+        this.dialogFormVisible = false
+        this.DialogConfigSaveFlag = false;
+    },
+    // 配置覆盖地区 保存
+    handleDialogConfigSave(){
+        this.dialogFormVisible = false;
+        this.DialogConfigSaveFlag = true;
+
     },
     observeCheckAll() {
       let checkall = this.checkAll.filter(function(value) {
@@ -355,28 +434,32 @@ export default {
       }
     },
     handleCheckAllChange(index, event) {
-      this.checkedCities.splice(index, 1, event.target.checked ? this.gridData[index].city : [])
+      let flag = event.target.checked
+      this.gridData[index].check = flag;
+      for(let j =0 ;j<this.gridData[index].citys.length;j++) {
+             this.gridData[index].citys[j].check = flag;
+            //  console.log(this.gridData[index].citys[j]);
+      }
+      console.log(this.gridData);
+      this.checkedCities.splice(index, 1, flag ? this.gridData[index].citys : [])
       this.isIndeterminate.splice(index, 1, false);
       this.observeCheckAll();
     },
     handleCheckedCitiesChange(index) {
       let value = this.checkedCities[index];
       let checkedCount = value.length;
-      this.checkAll.splice(index, 1, checkedCount === this.gridData[index].city.length)
-      console.log(checkedCount + "  " + this.gridData[index].city.length + " " + this.checkAll[index]);
-      this.isIndeterminate.splice(index, 1, checkedCount > 0 && checkedCount < this.gridData[index].city.length);
+      this.checkAll.splice(index, 1, checkedCount === this.gridData[index].citys.length)
+      console.log(checkedCount + "  " + this.gridData[index].citys.length + " " + this.checkAll[index]);
+      this.isIndeterminate.splice(index, 1, checkedCount > 0 && checkedCount < this.gridData[index].citys.length);
       this.observeCheckAll();
     },
-    dialogTable() {
-      var _this = this;
-      _this.$http.get("/rest/list3", (rsp) => {
-        _this.gridData = rsp.data.data;
-        _this.dialogTableVisible = true;
+    handleCheckedEveryChange(outIndex,index,event) {
+        this.gridData[outIndex].citys[index].check = event.target.checked;
+    },
 
-        console.log(_this.gridData);
-      }, (error) => {
-        console.log(error);
-      })
+    dialogTable() {
+      this.CoverData = this.gridData.slice(0);
+      this.dialogTableVisible = true;
     },
     onSubmit() {
       console.log('submit!');

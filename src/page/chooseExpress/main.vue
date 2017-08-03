@@ -104,7 +104,7 @@
         <div>
           <div v-if="showOperation">
             <el-button  @click="OperationTakeOff(scope.row)" type="text" size="small">
-              {{scope.row.status==1? "置为上线":"置为下线"}}
+              {{scope.row.status==2? "置为下线":"置为上线"}}
             </el-button>
             <br/>
           </div>
@@ -146,7 +146,7 @@
     </el-pagination>
   </div>
   <!--  覆盖地区 查看对话框 -->
-  <cover-area :visible="dialogTableVisible" :gridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
+  <cover-area :visible="dialogTableVisible" :coverGridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200"></el-table-column>
@@ -354,7 +354,7 @@ export default {
         this.$message({
           message: this.promotionMessage,
           type: this.promotionType
-        }); 
+        });
 
         this.pageId = "SD1010"; // 寄快递首页
         ((this.$route.path == "/chooseExpress" &&
@@ -411,7 +411,7 @@ export default {
       this.promotionMessage = '已通过申请';
       this.promotionType = 'success';
       this.url = "/api/promotion/getAuditList"; // 默认展开 配置
-      
+
     },
     OperationApprovedFail(row) {
       console.log(row)
@@ -423,7 +423,7 @@ export default {
       this.promotionMessage = '申请已驳回！';
       this.promotionType = 'success';
       this.url = "/api/promotion/getAuditList"; // 默认展开 配置
-      
+
     },
     OperationEffectDetail() {
       this.loadingTakeOffFlag = true;
@@ -537,12 +537,27 @@ export default {
       if(this.activeName2 === "已上线") {
           URL =  "/api/promotion/area";
       }
-      this.$http.post(URL,{id:id.toString()},(rsp) => {
-        this.gridData = rsp.provinces;
+      this.$http.post(URL,{id},(rsp) => {
+        console.log(rsp.provinces);
+        this.gridData = this.filterProvinces(rsp.provinces);
         // console.log(_this.gridData);
         this.listLoading = false;
         this.dialogTableVisible = true
       })
+    },
+    filterProvinces(list){
+      console.log("list %o",list);
+      var tempArr = list.slice(0);
+       for(let i =0;i<tempArr.length;i++) {
+            if(!tempArr[i].check){
+                tempArr[i].citys = tempArr[i].citys.filter(function(val){return val.check})
+            }
+            if(tempArr[i].citys.length === 0) {
+                 tempArr.splice(i,1)
+                 i--
+            }
+       }
+       return tempArr;
     },
     setNewData() {
       var _this = this;
@@ -607,7 +622,7 @@ export default {
         this.totalCount =  parseInt(rsp.pages.cnt);
       },(error)=>{
         console.log(error)
-        _this.listLoading = false;   
+        _this.listLoading = false;
       })
       var _this = this;
       this.halfListLoading = true;
@@ -622,6 +637,7 @@ export default {
       })
     },
     handleEdit(row) {
+      row.tabName = this.activeName2;
       localEvent.set("localChooseExpress", row);
       var _this = this;
       this.$router.push({
