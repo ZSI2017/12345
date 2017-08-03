@@ -8,10 +8,10 @@
     </el-form-item>
 
     <el-form-item label="运营图">
-      <el-upload v-if="isFromAddData" 
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload" 
-        :on-preview="handlePictureCardPreview" 
-        :on-remove="handleRemove" 
+      <el-upload v-if="isFromAddData"
+        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+        :on-preview="handlePictureCardPreview"
+        :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
         :file-list="fileList2">
@@ -177,8 +177,8 @@ export default {
     this.form.promotionId = localData.promotionId;
     this.id = localData.id;
     console.log(this.form.promotionId)
-    var _this =this;    
-    _this.url = "/api/promotion/getById"; 
+    var _this =this;
+    _this.url = "/api/promotion/getById";
 
     _this.$http.post(_this.url,{
       "id":this.form.promotionId
@@ -190,18 +190,18 @@ export default {
       this.form.link = rsp.linkUrl;
       this.fileList2[0].url = rsp.imageUrl;
       this.form.gmtBegin = rsp.gmtBegin;
-      this.form.gmtEnd = rsp.gmtEnd;  
+      this.form.gmtEnd = rsp.gmtEnd;
       this.value3 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
       if (rsp.status == "1") {
         this.radio = 1;
         this.currentStateText = "已下线"
       } else {
         this.radio = 2;
-        this.currentStateText = "已上线"        
+        this.currentStateText = "已上线"
       }
 
     },(error)=>{
-      console.log(error)                
+      console.log(error)
       console.log('failed');
     });
 
@@ -214,7 +214,7 @@ export default {
     } else {
       this.isFromAddData = true;
     }
-   
+
 
   },
   beforeMount() {
@@ -402,9 +402,10 @@ export default {
     handleCheckAll(event) {
       var allCount = this.gridData.length;
       for (var m = 0; m < allCount; m++) {
-        this.isIndeterminate.splice(m, 1, !event.target.checked)
-        this.checkAll.splice(m, 1, event.target.checked);
-        this.checkedCities.splice(m, 1, event.target.checked ? this.gridData[m].citys : [])
+          this.isIndeterminate.splice(m, 1, !event.target.checked)
+          this.checkAll.splice(m, 1, event.target.checked);
+          
+          this.checkedCities.splice(m, 1, event.target.checked ? this.gridData[m].citys : [])
       }
     },
     // 配置覆盖地区 取消

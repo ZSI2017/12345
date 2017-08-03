@@ -36,10 +36,9 @@
     </el-form-item>
     <el-form-item label="有效时段">
       <el-date-picker
-        v-model="ruleForm.date1"
-        type="datetimerange"
-
-        placeholder="选择时间范围">
+         v-model="ruleForm.date1"
+         type="datetimerange"
+         placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>
     <el-form-item label="覆盖地区" prop="coverArea">
