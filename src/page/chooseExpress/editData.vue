@@ -8,16 +8,22 @@
     </el-form-item>
 
     <el-form-item label="运营图">
-      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList2">
+      <el-upload v-if="isFromAddData" 
+        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload" 
+        :on-preview="handlePictureCardPreview" 
+        :on-remove="handleRemove" 
+        :on-success='handleSuccess'
+        :on-error='handlerror'
+        :file-list="fileList2">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="fileList2.url" alt="">
+      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="fileList2[0].url" alt="">
       <el-dialog v-model="dialogVisible" size="tiny">
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
       <el-popover ref="popover4" placement="right" trigger="click">
-        <img :src="fileList2.url">
+        <img :src="fileList2[0].url">
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
 
@@ -33,7 +39,7 @@
     <el-form-item label="有效时段">
       <el-date-picker v-if="isFromAddData" v-model="value3" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
-      <div class="detail-content" v-if="!isFromAddData">2223-11-22T14:22:00.000--3335-11-03T01:33:00.000</div>
+      <div class="detail-content" v-if="!isFromAddData"><span>{{form.gmtBegin | formatDate}}</span> ---- <span>{{form.gmtEnd | formatDate}}</span></div>
     </el-form-item>
     <el-form-item label="覆盖地区">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
@@ -97,24 +103,14 @@
       :gridData="gridData"
       @listenToCoverArea ="changeVisible"
       ></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-      <el-tag
-       style="margin-right:10px;margin-bottom:5px;"
-        v-for="(item,index) in scope.row.city"
-        >{{item}}</el-tag>
-    </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
 </section>
 </template>
 <script type="text/javascript">
 import localEvent from 'src/vuex/function.js';
 import coverArea from "./coverArea.vue";
+import {
+  formatDate
+} from 'src/util/date.js';
 
 export default {
   components:{
@@ -122,23 +118,16 @@ export default {
   },
   data() {
     return {
-      // 从详情页面
-      isDetail: false,
-      // 即将离开的对话框
-
-      loadingFlag: false,
+      url: '', // 待审详情的 url
+      loadingFlag: false, // 即将离开的对话框
       dialogVisible: false,
-      // dialogImageUrl:'https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png',
       fileList2: [{
-        name: '运营图.jpeg',
+        name: '',
         url: ""
       }],
       // 添加搜索框
       state1: "",
       provinces: [],
-      //标签页
-      activeName: 'C',
-      tabPaneData: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 'O', "P", "Q", "R"],
       // 覆盖地区选择
       check: false,
       checkAll: [],
@@ -157,32 +146,62 @@ export default {
       gridDataCopy: [],
       currentStateText: '',
       // value3 代表时间段选择的
-      value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+      value3: [],
       form: {
         name: '',
         Forder: '',
         link:'',
-        imageUrl:''
+        imageUrl:'',
+        promotionId:'',
+        gmtBegin:'',
+        gmtEnd:''
       },
+
+    }
+  },
+  filters: {
+    formatDate(time) {
+      var date = new Date(time);
+      return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
     }
   },
   mounted() {
     var localData = localEvent.get("localChooseExpress");
     console.log(localData);
-    console.log(localData.status);
-    this.form.name = localData.name;
-    this.form.Forder = localData.sortWeight;
-    this.form.link = localData.linkUrl;
-    this.fileList2[0].url = localData.imageUrl;
-    this.form.gmtBegin = localData.gmtBegin;
-    this.form.gmtEnd = localData.gmtEnd;  
-    this.value3 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
-    this.currentStateText = localData.status;
-    if (localData.status == "1") {
-      this.radio = 1;
-    } else {
-      this.radio = 2;
-    }
+    console.log(localData.promotionId);
+    this.form.promotionId = localData.promotionId;
+
+    console.log(this.form.promotionId)
+    var _this =this;    
+    _this.url = "/api/promotion/getById"; 
+
+    _this.$http.post(_this.url,{
+      "id":this.form.promotionId
+    },(rsp)=>{
+      console.log(rsp)
+      console.log(rsp.imageUrl)
+      this.form.name = rsp.name;
+      this.form.Forder = rsp.sortWeight;
+      this.form.link = rsp.linkUrl;
+      this.fileList2[0].url = rsp.imageUrl;
+      this.form.gmtBegin = rsp.gmtBegin;
+      this.form.gmtEnd = rsp.gmtEnd;  
+      this.value3 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
+      if (rsp.status == "1") {
+        this.radio = 1;
+        this.currentStateText = "已下线"
+      } else {
+        this.radio = 2;
+        this.currentStateText = "已上线"        
+      }
+
+    },(error)=>{
+      console.log(error)                
+      console.log('failed');
+    });
+
+
+
 
   },
   created() {
@@ -193,6 +212,8 @@ export default {
     } else {
       this.isFromAddData = true;
     }
+   
+
   },
   beforeMount() {
 
@@ -201,12 +222,7 @@ export default {
     alert("beforeDestory")
   },
   watch: {
-    //  loadingFlag:{
-    //     handler:(val,old) => {
-    //          alert(val),
-    //          console.log(old);
-    //     }
-    //  }
+
   },
   computed: {
     GETEDITFORM() {
@@ -246,7 +262,15 @@ export default {
     // },
     handlePreview() {},
     handleRemove() {},
-
+    handleSuccess(file){
+      console.log(file.result)
+      this.fileList2[0].url = file.result;
+    },
+    handlerror(err, file, fileList){
+      alert(err);
+      alert(file);
+      alert(fileList);
+    },
     // 标签页选择
     handleTabClick(tab, event) {
       console.log("handTabClick");

@@ -15,10 +15,15 @@
     <el-form-item label="运营图" prop="imageUrl">
       <el-upload 
         class="upload-demo" 
-        action="https://jsonplaceholder.typicode.com/posts/" 
+        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload" 
         :on-preview="handlePreview" 
         :on-remove="handleRemove"
-        :file-list="ruleForm.fileList">
+        :on-success='handleSuccess'
+        :on-error='handlerror'     
+        >
+        <el-dialog v-model="dialogVisible" size="tiny">
+          <img width="100%" :src="ruleForm.fileList" alt="">
+        </el-dialog>
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
@@ -114,6 +119,7 @@ export default {
     return {
      // 展示警告信息
       showAlert:false,
+      dialogVisible:false,
       // 添加搜索框
       state1: "",
       provinces: [],
@@ -141,7 +147,7 @@ export default {
         gmtBegin:'',
         gmtEnd:'',
         status: '',
-        fileList: []
+        fileList: ''
  
       },
       rules: {
@@ -264,7 +270,7 @@ export default {
             _this.tableData = result.page_list;
             _this.totalCount = parseInt(result.pages.cnt);
           },(error)=>{
-            
+
             console.log(error)
 
           });
@@ -283,7 +289,19 @@ export default {
         this.$router.go(-1);
       // this.loadingFlag = true;
     },
-    handlePreview() {},
+    handlePreview(file) {
+      this.dialogVisible = true;
+      console.log(file.response)
+    },
+    handleSuccess(file){
+      console.log(file.result)
+      this.ruleForm.fileList = file.result;
+    },
+    handlerror(err, file, fileList){
+      alert(err);
+      alert(file);
+      alert(fileList);
+    },
     handleRemove() {},
 
     // 标签页选择
