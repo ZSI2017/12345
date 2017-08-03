@@ -33,7 +33,7 @@
       <el-date-picker
         v-model="ruleForm.date1"
         type="datetimerange"
-        :picker-options="pickerOptions2"
+
         placeholder="选择时间范围">
       </el-date-picker>
     </el-form-item>
@@ -66,9 +66,9 @@
       </el-col>
     </el-row>
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200">
+      <el-table-column property="provinceName" label="省" width="200">
         <template scope="scope">
-            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
+            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.provinceName}}</el-tag>
             <el-checkbox
 
                   v-model="checkAll[scope.$index]"
@@ -76,28 +76,30 @@
                >全选</el-checkbox>
           </template>
       </el-table-column>
-      <el-table-column property="city" label="市">
+      <el-table-column property="citys" label="市">
         <template scope="scope">
             <el-checkbox-group
                   v-model="checkedCities[scope.$index]"
                   @change="handleCheckedCitiesChange(scope.$index)"
                   >
-                 <el-checkbox style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+                 <el-checkbox style="margin-left:0;margin-right:15px;"
+                   @change="handleCheckedEveryChange(scope.$index,index,$event)"
+                  v-for="city in scope.row.citys" :label="city.cityName" :key="city.cityName">{{city.cityName}}</el-checkbox>
             </el-checkbox-group>
 
      </template>
       </el-table-column>
     </el-table>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">保 存</el-button>
+      <el-button @click="handleDialogConfigCancel">取 消</el-button>
+      <el-button type="primary" @click="handleDialogConfigSave">保 存</el-button>
     </div>
   </el-dialog>
 
   <!--  覆盖地区 查看对话框 -->
   <cover-area
       :visible="dialogTableVisible"
-      :gridData="gridData"
+      :coverGridData="gridData"
       @listenToCoverArea ="changeVisible"
       ></cover-area>
 </section>
@@ -145,19 +147,19 @@ export default {
         fileList: []
 
       },
-      pickerOptions2: {
-        onPick:function({ maxDate, minDate }){
-          // var minDate = new Date(minDate);
-          // var maxDate = new Date(maxDate);
-          console.log(minDate)
-          console.log(maxDate)
-          this.ruleForm.gmtBegin = formatDate(minDate);
-          this.ruleForm.gmtEnd = formatDate(maxDate);
-          console.log(this.ruleForm.gmtBegin)
-          console.log(this.ruleForm.gmtEnd)
-
-        }
-      },
+      // pickerOptions2: {
+      //   onPick:function({ maxDate, minDate }){
+      //     // var minDate = new Date(minDate);
+      //     // var maxDate = new Date(maxDate);
+      //     console.log(minDate)
+      //     console.log(maxDate)
+      //     this.ruleForm.gmtBegin = formatDate(minDate);
+      //     this.ruleForm.gmtEnd = formatDate(maxDate);
+      //     console.log(this.ruleForm.gmtBegin)
+      //     console.log(this.ruleForm.gmtEnd)
+      //
+      //   }
+      // },
       rules: {
         name: [{
           type: "string",
@@ -224,13 +226,14 @@ export default {
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
+     // alert(this.ruleForm),
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
           // router.app.$store.state.loadingChange = true
           // _this.$router.app.$store.state.loadingChange = true;
-          _this.$store.dispatch('changeLoadingChange',true);
-          _this.$router.go(-1);
+          // _this.$store.dispatch('changeLoadingChange',true);
+          // _this.$router.go(-1);
           //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
           let submitDate = _this.ruleForm.date1;
           console.log(submitDate)
@@ -242,45 +245,26 @@ export default {
           let httpData = {
                 "data": {
                   "pageId": "",
-                  "name": this.ruleForm.name,
-                  "imageUrl": this.ruleForm.fileList,
-                  "sortWeight": this.ruleFrom.sortWeight,
-                  "linkUrl": this.ruleFrom.linkUrl,
-                  "gmtBegin": this.ruleFrom.gmtBegin,
-                  "gmtEnd": this.ruleFrom.gmtEnd,
-                  "opStatus": this.ruleFrom.Status
+                  "name": _this.ruleForm.name,
+                  "imageUrl": _this.ruleForm.fileList,
+                  "sortWeight": 12,
+                  "linkUrl": _this.ruleForm.linkUrl,
+                  "gmtBegin": _this.ruleForm.gmtBegin,
+                  "gmtEnd": _this.ruleForm.gmtEnd,
+                  "opStatus": _this.ruleForm.Status
                 },
                 "area": {
                   "code": "000000",
                   "check": true,
-                  "provinces": [
-                    {
-                      "provinceNo": "",
-                      "provinceName": "",
-                      "check": true,
-                      "citys": [
-                        {
-                          "cityNo": "",
-                          "cityName": "",
-                          "check": true,
-                          "currStatus": ""
-                        }
-                      ],
-                      "currStatus": ""
-                    }
-                  ],
-                  "currStatus": ""
+                  "provinces": _this.gridData,
+
                 }
-              }
-
-          _this.$http.post(_this.url,httpData, (result) => {
-
+              };
+            _this.$http.post(_this.url,httpData, (result) => {
             _this.tableData = result.page_list;
             _this.totalCount = parseInt(result.pages.cnt);
           },(error)=>{
-
-            console.log(error)
-
+             console.log(error)
           });
 
           // console.log(this.$route.matched);
@@ -341,23 +325,52 @@ export default {
     },
     // 覆盖地区选择
     dialogConfig() {
+      // var _this = this;
+      // _this.$http.get("/rest/list3", (rsp) => {
+      //   _this.gridData = rsp.data.data;
+      //   _this.gridDataCopy = _this.gridData;
+      //   _this.provinces = _this.gridData;
+      //   // 初始化 配置的多选框操作
+      //   var tableDataLength = _this.gridData.length;
+      //   for (var i = 0; i < tableDataLength; i++) {
+      //     _this.checkAll[i] = false;
+      //     // _this.isIndeterminate[i] = true;
+      //     _this.checkedCities[i] = [];
+      //   }
+      //   _this.dialogFormVisible = true;
+      //   // console.log(_this.gridData);
+      // }, (error) => {
+      //   console.log(error);
+      // })
       var _this = this;
-      _this.$http.get("/rest/list3", (rsp) => {
-        _this.gridData = rsp.data.data;
-        _this.gridDataCopy = _this.gridData;
-        _this.provinces = _this.gridData;
-        // 初始化 配置的多选框操作
-        var tableDataLength = _this.gridData.length;
-        for (var i = 0; i < tableDataLength; i++) {
-          _this.checkAll[i] = false;
-          // _this.isIndeterminate[i] = true;
-          _this.checkedCities[i] = [];
-        }
-        _this.dialogFormVisible = true;
-        // console.log(_this.gridData);
-      }, (error) => {
-        console.log(error);
-      })
+      var URL = "/api/promotion/areaAudit";   // 默认是 配置 中的覆盖地区
+      _this.$http.post(URL,{id:"0"},
+        (rsp) => {
+          _this.gridData = rsp.provinces.slice(0);
+          _this.gridDataCopy = rsp.provinces.slice(0);
+          console.log(_this.gridDataCopy);
+          _this.provinces = _this.gridData;
+          // 初始化 配置的多选框操作
+          this.check = rsp.check;
+          for (var i = 0; i < _this.gridData.length; i++) {
+            // _this.isIndeterminate[i] = true;
+              _this.checkedCities[i] = [];
+               if(_this.gridData[i].check){
+                  _this.checkAll[i] = true;
+                  for(let j = 0;j<_this.gridData[i].citys.length;j++) {
+                      _this.checkedCities[i].push(_this.gridData[i].citys[j].cityName)
+                  }
+               }else {
+                  _this.checkAll[i] = false;
+               }
+
+          }
+          console.log(_this.checkAll);
+          _this.dialogFormVisible = true;
+          // console.log(_this.gridData);
+        }, (error) => {
+          console.log(error);
+        })
     },
     handleCheckAll(event) {
       var allCount = this.gridData.length;
@@ -366,6 +379,17 @@ export default {
         this.checkAll.splice(m, 1, event.target.checked);
         this.checkedCities.splice(m, 1, event.target.checked ? this.gridData[m].city : [])
       }
+    },
+    // 配置覆盖地区 取消
+    handleDialogConfigCancel(){
+        this.dialogFormVisible = false
+        this.DialogConfigSaveFlag = false;
+    },
+    // 配置覆盖地区 保存
+    handleDialogConfigSave(){
+        this.dialogFormVisible = false;
+        this.DialogConfigSaveFlag = true;
+
     },
     observeCheckAll() {
       let checkall = this.checkAll.filter(function(value) {
@@ -383,6 +407,12 @@ export default {
       }
     },
     handleCheckAllChange(index, event) {
+      let flag = event.target.checked
+      this.gridData[index].check = flag;
+      for(let j =0 ;j<this.gridData[index].citys.length;j++) {
+             this.gridData[index].citys[j].check = flag;
+            //  console.log(this.gridData[index].citys[j]);
+      }
       this.checkedCities.splice(index, 1, event.target.checked ? this.gridData[index].city : [])
       this.isIndeterminate.splice(index, 1, false);
       this.observeCheckAll();
@@ -395,16 +425,12 @@ export default {
       this.isIndeterminate.splice(index, 1, checkedCount > 0 && checkedCount < this.gridData[index].city.length);
       this.observeCheckAll();
     },
+    handleCheckedEveryChange(outIndex,index,event) {
+        this.gridData[outIndex].citys[index].check = event.target.checked;
+    },
     dialogTable() {
-      var _this = this;
-      _this.$http.get("/rest/list3", (rsp) => {
-        _this.gridData = rsp.data.data;
-        _this.dialogTableVisible = true;
-
-        console.log(_this.gridData);
-      }, (error) => {
-        console.log(error);
-      })
+      this.CoverData = this.gridData.slice(0);
+      this.dialogTableVisible = true;
     },
     onSubmit() {
       console.log('submit!');
