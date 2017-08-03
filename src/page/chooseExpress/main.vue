@@ -529,10 +529,20 @@ export default {
       }
       this.$http.post(URL,{id},(rsp) => {
         this.gridData = rsp.provinces;
+
         // console.log(_this.gridData);
         this.listLoading = false;
         this.dialogTableVisible = true
       })
+    },
+    filterProvinces(list){
+         var tempArr = list.filter(function(val){
+          return val.check;
+       });
+       for(let i =0;i<tempArr.length;i++) {
+              tempArr[i].citys = tempArr[i].citys.filter(function(val){return val.check})
+       }
+       return tempArr;
     },
     setNewData() {
       var _this = this;

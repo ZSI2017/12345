@@ -177,7 +177,7 @@ export default {
     get(url,successfn,errorfn){
         axios({url:url,
               method:'get',
-              baseURL:URL,
+              // baseURL:URL,
               timeout: 10000,
               headers: {
                   'X-Requested-With': 'XMLHttpRequest'
