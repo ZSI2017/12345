@@ -71,8 +71,9 @@ function checkErrorCode(response) {
   var mySuccessFn = (response,successfn,errorfn) => {
         // console.log("mySuccessFn %o",response);
        if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
+          //  console.log(successfn(response.data.result))
+          console.log(response);
            successfn(response.data.result);
-           console.log(successfn(response.data.result))
        }else {
             if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
@@ -147,6 +148,7 @@ export default {
        }).then(
            (response) => {
                console.log("success");
+                  console.log(response);
                 mySuccessFn(response,successfn,errorfn);
            }
        ).catch(

@@ -101,7 +101,7 @@
         <div>
           <div v-if="showOperation">
             <el-button  @click="OperationTakeOff(scope.row)" type="text" size="small">
-              {{scope.row.status==1? "置为上线":"置为下线"}}
+              {{scope.row.status==2? "置为下线":"置为上线"}}
             </el-button>
             <br/>
           </div>
@@ -143,7 +143,7 @@
     </el-pagination>
   </div>
   <!--  覆盖地区 查看对话框 -->
-  <cover-area :visible="dialogTableVisible" :gridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
+  <cover-area :visible="dialogTableVisible" :coverGridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
   <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="value" label="省" width="200"></el-table-column>
@@ -528,19 +528,24 @@ export default {
           URL =  "/api/promotion/area";
       }
       this.$http.post(URL,{id},(rsp) => {
+        console.log(rsp.provinces);
         this.gridData = this.filterProvinces(rsp.provinces);
-
         // console.log(_this.gridData);
         this.listLoading = false;
         this.dialogTableVisible = true
       })
     },
     filterProvinces(list){
-         var tempArr = list.filter(function(val){
-          return val.check;
-       });
+      console.log("list %o",list);
+      var tempArr = list.slice(0);
        for(let i =0;i<tempArr.length;i++) {
-              tempArr[i].citys = tempArr[i].citys.filter(function(val){return val.check})
+            if(!tempArr[i].check){
+                tempArr[i].citys = tempArr[i].citys.filter(function(val){return val.check})
+            }
+            if(tempArr[i].citys.length === 0) {
+                 tempArr.splice(i,1)
+                 i--
+            }
        }
        return tempArr;
     },
@@ -622,6 +627,7 @@ export default {
       })
     },
     handleEdit(row) {
+      row.tabName = this.activeName2;
       localEvent.set("localChooseExpress", row);
       var _this = this;
       this.$router.push({
