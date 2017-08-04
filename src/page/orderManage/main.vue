@@ -55,9 +55,9 @@
     </el-table-column>
     <el-table-column label="操作" align="center" width="200">
       <template scope="scope">
-           <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
-           <el-button @click="handleEdit(scope.$index,scope.row)" type="text" size="small">查看完整信息</el-button>
-         </template>
+        <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+        <el-button ref='allIfo' @click="handleEdit(scope.$index,scope.row)" type="text" size="small">{{scope.row.checked?"隐藏完整信息":"查看完整信息"}}</el-button>
+      </template>
     </el-table-column>
   </el-table>
 
@@ -91,6 +91,8 @@ export default {
       totalCount:0,//默认数据总数
       listLoading: false, //loading框
       tableData: [],
+      showAllifo:'查看完整信息',
+      checked:false,
     }
   },
   created() {
@@ -176,20 +178,47 @@ export default {
       this.$router.push({path:'/orderManage/orderDetail'});
     },
     handleEdit(index,row) {
+      
       console.log(index)
       console.log(row)
       console.log(row.orderNo)
+
+
+    
       var orderNo = row.orderNo;
       var _this = this;
-      var allIfoUrl = '/api/order/details'
-      _this.$http.post(allIfoUrl,{
-        'orderNo': orderNo,
-        'isFull':'1' 
-      },(rsp)=>{
-         console.log(rsp);             
-         
+      var allIfoUrl = '/api/order/details';
+      var requestData = {};
+      this.tableData[index].checked = this.checked;
+      //  this.tableData[index].checked = true;
+      //  let arr1= this.tableData[index];
+      //  console.log(arr1)
+      //  arr1.checked = true;
+      //  this.tableData.splice(index,1,arr1);
+      this.tableData[index].checked = !this.checked;         
+      if(this.checked  == false){
+        requestData = {
+          'orderNo': orderNo,
+          'isFull':'1' 
+        }
+        this.checked = true;       
+      }else{
+        requestData = {
+          'orderNo': orderNo,
+          'isFull':'0' 
+        }   
+        this.checked = false;       
+             
+      }
 
-         
+      _this.$http.post(allIfoUrl,requestData,(rsp)=>{
+         console.log(rsp);             
+          row.snderName =  rsp.snderName;
+          row.snderMobile = rsp.snderMobile;
+          row.snderAddress = rsp.snderAddress;
+          row.rcvrName = rsp.rcvrName;
+          row.rcvrMobile = rsp.rcvrMobile;
+          row.rcvrAddress  = rsp.rcvrAddress;
       },(error)=>{
           console.log('failed');
       });
