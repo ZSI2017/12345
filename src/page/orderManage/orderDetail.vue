@@ -81,8 +81,8 @@
                 <el-button @click="dialogServerVisible = false">关 闭</el-button>
             </div>
         </el-dialog>
-      <!--  订单作废对话框       :label-width="formLabelWidth" -->
-      <el-dialog title="作废订单" :visible.sync="dialogOrderVisible">
+         <!--  订单作废对话框       :label-width="formLabelWidth" -->
+        <el-dialog title="作废订单" :visible.sync="dialogOrderVisible">
          <p style="color:red"> 该订单已经生产账单，作废后将用户取消订单不再提示用户支付。请与用户、快递方法核实情况后再操作</p>
           <el-form :model="cancelCause" :rules="cancelRules">
             <el-form-item label="作废原因">
@@ -93,7 +93,20 @@
               <el-button @click="dialogOrderVisible = false">取 消</el-button>
               <el-button type="primary" @click="handleDialogOrderSave">确 定</el-button>
             </div>
-    </el-dialog>
+        </el-dialog>
+         <!--  标记其他渠道支付对话框       :label-width="formLabelWidth" -->        
+        <el-dialog title="确认标记其他渠道支付？" :visible.sync="dialogOtherpayVisible">
+         <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单切显示支付完成，不再提示用户支付，请与用户、快递双方核实情况后再操作。</p>
+          <el-form>
+            <el-form-item label="标记其他渠道支付原因">
+                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" :value="invalid1"></el-input>
+           </el-form-item>
+         </el-form>
+          <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogOtherpayVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handleDialogOtherpaySave">确 定</el-button>
+            </div>
+        </el-dialog>
 
 
 
@@ -116,6 +129,7 @@ import localEvent from 'src/vuex/function.js';
         // 取消订单相关
         dialogCancelVisible:false,
         dialogOrderVisible:false,
+        dialogOtherpayVisible:false,
         cancelCauseArr:[],
         cancelCause:{
           region:''
@@ -128,6 +142,7 @@ import localEvent from 'src/vuex/function.js';
         cancelFlag:true,   // 默认没有取消
         // 作废订单相关
         invalid:'',
+        invalid1:'',        
         showAllIfo:'查看完整信息',
         items:[{
             name: "快递公司",
@@ -369,19 +384,34 @@ import localEvent from 'src/vuex/function.js';
                         });
         },
         handleOtherPay(){
-            this.$http.post("/api/order/api/order/otherPay",
-                {orderNo:this.orderNo},
-                (rsp)=>{
-                    console.log(rsp)
-                    this.serverLists = rsp;
+            this.dialogOtherpayVisible = true;
 
-                },(error)=>{
-                    this.$message({
-                        type: 'error',
-                        message: error.data.meta.code+"--"+error.data.meta.msg
-                    });
-                });
-
+        },
+        handleDialogOtherpaySave(){
+            this.dialogOtherpayVisible = false;
+           this.$confirm('确定后该订单将被标记为其他渠道支付，请与客户提前沟通', '确定将该订单将被标记为其他渠道支付吗？', {
+                              confirmButtonText: '确定',
+                              cancelButtonText: '取消',
+                              type: 'warning'
+                      }).then(() => {
+                        this.$http.post("/api/order/otherPay",{"cause":this.invalid1.region,orderNo:this.orderNo},(rsp)=>{
+                                console.log(rsp)
+                                this.$message({
+                                    type: 'success',
+                                    message: '标记成功!'
+                                });
+                        },(error)=>{
+                            this.$message({
+                                type: 'error',
+                                message: error.data.meta.code+"--"+error.data.meta.msg
+                            });
+                        });
+                        }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                        });
         },
         handleInvalidorder(){
                 this.dialogOrderVisible = true;
