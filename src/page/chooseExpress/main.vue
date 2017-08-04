@@ -392,7 +392,7 @@ export default {
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
       }
-      this.promotionID = row.promotionId;
+      this.promotionID = row.promotionId || row.id;
       this.promotionURL = '/api/promotion/subAudit';
       this.promotionMessage = '已置为下架';
       this.promotionType = 'success';
@@ -511,7 +511,7 @@ export default {
         _this.radio2 = "";
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/promotion/getAuditList"
+        _this.url = "/api/promotion/getConfList"
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,

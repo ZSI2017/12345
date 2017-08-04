@@ -176,7 +176,7 @@ export default {
     this.localData = localData;
     // console.log(localData);
     // console.log(localData.promotionId);
-    // this.form.promotionId = localData.promotionId;
+    this.form.promotionId = localData.promotionId;
     this.id = localData.id;
     var _this =this;    
     var httpId = '';    
