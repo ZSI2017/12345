@@ -396,7 +396,7 @@ export default {
       this.promotionURL = '/api/promotion/subAudit';
       this.promotionMessage = '已置为下架';
       this.promotionType = 'success';
-      this.url = "/api/promotion/getConfList"; // 默认展开 配置
+      this.url = "/api/promotion/getConfList"; // 刷新列表 url
 
     },
     Operationchange() {
@@ -408,22 +408,22 @@ export default {
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
-      this.promotionID = row.promotionId;
+      this.promotionID = row.id;
       this.promotionURL = '/api/promotion/pass';
       this.promotionMessage = '已通过申请';
       this.promotionType = 'success';
-      this.url = "/api/promotion/getAuditList"; // 默认展开 配置
+      this.url = "/api/promotion/getConfList"; //  刷新列表 url
 
     },
     OperationApprovedFail(row) {
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "申请驳回？";
       this.myDiglogContent = "确认后，该内容将申请驳回";
-      this.promotionID = row.promotionId;
+      this.promotionID = row.id;
       this.promotionURL = '/api/promotion/reject';
       this.promotionMessage = '申请已驳回！';
       this.promotionType = 'success';
-      this.url = "/api/promotion/getAuditList"; // 默认展开 配置
+      this.url = "/api/promotion/getConfList"; // 默认展开 配置
 
     },
     OperationEffectDetail() {

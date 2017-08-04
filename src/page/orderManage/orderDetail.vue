@@ -50,6 +50,8 @@
             <el-button class="serverRecord" @click="handleShowServer" type="primary">查看信息服务</el-button>
             <el-button v-if="cancelFlag" class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
             <el-button v-if="cancelFlag" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
+            <el-button v-if="cancelFlag" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
+            
         </el-row>
         <!--  取消原因对话框       :label-width="formLabelWidth" -->
         <el-dialog title="取消原因" :visible.sync="dialogCancelVisible">
@@ -61,10 +63,24 @@
               </el-form-item>
            </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="dialogCancelVisible = false">取 消</el-button>
                 <el-button type="primary" @click="handleDialogCanceSave">确 定</el-button>
               </div>
-      </el-dialog>
+        </el-dialog>
+           <!--  查看信息服务       :label-width="formLabelWidth" -->
+        <el-dialog title="服务记录" :visible.sync="dialogServerVisible">
+            <el-collapse v-model="activeNames2" @change="handleChange" v-for='serverList in serverLists'>
+                <el-collapse-item :title="serverList.title" name="0">
+                    <template slot="title">
+                        <span>{{serverList.title}}</span><span style="float:right;padding-right:20px;">{{serverList.time}}</span>
+                    </template>
+                    <div>{{serverList.content || '暂无信息'}}</div>
+                </el-collapse-item>
+            </el-collapse>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogServerVisible = false">关 闭</el-button>
+            </div>
+        </el-dialog>
 
 
     </el-collapse>
@@ -77,9 +93,12 @@ import localEvent from 'src/vuex/function.js';
     data() {
       return {
         activeNames: ['0','1','2','3','4',"5"],
+        activeNames2: ['0'],
         orderNo:'',
         url:'',
+        serverLists:'',
         dialogCancelVisible:false,
+        dialogServerVisible:false,
         cancelCauseArr:[],
         cancelCause:{
           region:''
@@ -278,6 +297,19 @@ import localEvent from 'src/vuex/function.js';
 
         },
         handleShowServer(){
+            this.dialogServerVisible = true;
+            this.$http.post("/api/order/getServiceRecord",
+                {orderNo:this.orderNo},
+                (rsp)=>{
+                    console.log(rsp)
+                    this.serverLists = rsp;
+
+                },(error)=>{
+                    this.$message({
+                        type: 'error',
+                        message: error.data.meta.code+"--"+error.data.meta.msg
+                    });
+                });
 
         },
         handleCancleOrder(){
@@ -288,36 +320,48 @@ import localEvent from 'src/vuex/function.js';
             })
 
          },
-      handleDialogCanceSave() {
-           this.dialogCancelVisible = false;
-           console.log(this.cancelCause.region);
-           this.$confirm('确定后该订单将被取消，请与客户提前沟通', '确定取消该订单吗？', {
-                              confirmButtonText: '确定',
-                              cancelButtonText: '取消',
-                              type: 'warning'
-                      }).then(() => {
+        handleDialogCanceSave() {
+            this.dialogCancelVisible = false;
+            console.log(this.cancelCause.region);
+            this.$confirm('确定后该订单将被取消，请与客户提前沟通', '确定取消该订单吗？', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                        }).then(() => {
                         this.$http.post("/api/order/cancelConfirm",{"cause":this.cancelCause.region,orderNo:this.orderNo},(rsp)=>{
-                           this.cancelCauseArr = rsp;
-                               console.log(rsp)
-                               this.$message({
-                                 type: 'success',
-                                 message: '删除成功!'
-                               });
-                               this.cancelFlag = false;
+                            this.cancelCauseArr = rsp;
+                                console.log(rsp)
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                this.cancelFlag = false;
                         },(error)=>{
                             this.$message({
                                 type: 'error',
                                 message: error.data.meta.code+"--"+error.data.meta.msg
                             });
                         });
-                      }).catch(() => {
+                        }).catch(() => {
                         this.$message({
-                          type: 'info',
-                          message: '已取消删除'
+                            type: 'info',
+                            message: '已取消删除'
                         });
-                      });
-      },
-        handleInvalidorder(){
+                        });
+        },
+        handleOtherPay(){
+            this.$http.post("/api/order/api/order/otherPay",
+                {orderNo:this.orderNo},
+                (rsp)=>{
+                    console.log(rsp)
+                    this.serverLists = rsp;
+
+                },(error)=>{
+                    this.$message({
+                        type: 'error',
+                        message: error.data.meta.code+"--"+error.data.meta.msg
+                    });
+                });
 
         }
 
