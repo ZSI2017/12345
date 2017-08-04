@@ -204,6 +204,7 @@ export default {
     }
   },
   created() {
+    this.pageId = localEvent.get('pageId')
     console.log(this);
 
   },
@@ -249,27 +250,27 @@ export default {
 
           let httpData = {
                 "data": {
-                  "pageId": "",
+                  "pageId": _this.pageId,
                   "name": _this.ruleForm.name,
                   "imageUrl": _this.ruleForm.fileList,
-                  "sortWeight": 12,
+                  "sortWeight": _this.ruleForm.sortWeight,
                   "linkUrl": _this.ruleForm.linkUrl,
                   "gmtBegin": _this.ruleForm.gmtBegin,
                   "gmtEnd": _this.ruleForm.gmtEnd,
-                  "opStatus": _this.ruleForm.Status
+                  "opStatus": _this.ruleForm.status
                 },
                 "area": {
                   "code": "000000",
-                  "check": true,
+                  "check": _this.check,
                   "provinces": _this.gridData,
-
                 }
               };
-            _this.$http.post(_this.url,httpData, (result) => {
-            _this.tableData = result.page_list;
-            _this.totalCount = parseInt(result.pages.cnt);
-          },(error)=>{
-             console.log(error)
+            _this.$http.post(_this.url,httpData,(result) => {
+               alert("result")
+              _this.$store.dispatch('changeLoadingChange',true);
+              _this.$router.go(-1);
+            // _this.tableData = result.page_list;
+            // _this.totalCount = parseInt(result.pages.cnt);
           });
 
           // console.log(this.$route.matched);
@@ -373,144 +374,18 @@ export default {
       }
       var _this = this;
       var URL = "/api/promotion/areaAudit";   // 默认是 配置 中的覆盖地区
-      // _this.$http.post(URL,{id:"0"},
-      //   (rsp) => {
-        var rsp =  {
-        "code": "000000",
-        "check": false,
-        "provinces": [
-            {
-                "provinceNo": "340000",
-                "provinceName": "安徽省",
-                "check": false,
-                "city":[1,2,3,4],
-                "citys": [
-                    {
-                        "cityNo": "340800",
-                        "cityName": "安庆市",
-                        "check": true,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340300",
-                        "cityName": "蚌埠市",
-                        "check": true,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341700",
-                        "cityName": "池州市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341100",
-                        "cityName": "滁州市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341200",
-                        "cityName": "阜阳市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340100",
-                        "cityName": "合肥市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340600",
-                        "cityName": "淮北市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340400",
-                        "cityName": "淮南市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341000",
-                        "cityName": "黄山市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341500",
-                        "cityName": "六安市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340500",
-                        "cityName": "马鞍山市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341300",
-                        "cityName": "宿州市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340700",
-                        "cityName": "铜陵市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340200",
-                        "cityName": "芜湖市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341800",
-                        "cityName": "宣城市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341600",
-                        "cityName": "亳州市",
-                        "check": true,
-                        "currStatus": "0"
-                    }
-                ],
-                "currStatus": "0"
-            },
-            {
-                "provinceNo": "110000",
-                "provinceName": "北京",
-                "check": false,
-                "citys": [
-                    {
-                        "cityNo": "110100",
-                        "cityName": "北京市",
-                        "check": false,
-                        "currStatus": "0"
-                    }
-                ],
-                "currStatus": "0"
-            }
-        ],
-        "currStatus": "0"
-    };
+      _this.$http.post(URL,{id:"0"},
+        (rsp) => {
         // rsp.provinces =
           _this.gridData = rsp.provinces.slice(0);
-              localEvent.set("gridData", rsp);
-              _this.initCheckBox(rsp.check);
+          localEvent.set("gridData", rsp);
+          _this.initCheckBox(rsp.check);
           // _this.gridDataCopy123 = _this.gridData.slice(0);
 
           // console.log(_this.gridData);
         // }, (error) => {
         //   console.log(error);
-        // })
+        })
     },
     initCheckBox(isAllcheck){
       // console.log(_this.gridDataCopy);

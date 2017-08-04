@@ -559,10 +559,15 @@ export default {
        }
        return tempArr;
     },
-    setNewData() {
+    setNewData(){
       var _this = this;
+      console.log(this.pageId);
+      // alert("asdfadsf");
+      // alert();
+      localEvent.set("pageId",_this.pageId);
       this.$router.push({
-        path: _this.$route.path + '/addData'
+        path: _this.$route.path + '/addData',
+        params:{pageId:_this.pageId}
       });
     },
     handleClose() {
@@ -638,16 +643,18 @@ export default {
     },
     handleEdit(row) {
       row.tabName = this.activeName2;
-      localEvent.set("localChooseExpress", row);
       var _this = this;
+      row.pageId = _this.pageId
+      localEvent.set("localChooseExpress", row);
       this.$router.push({
         path: _this.$route.path + '/editData'
       });
     },
     effectiveDetails(row) {
+      var _this = this;
+      row.pageId = _this.pageId
       localEvent.set("localChooseExpress", row);
 
-      var _this = this;
       this.$router.push({
         path: _this.$route.path + '/detail'
       });

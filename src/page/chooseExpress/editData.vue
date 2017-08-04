@@ -172,16 +172,16 @@ export default {
   },
   mounted() {
     var localData = localEvent.get("localChooseExpress");
-    console.log(localData);
-    console.log(localData.promotionId);
-    this.form.promotionId = localData.promotionId;
+    this.localData = localData;
+    // console.log(localData);
+    // console.log(localData.promotionId);
+    // this.form.promotionId = localData.promotionId;
     this.id = localData.id;
-    console.log(this.form.promotionId)
+    console.log(this.localData.promotionId)
     var _this =this;
     _this.url = "/api/promotion/getById";
-
     _this.$http.post(_this.url,{
-      "id":this.form.promotionId
+      "id":this.localData.promotionId
     },(rsp)=>{
       console.log(rsp)
       console.log(rsp.imageUrl)
@@ -199,7 +199,6 @@ export default {
         this.radio = 2;
         this.currentStateText = "已上线"
       }
-
     },(error)=>{
       console.log(error)
       console.log('failed');
@@ -239,13 +238,14 @@ export default {
 
     //  点击提交
     handleSubmit() {
+      alert(this.localData.pageId)
        var result = {
            "data":{
                "id":this.id,
                "pageId":this.localData.pageId,
                "promotionId":this.localData.promotionId,
                "name":this.form.name,
-               "imageUrl":this.form.link,
+               "imageUrl":this.fileList2[0].url,
                "sortWeight":this.form.Forder,
                "linkUrl":this.form.link,
                "gmtBegin": formatDate(this.value3[0], 'yyyy-MM-dd hh:mm:ss'),
@@ -253,10 +253,10 @@ export default {
                'opStatus':this.radio,
              },
            "area":{
-              "code":"0000",
+              "code":"000000",
               "check":false,
-              "provinces":this.gridData,
-               "currStatus":this.check
+              "provinces":JSON.stringify(this.gridData),
+              "currStatus":this.check
            },
 
        }
@@ -409,8 +409,6 @@ export default {
           // console.log(_this.checkAll);
           // _this.dialogFormVisible = true;
           // console.log(_this.gridData);
-        }, (error) => {
-          console.log(error);
         })
     },
     initCheckBox(isAllcheck){
