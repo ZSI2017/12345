@@ -189,12 +189,6 @@ export default {
       var _this = this;
       var allIfoUrl = '/api/order/details';
       var requestData = {};
-      this.tableData[index].checked = this.checked;
-      //  this.tableData[index].checked = true;
-      //  let arr1= this.tableData[index];
-      //  console.log(arr1)
-      //  arr1.checked = true;
-      //  this.tableData.splice(index,1,arr1);
       this.tableData[index].checked = !this.checked;         
       if(this.checked  == false){
         requestData = {
