@@ -55,21 +55,35 @@
         <el-dialog title="取消原因" :visible.sync="dialogCancelVisible">
             <el-form :model="cancelCause" :rules="cancelRules">
               <el-form-item label="请选择取消原因" :label-width="formLabelWidth">
-               <el-select v-model="cancelCause.region" placeholder="请选择活动区域">
+               <el-select v-model="cancelCause.region" placeholder="请选择">
                     <el-option v-for="(item,index) in cancelCauseArr" :label="item"  :value="item"></el-option>
                </el-select>
               </el-form-item>
            </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleDialogCanceSave">确 定</el-button>
+                <el-button type="primary" @click="handleDialogCancelSave">确 定</el-button>
               </div>
       </el-dialog>
+      <!--  订单作废对话框       :label-width="formLabelWidth" -->
+      <el-dialog title="作废订单" :visible.sync="dialogOrderVisible">
+         <p style="color:red"> 该订单已经生产账单，作废后将用户取消订单不再提示用户支付。请与用户、快递方法核实情况后再操作</p>
+          <el-form :model="cancelCause" :rules="cancelRules">
+            <el-form-item label="作废原因">
+                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" v-model="invalid"></el-input>
+           </el-form-item>
+         </el-form>
+          <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogOrderVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handleDialogOrderSave">确 定</el-button>
+            </div>
+    </el-dialog>
 
 
     </el-collapse>
   </div>
 </template>
+
 <script>
 import localEvent from 'src/vuex/function.js';
 
@@ -79,7 +93,9 @@ import localEvent from 'src/vuex/function.js';
         activeNames: ['0','1','2','3','4',"5"],
         orderNo:'',
         url:'',
+        // 取消订单相关
         dialogCancelVisible:false,
+        dialogOrderVisible:false,
         cancelCauseArr:[],
         cancelCause:{
           region:''
@@ -90,6 +106,8 @@ import localEvent from 'src/vuex/function.js';
             ]
         },
         cancelFlag:true,   // 默认没有取消
+        // 作废订单相关
+        invalid:'',
         showAllIfo:'查看完整信息',
         items:[{
             name: "快递公司",
@@ -288,7 +306,7 @@ import localEvent from 'src/vuex/function.js';
             })
 
          },
-      handleDialogCanceSave() {
+      handleDialogCancelSave() {
            this.dialogCancelVisible = false;
            console.log(this.cancelCause.region);
            this.$confirm('确定后该订单将被取消，请与客户提前沟通', '确定取消该订单吗？', {
@@ -318,12 +336,25 @@ import localEvent from 'src/vuex/function.js';
                       });
       },
         handleInvalidorder(){
-
-        }
-
+              this.dialogOrderVisible = true;
+        },
+        //  确定 作废
+        handleDialogOrderSave () {
+          this.dialogOrderVisible = false;
+            this.$http.post("/api/order/cancelConfirm",{"cause":this.invalid,orderNo:this.orderNo},(rsp)=>{
+                this.$message({
+                  type: 'success',
+                  message: '作废成功!'
+                });
+        },(error)=>{
+              this.$message({
+                  type: 'error',
+                  message: error.data.meta.code+"--"+error.data.meta.msg
+              });
+        })
      }
-
-  }
+   }
+}
 </script>
 
 <style lang="scss">
@@ -428,9 +459,6 @@ import localEvent from 'src/vuex/function.js';
     .footer{
         padding:20px 0 20px 15px;
     }
-
-
-</style>
 
 
 </style>

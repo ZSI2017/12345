@@ -43,7 +43,7 @@
     </el-form-item>
     <el-form-item label="覆盖地区">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+      <!-- <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button> -->
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态">
@@ -72,11 +72,14 @@
     <el-table :data="gridData" border :show-header="showHeader" max-height="400" style="padding-top:0;">
       <el-table-column property="provinceName" label="省" width="200">
         <template scope="scope">
-            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.provinceName}}</el-tag>
+
             <el-checkbox
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
-               >全选</el-checkbox>
+                  style='padding-right:10px;'
+               ></el-checkbox>
+               {{scope.row.provinceName}}
+                 <!-- <el-tag type="primary" style="float:right;overflow:hidden;font-size:16px;width:120px;margin-right:10px;text-overflow:ellipsis"></el-tag> -->
           </template>
       </el-table-column>
       <el-table-column property="citys" label="市">
@@ -178,16 +181,16 @@ export default {
     // console.log(localData.promotionId);
     this.form.promotionId = localData.promotionId;
     this.id = localData.id;
-    var _this =this;    
-    var httpId = '';    
+    var _this =this;
+    var httpId = '';
     if(localData.tabName == '配置'){  //配置 修改
-        _this.url = "/api/promotion/getAuditById"; 
+        _this.url = "/api/promotion/getAuditById";
         httpId = this.id;
         console.log("配置 修改")
     }else if(!localData.tabName){  // 待审核 已生效详情
-        _this.url = "/api/promotion/getById"; 
+        _this.url = "/api/promotion/getById";
         httpId = this.form.promotionId;
-        console.log("待审核 已生效详情")        
+        console.log("待审核 已生效详情")
     }else{
       alert('错误')
     }
@@ -546,9 +549,9 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss">
 .editData-class {
-    label {
-        font-weight: bold;
-    }
+    // label {
+    //     font-weight: bold;
+    // }
     .dialog-class {
         .el-dialog__body {
             padding-top: 15px !important;
