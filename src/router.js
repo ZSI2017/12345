@@ -134,6 +134,17 @@ let routes =  [
    ]
  },{
    path:'/',
+   name:"用户管理",
+   component:index,
+   hasChild:true,
+   children:[
+      {path:'/orderCancle',component:orderCancle,name:"订单取消频次管理"},
+      {path:'/blankList',component:blankList,name:"黑名单管理"}
+   ]
+  //  path:'/orderCancle',component:orderCancle
+
+}, {
+   path:'/',
    name:"运营位管理",
    component:index,
    hasChild:true,
@@ -162,6 +173,21 @@ let routes =  [
       ]
     }
    ]
+ },{
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+     {path:'/noticeManage',component:noticeManage,name:"公告管理",
+     children:[
+        {path:'',component:noticeManageMain},
+        {path:'addData',name:'添加',component:noticeManageAddData},
+        {path:'editData',name:'修改',component:noticeManageEditData},
+        {path:'detail',name:'查看详情',component:noticeManageEditData}
+     ]
+    }
+  ]
+
  },
  //寄快递入口
  {
@@ -295,36 +321,9 @@ let routes =  [
    ]
  },
  //公告管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-     {path:'/noticeManage',component:noticeManage,name:"公告管理",
-     children:[
-        {path:'',component:noticeManageMain},
-        {path:'addData',name:'添加',component:noticeManageAddData},
-        {path:'editData',name:'修改',component:noticeManageEditData},
-        {path:'detail',name:'查看详情',component:noticeManageEditData}
-     ]
-    }
-  ]
 
- },
  //用户管理
- {
-   path:'/',
-   name:"用户管理",
-   component:index,
-   hasChild:true,
-   children:[
-      {path:'/orderCancle',component:orderCancle,name:"订单取消频次管理"},
-      {path:'/blankList',component:blankList,name:"黑名单管理"}
-   ]
-  //  path:'/orderCancle',component:orderCancle
-
-}
-, {
+{
    path:'/',
    name:"首页",
    component:index,

@@ -22,31 +22,31 @@
   </div>
 
   <!-- 表格  -->
-  <el-table 
-    :data="tableData" 
-    stripe v-loading.body="listLoading" 
-    lement-loading-text="拼命加载中" 
-    style="width: 100%" 
-    max-height="3000" 
+  <el-table
+    :data="tableData"
+    stripe v-loading.body="listLoading"
+    lement-loading-text="拼命加载中"
+    style="width: 100%"
+    max-height="3000"
   >
     <el-table-column prop="gmtCreate" align="center" label="下单时间">
     </el-table-column>
     <el-table-column align="center" label="相关订单号" width="260">
       <template scope="scope">
           <p>订单号：{{scope.row.orderNo}}</p>
-          <p>运单号：{{scope.row.waybillNo || "-"}}</p>          
+          <p>运单号：{{scope.row.waybillNo || "-"}}</p>
       </template>
     </el-table-column>
     <el-table-column align="center" label="寄件人信息">
       <template scope="scope">
           <p><span>{{scope.row.snderName}}</span> <span>{{scope.row.snderMobile}}</span></p>
-          <p>{{scope.row.snderAddress}}</p>          
+          <p>{{scope.row.snderAddress}}</p>
       </template>
     </el-table-column>
     <el-table-column align="center" label="收件人信息">
       <template scope="scope">
           <p>{{scope.row.rcvrName}} {{scope.row.rcvrMobile}}</p>
-          <p>{{scope.row.rcvrAddress}}</p>          
+          <p>{{scope.row.rcvrAddress}}</p>
       </template>
     </el-table-column>
     <el-table-column prop="expName" align="center" label="快递公司">
@@ -101,14 +101,14 @@ export default {
     loadData: function(){
       var _this =this;
       _this.currentPage = 1;
-      _this.listLoading = true;      
-      _this.url = "/api/order/getList"; // 默认展开 
+      _this.listLoading = true;
+      _this.url = "/api/order/getList"; // 默认展开
       if(this.keyword == ""){
         this.$message({
           message: '请输入关键字查询！',
           type: 'warning'
-        }); 
-        _this.listLoading = false;                        
+        });
+        _this.listLoading = false;
         return;
       }
       _this.$http.post(this.url,{
@@ -121,22 +121,22 @@ export default {
           "keyword": this.keyword
         }
       },(rsp)=>{
-        _this.listLoading = false;              
+        _this.listLoading = false;
         _this.tableData = rsp.page_list;
         _this.totalCount = parseInt(rsp.pages.cnt);
         if(_this.totalCount == "0"){
           this.$message({
             message: '未查询到内容，请重新输入！',
             type: 'warning'
-          });        
+          });
         }
       },(error)=>{
         console.log(error)
-        _this.listLoading = false;   
+        _this.listLoading = false;
         this.$message({
             message: '未查询到内容，请重新输入！',
             type: 'warning'
-          });                    
+          });
         console.log('failed');
       });
     },
@@ -148,7 +148,7 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.listLoading = true;
-      this.$message(`当前页${val}`);   
+      this.$message(`当前页${val}`);
       var _this = this;
       _this.$http.post(this.url,{
         "pages": {
@@ -160,7 +160,7 @@ export default {
           "keyword": this.keyword
         }
       },(rsp)=>{
-        _this.listLoading = false;              
+        _this.listLoading = false;
         _this.tableData = rsp.page_list;
         _this.totalCount = parseInt(rsp.pages.cnt);
       },(error)=>{
@@ -172,7 +172,7 @@ export default {
       console.log(`当前页: ${val}`);
     },
     handleClick(row) {
-      localEvent.set("localorderManage", row.orderNo);      
+      localEvent.set("localorderManage", row.orderNo);
       this.$router.push({path:'/orderManage/orderDetail'});
     },
     handleEdit(index,row) {
@@ -184,12 +184,12 @@ export default {
       var allIfoUrl = '/api/order/details'
       _this.$http.post(allIfoUrl,{
         'orderNo': orderNo,
-        'isFull':'1' 
+        'isFull':'1'
       },(rsp)=>{
-         console.log(rsp);             
-         
+         console.log(rsp);
 
-         
+
+
       },(error)=>{
           console.log('failed');
       });

@@ -203,8 +203,8 @@ export default {
       // 置为下线对话框
       showOperation: true,
       showOperation2: false,
-      showOperation3: true,  
-      showOperation4: true,                
+      showOperation3: true,
+      showOperation4: true,
       loadingTakeOffFlag: false,
       tableFalg: true,
       showConfig: true,
@@ -453,7 +453,7 @@ export default {
         _this.showConfig = true;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.showOperation3 = true;        
+        _this.showOperation3 = true;
         _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
@@ -480,7 +480,7 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
-        _this.showOperation3 = false;        
+        _this.showOperation3 = false;
         _this.radio2 = "";
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
@@ -507,7 +507,7 @@ export default {
         // window.location.reload();
         _this.showConfig = false;
         _this.showOperation2 = true;
-        _this.showOperation3 = false;        
+        _this.showOperation3 = false;
         _this.radio2 = "";
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
@@ -566,7 +566,6 @@ export default {
     setNewData(){
       var _this = this;
       console.log(this.pageId);
-      alert(this.pageId)
       // alert("asdfadsf");
       // alert();
       localEvent.set("pageId",_this.pageId);
@@ -669,10 +668,10 @@ export default {
       var _this = this;
       if(this.radio2 == 3){
           this.showOperation = false;
-          this.showOperation3 = false;          
+          this.showOperation3 = false;
       }else{
           this.showOperation = true;
-          this.showOperation3 = true;                    
+          this.showOperation3 = true;
       }
       _this.currentPage = 1;
       _this.url = "/api/promotion/getConfList"

@@ -9,6 +9,7 @@
         style="margin-right:10px;margin-bottom:5px;"
          v-for="(item,index) in scope.row.cityss"
          :key="index"
+         type="primary"
          >{{item.cityName}}</el-tag>
      </template>
       </el-table-column>
