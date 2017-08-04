@@ -48,8 +48,8 @@
     </el-form-item>
     <el-form-item label="当前状态" prop="status">
       <el-radio-group v-model="ruleForm.status">
-        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">上架</el-radio>
+        <el-radio class="radio" v-model="radio" label="1">下架</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
@@ -72,11 +72,16 @@
     <el-table :data="gridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="provinceName" label="省" width="200">
         <template scope="scope">
-            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.provinceName}}</el-tag>
-            <el-checkbox
+          <el-checkbox
+                v-model="checkAll[scope.$index]"
+                @change="handleCheckAllChange(scope.$index,$event)"
+             ></el-checkbox>
+             {{scope.row.provinceName}}
+            <!-- <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.provinceName}}</el-tag> -->
+            <!-- <el-checkbox
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
-               >全选</el-checkbox>
+               ></el-checkbox> -->
           </template>
       </el-table-column>
       <el-table-column property="citys" label="市">
@@ -148,9 +153,8 @@ export default {
         date1: '',
         gmtBegin:'',
         gmtEnd:'',
-        status:"2",
+        status:"1",
         fileList: []
-
       },
       // pickerOptions2: {
       //   onPick:function({ maxDate, minDate }){
@@ -271,6 +275,11 @@ export default {
               _this.$router.go(-1);
             // _this.tableData = result.page_list;
             // _this.totalCount = parseInt(result.pages.cnt);
+          },(error) => {
+              this.$message({
+                  type: 'error',
+                  message: error.data.meta.code+"--"+error.data.meta.msg
+              });
           });
 
           // console.log(this.$route.matched);
