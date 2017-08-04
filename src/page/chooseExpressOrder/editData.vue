@@ -60,14 +60,14 @@
         <el-radio class="radio" :label="1">上架</el-radio>
         <el-radio class="radio" :label="2">下架</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
+      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-form-item label="是否最新">
       <el-radio-group v-if="isFromAddData" v-model="newRadio">
         <el-radio class="radio" :label="1">上架</el-radio>
         <el-radio class="radio" :label="2">下架</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
+      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-if="isFromAddData" v-model="stateRadio">
@@ -178,7 +178,7 @@ export default {
         this.addTag = false;
       }else{
         this.addTag = true;
-      }  
+      }
     },
     showInput() {
       this.inputVisible = true;
@@ -194,7 +194,7 @@ export default {
           this.addTag = false;
         }else{
           this.addTag = true;
-        }      
+        }
       }
       this.inputVisible = false;
       this.inputValue = '';
