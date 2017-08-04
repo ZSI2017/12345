@@ -131,7 +131,7 @@ export default {
       checkedCities: [],
       isIndeterminate: [],
       // radio 代表上下架状态的选择
-      radio: 1,
+      radio: "1",
       url:'/api/promotion/saveAudit',
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
@@ -148,7 +148,7 @@ export default {
         date1: '',
         gmtBegin:'',
         gmtEnd:'',
-        status: '',
+        status: 1,
         fileList: []
 
       },

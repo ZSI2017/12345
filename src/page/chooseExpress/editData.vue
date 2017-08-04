@@ -159,7 +159,8 @@ export default {
         imageUrl:'',
         promotionId:'',
         gmtBegin:'',
-        gmtEnd:''
+        gmtEnd:'',
+        pageId:''
       },
 
     }
@@ -238,12 +239,16 @@ export default {
 
     //  点击提交
     handleSubmit() {
+<<<<<<< HEAD
       alert(this.localData.pageId)
+=======
+      console.log(this.localData.promotionId)
+>>>>>>> cf5eb111887ab7873cfdfe4813e6857a08f50be6
        var result = {
            "data":{
                "id":this.id,
-               "pageId":this.localData.pageId,
-               "promotionId":this.localData.promotionId,
+               "pageId":this.form.pageId,
+               "promotionId":this.form.promotionId,
                "name":this.form.name,
                "imageUrl":this.fileList2[0].url,
                "sortWeight":this.form.Forder,
