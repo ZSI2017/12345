@@ -99,7 +99,7 @@
             </div>
       </template>
     </el-table-column>
-    <el-table-column v-if="showOperation||showOperation2||showOperation3" label="操作" width="130">
+    <el-table-column v-if="showOperation||showOperation2||showOperation3||showOperation4" label="操作" width="130">
       <template scope="scope">
         <div>
           <div v-if="showOperation">
@@ -108,7 +108,7 @@
             </el-button>
             <br/>
           </div>
-          <div v-if="showOperation">
+          <div v-if="showOperation3">
             <el-button  @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
             <br/>
           </div>
@@ -203,7 +203,8 @@ export default {
       // 置为下线对话框
       showOperation: true,
       showOperation2: false,
-      showOperation3: false,      
+      showOperation3: true,  
+      showOperation4: true,                
       loadingTakeOffFlag: false,
       tableFalg: true,
       showConfig: true,
@@ -382,6 +383,7 @@ export default {
     },
     // 操作栏对应的事件响应
     OperationTakeOff(row) {
+      console.log(row.promotionId)
       this.loadingTakeOffFlag = true;
       if(row.status == '1'){
         this.myDialogTitle = "确认置为上线？";
@@ -390,7 +392,7 @@ export default {
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
       }
-      this.promotionID = row.id;
+      this.promotionID = row.promotionId;
       this.promotionURL = '/api/promotion/subAudit';
       this.promotionMessage = '已置为下架';
       this.promotionType = 'success';
@@ -406,7 +408,7 @@ export default {
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
-      this.promotionID = row.id;
+      this.promotionID = row.promotionId;
       this.promotionURL = '/api/promotion/pass';
       this.promotionMessage = '已通过申请';
       this.promotionType = 'success';
@@ -414,11 +416,10 @@ export default {
 
     },
     OperationApprovedFail(row) {
-      console.log(row)
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "申请驳回？";
       this.myDiglogContent = "确认后，该内容将申请驳回";
-      this.promotionID = row.id;
+      this.promotionID = row.promotionId;
       this.promotionURL = '/api/promotion/reject';
       this.promotionMessage = '申请已驳回！';
       this.promotionType = 'success';
@@ -452,6 +453,7 @@ export default {
         _this.showConfig = true;
         _this.showOperation = true;
         _this.showOperation2 = false;
+        _this.showOperation3 = true;        
         _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
@@ -478,6 +480,7 @@ export default {
         _this.showConfig = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
+        _this.showOperation3 = false;        
         _this.radio2 = "";
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
@@ -504,6 +507,7 @@ export default {
         // window.location.reload();
         _this.showConfig = false;
         _this.showOperation2 = true;
+        _this.showOperation3 = false;        
         _this.radio2 = "";
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
@@ -645,6 +649,7 @@ export default {
       });
     },
     effectiveDetails(row) {
+      console.log(row)      
       localEvent.set("localChooseExpress", row);
 
       var _this = this;
@@ -657,11 +662,10 @@ export default {
       var _this = this;
       if(this.radio2 == 3){
           this.showOperation = false;
-          this.showOperation3 = true;
+          this.showOperation3 = false;          
       }else{
           this.showOperation = true;
-          this.showOperation3 = false;
-          
+          this.showOperation3 = true;                    
       }
       _this.currentPage = 1;
       _this.url = "/api/promotion/getConfList"

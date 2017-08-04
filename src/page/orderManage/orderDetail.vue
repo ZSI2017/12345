@@ -46,7 +46,7 @@
         </el-collapse-item>
         <el-row class="footer">
             <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
-            <el-button class="complateInfo" @click="handleShowIfo" type="primary">查看完整信息</el-button>
+            <el-button class="complateInfo" @click="handleShowIfo" type="primary">{{showAllIfo}}</el-button>
             <el-button class="serverRecord" @click="handleShowServer" type="primary">查看信息服务</el-button>
             <el-button class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
             <el-button class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
@@ -64,109 +64,111 @@ import localEvent from 'src/vuex/function.js';
         activeNames: ['0','1','2','3','4',"5"],
         orderNo:'',
         url:'',
+        showAllIfo:'查看完整信息',
         items:[{
             name: "快递公司",
-            message: '德邦快递',
+            message: '',
           },
           {
             name: "实际承运公司",
-            message: '暂无',
+            message: '',
           },
           {
             name: "运单号",
-            message: '暂无',
+            message: '',
           },
           {
             name: "取件码",
-            message: '暂无',
+            message: '',
           },
           {
             name: "期望上门时间",
-            message: '2017-06-20 10:00:00-6:00:00',
+            message: '',
           },
           {
             name: "下单时间",
-            message: '2017-06-20 10:00:00-6:00:00',
+            message: '',
           },
           {
             name: "接单时间",
-            message: '暂无',
+            message: '',
           },
           {
             name: "运单回传时间",
-            message: '暂无',
+            message: '',
           },
           {
             name: "物流公司订单号",
-            message: '暂无',
+            message: '',
           },
           {
             name: "是否转快递",
-            message: 'fou',
+            message: '',
           },
           {
             name: "账单回传时间",
-            message: '暂无',
+            message: '',
           },
           {
             name: "订单状态",
-            message: '订单已取消',
+            message: '',
           }
         ],
         senderItems:[{
             name: "寄件人",
-            message: '尼古拉是凯奇',
+            message: '',
         }, {
             name: "联系电话",
-            message: '1888888888',
+            message: '',
         },{
           name: "寄件地址",
-           message: '北京市朝阳区几乎几乎没有这个地址',
+           message: '',
        }],
        rcvrItems:[{
             name: "收件人",
-            message: '尼古拉是凯奇',
+            message: '',
         }, {
             name: "联系电话",
-            message: '1888888888',
+            message: '',
         },{
           name: "收件地址",
-           message: '北京市朝阳区几乎几乎没有这个地址',
+           message: '',
        }],
         goodsItems:[{
             name: "类型",
-            message: '日用品',
+            message: '',
         },
         {
             name: "物品重量",
-            message: '18T',
+            message: '',
         },{
             name: "额外服务",
-            message: '北京市朝阳区几乎几乎没有这个服务',
+            message: '',
         },{
             name: "备注",
-            message: '北京市朝阳区几乎几乎没有这个备注',
+            message: '',
         }],
         couriers:[{
             name: "揽件员信息",
-            message: '暂无',
+            message: '',
         },
         {
             name: "联系电话",
-            message: '暂无',
+            message: '',
         }],
         expressPays:[{
             name: "支付方式",
-            message: '支付宝在线支付',
+            message: '',
         },
         {
             name: "预计费用",
-            message: "￥11.00",
+            message: "",
         },
         {
             name: "实际费用",
-            message: '未支付',
+            message: '',
         }],
+        requestData:{},
       }
 
     },
@@ -175,54 +177,78 @@ import localEvent from 'src/vuex/function.js';
         var localData = localEvent.get("localorderManage");
         console.log(localData);
         _this.orderNo = localData;
-        _this.url = "/api/order/detail"; // 默认展开 
-        _this.$http.post(this.url,{
-            orderNo:_this.orderNo
-        },(rsp)=>{
-            console.log(rsp);
-
-            //基本信息
-            this.items[0].message = rsp.page_list.expName;
-            this.items[1].message = rsp.page_list.actCarrierName;
-            this.items[2].message = rsp.page_list.waybillNo;
-            this.items[3].message = rsp.page_list.pickUpCode;
-            this.items[4].message = rsp.page_list.gmtExp;
-            this.items[5].message = rsp.page_list.gmtSuc;
-            this.items[6].message = rsp.page_list.gmtAccept;
-            this.items[7].message = rsp.page_list.waybillDate;
-            this.items[8].message = rsp.page_list.outOrderNo;
-            this.items[9].message = rsp.page_list.waybillDate;//是否转运快递
-            this.items[10].message = rsp.page_list.billDate;
-            this.items[11].message = rsp.page_list.waybillDate;
-            this.items[12].message = rsp.page_list.orderStatus;
-            //寄件人信息
-            this.senderItems[0].message = rsp.page_list.snderName;
-            this.senderItems[1].message = rsp.page_list.snderMobile;
-            this.senderItems[2].message = rsp.page_list.snderAddress;
-            //收件人信息
-            this.rcvrItems[0].message = rsp.page_list.rcvrName;
-            this.rcvrItems[1].message = rsp.page_list.rcvrMobile;
-            this.rcvrItems[2].message = rsp.page_list.rcvrAddress;
-            //物品信息
-            this.goodsItems[0].message = rsp.page_list.goodsType;
-            this.goodsItems[1].message = rsp.page_list.goodsWeight;
-            this.goodsItems[2].message = rsp.page_list.addService;
-            this.goodsItems[3].message = rsp.page_list.remark;
-            //揽件员信息
-            this.couriers[0].message = rsp.page_list.acppeter;
-            this.couriers[1].message = rsp.page_list.acppetermobile;
-            //快递费用
-            this.expressPays[1].message = rsp.page_list.estimatePrice;
-            this.expressPays[2].message = rsp.page_list.orderAmount;
-            this.expressPays[3].message = rsp.page_list.receiptAmount;
-        },(error)=>{
-            console.log('failed');
-        });
-
-        
+        this.requestData = {          
+                orderNo:_this.orderNo
+            }
+        this.requestHttp();
     },
-     methods: {      
+     methods: {  
+        requestHttp(){
+            var _this = this;        
+            // var localData = localEvent.get("localorderManage");
+            // console.log(localData);
+            // this.orderNo = localData;
+            _this.url = "/api/order/details"; // 默认展开 
+            _this.$http.post(this.url,this.requestData,(rsp)=>{
+                console.log(rsp);
+
+                //基本信息
+                this.items[0].message = rsp.expName || '暂无';
+                this.items[1].message = rsp.actCarrierName || '暂无';
+                this.items[2].message = rsp.waybillNo || '暂无';
+                this.items[3].message = rsp.pickUpCode || '暂无';
+                this.items[4].message = rsp.gmtExp || '暂无';
+                this.items[5].message = rsp.gmtCreate || '暂无';
+                this.items[6].message = rsp.gmtAccept || '暂无';
+                this.items[7].message = rsp.gmtBill || '暂无';
+                this.items[8].message = rsp.outOrderNo || '暂无';
+                this.items[9].message = rsp.expNameOld? '是':'否';//是否转运快递
+                this.items[10].message = rsp.gmtBill || '暂无';
+                this.items[11].message = rsp.orderStatus || '暂无';
+                //寄件人信息
+                this.senderItems[0].message = rsp.snderName || '暂无';
+                this.senderItems[1].message = rsp.snderMobile || '暂无';
+                this.senderItems[2].message = rsp.snderAddress || '暂无';
+                //收件人信息
+                this.rcvrItems[0].message = rsp.rcvrName || '暂无';
+                this.rcvrItems[1].message = rsp.rcvrMobile || '暂无';
+                this.rcvrItems[2].message = rsp.rcvrAddress || '暂无';
+                //物品信息
+                this.goodsItems[0].message = rsp.goodsType || '暂无';
+                this.goodsItems[1].message = rsp.goodsWeight || '暂无';
+                this.goodsItems[2].message = rsp.addService || '暂无';
+                this.goodsItems[3].message = rsp.remark || '暂无';
+                //揽件员信息
+                this.couriers[0].message = rsp.acppeter || "暂无";
+                this.couriers[1].message = rsp.acppetermobile || "暂无";
+                //快递费用
+                this.expressPays[1].message = rsp.estimatePrice || '暂无';
+                this.expressPays[2].message = rsp.orderAmount || '暂无';
+                this.expressPays[3].message = rsp.receiptAmount || '暂无';
+            },(error)=>{
+                console.log('failed');
+            });
+        },     
         handleShowIfo(){
+            var _this = this;        
+            var localData = localEvent.get("localorderManage");
+            console.log(localData);
+            _this.orderNo = localData;
+            if(this.showAllIfo == '查看完整信息'){
+                this.requestData = {          
+                        "orderNo":_this.orderNo,
+                        "isFull":"1"
+                    }
+                this.requestHttp();
+                this.showAllIfo ='隐藏完整信息'
+            }else{
+               this.requestData = {          
+                        "orderNo":_this.orderNo,
+                        "isFull":"0"
+                    }
+                this.requestHttp();
+                this.showAllIfo ='查看完整信息' 
+            }
             
         },
         handleShowServer(){

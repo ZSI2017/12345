@@ -177,12 +177,22 @@ export default {
     console.log(localData.promotionId);
     this.form.promotionId = localData.promotionId;
     this.id = localData.id;
-    console.log(this.form.promotionId)
     var _this =this;    
-    _this.url = "/api/promotion/getById"; 
+    var httpId = '';    
+    if(localData.tabName == '配置'){  //配置 修改
+        _this.url = "/api/promotion/getAuditById"; 
+        httpId = this.id;
+        console.log("配置 修改")
+    }else if(!localData.tabName){  // 待审核 已生效详情
+        _this.url = "/api/promotion/getById"; 
+        httpId = this.form.promotionId;
+        console.log("待审核 已生效详情")        
+    }else{
+      alert('错误')
+    }
 
     _this.$http.post(_this.url,{
-      "id":this.form.promotionId
+      "id":httpId
     },(rsp)=>{
       console.log(rsp)
       console.log(rsp.imageUrl)

@@ -56,7 +56,7 @@
     <el-table-column label="操作" align="center" width="200">
       <template scope="scope">
            <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
-           <el-button @click="handleEdit" type="text" size="small">查看完整信息</el-button>
+           <el-button @click="handleEdit(scope.$index,scope.row)" type="text" size="small">查看完整信息</el-button>
          </template>
     </el-table-column>
   </el-table>
@@ -175,11 +175,25 @@ export default {
       localEvent.set("localorderManage", row.orderNo);      
       this.$router.push({path:'/orderManage/orderDetail'});
     },
-    handleEdit() {
-      this.$notify({
-        title: "点击了编辑",
-        message: "即将跳转到编辑界面"
-      })
+    handleEdit(index,row) {
+      console.log(index)
+      console.log(row)
+      console.log(row.orderNo)
+      var orderNo = row.orderNo;
+      var _this = this;
+      var allIfoUrl = '/api/order/details'
+      _this.$http.post(allIfoUrl,{
+        'orderNo': orderNo,
+        'isFull':'1' 
+      },(rsp)=>{
+         console.log(rsp);             
+         
+
+         
+      },(error)=>{
+          console.log('failed');
+      });
+
     },
     handleRadio(){
       this.type = this.radio.toString()
