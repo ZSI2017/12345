@@ -43,7 +43,7 @@
     </el-form-item>
     <el-form-item label="覆盖地区" prop="coverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+      <!-- <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button> -->
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态" prop="status">
@@ -148,7 +148,7 @@ export default {
         date1: '',
         gmtBegin:'',
         gmtEnd:'',
-        status: 1,
+        status:"2",
         fileList: []
 
       },

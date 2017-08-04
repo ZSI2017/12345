@@ -562,6 +562,7 @@ export default {
     setNewData(){
       var _this = this;
       console.log(this.pageId);
+      alert(this.pageId)
       // alert("asdfadsf");
       // alert();
       localEvent.set("pageId",_this.pageId);

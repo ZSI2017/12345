@@ -239,16 +239,12 @@ export default {
 
     //  点击提交
     handleSubmit() {
-<<<<<<< HEAD
-      alert(this.localData.pageId)
-=======
       console.log(this.localData.promotionId)
->>>>>>> cf5eb111887ab7873cfdfe4813e6857a08f50be6
        var result = {
            "data":{
                "id":this.id,
-               "pageId":this.form.pageId,
-               "promotionId":this.form.promotionId,
+               "pageId":this.localData.pageId,
+               "promotionId":this.localData.promotionId,
                "name":this.form.name,
                "imageUrl":this.fileList2[0].url,
                "sortWeight":this.form.Forder,
@@ -260,14 +256,17 @@ export default {
            "area":{
               "code":"000000",
               "check":false,
-              "provinces":JSON.stringify(this.gridData),
+              "provinces":this.gridData,
               "currStatus":this.check
            },
-
        }
        console.log("result%o ",result);
+       var _this = this;
       this.$http.post("/api/promotion/updateAudit",result,(result) => {
-                  alert(result);
+        _this.$store.dispatch('changeLoadingChange', true);
+                console.log(this);
+                this.$router.go(-1);
+                  // alert(result);
       });
       // this.$router.app.$store.state.loadingFlag = true;
       // this.$store.dispatch('changeLoadingChange', true);
