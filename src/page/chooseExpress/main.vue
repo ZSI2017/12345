@@ -326,7 +326,7 @@ export default {
     // 操作排序值改变
     handleSortChange(column) {
         console.log(column.prop)
-        console.log(column.order)       
+        console.log(column.order)
         // 创建时间进行排序
         var _this = this;
         _this.$http.post(this.url, {
@@ -563,10 +563,16 @@ export default {
        }
        return tempArr;
     },
-    setNewData() {
+    setNewData(){
       var _this = this;
+      console.log(this.pageId);
+      alert(this.pageId)
+      // alert("asdfadsf");
+      // alert();
+      localEvent.set("pageId",_this.pageId);
       this.$router.push({
-        path: _this.$route.path + '/addData'
+        path: _this.$route.path + '/addData',
+        params:{pageId:_this.pageId}
       });
     },
     handleClose() {
@@ -642,17 +648,18 @@ export default {
     },
     handleEdit(row) {
       row.tabName = this.activeName2;
-      localEvent.set("localChooseExpress", row);
       var _this = this;
+      row.pageId = _this.pageId
+      localEvent.set("localChooseExpress", row);
       this.$router.push({
         path: _this.$route.path + '/editData'
       });
     },
     effectiveDetails(row) {
-      console.log(row)      
+      var _this = this;
+      row.pageId = _this.pageId
       localEvent.set("localChooseExpress", row);
 
-      var _this = this;
       this.$router.push({
         path: _this.$route.path + '/detail'
       });
