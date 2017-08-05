@@ -1,29 +1,28 @@
 <template type="html">
 <section class="section editData-class">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="form" :model="form" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="名称">
+  <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
+    <el-form-item label="名称" prop="name">
       <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
 
-    <el-form-item label="运营图">
+    <el-form-item label="运营图" prop="fileList2">
       <el-upload v-if="isFromAddData"
         action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+        :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
-        :file-list="fileList2">
+        :file-list="form.fileList2">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="fileList2[0].url" alt="">
-      <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
+      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
+
       <el-popover ref="popover4" placement="right" trigger="click">
-        <img :src="fileList2[0].url">
+        <img :src="form.fileList2[0].url">
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
 
@@ -56,6 +55,11 @@
     <el-col class="line" :span="2"> </el-col>
     <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
   </el-form>
+
+  <!--  查看大图对话框 -->
+  <el-dialog v-model="dialogVisible" size="tiny">
+    <img width="100%" :src="dialogImageUrl" alt="">
+  </el-dialog>
 
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
@@ -129,10 +133,7 @@ export default {
       dialogVisible: false,
       CoverData:[],
       DialogConfigSaveFlag:false,  // 配置覆盖地区
-      fileList2: [{
-        name: '',
-        url: ""
-      }],
+
       // 添加搜索框
       state1: "",
       provinces: [],
@@ -163,7 +164,11 @@ export default {
         promotionId:'',
         gmtBegin:'',
         gmtEnd:'',
-        pageId:''
+        pageId:'',
+        fileList2: [{
+          name: '',
+          url: ""
+        }],
       },
 
     }
@@ -203,7 +208,7 @@ export default {
       this.form.name = rsp.name;
       this.form.Forder = rsp.sortWeight;
       this.form.link = rsp.linkUrl;
-      this.fileList2[0].url = rsp.imageUrl;
+      this.form.fileList2[0].url = rsp.imageUrl;
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
       this.value3 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
@@ -260,7 +265,7 @@ export default {
                "pageId":this.localData.pageId,
                "promotionId":this.localData.promotionId,
                "name":this.form.name,
-               "imageUrl":this.fileList2[0].url,
+               "imageUrl":this.form.fileList2[0].url,
                "sortWeight":this.form.Forder,
                "linkUrl":this.form.link,
                "gmtBegin": formatDate(this.value3[0], 'yyyy-MM-dd hh:mm:ss'),
@@ -310,7 +315,7 @@ export default {
     handleRemove() {},
     handleSuccess(file){
       console.log(file.result)
-      this.fileList2[0].url = file.result;
+      this.form.fileList2[0].url = file.result;
     },
     handlerror(err, file, fileList){
       alert(err);
@@ -543,7 +548,11 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
-    }
+    },
+    handleImageChange(file,fileList){
+         this.ruleForm.fileList2 = fileList.slice(-1);
+    },
+
   }
 }
 </script>

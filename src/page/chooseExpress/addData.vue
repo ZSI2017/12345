@@ -12,18 +12,18 @@
     <el-form-item label="名称" prop="name">
       <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
-    <el-form-item label="运营图" prop="imageUrl">
+    <el-form-item label="运营图" prop="imageList">
+      <!--   action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload" -->
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+        action = "https://jsonplaceholder.typicode.com/posts/"
+        :on-change="handleImageChange"
+        :file-list="ruleForm.imageList"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
         >
-        <el-dialog v-model="dialogVisible" size="tiny">
-          <img width="100%" :src="ruleForm.fileList" alt="">
-        </el-dialog>
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
@@ -34,8 +34,9 @@
     <el-form-item label="链接" prop="linkUrl">
       <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
     </el-form-item>
-    <el-form-item label="有效时段">
+    <el-form-item label="有效时段"  prop="date1">
       <el-date-picker
+         @change="dataChagne"
          v-model="ruleForm.date1"
          type="datetimerange"
          placeholder="选择时间范围">
@@ -56,6 +57,10 @@
     <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
 
+  <!--图片预览 框  -->
+   <el-dialog v-model="dialogVisible" size="tiny">
+     <img width="100%" :src="ruleForm.fileList" alt="">
+  </el-dialog>
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
 
@@ -64,14 +69,17 @@
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
       </el-col>
       <el-col :span="10" style="height:10px;"></el-col>
-      <el-col :span="10" style="font-weight:bold;font-size:16px;margin-top:2px;padding-left:20px;line-height:40px;height:40px;">
-        快速搜索:
-        <el-autocomplete class="inline-input" v-model="state1" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+      <el-col :span="5" style="font-weight:bold;font-size:16px;margin-top:2px;line-height:40px;height:40px;">
+           <span style="float:right;padding-right:10px">按照省搜索:</span>
+      </el-col>
+      <el-col :span="5" style="font-weight:bold;font-size:16px;margin-top:2px;line-height:40px;height:40px;">
+
+        <el-autocomplete class="inline-input" v-model="searchContent" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入省名" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
       </el-col>
     </el-row>
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400" :row-style="handleRowStyle" >
       <el-table-column property="provinceName" label="省" width="200">
-        <template scope="scope">
+        <template scope="scope" >
           <el-checkbox
                 v-model="checkAll[scope.$index]"
                 @change="handleCheckAllChange(scope.$index,$event)"
@@ -128,13 +136,16 @@ export default {
       showAlert:false,
       dialogVisible:false,
       // 添加搜索框
-      state1: "",
+      searchContent: "",
       provinces: [],
       // 覆盖地区选择
       check: false,
       checkAll: [],
       checkedCities: [],
       isIndeterminate: [],
+      // 搜索框中省名初始化
+      searchProvinces:[],
+      showProvinces:'',
       // radio 代表上下架状态的选择
       radio: "1",
       url:'/api/promotion/saveAudit',
@@ -150,13 +161,17 @@ export default {
         name: '',
         sortWeight: '',
         linkUrl: '',
-        date1: '',
+        date1: [],
         gmtBegin:'',
         gmtEnd:'',
         status:"1",
-        fileList: []
+        fileList: [],
+        imageList:[],
+        coverArea:''
       },
-      // pickerOptions2: {
+      // 上传图片列表
+
+      // pickerO:ptions2: {
       //   onPick:function({ maxDate, minDate }){
       //     // var minDate = new Date(minDate);
       //     // var maxDate = new Date(maxDate);
@@ -170,40 +185,57 @@ export default {
       //   }
       // },
       rules: {
-        name: [{
-          type: "string",
+        name: [{type: "string",
           required: true,
-          message: '请输入运营图名称',
+          message: '请输入正确运营图名称',
           trigger: 'blur'
-        }, ],
+          },
+          {  min:1,
+             max:10,
+             message:'名称长度不大于10'
+          }
+      ],
         sortWeight: [
           { required: true, message: '排序值不能为空'},
           { type: 'number', message: '排序值必须为数字值'}
         ],
         linkUrl: [{
+          type:'url',
           required: true,
           message: "请输入链接",
           trigger: 'blur'
         }],
         date1: [{
-          type: 'date',
           required: true,
           message: '请选择日期',
-          trigger: 'change'
+          trigger: 'change',
+          type:'array',
+        },{
+           validator(rule,value,callback,source,options) {
+             var errors = [];
+             if(value[0] === null) {
+               errors.push(
+                 new Error('请选择日期')
+               )
+             }
+             callback(errors)
+           }
         }],
         status: [{
           required: true,
           message: '请选择状态',
           trigger: 'change'
         }],
-        // imageUrl: [{
-        //   required: true,
-        //   message: '请上传图片'
-        // }],
-        // coverArea: [{
-        //   required: true,
-        //   message: '请选择覆盖地区'
-        // }]
+        imageList: [{
+          required: true,
+          message: '请上传图片',
+          type:'array',
+          trigger: 'on-change'
+        }],
+        coverArea: [{
+          required: true,
+          message: '请选择覆盖地区',
+        }]
       }
     }
   },
@@ -230,13 +262,30 @@ export default {
     //  }
   },
   methods: {
+    //
+    dataChagne(value) {
+      console.log(value);
+      console.log(this.ruleForm.date1);
+    },
+    // 为表格中的行设置样式，
+    handleRowStyle(row,index) {
+
+      if(this.showProvinces !== '') {
+         if(this.showProvinces === row.provinceName) {
+            // return {'display':}
+         }else {
+             return {'display':'none'}
+         }
+      }
+    },
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
-     // alert(this.ruleForm),
+      console.log("-----------------------");
+        console.log(this.$refs[formName]),
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
@@ -296,6 +345,10 @@ export default {
         this.$router.go(-1);
       // this.loadingFlag = true;
     },
+  // 对图片操作的控制
+  handleImageChange(file,fileList){
+       this.ruleForm.imageList = fileList.slice(-1);
+  },
     handlePreview(file) {
       this.dialogVisible = true;
       console.log(file.response)
@@ -322,33 +375,34 @@ export default {
     },
     // 搜索框
     querySearch(queryString, cb) {
-      // var provinces = this.provinces;
-      // var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
-      // // 调用 callback 返回建议列表的数据
-      // cb(results);
-      var provinces = this.provinces;
-      var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
-      // 调用 callback 返回建议列表的数据
+      if(queryString === '') {
+        this.showProvinces = '';
+      }
+      var searchProvinces = this.searchProvinces;
+      var results = queryString ? searchProvinces.filter(this.createFilter(queryString)) : searchProvinces;
       cb(results);
     },
     createFilter(queryString) {
-      // return (province) => {
-      //   return (province.province.indexOf(queryString.toLowerCase()) === 0);
-      // };
       return (province) => {
         return (province.value.indexOf(queryString.toLowerCase()) === 0);
       };
     },
     handleQuerySelect(items) {
+       this.showProvinces = items.value
       console.log(items);
-      this.gridData = this.gridDataCopy.filter(function(item) {
-        return item.value == items.value
-      })
-      console.log(this.gridData);
+      // for(let i =0;i<this.gridData.length;i++) {
+      //      if(this.gridData[i].provinceName === items.value) {
+      //         this.gridData[i].isShow= true;
+      //      } else {
+      //         this.gridData[i].isShow = false;
+      //      }
+      // }
+      // console.log(this.gridData);
     },
     handleIconClick(ev) {
-      this.gridData = this.gridDataCopy;
-      this.state1 = '';
+      this.showProvinces = ''
+      // this.gridData = this.gridDataCopy;
+      this.searchContent = '';
     },
     // 覆盖地区选择
     dialogConfig() {
@@ -369,6 +423,9 @@ export default {
       // }, (error) => {
       //   console.log(error);
       // })
+      // 初始化话搜索框
+      this.handleIconClick();
+       this.ruleForm.coverArea = "hasClick";
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
@@ -383,18 +440,149 @@ export default {
       }
       var _this = this;
       var URL = "/api/promotion/areaAudit";   // 默认是 配置 中的覆盖地区
-      _this.$http.post(URL,{id:"0"},
-        (rsp) => {
-        // rsp.provinces =
+      // _this.$http.post(URL,{id:"0"},
+      //   (rsp) => {
+      var rsp = {
+        "code": "000000",
+        "check": false,
+        "provinces": [
+            {
+                "provinceNo": "340000",
+                "provinceName": "安徽省",
+                "check": false,
+                "citys": [
+                    {
+                        "cityNo": "340800",
+                        "cityName": "安庆市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "340300",
+                        "cityName": "蚌埠市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "341700",
+                        "cityName": "池州市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "341100",
+                        "cityName": "滁州市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "341200",
+                        "cityName": "阜阳市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "340100",
+                        "cityName": "合肥市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "340600",
+                        "cityName": "淮北市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "340400",
+                        "cityName": "淮南市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "341000",
+                        "cityName": "黄山市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "341500",
+                        "cityName": "六安市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "340500",
+                        "cityName": "马鞍山市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "341300",
+                        "cityName": "宿州市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "340700",
+                        "cityName": "铜陵市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "340200",
+                        "cityName": "芜湖市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "341800",
+                        "cityName": "宣城市",
+                        "check": false,
+                        "currStatus": "0"
+                    },
+                    {
+                        "cityNo": "341600",
+                        "cityName": "亳州市",
+                        "check": false,
+                        "currStatus": "0"
+                    }
+                ],
+                "currStatus": "0"
+            },
+            {
+                "provinceNo": "110000",
+                "provinceName": "北京",
+                "check": false,
+                "citys": [
+                    {
+                        "cityNo": "110100",
+                        "cityName": "北京市",
+                        "check": false,
+                        "currStatus": "0"
+                    }
+                ],
+                "currStatus": "0"
+            }
+        ],
+        "currStatus": "0"
+    };
           _this.gridData = rsp.provinces.slice(0);
+          for( let i =0;i<_this.gridData.length;i++) {
+             _this.searchProvinces[i]={};
+             _this.searchProvinces[i].value = _this.gridData[i].provinceName;
+          }
+          console.log(_this.searchProvinces);
           localEvent.set("gridData", rsp);
+
+
           _this.initCheckBox(rsp.check);
           // _this.gridDataCopy123 = _this.gridData.slice(0);
 
           // console.log(_this.gridData);
         // }, (error) => {
         //   console.log(error);
-        })
+        // })
     },
     initCheckBox(isAllcheck){
       // console.log(_this.gridDataCopy);

@@ -32,7 +32,7 @@ export default {
       }, (result) => {
           // _this.totalCount = result.page_list.length; //获取数据长度
       });
-      Cookie.set("express","mng",600000);
+      Cookie.set("express","mng",6000000);
       this.$router.push({
         path: "/"
       })
