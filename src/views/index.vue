@@ -164,6 +164,8 @@ export default {
     },
     handleSelect(key, keyPath) {
          this.PageStore.commit("setPage",1);
+         this.PageStore.commit("setRadio",1);
+         this.PageStore.commit("setTabName","配置");
       // this.fullscreenLoading = true;
       //  this.defaultActive =""+key;
       //  console.log("this.$route.path");

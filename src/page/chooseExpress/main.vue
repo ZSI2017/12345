@@ -248,10 +248,14 @@ export default {
     // alert("deactivated....")
   },
   created() {
+    alert('sdafsd')
     //  alert("created...")
     //  alert(this.$store.state.loadingFlag)
-    // 在页面初始化时，获取pageName,
+    // 在页面初始化时，获取pageName,标签页，单选框 的记录值。
     this.currentPage = this.PageStore.pageCount;
+    this.activeName2 = this.PageStore.tabName;
+    this.radio2= this.PageStore.radio;
+    console.log(this.PageStore.radio)
     console.log("$router: %o",this.$route);
     this.url = "/api/promotion/getConfList"; // 默认展开 配置
     this.pageId = "SD1010"; // 寄快递首页
@@ -287,10 +291,12 @@ export default {
       this.url = "/api/promotion/getConfList";
       this.pageId = "SD1010"; // 寄快递首页
       this.activeName2 = "配置";
-      this.PageStore.commit("setPage",1);
       this.currentPage = 1;
       this.radio2 = 1;
       this.showConfig = true;
+      this.PageStore.commit("setPage",1);
+      this.PageStore.commit("setRadio",1);
+      this.PageStore.commit("setTabName","配置");
       ((this.$route.path == "/chooseExpress" &&
           (this.pageId = "BM1010")) ||
         (this.$route.path == "/expressOrder" &&
@@ -445,6 +451,7 @@ export default {
       _this.showConfig = false;
       _this.currentPage = 1;    //跳转标签页 页码归 1
       console.log(tab.label);
+      this.PageStore.commit("setTabName",tab.label);   // 记录当前标签页
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
         // 配置排序
@@ -666,6 +673,7 @@ export default {
     },
     handleRadio(){
       var _this = this;
+      this.PageStore.commit('setRadio',this.radio2);
       if(this.radio2 == 3){
           this.showOperation = false;
           this.showOperation3 = false;
