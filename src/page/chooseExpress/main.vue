@@ -241,15 +241,13 @@ export default {
     }
   },
   activated(){
-    // alert(this.activeName2);
-    // alert("activated ....")
+
   },
   deactivated(){
-    // alert("deactivated....")
+
   },
   created() {
-    alert('sdafsd')
-    //  alert("created...")
+
     //  alert(this.$store.state.loadingFlag)
     // 在页面初始化时，获取pageName,标签页，单选框 的记录值。
     this.currentPage = this.PageStore.pageCount;
@@ -577,8 +575,7 @@ export default {
       // alert();
       localEvent.set("pageId",_this.pageId);
       this.$router.push({
-        path: _this.$route.path + '/addData',
-        params:{pageId:_this.pageId}
+        path: _this.$route.path + '/addData'
       });
     },
     handleClose() {

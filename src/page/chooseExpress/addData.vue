@@ -248,6 +248,7 @@ export default {
 
   },
   mounted() {
+     console.log("router params %c %o","fontSize:20px",this.$route.params);
 
   },
   beforeDestory() {
