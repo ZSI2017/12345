@@ -84,16 +84,15 @@
     </el-table-column>
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="status" width="110" v-if="showConfig" label="状态" :sortable="showSortable">>
+    <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">>
        <template scope="scope">
-            {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下架":"待上架")))}}
+            {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下线":"待上线")))}}
         </template>
     </el-table-column>
-    <el-table-column prop="auditStatus" width="110" :label="auditState">
-
+    <el-table-column prop="auditStatus" width="110" v-if="showflag" :label="auditState">
       <template scope="scope">
             <div v-if="!auditStatusFlage">
-              {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":"已上线")}}
+              {{ scope.row.opStatus==1? "已下线":(scope.row.opStatus==2?"已上线":(scope.row.opStatus==3?"待下线":"待上线"))}}
             </div>
             <div v-else>
               {{scope.row.auditStatus==7? "已驳回":(scope.row.auditStatus==1?"已通过":(scope.row.auditStatus==2?"上线待审核":(scope.row.auditStatus==3?"下线待审核":"草稿")))}}
@@ -209,6 +208,7 @@ export default {
       loadingTakeOffFlag: false,
       tableFalg: true,
       showConfig: true,
+      showflag:true,
       gridData: [],
       radio2: 1,
       activeName2: '配置',
@@ -253,7 +253,7 @@ export default {
     // 在页面初始化时，获取pageName,标签页，单选框 的记录值。
     this.currentPage = this.PageStore.pageCount;
     this.activeName2 = this.PageStore.tabName;
-    this.radio2= this.PageStore.radio;
+    this.radio2= Number(this.PageStore.radio);
     console.log(this.PageStore.radio)
     console.log("$router: %o",this.$route);
     if(this.activeName2 == "配置") {
@@ -268,22 +268,7 @@ export default {
       (this.$route.path == "/expressOrder" &&
         (this.pageId = "SS1010")))
 
-       this.handleTabClick({label:this.activeName2});
-    // var _this = this;
-    // _this.$http.post(_this.url,{
-    //   "pages": {
-    //     "page_size": this.pageSize,
-    //     "page_num": this.currentPage - 1
-    //   },
-    //   "con": {
-    //     "pageId": this.pageId,
-    //     "status":this.radio2
-    //   }
-    // }, (result) => {
-    //   _this.tableData = result.page_list;
-    //   _this.totalCount = parseInt(result.pages.cnt);
-    // });
-    console.log(this.$route.matched);
+       this.handleTabClick({label:this.activeName2})
   },
   filters: {
     formatDate(time) {
@@ -296,15 +281,19 @@ export default {
       // alert(this.auditStatusFlage)
       // 默认状态是 运营位管理的 寄快递首页
       this.url = "/api/promotion/getConfList";
-      this.pageId = "SD1010"; // 寄快递首页
+      // this.pageId = "SD1010"; // 寄快递首页
       this.activeName2 = "配置";
       this.currentPage = 1;
       this.radio2 = 1;
+      this.auditStatusFlage = true;
       this.showConfig = true;
+      this.showflag = true;
       this.PageStore.commit("setPage",1);
       this.PageStore.commit("setRadio",1);
       this.PageStore.commit("setTabName","配置");
-      ((this.$route.path == "/chooseExpress" &&
+      ((this.$route.path == "/sendExpress" &&
+          (this.pageId = "SD1010")) ||
+        (this.$route.path == "/chooseExpress" &&
           (this.pageId = "BM1010")) ||
         (this.$route.path == "/expressOrder" &&
           (this.pageId = "SS1010")))
@@ -459,6 +448,7 @@ export default {
       _this.listLoading = true;
       _this.tableFalg = false
       _this.showConfig = false;
+      _this.showflag = false;
       _this.currentPage = 1;    //跳转标签页 页码归 1
       console.log(tab.label);
       this.PageStore.commit("setTabName",tab.label);   // 记录当前标签页
@@ -468,6 +458,7 @@ export default {
         _this.showSortable = "custom";
         _this.tableData = [];
         _this.showConfig = true;
+        _this.showflag = true;
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = true;
@@ -483,7 +474,6 @@ export default {
           "con": {
             "pageId": _this.pageId,
             "status":this.radio2
-
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
@@ -497,6 +487,7 @@ export default {
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = false;
+        _this.showflag = false;
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = false;
@@ -510,7 +501,8 @@ export default {
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId
+            "pageId": _this.pageId,
+            "status":this.radio2
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list
@@ -525,6 +517,7 @@ export default {
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = false;
+        _this.showflag = true;
         _this.showOperation2 = true;
         _this.showOperation3 = false;
         // _this.radio2 = 1;
@@ -537,7 +530,8 @@ export default {
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId
+            "pageId": _this.pageId,
+            "status":this.radio2
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
@@ -692,6 +686,11 @@ export default {
           this.showOperation = true;
           this.showOperation3 = true;
       }
+      // if(this.radio2 == 1){
+      //     this.auditStatusFlage = false;
+      // }else{
+          this.auditStatusFlage = true;
+      // }
       _this.currentPage = 1;
       _this.url = "/api/promotion/getConfList"
         _this.$http.post(_this.url, {
