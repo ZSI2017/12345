@@ -93,6 +93,7 @@ export default {
       tableData: [],
       showAllifo:'查看完整信息',
       checked:false,
+      viewIfoArray:[]
     }
   },
   created() {
@@ -184,26 +185,41 @@ export default {
       console.log(row.orderNo)
 
 
-
       var orderNo = row.orderNo;
       var _this = this;
       var allIfoUrl = '/api/order/details';
       var requestData = {};
       this.tableData[index].checked = !this.checked;
-      if(this.checked  == false){
+      //脱敏判断
+      if(this.viewIfoArray.indexOf(row.orderNo) == -1){
+        this.viewIfoArray.push(row.orderNo)
+        console.log(this.viewIfoArray)
         requestData = {
           'orderNo': orderNo,
           'isFull':'1'
         }
-        this.checked = true;
       }else{
+        this.viewIfoArray.splice(this.viewIfoArray.indexOf(row.orderNo),1);
+        console.log(this.viewIfoArray)
         requestData = {
           'orderNo': orderNo,
           'isFull':'0'
         }
-        this.checked = false;
-
       }
+      // if(this.checked  == false){
+      //   requestData = {
+      //     'orderNo': orderNo,
+      //     'isFull':'1'
+      //   }
+      //   this.checked = true;
+      // }else{
+      //   requestData = {
+      //     'orderNo': orderNo,
+      //     'isFull':'0'
+      //   }
+      //   this.checked = false;
+
+      // }
 
       _this.$http.post(allIfoUrl,requestData,(rsp)=>{
          console.log(rsp);

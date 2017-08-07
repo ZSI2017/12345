@@ -48,9 +48,10 @@
             <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
             <el-button class="complateInfo" @click="handleShowIfo" type="primary">{{showAllIfo}}</el-button>
             <el-button class="serverRecord" @click="handleShowServer" type="primary">查看信息服务</el-button>
-            <el-button v-if="cancelFlag" class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
-            <el-button v-if="cancelFlag" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
-            <el-button v-if="cancelFlag" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
+            <el-button v-if="cancelFlag" :plain="true" class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
+            <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
+            <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
+            <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleChangeExpress" type="danger">超时转快递</el-button>
             
         </el-row>
         <!--  取消原因对话框       :label-width="formLabelWidth" -->
@@ -409,7 +410,7 @@ import localEvent from 'src/vuex/function.js';
                         }).catch(() => {
                         this.$message({
                             type: 'info',
-                            message: '已取消删除'
+                            message: '已取消标记其他渠道'
                         });
                         });
         },
@@ -430,6 +431,33 @@ import localEvent from 'src/vuex/function.js';
                         message: error.data.meta.code+"--"+error.data.meta.msg
                     });
             })
+        },
+        handleChangeExpress(){
+            this.dialogOtherpayVisible = false;
+            this.$confirm('确认后该订单将由EMS上门取件，请与客户提前沟通。', '确定将该订单转为其他快递公司吗？', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                this.$http.post("/api/order/changeExpress",{orderNo:this.orderNo},(rsp)=>{
+                        console.log(rsp)
+                        this.$message({
+                            type: 'success',
+                            message: '转快递成功!'
+                        });
+                },(error)=>{
+                    this.$message({
+                        type: 'error',
+                        message: error.data.meta.code+"--"+error.data.meta.msg
+                    });
+                });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
         }
 
    }

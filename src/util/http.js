@@ -168,7 +168,7 @@ export default {
                         //   在node.js 中 就是 http.ClientRequest 实例；
                            console.log("%crequest error %o","color:red;font-size:16px;",error.request);
                       } else {
-                          vue.$message.error('接口调用失败2222');
+                        //   vue.$message.error('接口调用失败2222');
                           console.log("Error",error.message);
                       }
                   // console.log(error.config);
