@@ -90,6 +90,7 @@
         </template>
     </el-table-column>
     <el-table-column prop="auditStatus" width="110" :label="auditState">
+
       <template scope="scope">
             <div v-if="!auditStatusFlage">
               {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":"已上线")}}
@@ -255,26 +256,33 @@ export default {
     this.radio2= this.PageStore.radio;
     console.log(this.PageStore.radio)
     console.log("$router: %o",this.$route);
-    this.url = "/api/promotion/getConfList"; // 默认展开 配置
+    if(this.activeName2 == "配置") {
+      this.url = "/api/promotion/getConfList"; // 默认展开 配置
+    } else {
+      this.url = "/api/promotion/getList"
+    }
+    // this.url = '/api/promotion/audit/list';
     this.pageId = "SD1010"; // 寄快递首页
     ((this.$route.path == "/chooseExpress" &&
         (this.pageId = "BM1010")) ||
       (this.$route.path == "/expressOrder" &&
         (this.pageId = "SS1010")))
 
-    var _this = this;
-    _this.$http.post(_this.url,{
-      "pages": {
-        "page_size": this.pageSize,
-        "page_num": this.currentPage - 1
-      },
-      "con": {
-        "pageId": this.pageId
-      }
-    }, (result) => {
-      _this.tableData = result.page_list;
-      _this.totalCount = parseInt(result.pages.cnt);
-    });
+       this.handleTabClick({label:this.activeName2});
+    // var _this = this;
+    // _this.$http.post(_this.url,{
+    //   "pages": {
+    //     "page_size": this.pageSize,
+    //     "page_num": this.currentPage - 1
+    //   },
+    //   "con": {
+    //     "pageId": this.pageId,
+    //     "status":this.radio2
+    //   }
+    // }, (result) => {
+    //   _this.tableData = result.page_list;
+    //   _this.totalCount = parseInt(result.pages.cnt);
+    // });
     console.log(this.$route.matched);
   },
   filters: {
@@ -308,7 +316,8 @@ export default {
           "page_num": _this.currentPage - 1
         },
         "con": {
-          "pageId": this.pageId
+          "pageId": this.pageId,
+          "status":this.radio2
         }
       }, (rsp) => {
         _this.tableData = rsp.page_list
@@ -374,7 +383,8 @@ export default {
             "page_num": this.currentPage - 1
           },
           "con": {
-            "pageId": this.pageId
+            "pageId": this.pageId,
+            "status":this.radio2
           }
         }, (result) => {
 
@@ -393,13 +403,15 @@ export default {
       if(row.status == '1'){
         this.myDialogTitle = "确认置为上线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
+        this.promotionMessage = '已置为上线';
       }else{
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
+        this.promotionMessage = '已置为下线';
       }
       this.promotionID = row.promotionId || row.id;
       this.promotionURL = '/api/promotion/subAudit';
-      this.promotionMessage = '已置为下架';
+
       this.promotionType = 'success';
       this.url = "/api/promotion/getConfList"; // 刷新列表 url
 
@@ -459,7 +471,7 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = true;
-        _this.radio2 = 1;
+        // _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
         _this.url = "/api/promotion/getConfList"
@@ -469,7 +481,9 @@ export default {
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId
+            "pageId": _this.pageId,
+            "status":this.radio2
+
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
@@ -486,7 +500,7 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = false;
-        _this.radio2 = "";
+        // _this.radio2 = 1;
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
         _this.url = "/api/promotion/getList";
@@ -513,7 +527,7 @@ export default {
         _this.showConfig = false;
         _this.showOperation2 = true;
         _this.showOperation3 = false;
-        _this.radio2 = "";
+        // _this.radio2 = 1;
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
         _this.url = "/api/promotion/getConfList"
