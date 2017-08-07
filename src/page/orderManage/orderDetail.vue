@@ -52,7 +52,6 @@
             <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
             <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
             <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleChangeExpress" type="danger">超时转快递</el-button>
-            
         </el-row>
         <!--  取消原因对话框       :label-width="formLabelWidth" -->
         <el-dialog title="取消原因" :visible.sync="dialogCancelVisible">
@@ -95,7 +94,7 @@
               <el-button type="primary" @click="handleDialogOrderSave">确 定</el-button>
             </div>
         </el-dialog>
-         <!--  标记其他渠道支付对话框       :label-width="formLabelWidth" -->        
+         <!--  标记其他渠道支付对话框       :label-width="formLabelWidth" -->
         <el-dialog title="确认标记其他渠道支付？" :visible.sync="dialogOtherpayVisible">
          <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单切显示支付完成，不再提示用户支付，请与用户、快递双方核实情况后再操作。</p>
           <el-form>
@@ -143,7 +142,7 @@ import localEvent from 'src/vuex/function.js';
         cancelFlag:true,   // 默认没有取消
         // 作废订单相关
         invalid:'',
-        invalid1:'',        
+        invalid1:'',
         showAllIfo:'查看完整信息',
         items:[{
             name: "快递公司",

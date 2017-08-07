@@ -33,8 +33,8 @@
                  this.$emit("listenToCoverArea",false)
               },
               filterProvinces(list){
+                if(typeof list === 'undefined') return;
                 var tempArr = list.slice(0);
-                console.log("temparr123333 %o",tempArr)
                  for(let i =0;i<tempArr.length;i++) {
                      console.log(!tempArr[i].check);
                       if(!tempArr[i].check){

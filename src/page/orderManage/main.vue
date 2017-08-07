@@ -92,7 +92,6 @@ export default {
       listLoading: false, //loading框
       tableData: [],
       showAllifo:'查看完整信息',
-      checked:false,
       viewIfoArray:[]
     }
   },
@@ -189,7 +188,6 @@ export default {
       var _this = this;
       var allIfoUrl = '/api/order/details';
       var requestData = {};
-      this.tableData[index].checked = !this.checked;
       //脱敏判断
       if(this.viewIfoArray.indexOf(row.orderNo) == -1){
         this.viewIfoArray.push(row.orderNo)
@@ -198,6 +196,7 @@ export default {
           'orderNo': orderNo,
           'isFull':'1'
         }
+        this.tableData[index].checked = true;
       }else{
         this.viewIfoArray.splice(this.viewIfoArray.indexOf(row.orderNo),1);
         console.log(this.viewIfoArray)
@@ -205,6 +204,8 @@ export default {
           'orderNo': orderNo,
           'isFull':'0'
         }
+        this.tableData[index].checked = false;
+        
       }
       // if(this.checked  == false){
       //   requestData = {

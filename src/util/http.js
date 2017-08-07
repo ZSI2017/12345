@@ -8,7 +8,7 @@ var vue = new Vue();
 import axios from "axios";
 
 let URL = "http://sendexmng-sit.alipay-eco.com"
-
+// alert(process.env.npm_config_report)
 if(process.env.NODE_ENV === "development"){
       // 开发环境下调用
       URL = "http://sendexmng-sit.alipay-eco.com"
