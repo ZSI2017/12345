@@ -120,7 +120,7 @@
             <el-button @click="OperationApprovedFail(scope.row)" type="text" size="small">申请驳回</el-button>
             <br/>
           </div>
-          <div v-if="showOperation2">
+          <div v-if="showOperation2 && scope.row.status != '0'">
            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">已生效详情</el-button>
            <br/>
           </div>
@@ -250,16 +250,15 @@ export default {
   created() {
 
     //  alert(this.$store.state.loadingFlag)
-    // 在页面初始化时，获取pageName,标签页，单选框 的记录值。
-    this.currentPage = this.PageStore.pageCount;
+    // 在页面初始化时，获取pageName,标签页，单选框 的记录值
     this.activeName2 = this.PageStore.tabName;
+    this.currentPage = this.PageStore.pageCount;
     this.radio2= Number(this.PageStore.radio);
-    console.log(this.PageStore.pageCount);
     console.log("$router: %o",this.$route);
     if(this.activeName2 == "配置") {
-      this.url = "/api/promotion/getConfList"; // 默认展开 配置
+      this.url = "/api/promotion/audit/list"; // 默认展开 配置
     } else {
-      this.url = "/api/promotion/getList"
+      this.url = "/api/promotion/onlineList"
     }
     // this.url = '/api/promotion/audit/list';
     this.pageId = "SD1010"; // 寄快递首页
@@ -268,7 +267,8 @@ export default {
       (this.$route.path == "/expressOrder" &&
         (this.pageId = "SS1010")))
 
-       this.handleTabClick({label:this.activeName2})
+       this.handleTabClick({label:this.activeName2},null,this.currentPage)
+
   },
   filters: {
     formatDate(time) {
@@ -280,7 +280,7 @@ export default {
     '$route': function(to, from) {
       // alert(this.auditStatusFlage)
       // 默认状态是 运营位管理的 寄快递首页
-      this.url = "/api/promotion/getConfList";
+      this.url = "/api/promotion/audit/list";
       // this.pageId = "SD1010"; // 寄快递首页
       this.activeName2 = "配置";
       this.currentPage = 1;
@@ -388,22 +388,21 @@ export default {
     },
     // 操作栏对应的事件响应
     OperationTakeOff(row) {
-      console.log(row.promotionId)
       this.loadingTakeOffFlag = true;
-      if(row.status == '1'){
-        this.myDialogTitle = "确认置为上线？";
-        this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
-        this.promotionMessage = '已置为上线';
-      }else{
+      if(row.status == '2'){
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
         this.promotionMessage = '已置为下线';
+      }else{
+        this.myDialogTitle = "确认置为上线？";
+        this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
+        this.promotionMessage = '已置为上线';
       }
       this.promotionID = row.promotionId || row.id;
-      this.promotionURL = '/api/promotion/subAudit';
+      this.promotionURL = '/api/promotion/status/update';
 
       this.promotionType = 'success';
-      this.url = "/api/promotion/getConfList"; // 刷新列表 url
+      this.url = "/api/promotion/audit/list"; // 刷新列表 url
 
     },
     Operationchange() {
@@ -416,10 +415,10 @@ export default {
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
       this.promotionID = row.id;
-      this.promotionURL = '/api/promotion/pass';
+      this.promotionURL = '/api/promotion/audit/reject';
       this.promotionMessage = '已通过申请';
       this.promotionType = 'success';
-      this.url = "/api/promotion/getConfList"; //  刷新列表 url
+      this.url = "/api/promotion/audit/list"; //  刷新列表 url
 
     },
     OperationApprovedFail(row) {
@@ -427,10 +426,10 @@ export default {
       this.myDialogTitle = "申请驳回？";
       this.myDiglogContent = "确认后，该内容将申请驳回";
       this.promotionID = row.id;
-      this.promotionURL = '/api/promotion/reject';
+      this.promotionURL = '/api/promotion/audit/reject';
       this.promotionMessage = '申请已驳回！';
       this.promotionType = 'success';
-      this.url = "/api/promotion/getConfList"; // 默认展开 配置
+      this.url = "/api/promotion/audit/list"; // 默认展开 配置
 
     },
     OperationEffectDetail() {
@@ -444,13 +443,17 @@ export default {
       this.myDiglogContent = "确认后，该内容将待审详情";
     },
     // 标签页导航
-    handleTabClick(tab, event) {
+    handleTabClick(tab, event,countPage) {
       var _this = this;
       _this.listLoading = true;
       _this.tableFalg = false
       _this.showConfig = false;
       _this.showflag = false;
-      _this.currentPage = 1;    //跳转标签页 页码归 1
+      if(countPage !== undefined) {
+        _this.currentPage = countPage;
+      } else {
+        _this.currentPage = 1;    //跳转标签页 页码归 1
+      };
       console.log(tab.label);
       this.PageStore.commit("setTabName",tab.label);   // 记录当前标签页
       var tableDataCopy = _this.tableData;
@@ -466,7 +469,7 @@ export default {
         // _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/promotion/getConfList"
+        _this.url = "/api/promotion/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": this.pageSize,
@@ -495,7 +498,7 @@ export default {
         // _this.radio2 = 1;
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
-        _this.url = "/api/promotion/getList";
+        _this.url = "/api/promotion/onlineList";
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,
@@ -524,7 +527,7 @@ export default {
         // _this.radio2 = 1;
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/promotion/getConfList"
+        _this.url = "/api/promotion/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,
@@ -550,9 +553,9 @@ export default {
     checkArea(id) {
       // var _this = this;
       this.listLoading = true;
-      let URL= "/api/promotion/areaAudit";
+      let URL= "/api/promotion/audit/areaConf/all";
       if(this.activeName2 === "已上线") {
-          URL =  "/api/promotion/area";
+          URL =  "/api/promotion/areaConf/all";
       }
       this.$http.post(URL,{id},(rsp) => {
         console.log(rsp.provinces);
@@ -607,6 +610,7 @@ export default {
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
+      this.PageStore.commit("setPage",1);
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -692,7 +696,8 @@ export default {
           this.auditStatusFlage = true;
       // }
       _this.currentPage = 1;
-      _this.url = "/api/promotion/getConfList"
+          this.PageStore.commit("setPage",1);
+      _this.url = "/api/promotion/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": this.pageSize,
