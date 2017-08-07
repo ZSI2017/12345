@@ -530,8 +530,7 @@ export default {
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId,
-            "status":this.radio2
+            "pageId": _this.pageId
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
