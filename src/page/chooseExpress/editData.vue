@@ -6,7 +6,6 @@
       <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-
     <el-form-item label="运营图" prop="fileList2">
       <el-upload v-if="isFromAddData"
         action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
@@ -32,7 +31,6 @@
     </el-form-item>
     <el-form-item label="链接" prop="link">
       <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
     </el-form-item>
     <el-form-item label="有效时段" prop="date1">
       <el-date-picker v-if="isFromAddData" v-model="form.date1" type="datetimerange" placeholder="选择时间范围">
@@ -190,11 +188,12 @@ export default {
          }
      ],
        Forder: [
-         { required: true, message: '排序值不能为空'},
-         { type: 'number', message: '排序值必须为数字值'}
+         { required: false, message: '排序值不能为空'},
+        //  { type: 'number', message: '排序值必须为数字值'},
+         { type: 'number', min:1, max:999,message:'排序值范围1-999'}
        ],
        link: [{
-         type:'url',
+        //  type:'url',
          required: true,
          message: "请输入正确链接",
          trigger: 'blur'

@@ -415,11 +415,10 @@ export default {
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
       this.promotionID = row.id;
-      this.promotionURL = '/api/promotion/audit/reject';
+      this.promotionURL = '/api/promotion/audit/approve';
       this.promotionMessage = '已通过申请';
       this.promotionType = 'success';
       this.url = "/api/promotion/audit/list"; //  刷新列表 url
-
     },
     OperationApprovedFail(row) {
       this.loadingTakeOffFlag = true;

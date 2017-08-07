@@ -33,6 +33,7 @@
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
       <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+      <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
     </el-form-item>
     <el-form-item label="有效时段"  prop="date1">
       <el-date-picker
@@ -196,11 +197,12 @@ export default {
           }
       ],
         sortWeight: [
-          { required: true, message: '排序值不能为空'},
-          { type: 'number', message: '排序值必须为数字值'}
+          { required: false, message: '排序值不能为空'},
+          // { type: 'number', message: '排序值必须为数字值'}
+           { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         linkUrl: [{
-          type:'url',
+          // type:'url',
           required: true,
           message: "请输入正确链接",
           trigger: 'blur'
