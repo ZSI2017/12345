@@ -251,12 +251,12 @@ export default {
     var _this =this;
     var httpId = '';
     if(localData.tabName == '配置'){  //配置 修改
-        _this.url = "/api/promotion/getAuditById";
+        _this.url = "/api/promotion/audit/get";
         httpId = this.id;
         console.log("配置 修改")
     }else if(!localData.tabName){  // 待审核 已生效详情
-        _this.url = "/api/promotion/getById";
-        httpId = this.form.promotionId;
+        _this.url = "/api/promotion/get";
+        httpId = this.form.promotionId;``
         console.log("待审核 已生效详情")
     }else{
       alert('错误')
@@ -355,7 +355,7 @@ export default {
          }
          console.log("result%o ",result);
          var _this = this;
-        this.$http.post("/api/promotion/updateAudit",result,(result) => {
+        this.$http.post("/api/promotion/audit/update",result,(result) => {
           _this.$store.dispatch('changeLoadingChange', true);
                   console.log(this);
                   this.$router.go(-1);
@@ -487,9 +487,9 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/promotion/areaAudit";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/promotion/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
       if(this.tabName === "已上线") {
-          URL = "/api/promotion/area";
+          URL = "/api/promotion/areaConf/all";
       }
       _this.$http.post(URL,{id:this.id},
         (rsp) => {

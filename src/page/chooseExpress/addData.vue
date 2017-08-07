@@ -148,7 +148,7 @@ export default {
       showProvinces:'',
       // radio 代表上下架状态的选择
       radio: "1",
-      url:'/api/promotion/saveAudit',
+      url:'/api/promotion/audit/add',
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
       // 查看配置地区中的表格数据 和 是否显示的标志
@@ -440,7 +440,7 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/promotion/area";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/promotion/areaConf/all";   // 默认是 配置 中的覆盖地区
       _this.$http.post(URL,{id:"0"},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
