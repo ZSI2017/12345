@@ -254,7 +254,7 @@ export default {
     this.currentPage = this.PageStore.pageCount;
     this.activeName2 = this.PageStore.tabName;
     this.radio2= Number(this.PageStore.radio);
-    console.log(this.PageStore.radio)
+    console.log(this.PageStore.pageCount);
     console.log("$router: %o",this.$route);
     if(this.activeName2 == "配置") {
       this.url = "/api/promotion/getConfList"; // 默认展开 配置
@@ -359,29 +359,30 @@ export default {
           message: this.promotionMessage,
           type: this.promotionType
         });
+        this.handleTabClick({label:this.activeName2})
 
-        this.pageId = "SD1010"; // 寄快递首页
-        ((this.$route.path == "/chooseExpress" &&
-            (this.pageId = "BM1010")) ||
-          (this.$route.path == "/expressOrder" &&
-            (this.pageId = "SS1010")))
-        var _this = this;
-        _this.$http.post(_this.url,{
-          "pages": {
-            "page_size": this.pageSize,
-            "page_num": this.currentPage - 1
-          },
-          "con": {
-            "pageId": this.pageId,
-            "status":this.radio2
-          }
-        }, (result) => {
+        // this.pageId = "SD1010"; // 寄快递首页
+        // ((this.$route.path == "/chooseExpress" &&
+        //     (this.pageId = "BM1010")) ||
+        //   (this.$route.path == "/expressOrder" &&
+        //     (this.pageId = "SS1010")))
+        // var _this = this;
+        // _this.$http.post(_this.url,{
+        //   "pages": {
+        //     "page_size": this.pageSize,
+        //     "page_num": this.currentPage - 1
+        //   },
+        //   "con": {
+        //     "pageId": this.pageId,
+        //     "status":this.radio2
+        //   }
+        // }, (result) => {
+        //
+        //   _this.tableData = result.page_list;
+        //   _this.totalCount = parseInt(result.pages.cnt);
+        // });
 
-          _this.tableData = result.page_list;
-          _this.totalCount = parseInt(result.pages.cnt);
-        });
-
-        console.log(this.$route.matched);
+        // console.log(this.$route.matched);
       })
 
     },

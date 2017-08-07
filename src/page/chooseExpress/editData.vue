@@ -25,10 +25,9 @@
         <img :src="form.fileList2[0].url">
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
-
     </el-form-item>
     <el-form-item label="排序值" prop="Forder">
-      <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromAddData" v-model.number="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="link">
@@ -53,7 +52,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
+    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit('form')">提交</el-button>
   </el-form>
 
   <!--  查看大图对话框 -->
@@ -68,12 +67,14 @@
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
       </el-col>
       <el-col :span="10" style="height:10px;"></el-col>
-      <el-col :span="10" style="font-weight:bold;font-size:16px;margin-top:2px;padding-left:20px;line-height:40px;height:40px;">
-        快速搜索:
-        <el-autocomplete class="inline-input" v-model="state1" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+      <el-col :span="5" style="font-weight:bold;font-size:16px;margin-top:2px;line-height:40px;height:40px;">
+           <span style="float:right;padding-right:10px">按照省搜索:</span>
+      </el-col>
+      <el-col :span="5" style="font-weight:bold;font-size:16px;margin-top:2px;padding-left:20px;line-height:40px;height:40px;">
+        <el-autocomplete class="inline-input" v-model="searchContent" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入省名" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
       </el-col>
     </el-row>
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400" style="padding-top:0;">
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400" style="padding-top:0;" :row-style="handleRowStyle">
       <el-table-column property="provinceName" label="省" width="200">
         <template scope="scope">
 
@@ -135,7 +136,10 @@ export default {
       DialogConfigSaveFlag:false,  // 配置覆盖地区
 
       // 添加搜索框
-      state1: "",
+      // 搜索框中省名初始化
+      searchProvinces:[],
+      showProvinces:'',
+      searchContent: "",
       provinces: [],
       // 覆盖地区选择
       check: false,
@@ -313,43 +317,59 @@ export default {
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
+    // 为表格中的行设置样式，
+    handleRowStyle(row,index) {
+
+      if(this.showProvinces !== '') {
+         if(this.showProvinces === row.provinceName) {
+            // return {'display':}
+         }else {
+             return {'display':'none'}
+         }
+      }
+    },
 
     //  点击提交
-    handleSubmit() {
-      console.log(this.localData.promotionId)
-       var result = {
-           "data":{
-               "id":this.id,
-               "pageId":this.localData.pageId,
-               "promotionId":this.localData.promotionId,
-               "name":this.form.name,
-               "imageUrl":this.form.fileList2[0].url,
-               "sortWeight":this.form.Forder,
-               "linkUrl":this.form.link,
-               "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-               "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-               'opStatus':this.form.radio,
+    handleSubmit(formName) {
+   this.$refs[formName].validate((valid) => {
+     if(valid) {
+         var result = {
+             "data":{
+                 "id":this.id,
+                 "pageId":this.localData.pageId,
+                 "promotionId":this.localData.promotionId,
+                 "name":this.form.name,
+                 "imageUrl":this.form.fileList2[0].url,
+                 "sortWeight":this.form.Forder,
+                 "linkUrl":this.form.link,
+                 "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+                 "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+                 'opStatus':this.form.radio,
+               },
+             "area":{
+                "code":"000000",
+                "check":false,
+                "provinces":this.gridData,
+                "currStatus":this.check
              },
-           "area":{
-              "code":"000000",
-              "check":false,
-              "provinces":this.gridData,
-              "currStatus":this.check
-           },
-       }
-       console.log("result%o ",result);
-       var _this = this;
-      this.$http.post("/api/promotion/updateAudit",result,(result) => {
-        _this.$store.dispatch('changeLoadingChange', true);
-                console.log(this);
-                this.$router.go(-1);
-                  // alert(result);
-      });
-      // this.$router.app.$store.state.loadingFlag = true;
-      // this.$store.dispatch('changeLoadingChange', true);
-      // // this.$router.app.$store.state.loadingChange = true;
-      // console.log(this);
-      // this.$router.go(-1);
+         }
+         console.log("result%o ",result);
+         var _this = this;
+        this.$http.post("/api/promotion/updateAudit",result,(result) => {
+          _this.$store.dispatch('changeLoadingChange', true);
+                  console.log(this);
+                  this.$router.go(-1);
+                    // alert(result);
+        },(error) => {
+          this.$message({
+              type: 'error',
+              message: error.data.meta.code+"--"+error.data.meta.msg
+          });
+        });
+     } else {
+
+     }
+     })
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
@@ -395,29 +415,29 @@ export default {
       // var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
       // // 调用 callback 返回建议列表的数据
       // cb(results);
-      var provinces = this.provinces;
-      var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
-      // 调用 callback 返回建议列表的数据
+      if(queryString === '') {
+        this.showProvinces = '';
+      }
+      var searchProvinces = this.searchProvinces;
+      var results = queryString ? searchProvinces.filter(this.createFilter(queryString)) : searchProvinces;
       cb(results);
     },
     createFilter(queryString) {
-      // return (province) => {
-      //   return (province.province.indexOf(queryString.toLowerCase()) === 0);
-      // };
       return (province) => {
         return (province.value.indexOf(queryString.toLowerCase()) === 0);
       };
     },
     handleQuerySelect(items) {
-      console.log(items);
-      this.gridData = this.gridDataCopy.filter(function(item) {
-        return item.value == items.value
-      })
-      console.log(this.gridData);
+         this.showProvinces = items.value
+      // console.log(items);
+      // this.gridData = this.gridDataCopy.filter(function(item) {
+      //   return item.value == items.value
+      // })
+      // console.log(this.gridData);
     },
     handleIconClick(ev) {
-      this.gridData = this.gridDataCopy;
-      this.state1 = '';
+      this.showProvinces = ''
+      this.searchContent = '';
     },
     // 覆盖地区选择
     dialogConfig() {
@@ -447,6 +467,8 @@ export default {
       //       return;
       //     }
       // }
+       this.form.coverArea = "hasClick";
+       this.handleIconClick();
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
@@ -467,6 +489,10 @@ export default {
       _this.$http.post(URL,{id:this.id},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
+          for( let i =0;i<_this.gridData.length;i++) {
+             _this.searchProvinces[i]={};
+             _this.searchProvinces[i].value = _this.gridData[i].provinceName;
+          }
             localEvent.set("gridData", rsp);
           _this.initCheckBox(rsp.check);
           // _this.gridDataCopy = rsp.provinces.slice(0);
@@ -608,7 +634,7 @@ export default {
       this.dialogVisible = true;
     },
     handleImageChange(file,fileList){
-         this.ruleForm.fileList2 = fileList.slice(-1);
+         this.form.fileList2 = fileList.slice(-1);
     },
 
   }
