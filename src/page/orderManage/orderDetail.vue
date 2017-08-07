@@ -99,7 +99,7 @@
          <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单切显示支付完成，不再提示用户支付，请与用户、快递双方核实情况后再操作。</p>
           <el-form>
             <el-form-item label="标记其他渠道支付原因">
-                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" :value="invalid1"></el-input>
+                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" v-model="invalid1"></el-input>
            </el-form-item>
          </el-form>
           <div slot="footer" class="dialog-footer">
@@ -143,7 +143,7 @@ import localEvent from 'src/vuex/function.js';
         InvaliOrderFlag:true,
         OtherPayFlag:true,
         ChangeExpressFlag:true,
-        cancelFlag:true,   // 默认没有取消
+        // cancelFlag:true,   // 默认没有取消
         // 作废订单相关
         invalid:'',
         invalid1:'',
@@ -274,26 +274,26 @@ import localEvent from 'src/vuex/function.js';
             _this.url = "/api/order/details"; // 默认展开
             _this.$http.post(this.url,this.requestData,(rsp)=>{
                 console.log(rsp);
-                if(rsp.orderStatus == "2"){
-                    this.cancleOrderFlag = true;
-                }else{
-                    this.cancleOrderFlag = false;                    
-                }
-                if(rsp.payStatus == '1'){
-                    this.InvaliOrderFlag = true;
-                }else{
-                    this.InvaliOrderFlag = false;                    
-                }
-                if(rsp.orderStatus == '1'){
-                    this.ChangeExpressFlag = true;
-                }else{
-                    this.ChangeExpressFlag = false;                    
-                }
-                if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
-                    this.OtherPayFlag = true;
-                }else{
-                    this.OtherPayFlag = false;                    
-                }
+                // if(rsp.orderStatus == "2"){
+                //     this.cancleOrderFlag = true;
+                // }else{
+                //     this.cancleOrderFlag = false;                    
+                // }
+                // if(rsp.payStatus == '1' && rsp.orderStatus != '0'){
+                //     this.InvaliOrderFlag = true;
+                // }else{
+                //     this.InvaliOrderFlag = false;                    
+                // }
+                // if(rsp.orderStatus == '1'){
+                //     this.ChangeExpressFlag = true;
+                // }else{
+                //     this.ChangeExpressFlag = false;                    
+                // }
+                // if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
+                //     this.OtherPayFlag = true;
+                // }else{
+                //     this.OtherPayFlag = false;                    
+                // }
                 
                 //基本信息
                 this.items[0].message = rsp.expName || '暂无';
@@ -403,9 +403,9 @@ import localEvent from 'src/vuex/function.js';
                                 console.log(rsp)
                                 this.$message({
                                     type: 'success',
-                                    message: '删除成功!'
+                                    message: '取消成功!'
                                 });
-                                this.cancelFlag = false;
+                                // this.cancelFlag = false;
                         },(error)=>{
                             this.$message({
                                 type: 'error',
@@ -421,50 +421,57 @@ import localEvent from 'src/vuex/function.js';
         },
         handleOtherPay(){
             this.dialogOtherpayVisible = true;
-
+            this.invalid1 = '';
         },
         handleDialogOtherpaySave(){
-            this.dialogOtherpayVisible = false;
-           this.$confirm('确定后该订单将被标记为其他渠道支付，请与客户提前沟通', '确定将该订单将被标记为其他渠道支付吗？', {
-                              confirmButtonText: '确定',
-                              cancelButtonText: '取消',
-                              type: 'warning'
-                      }).then(() => {
-                        this.$http.post("/api/order/otherPay",{"cause":this.invalid1.region,orderNo:this.orderNo},(rsp)=>{
-                                console.log(rsp)
-                                this.$message({
-                                    type: 'success',
-                                    message: '标记成功!'
-                                });
-                        },(error)=>{
-                            this.$message({
-                                type: 'error',
-                                message: error.data.meta.code+"--"+error.data.meta.msg
-                            });
-                        });
-                        }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消标记其他渠道'
-                        });
-                        });
+            this.$http.post("/api/order/otherPay",{"cause":this.invalid1,orderNo:this.orderNo},(rsp)=>{
+                console.log(rsp)
+                this.$message({
+                    type: 'success',
+                    message: '标记成功!'
+                });
+                this.dialogOtherpayVisible = false;                
+            },(error)=>{
+                if(error.data.meta.code == '0011'){
+                    this.$message({
+                        type: 'warning',
+                        message: '请记录具体原因，字数在150字以内。'
+                    });
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: error.data.meta.code+"--"+error.data.meta.msg
+                    });  
+                    this.dialogOtherpayVisible = false;                       
+                }    
+            });
+
         },
         handleInvalidorder(){
-                this.dialogOrderVisible = true;
+            this.dialogOrderVisible = true;
+            this.invalid = '';  
         },
         //  确定 作废
         handleDialogOrderSave () {
-            this.dialogOrderVisible = false;
             this.$http.post("/api/order/cancelConfirm",{"cause":this.invalid,orderNo:this.orderNo},(rsp)=>{
                 this.$message({
                     type: 'success',
                     message: '作废成功!'
                 });
-            },(error)=>{
+                this.dialogOrderVisible = false;                
+            },(error)=>{   
+                if(error.data.meta.code == '0011'){
+                    this.$message({
+                        type: 'warning',
+                        message: '请记录具体原因，字数在150字以内。'
+                    });
+                }else{
                     this.$message({
                         type: 'error',
                         message: error.data.meta.code+"--"+error.data.meta.msg
-                    });
+                    });  
+                    this.dialogOrderVisible = false;                       
+                }                                         
             })
         },
         handleChangeExpress(){
