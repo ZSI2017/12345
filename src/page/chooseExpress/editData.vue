@@ -196,7 +196,7 @@ export default {
        link: [{
          type:'url',
          required: true,
-         message: "请输入链接",
+         message: "请输入正确链接",
          trigger: 'blur'
        }],
        date1: [{
@@ -361,10 +361,15 @@ export default {
                   this.$router.go(-1);
                     // alert(result);
         },(error) => {
-          this.$message({
-              type: 'error',
-              message: error.data.meta.code+"--"+error.data.meta.msg
-          });
+          if(error.data.meta.code == "0017") {
+              this.$message.error('"名称重复！"')
+          } else {
+            this.$message({
+                type: 'error',
+                message: error.data.meta.code+"--"+error.data.meta.msg
+            });
+          }
+
         });
      } else {
 

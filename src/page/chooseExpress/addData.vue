@@ -202,7 +202,7 @@ export default {
         linkUrl: [{
           type:'url',
           required: true,
-          message: "请输入链接",
+          message: "请输入正确链接",
           trigger: 'blur'
         }],
         date1: [{
