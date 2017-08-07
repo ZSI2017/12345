@@ -531,7 +531,7 @@ export default {
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId,
+            "pageId": _this.pageId
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;

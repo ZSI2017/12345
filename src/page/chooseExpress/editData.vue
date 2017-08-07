@@ -46,8 +46,8 @@
     </el-form-item>
     <el-form-item label="当前状态"  prop="radio">
       <el-radio-group v-if="isFromAddData" v-model="form.radio">
-        <el-radio class="radio" :label="2">上架</el-radio>
-        <el-radio class="radio" :label="1">下架</el-radio>
+        <el-radio class="radio" :label="2">上线</el-radio>
+        <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
@@ -274,7 +274,7 @@ export default {
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
       this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
-      if (rsp.status == "1") {
+      if (rsp.opStatus == "1") {
         this.form.radio = 1;
         this.currentStateText = "已下线"
       } else {

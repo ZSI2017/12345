@@ -48,10 +48,10 @@
             <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
             <el-button class="complateInfo" @click="handleShowIfo" type="primary">{{showAllIfo}}</el-button>
             <el-button class="serverRecord" @click="handleShowServer" type="primary">查看信息服务</el-button>
-            <el-button v-if="cancelFlag" :plain="true" class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
-            <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
-            <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
-            <el-button v-if="cancelFlag" :plain="true" class="serverRecord" @click="handleChangeExpress" type="danger">超时转快递</el-button>
+            <el-button :plain="true" v-if="cancleOrderFlag" class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
+            <el-button :plain="true" v-if="InvaliOrderFlag" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
+            <el-button :plain="true" v-if="OtherPayFlag" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
+            <el-button :plain="true" v-if="ChangeExpressFlag" class="serverRecord" @click="handleChangeExpress" type="danger">超时转快递</el-button>
         </el-row>
         <!--  取消原因对话框       :label-width="formLabelWidth" -->
         <el-dialog title="取消原因" :visible.sync="dialogCancelVisible">
@@ -139,6 +139,10 @@ import localEvent from 'src/vuex/function.js';
               { required: true, message: '请选择活动区域', trigger: 'change' }
             ]
         },
+        cancleOrderFlag:true,
+        InvaliOrderFlag:true,
+        OtherPayFlag:true,
+        ChangeExpressFlag:true,
         cancelFlag:true,   // 默认没有取消
         // 作废订单相关
         invalid:'',
@@ -270,7 +274,27 @@ import localEvent from 'src/vuex/function.js';
             _this.url = "/api/order/details"; // 默认展开
             _this.$http.post(this.url,this.requestData,(rsp)=>{
                 console.log(rsp);
-
+                if(rsp.orderStatus == "2"){
+                    this.cancleOrderFlag = true;
+                }else{
+                    this.cancleOrderFlag = false;                    
+                }
+                if(rsp.payStatus == '1'){
+                    this.InvaliOrderFlag = true;
+                }else{
+                    this.InvaliOrderFlag = false;                    
+                }
+                if(rsp.orderStatus == '1'){
+                    this.ChangeExpressFlag = true;
+                }else{
+                    this.ChangeExpressFlag = false;                    
+                }
+                if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
+                    this.OtherPayFlag = true;
+                }else{
+                    this.OtherPayFlag = false;                    
+                }
+                
                 //基本信息
                 this.items[0].message = rsp.expName || '暂无';
                 this.items[1].message = rsp.actCarrierName || '暂无';
@@ -284,6 +308,17 @@ import localEvent from 'src/vuex/function.js';
                 this.items[9].message = rsp.expNameOld? '是':'否';//是否转运快递
                 this.items[10].message = rsp.gmtBill || '暂无';
                 this.items[11].message = rsp.orderStatus || '暂无';
+                if(rsp.orderStatus == '1'){
+                    this.items[11].message = '待接单';
+                }else if(rsp.orderStatus == '2'){
+                    this.items[11].message = '待取件';                    
+                }else if(rsp.orderStatus == '3'){
+                    this.items[11].message = '已取件';                    
+                }else if(rsp.orderStatus == '4'){
+                    this.items[11].message = '已取消';                    
+                }else{
+                    this.items[11].message = '已作废';                                        
+                }
                 //寄件人信息
                 this.senderItems[0].message = rsp.snderName || '暂无';
                 this.senderItems[1].message = rsp.snderMobile || '暂无';
@@ -304,6 +339,7 @@ import localEvent from 'src/vuex/function.js';
                 this.expressPays[1].message = rsp.estimatePrice || '暂无';
                 this.expressPays[2].message = rsp.orderAmount || '暂无';
                 this.expressPays[3].message = rsp.receiptAmount || '暂无';
+                
             },(error)=>{
                 console.log('failed');
             });
