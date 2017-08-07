@@ -254,7 +254,7 @@ export default {
     this.currentPage = this.PageStore.pageCount;
     this.activeName2 = this.PageStore.tabName;
     this.radio2= Number(this.PageStore.radio);
-    console.log(this.PageStore.radio)
+    console.log(this.PageStore.pageCount);
     console.log("$router: %o",this.$route);
     if(this.activeName2 == "配置") {
       this.url = "/api/promotion/getConfList"; // 默认展开 配置
@@ -531,7 +531,6 @@ export default {
           },
           "con": {
             "pageId": _this.pageId,
-            "status":this.radio2
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
