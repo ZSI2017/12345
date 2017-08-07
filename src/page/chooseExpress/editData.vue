@@ -30,7 +30,20 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="link">
-      <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+
+      <el-select v-if="isFromAddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
+         <el-option label="http://" value="http"></el-option>
+         <el-option label="https://" value="https"></el-option>
+      </el-select>
+      <el-input style="float:left;width:600px" v-if="isFromAddData"  v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <!-- <el-input  v-if="isFromAddData" placeholder="请输入内容" v-model="form.link"> -->
+         <!-- <template slot="prepend">Http://</template>  -->
+         <!-- <el-select v-model="form.link" slot="prepend" placeholder="请选择">
+             <el-option label="http" value="http"></el-option>
+             <el-option label="https" value="https"></el-option>
+           </el-select> -->
+       <!-- </el-input> -->
+      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
     </el-form-item>
     <el-form-item label="有效时段" prop="date1">
       <el-date-picker v-if="isFromAddData" v-model="form.date1" type="datetimerange" placeholder="选择时间范围">
@@ -39,7 +52,7 @@
     </el-form-item>
     <el-form-item label="覆盖地区" prop="coverArea">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
-      <!-- <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button> -->
+      <el-button v-if="!isFromAddData"  size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态"  prop="radio">
@@ -123,6 +136,7 @@ export default {
   },
   data() {
     return {
+
       url: '', // 待审详情的 url
       id:'',
       tabName:'', // 标签页 名称
@@ -157,6 +171,7 @@ export default {
       currentStateText: '',
 
       form: {
+        linkHeader:'http://',    // url的 默认头部
         // radio 代表上下架状态的选择
         radio: "",
         // date1 代表时间段选择的
@@ -268,7 +283,7 @@ export default {
       console.log(rsp.imageUrl)
       this.form.name = rsp.name;
       this.form.Forder = rsp.sortWeight;
-      this.form.link = rsp.linkUrl;
+      this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
       this.form.fileList2[0].url = rsp.imageUrl;
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
@@ -280,10 +295,14 @@ export default {
         this.form.radio = 2;
         this.currentStateText = "已上线"
       }
+
+     this.dialogConfig(true)
+
     },(error)=>{
       console.log(error)
       console.log('failed');
     });
+
 
   },
   created() {
@@ -294,6 +313,7 @@ export default {
     } else {
       this.isFromAddData = true;
     }
+
 
 
   },
@@ -340,7 +360,7 @@ export default {
                  "name":this.form.name,
                  "imageUrl":this.form.fileList2[0].url,
                  "sortWeight":this.form.Forder,
-                 "linkUrl":this.form.link,
+                 "linkUrl":this.form.linkHeader+this.form.link,
                  "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
                  "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
                  'opStatus':this.form.radio,
@@ -444,7 +464,7 @@ export default {
       this.searchContent = '';
     },
     // 覆盖地区选择
-    dialogConfig() {
+    dialogConfig(visible) {
       // if(this.gridData.length>0){
       //     if(this.DialogConfigSaveFlag){
       //         this.dialogFormVisible = true;
@@ -498,7 +518,11 @@ export default {
              _this.searchProvinces[i].value = _this.gridData[i].provinceName;
           }
             localEvent.set("gridData", rsp);
-          _this.initCheckBox(rsp.check);
+            if(visible === undefined) {
+                _this.initCheckBox(rsp.check);
+            }else {
+              this.initCheckBox(rsp.check,visible);
+            }
           // _this.gridDataCopy = rsp.provinces.slice(0);
           // console.log(_this.gridDataCopy);
           // _this.provinces = _this.gridData;
@@ -522,7 +546,7 @@ export default {
           // console.log(_this.gridData);
         })
     },
-    initCheckBox(isAllcheck){
+    initCheckBox(isAllcheck,visible){
       // console.log(_this.gridDataCopy);
 
       this.provinces = this.gridData;
@@ -551,7 +575,9 @@ export default {
       if(this.check){
         this.handleCheckAll({target:{checked:true}})
       }
-      this.dialogFormVisible = true;
+      if(visible === undefined) {
+        this.dialogFormVisible = true;
+      }
 
     },
     handleCheckAll(event) {
