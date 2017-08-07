@@ -285,6 +285,7 @@ export default {
   },
   watch: {
     '$route': function(to, from) {
+      // alert(this.auditStatusFlage)
       // 默认状态是 运营位管理的 寄快递首页
       this.url = "/api/promotion/getConfList";
       this.pageId = "SD1010"; // 寄快递首页
@@ -442,7 +443,6 @@ export default {
     },
     // 标签页导航
     handleTabClick(tab, event) {
-
       var _this = this;
       _this.listLoading = true;
       _this.tableFalg = false

@@ -36,7 +36,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
     </el-form-item>
     <el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-if="isFromAddData" v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
+      <el-date-picker v-if="isFromAddData" v-model="form.date1" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
       <div class="detail-content" v-if="!isFromAddData"><span>{{form.gmtBegin | formatDate}}</span> ---- <span>{{form.gmtEnd | formatDate}}</span></div>
     </el-form-item>
@@ -45,8 +45,8 @@
       <!-- <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button> -->
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
-    <el-form-item label="当前状态">
-      <el-radio-group v-if="isFromAddData" v-model="radio">
+    <el-form-item label="当前状态"  prop="radio">
+      <el-radio-group v-if="isFromAddData" v-model="form.radio">
         <el-radio class="radio" :label="2">上架</el-radio>
         <el-radio class="radio" :label="1">下架</el-radio>
       </el-radio-group>
@@ -143,8 +143,7 @@ export default {
       checkedCities: [],
       isIndeterminate: [],
       // cities: cityOptions,
-      // radio 代表上下架状态的选择
-      radio: "",
+
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
 
@@ -156,6 +155,8 @@ export default {
       currentStateText: '',
 
       form: {
+        // radio 代表上下架状态的选择
+        radio: "",
         // date1 代表时间段选择的
         date1: [],
         name: '',
@@ -268,12 +269,12 @@ export default {
       this.form.fileList2[0].url = rsp.imageUrl;
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
-      this.ruleForm.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
+      this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
       if (rsp.status == "1") {
-        this.radio = 1;
+        this.form.radio = 1;
         this.currentStateText = "已下线"
       } else {
-        this.radio = 2;
+        this.form.radio = 2;
         this.currentStateText = "已上线"
       }
     },(error)=>{
@@ -325,9 +326,9 @@ export default {
                "imageUrl":this.form.fileList2[0].url,
                "sortWeight":this.form.Forder,
                "linkUrl":this.form.link,
-               "gmtBegin": formatDate(this.ruleForm.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-               "gmtEnd":formatDate(this.ruleForm.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-               'opStatus':this.radio,
+               "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+               "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+               'opStatus':this.form.radio,
              },
            "area":{
               "code":"000000",
