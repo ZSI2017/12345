@@ -94,7 +94,7 @@ export default {
       uniqueOpened: true,
       fold: true,
       headerFixed: true,
-      userID:"2088702773405612@alipay",
+      // userID:"2088702773405612@alipay",
       title: "寄件平台运营管理系统",
       input: '',
       isActive:false
@@ -103,6 +103,9 @@ export default {
   computed:{
       loadingFlag() {
           return this.$store.state.loadingFlag;
+      },
+      userID() {
+          return this.$store.state.uid;
       }
   },
   mounted() {

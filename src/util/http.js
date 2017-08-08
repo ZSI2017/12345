@@ -1,4 +1,5 @@
 'use strict'
+import Cookie from "@/util/cookie.js"
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
@@ -17,6 +18,8 @@ if(process.env.NODE_ENV === "development"){
 // add request interceptor
 axios.interceptors.request.use(function(config) {
 
+
+    alert(encodeURI(window.location.href));
     // TODO  before request is sent
      console.log("%c[axios log]before request:%s\n %o","color:green;font-size:16px;",config.url,config);
     return config;
@@ -176,11 +179,13 @@ export default {
            }
        )
     },
-    get(url,successfn,errorfn){
-        axios({url:url,
+    get(url,data,successfn,errorfn){
+        axios({
+              url:url,
               method:'get',
-              // baseURL:URL,
+              baseURL:URL,
               timeout: 10000,
+              params: data,
               headers: {
                   'X-Requested-With': 'XMLHttpRequest'
                 },

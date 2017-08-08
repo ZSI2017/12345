@@ -32,8 +32,8 @@
     <el-form-item label="链接" prop="link">
 
       <el-select v-if="isFromAddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
-         <el-option label="http://" value="http"></el-option>
-         <el-option label="https://" value="https"></el-option>
+         <el-option label="http://" value="http://"></el-option>
+         <el-option label="https://" value="https://"></el-option>
       </el-select>
       <el-input style="float:left;width:600px" v-if="isFromAddData"  v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
       <!-- <el-input  v-if="isFromAddData" placeholder="请输入内容" v-model="form.link"> -->

@@ -1,13 +1,6 @@
 <template type="html">
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-alert
-       style="margin-left:100px;margin-bottom:30px;width:800px;"
-       title="检查表单数据"
-       type="error"
-       v-if="showAlert"
-       >
-  </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="name">
       <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
@@ -33,8 +26,8 @@
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
       <el-select  v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
-         <el-option label="http://" value="http"></el-option>
-         <el-option label="https://" value="https"></el-option>
+         <el-option label="http://" value="http://"></el-option>
+         <el-option label="https://" value="https://"></el-option>
       </el-select>
       <el-input style="float:left;width:600px" v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
       <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
@@ -342,7 +335,7 @@ export default {
 
         } else {
           console.log(_this);
-          _this.showAlert = true;
+
           return false;
         }
       })
