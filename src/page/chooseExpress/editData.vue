@@ -6,7 +6,6 @@
       <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-
     <el-form-item label="运营图" prop="fileList2">
       <el-upload v-if="isFromAddData"
         action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
@@ -25,35 +24,46 @@
         <img :src="form.fileList2[0].url">
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
-
     </el-form-item>
     <el-form-item label="排序值" prop="Forder">
-      <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromAddData" v-model.number="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="link">
-      <el-input v-if="isFromAddData" v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+
+      <el-select v-if="isFromAddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
+         <el-option label="http://" value="http"></el-option>
+         <el-option label="https://" value="https"></el-option>
+      </el-select>
+      <el-input style="float:left;width:600px" v-if="isFromAddData"  v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <!-- <el-input  v-if="isFromAddData" placeholder="请输入内容" v-model="form.link"> -->
+         <!-- <template slot="prepend">Http://</template>  -->
+         <!-- <el-select v-model="form.link" slot="prepend" placeholder="请选择">
+             <el-option label="http" value="http"></el-option>
+             <el-option label="https" value="https"></el-option>
+           </el-select> -->
+       <!-- </el-input> -->
       <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
     </el-form-item>
     <el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-if="isFromAddData" v-model="ruleForm.date1" type="datetimerange" placeholder="选择时间范围">
+      <el-date-picker v-if="isFromAddData" v-model="form.date1" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
       <div class="detail-content" v-if="!isFromAddData"><span>{{form.gmtBegin | formatDate}}</span> ---- <span>{{form.gmtEnd | formatDate}}</span></div>
     </el-form-item>
     <el-form-item label="覆盖地区" prop="coverArea">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
-      <!-- <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button> -->
+      <el-button v-if="!isFromAddData"  size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
-    <el-form-item label="当前状态">
-      <el-radio-group v-if="isFromAddData" v-model="radio">
-        <el-radio class="radio" :label="2">上架</el-radio>
-        <el-radio class="radio" :label="1">下架</el-radio>
+    <el-form-item label="当前状态"  prop="radio">
+      <el-radio-group v-if="isFromAddData" v-model="form.radio">
+        <el-radio class="radio" :label="2">上线</el-radio>
+        <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
+    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit('form')">提交</el-button>
   </el-form>
 
   <!--  查看大图对话框 -->
@@ -68,12 +78,14 @@
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
       </el-col>
       <el-col :span="10" style="height:10px;"></el-col>
-      <el-col :span="10" style="font-weight:bold;font-size:16px;margin-top:2px;padding-left:20px;line-height:40px;height:40px;">
-        快速搜索:
-        <el-autocomplete class="inline-input" v-model="state1" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+      <el-col :span="5" style="font-weight:bold;font-size:16px;margin-top:2px;line-height:40px;height:40px;">
+           <span style="float:right;padding-right:10px">按照省搜索:</span>
+      </el-col>
+      <el-col :span="5" style="font-weight:bold;font-size:16px;margin-top:2px;padding-left:20px;line-height:40px;height:40px;">
+        <el-autocomplete class="inline-input" v-model="searchContent" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入省名" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
       </el-col>
     </el-row>
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400" style="padding-top:0;">
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400" style="padding-top:0;" :row-style="handleRowStyle">
       <el-table-column property="provinceName" label="省" width="200">
         <template scope="scope">
 
@@ -124,6 +136,7 @@ export default {
   },
   data() {
     return {
+
       url: '', // 待审详情的 url
       id:'',
       tabName:'', // 标签页 名称
@@ -135,7 +148,10 @@ export default {
       DialogConfigSaveFlag:false,  // 配置覆盖地区
 
       // 添加搜索框
-      state1: "",
+      // 搜索框中省名初始化
+      searchProvinces:[],
+      showProvinces:'',
+      searchContent: "",
       provinces: [],
       // 覆盖地区选择
       check: false,
@@ -143,8 +159,7 @@ export default {
       checkedCities: [],
       isIndeterminate: [],
       // cities: cityOptions,
-      // radio 代表上下架状态的选择
-      radio: "",
+
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
 
@@ -156,6 +171,9 @@ export default {
       currentStateText: '',
 
       form: {
+        linkHeader:'http://',    // url的 默认头部
+        // radio 代表上下架状态的选择
+        radio: "",
         // date1 代表时间段选择的
         date1: [],
         name: '',
@@ -185,13 +203,14 @@ export default {
          }
      ],
        Forder: [
-         { required: true, message: '排序值不能为空'},
-         { type: 'number', message: '排序值必须为数字值'}
+         { required: false, message: '排序值不能为空'},
+        //  { type: 'number', message: '排序值必须为数字值'},
+         { type: 'number', min:1, max:999,message:'排序值范围1-999'}
        ],
        link: [{
-         type:'url',
+        //  type:'url',
          required: true,
-         message: "请输入链接",
+         message: "请输入正确链接",
          trigger: 'blur'
        }],
        date1: [{
@@ -246,12 +265,12 @@ export default {
     var _this =this;
     var httpId = '';
     if(localData.tabName == '配置'){  //配置 修改
-        _this.url = "/api/promotion/getAuditById";
+        _this.url = "/api/promotion/audit/get";
         httpId = this.id;
         console.log("配置 修改")
     }else if(!localData.tabName){  // 待审核 已生效详情
-        _this.url = "/api/promotion/getById";
-        httpId = this.form.promotionId;
+        _this.url = "/api/promotion/get";
+        httpId = this.form.promotionId;``
         console.log("待审核 已生效详情")
     }else{
       alert('错误')
@@ -264,22 +283,26 @@ export default {
       console.log(rsp.imageUrl)
       this.form.name = rsp.name;
       this.form.Forder = rsp.sortWeight;
-      this.form.link = rsp.linkUrl;
+      this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
       this.form.fileList2[0].url = rsp.imageUrl;
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
-      this.ruleForm.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
-      if (rsp.status == "1") {
-        this.radio = 1;
+      this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
+      if (rsp.opStatus == "1") {
+        this.form.radio = 1;
         this.currentStateText = "已下线"
       } else {
-        this.radio = 2;
+        this.form.radio = 2;
         this.currentStateText = "已上线"
       }
+
+     this.dialogConfig(true)
+
     },(error)=>{
       console.log(error)
       console.log('failed');
     });
+
 
   },
   created() {
@@ -290,6 +313,7 @@ export default {
     } else {
       this.isFromAddData = true;
     }
+
 
 
   },
@@ -312,43 +336,64 @@ export default {
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
+    // 为表格中的行设置样式，
+    handleRowStyle(row,index) {
+
+      if(this.showProvinces !== '') {
+         if(this.showProvinces === row.provinceName) {
+            // return {'display':}
+         }else {
+             return {'display':'none'}
+         }
+      }
+    },
 
     //  点击提交
-    handleSubmit() {
-      console.log(this.localData.promotionId)
-       var result = {
-           "data":{
-               "id":this.id,
-               "pageId":this.localData.pageId,
-               "promotionId":this.localData.promotionId,
-               "name":this.form.name,
-               "imageUrl":this.form.fileList2[0].url,
-               "sortWeight":this.form.Forder,
-               "linkUrl":this.form.link,
-               "gmtBegin": formatDate(this.ruleForm.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-               "gmtEnd":formatDate(this.ruleForm.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-               'opStatus':this.radio,
+    handleSubmit(formName) {
+   this.$refs[formName].validate((valid) => {
+     if(valid) {
+         var result = {
+             "data":{
+                 "id":this.id,
+                 "pageId":this.localData.pageId,
+                 "promotionId":this.localData.promotionId,
+                 "name":this.form.name,
+                 "imageUrl":this.form.fileList2[0].url,
+                 "sortWeight":this.form.Forder,
+                 "linkUrl":this.form.linkHeader+this.form.link,
+                 "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+                 "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+                 'opStatus':this.form.radio,
+               },
+             "area":{
+                "code":"000000",
+                "check":false,
+                "provinces":this.gridData,
+                "currStatus":this.check
              },
-           "area":{
-              "code":"000000",
-              "check":false,
-              "provinces":this.gridData,
-              "currStatus":this.check
-           },
-       }
-       console.log("result%o ",result);
-       var _this = this;
-      this.$http.post("/api/promotion/updateAudit",result,(result) => {
-        _this.$store.dispatch('changeLoadingChange', true);
-                console.log(this);
-                this.$router.go(-1);
-                  // alert(result);
-      });
-      // this.$router.app.$store.state.loadingFlag = true;
-      // this.$store.dispatch('changeLoadingChange', true);
-      // // this.$router.app.$store.state.loadingChange = true;
-      // console.log(this);
-      // this.$router.go(-1);
+         }
+         console.log("result%o ",result);
+         var _this = this;
+        this.$http.post("/api/promotion/audit/update",result,(result) => {
+          _this.$store.dispatch('changeLoadingChange', true);
+                  console.log(this);
+                  this.$router.go(-1);
+                    // alert(result);
+        },(error) => {
+          if(error.data.meta.code == "0017") {
+              this.$message.error('"名称重复！"')
+          } else {
+            this.$message({
+                type: 'error',
+                message: error.data.meta.code+"--"+error.data.meta.msg
+            });
+          }
+
+        });
+     } else {
+
+     }
+     })
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
@@ -394,32 +439,32 @@ export default {
       // var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
       // // 调用 callback 返回建议列表的数据
       // cb(results);
-      var provinces = this.provinces;
-      var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
-      // 调用 callback 返回建议列表的数据
+      if(queryString === '') {
+        this.showProvinces = '';
+      }
+      var searchProvinces = this.searchProvinces;
+      var results = queryString ? searchProvinces.filter(this.createFilter(queryString)) : searchProvinces;
       cb(results);
     },
     createFilter(queryString) {
-      // return (province) => {
-      //   return (province.province.indexOf(queryString.toLowerCase()) === 0);
-      // };
       return (province) => {
         return (province.value.indexOf(queryString.toLowerCase()) === 0);
       };
     },
     handleQuerySelect(items) {
-      console.log(items);
-      this.gridData = this.gridDataCopy.filter(function(item) {
-        return item.value == items.value
-      })
-      console.log(this.gridData);
+         this.showProvinces = items.value
+      // console.log(items);
+      // this.gridData = this.gridDataCopy.filter(function(item) {
+      //   return item.value == items.value
+      // })
+      // console.log(this.gridData);
     },
     handleIconClick(ev) {
-      this.gridData = this.gridDataCopy;
-      this.state1 = '';
+      this.showProvinces = ''
+      this.searchContent = '';
     },
     // 覆盖地区选择
-    dialogConfig() {
+    dialogConfig(visible) {
       // if(this.gridData.length>0){
       //     if(this.DialogConfigSaveFlag){
       //         this.dialogFormVisible = true;
@@ -446,6 +491,8 @@ export default {
       //       return;
       //     }
       // }
+       this.form.coverArea = "hasClick";
+       this.handleIconClick();
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
@@ -459,15 +506,23 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/promotion/areaAudit";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/promotion/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
       if(this.tabName === "已上线") {
-          URL = "/api/promotion/area";
+          URL = "/api/promotion/areaConf/all";
       }
       _this.$http.post(URL,{id:this.id},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
+          for( let i =0;i<_this.gridData.length;i++) {
+             _this.searchProvinces[i]={};
+             _this.searchProvinces[i].value = _this.gridData[i].provinceName;
+          }
             localEvent.set("gridData", rsp);
-          _this.initCheckBox(rsp.check);
+            if(visible === undefined) {
+                _this.initCheckBox(rsp.check);
+            }else {
+              this.initCheckBox(rsp.check,visible);
+            }
           // _this.gridDataCopy = rsp.provinces.slice(0);
           // console.log(_this.gridDataCopy);
           // _this.provinces = _this.gridData;
@@ -491,7 +546,7 @@ export default {
           // console.log(_this.gridData);
         })
     },
-    initCheckBox(isAllcheck){
+    initCheckBox(isAllcheck,visible){
       // console.log(_this.gridDataCopy);
 
       this.provinces = this.gridData;
@@ -520,7 +575,9 @@ export default {
       if(this.check){
         this.handleCheckAll({target:{checked:true}})
       }
-      this.dialogFormVisible = true;
+      if(visible === undefined) {
+        this.dialogFormVisible = true;
+      }
 
     },
     handleCheckAll(event) {
@@ -607,7 +664,7 @@ export default {
       this.dialogVisible = true;
     },
     handleImageChange(file,fileList){
-         this.ruleForm.fileList2 = fileList.slice(-1);
+         this.form.fileList2 = fileList.slice(-1);
     },
 
   }

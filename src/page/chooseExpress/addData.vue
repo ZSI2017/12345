@@ -13,10 +13,10 @@
       <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
     <el-form-item label="运营图" prop="imageList">
-      <!--   action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload" -->
+      <!--   -->
       <el-upload
         class="upload-demo"
-        action = "https://jsonplaceholder.typicode.com/posts/"
+        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
         :on-change="handleImageChange"
         :file-list="ruleForm.imageList"
         :on-preview="handlePreview"
@@ -32,7 +32,12 @@
       <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
-      <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+      <el-select  v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
+         <el-option label="http://" value="http"></el-option>
+         <el-option label="https://" value="https"></el-option>
+      </el-select>
+      <el-input style="float:left;width:600px" v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+      <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
     </el-form-item>
     <el-form-item label="有效时段"  prop="date1">
       <el-date-picker
@@ -148,7 +153,7 @@ export default {
       showProvinces:'',
       // radio 代表上下架状态的选择
       radio: "1",
-      url:'/api/promotion/saveAudit',
+      url:'/api/promotion/audit/add',
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
       // 查看配置地区中的表格数据 和 是否显示的标志
@@ -158,6 +163,7 @@ export default {
       gridDataCopy: [],
       // 对输入表单进行验证
       ruleForm: {
+        linkHeader:'http://',    // url的 默认头部
         name: '',
         sortWeight: '',
         linkUrl: '',
@@ -196,13 +202,14 @@ export default {
           }
       ],
         sortWeight: [
-          { required: true, message: '排序值不能为空'},
-          { type: 'number', message: '排序值必须为数字值'}
+          { required: false, message: '排序值不能为空'},
+          // { type: 'number', message: '排序值必须为数字值'}
+           { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         linkUrl: [{
-          type:'url',
+          // type:'url',
           required: true,
-          message: "请输入链接",
+          message: "请输入正确链接",
           trigger: 'blur'
         }],
         date1: [{
@@ -308,7 +315,7 @@ export default {
                   "name": _this.ruleForm.name,
                   "imageUrl": _this.ruleForm.fileList,
                   "sortWeight": _this.ruleForm.sortWeight,
-                  "linkUrl": _this.ruleForm.linkUrl,
+                  "linkUrl": _this.ruleForm.linkHeader+_this.ruleForm.linkUrl,
                   "gmtBegin": _this.ruleForm.gmtBegin,
                   "gmtEnd": _this.ruleForm.gmtEnd,
                   "opStatus": _this.ruleForm.status
@@ -320,7 +327,6 @@ export default {
                 }
               };
             _this.$http.post(_this.url,httpData,(result) => {
-               alert("result")
               _this.$store.dispatch('changeLoadingChange',true);
               _this.$router.go(-1);
             // _this.tableData = result.page_list;
@@ -440,134 +446,9 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/promotion/areaAudit";   // 默认是 配置 中的覆盖地区
-      // _this.$http.post(URL,{id:"0"},
-      //   (rsp) => {
-      var rsp = {
-        "code": "000000",
-        "check": false,
-        "provinces": [
-            {
-                "provinceNo": "340000",
-                "provinceName": "安徽省",
-                "check": false,
-                "citys": [
-                    {
-                        "cityNo": "340800",
-                        "cityName": "安庆市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340300",
-                        "cityName": "蚌埠市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341700",
-                        "cityName": "池州市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341100",
-                        "cityName": "滁州市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341200",
-                        "cityName": "阜阳市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340100",
-                        "cityName": "合肥市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340600",
-                        "cityName": "淮北市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340400",
-                        "cityName": "淮南市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341000",
-                        "cityName": "黄山市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341500",
-                        "cityName": "六安市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340500",
-                        "cityName": "马鞍山市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341300",
-                        "cityName": "宿州市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340700",
-                        "cityName": "铜陵市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "340200",
-                        "cityName": "芜湖市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341800",
-                        "cityName": "宣城市",
-                        "check": false,
-                        "currStatus": "0"
-                    },
-                    {
-                        "cityNo": "341600",
-                        "cityName": "亳州市",
-                        "check": false,
-                        "currStatus": "0"
-                    }
-                ],
-                "currStatus": "0"
-            },
-            {
-                "provinceNo": "110000",
-                "provinceName": "北京",
-                "check": false,
-                "citys": [
-                    {
-                        "cityNo": "110100",
-                        "cityName": "北京市",
-                        "check": false,
-                        "currStatus": "0"
-                    }
-                ],
-                "currStatus": "0"
-            }
-        ],
-        "currStatus": "0"
-    };
+      var URL = "/api/promotion/areaConf/all";   // 默认是 配置 中的覆盖地区
+      _this.$http.post(URL,{id:"0"},
+        (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
              _this.searchProvinces[i]={};
@@ -575,15 +456,13 @@ export default {
           }
           console.log(_this.searchProvinces);
           localEvent.set("gridData", rsp);
-
-
           _this.initCheckBox(rsp.check);
           // _this.gridDataCopy123 = _this.gridData.slice(0);
 
           // console.log(_this.gridData);
-        // }, (error) => {
-        //   console.log(error);
-        // })
+        }, (error) => {
+          console.log(error);
+        })
     },
     initCheckBox(isAllcheck){
       // console.log(_this.gridDataCopy);

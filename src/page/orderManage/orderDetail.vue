@@ -48,10 +48,10 @@
             <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
             <el-button class="complateInfo" @click="handleShowIfo" type="primary">{{showAllIfo}}</el-button>
             <el-button class="serverRecord" @click="handleShowServer" type="primary">查看信息服务</el-button>
-            <el-button v-if="cancelFlag" class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
-            <el-button v-if="cancelFlag" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
-            <el-button v-if="cancelFlag" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
-            
+            <el-button :plain="true" v-if="cancleOrderFlag" class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
+            <el-button :plain="true" v-if="InvaliOrderFlag" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
+            <el-button :plain="true" v-if="OtherPayFlag" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
+            <el-button :plain="true" v-if="ChangeExpressFlag" class="serverRecord" @click="handleChangeExpress" type="danger">超时转快递</el-button>
         </el-row>
         <!--  取消原因对话框       :label-width="formLabelWidth" -->
         <el-dialog title="取消原因" :visible.sync="dialogCancelVisible">
@@ -81,8 +81,8 @@
                 <el-button @click="dialogServerVisible = false">关 闭</el-button>
             </div>
         </el-dialog>
-      <!--  订单作废对话框       :label-width="formLabelWidth" -->
-      <el-dialog title="作废订单" :visible.sync="dialogOrderVisible">
+         <!--  订单作废对话框       :label-width="formLabelWidth" -->
+        <el-dialog title="作废订单" :visible.sync="dialogOrderVisible">
          <p style="color:red"> 该订单已经生产账单，作废后将用户取消订单不再提示用户支付。请与用户、快递方法核实情况后再操作</p>
           <el-form :model="cancelCause" :rules="cancelRules">
             <el-form-item label="作废原因">
@@ -93,7 +93,20 @@
               <el-button @click="dialogOrderVisible = false">取 消</el-button>
               <el-button type="primary" @click="handleDialogOrderSave">确 定</el-button>
             </div>
-    </el-dialog>
+        </el-dialog>
+         <!--  标记其他渠道支付对话框       :label-width="formLabelWidth" -->
+        <el-dialog title="确认标记其他渠道支付？" :visible.sync="dialogOtherpayVisible">
+         <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单切显示支付完成，不再提示用户支付，请与用户、快递双方核实情况后再操作。</p>
+          <el-form>
+            <el-form-item label="标记其他渠道支付原因">
+                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" :value="invalid1"></el-input>
+           </el-form-item>
+         </el-form>
+          <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogOtherpayVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handleDialogOtherpaySave">确 定</el-button>
+            </div>
+        </el-dialog>
 
 
 
@@ -116,6 +129,7 @@ import localEvent from 'src/vuex/function.js';
         // 取消订单相关
         dialogCancelVisible:false,
         dialogOrderVisible:false,
+        dialogOtherpayVisible:false,
         cancelCauseArr:[],
         cancelCause:{
           region:''
@@ -125,9 +139,14 @@ import localEvent from 'src/vuex/function.js';
               { required: true, message: '请选择活动区域', trigger: 'change' }
             ]
         },
+        cancleOrderFlag:true,
+        InvaliOrderFlag:true,
+        OtherPayFlag:true,
+        ChangeExpressFlag:true,
         cancelFlag:true,   // 默认没有取消
         // 作废订单相关
         invalid:'',
+        invalid1:'',
         showAllIfo:'查看完整信息',
         items:[{
             name: "快递公司",
@@ -255,7 +274,27 @@ import localEvent from 'src/vuex/function.js';
             _this.url = "/api/order/details"; // 默认展开
             _this.$http.post(this.url,this.requestData,(rsp)=>{
                 console.log(rsp);
-
+                if(rsp.orderStatus == "2"){
+                    this.cancleOrderFlag = true;
+                }else{
+                    this.cancleOrderFlag = false;                    
+                }
+                if(rsp.payStatus == '1'){
+                    this.InvaliOrderFlag = true;
+                }else{
+                    this.InvaliOrderFlag = false;                    
+                }
+                if(rsp.orderStatus == '1'){
+                    this.ChangeExpressFlag = true;
+                }else{
+                    this.ChangeExpressFlag = false;                    
+                }
+                if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
+                    this.OtherPayFlag = true;
+                }else{
+                    this.OtherPayFlag = false;                    
+                }
+                
                 //基本信息
                 this.items[0].message = rsp.expName || '暂无';
                 this.items[1].message = rsp.actCarrierName || '暂无';
@@ -269,6 +308,17 @@ import localEvent from 'src/vuex/function.js';
                 this.items[9].message = rsp.expNameOld? '是':'否';//是否转运快递
                 this.items[10].message = rsp.gmtBill || '暂无';
                 this.items[11].message = rsp.orderStatus || '暂无';
+                if(rsp.orderStatus == '1'){
+                    this.items[11].message = '待接单';
+                }else if(rsp.orderStatus == '2'){
+                    this.items[11].message = '待取件';                    
+                }else if(rsp.orderStatus == '3'){
+                    this.items[11].message = '已取件';                    
+                }else if(rsp.orderStatus == '4'){
+                    this.items[11].message = '已取消';                    
+                }else{
+                    this.items[11].message = '已作废';                                        
+                }
                 //寄件人信息
                 this.senderItems[0].message = rsp.snderName || '暂无';
                 this.senderItems[1].message = rsp.snderMobile || '暂无';
@@ -289,6 +339,7 @@ import localEvent from 'src/vuex/function.js';
                 this.expressPays[1].message = rsp.estimatePrice || '暂无';
                 this.expressPays[2].message = rsp.orderAmount || '暂无';
                 this.expressPays[3].message = rsp.receiptAmount || '暂无';
+                
             },(error)=>{
                 console.log('failed');
             });
@@ -369,19 +420,34 @@ import localEvent from 'src/vuex/function.js';
                         });
         },
         handleOtherPay(){
-            this.$http.post("/api/order/api/order/otherPay",
-                {orderNo:this.orderNo},
-                (rsp)=>{
-                    console.log(rsp)
-                    this.serverLists = rsp;
+            this.dialogOtherpayVisible = true;
 
-                },(error)=>{
-                    this.$message({
-                        type: 'error',
-                        message: error.data.meta.code+"--"+error.data.meta.msg
-                    });
-                });
-
+        },
+        handleDialogOtherpaySave(){
+            this.dialogOtherpayVisible = false;
+           this.$confirm('确定后该订单将被标记为其他渠道支付，请与客户提前沟通', '确定将该订单将被标记为其他渠道支付吗？', {
+                              confirmButtonText: '确定',
+                              cancelButtonText: '取消',
+                              type: 'warning'
+                      }).then(() => {
+                        this.$http.post("/api/order/otherPay",{"cause":this.invalid1.region,orderNo:this.orderNo},(rsp)=>{
+                                console.log(rsp)
+                                this.$message({
+                                    type: 'success',
+                                    message: '标记成功!'
+                                });
+                        },(error)=>{
+                            this.$message({
+                                type: 'error',
+                                message: error.data.meta.code+"--"+error.data.meta.msg
+                            });
+                        });
+                        }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消标记其他渠道'
+                        });
+                        });
         },
         handleInvalidorder(){
                 this.dialogOrderVisible = true;
@@ -400,6 +466,33 @@ import localEvent from 'src/vuex/function.js';
                         message: error.data.meta.code+"--"+error.data.meta.msg
                     });
             })
+        },
+        handleChangeExpress(){
+            this.dialogOtherpayVisible = false;
+            this.$confirm('确认后该订单将由EMS上门取件，请与客户提前沟通。', '确定将该订单转为其他快递公司吗？', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                this.$http.post("/api/order/changeExpress",{orderNo:this.orderNo},(rsp)=>{
+                        console.log(rsp)
+                        this.$message({
+                            type: 'success',
+                            message: '转快递成功!'
+                        });
+                },(error)=>{
+                    this.$message({
+                        type: 'error',
+                        message: error.data.meta.code+"--"+error.data.meta.msg
+                    });
+                });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
         }
 
    }
