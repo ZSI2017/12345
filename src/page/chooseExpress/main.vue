@@ -320,7 +320,7 @@ export default {
     //点击图片显示大图
     showImg(row){
       this.dialogVisible = true;
-      this.bigImageUrl = row;
+      this.bigImageUrl = row || '11';
     },
     // 监听 子组件覆盖对话框 的回调函数
     changeVisible(flag) {
