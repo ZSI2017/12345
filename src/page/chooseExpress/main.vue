@@ -1,9 +1,9 @@
 <template>
 <div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
-    <el-tab-pane label="配置" name="配置">配置</el-tab-pane>
+    <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
-    <el-tab-pane label="待审核" name="待审核">待审核</el-tab-pane>
+    <el-tab-pane  v-if ="(Authority == '审核'||Authority == '开发者')" label="待审核" name="待审核">待审核</el-tab-pane>
   </el-tabs>
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
@@ -212,6 +212,7 @@ export default {
       gridData: [],
       radio2: 1,
       activeName2: '配置',
+      initActiveName:'',
       showHeader: false,
       dialogTableVisible: false,
       //审核状态分类显示
@@ -234,12 +235,13 @@ export default {
       bigImageUrl:'',
     }
   },
-  computed() {
-    return {
+  computed: {
+      Authority() {
+        return this.$store.getters.getAuthority;
+      }
       // table2:function(){
       //     return this.tableData[0]
       // }
-    }
   },
   activated(){
 
@@ -251,6 +253,7 @@ export default {
 
     //  alert(this.$store.state.loadingFlag)
     // 在页面初始化时，获取pageName,标签页，单选框 的记录值
+    this.initActiveName = this.Authority == "审核"?"已上线":'配置'
     this.activeName2 = this.PageStore.tabName;
     this.currentPage = this.PageStore.pageCount;
     this.radio2= Number(this.PageStore.radio);
@@ -278,42 +281,50 @@ export default {
   },
   watch: {
     '$route': function(to, from) {
-      // alert(this.auditStatusFlage)
-      // 默认状态是 运营位管理的 寄快递首页
-      this.url = "/api/promotion/audit/list";
-      // this.pageId = "SD1010"; // 寄快递首页
-      this.activeName2 = "配置";
-      this.currentPage = 1;
-      this.radio2 = 1;
-      this.auditStatusFlage = true;
-      this.showConfig = true;
-      this.showflag = true;
-      this.PageStore.commit("setPage",1);
-      this.PageStore.commit("setRadio",1);
-      this.PageStore.commit("setTabName","配置");
+
       ((this.$route.path == "/sendExpress" &&
           (this.pageId = "SD1010")) ||
         (this.$route.path == "/chooseExpress" &&
           (this.pageId = "BM1010")) ||
         (this.$route.path == "/expressOrder" &&
           (this.pageId = "SS1010")))
+      // this.pageId = "SD1010"; // 寄快递首页
+      this.activeName2 = this.initActiveName;
+      this.handleTabClick({label:this.activeName2},null);
+      // alert(this.auditStatusFlage)
+      // 默认状态是 运营位管理的 寄快递首页
 
-      var _this = this;
-      _this.$http.post(this.url, {
-        "pages": {
-          "page_size": this.pageSize,
-          "page_num": _this.currentPage - 1
-        },
-        "con": {
-          "pageId": this.pageId,
-          "status":this.radio2
-        }
-      }, (rsp) => {
-        _this.tableData = rsp.page_list
-        _this.totalCount =  parseInt(rsp.pages.cnt);
-        //  console.log("success");
-        //  console.log(data);
-      })
+      // if(this.activeName2 == "配置") {
+      //   this.url = "/api/promotion/audit/list"; // 默认展开 配置
+      // } else {
+      //   this.url = "/api/promotion/onlineList"
+      // }
+      // this.currentPage = 1;
+      // this.radio2 = 1;
+      // this.auditStatusFlage = true;
+      // this.showConfig = true;
+      // this.showflag = true;
+      // this.PageStore.commit("setPage",1);
+      // this.PageStore.commit("setRadio",1);
+      // this.PageStore.commit("setTabName",this.initActiveName);
+
+      //
+      // var _this = this;
+      // _this.$http.post(this.url, {
+      //   "pages": {
+      //     "page_size": this.pageSize,
+      //     "page_num": _this.currentPage - 1
+      //   },
+      //   "con": {
+      //     "pageId": this.pageId,
+      //     "status":this.radio2
+      //   }
+      // }, (rsp) => {
+      //   _this.tableData = rsp.page_list
+      //   _this.totalCount =  parseInt(rsp.pages.cnt);
+      //   //  console.log("success");
+      //   //  console.log(data);
+      // })
     }
   },
   methods: {
@@ -400,10 +411,8 @@ export default {
       }
       this.promotionID = row.promotionId || row.id;
       this.promotionURL = '/api/promotion/status/update';
-
       this.promotionType = 'success';
       this.url = "/api/promotion/audit/list"; // 刷新列表 url
-
     },
     Operationchange() {
       this.loadingTakeOffFlag = true;
@@ -415,11 +424,10 @@ export default {
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
       this.promotionID = row.id;
-      this.promotionURL = '/api/promotion/audit/reject';
+      this.promotionURL = '/api/promotion/audit/approve';
       this.promotionMessage = '已通过申请';
       this.promotionType = 'success';
       this.url = "/api/promotion/audit/list"; //  刷新列表 url
-
     },
     OperationApprovedFail(row) {
       this.loadingTakeOffFlag = true;
@@ -430,7 +438,6 @@ export default {
       this.promotionMessage = '申请已驳回！';
       this.promotionType = 'success';
       this.url = "/api/promotion/audit/list"; // 默认展开 配置
-
     },
     OperationEffectDetail() {
       this.loadingTakeOffFlag = true;

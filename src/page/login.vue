@@ -2,6 +2,7 @@
 <section class="login">
   <h1>支付宝我的快递-- 寄件管理后台</h1>
   <el-button type="primary" size="large" @click="loginIn">登 录</el-button>
+  <el-button type="primary" size="large" @click="loginInText">登 录 测 试</el-button>
 </section>
 </template>
 <script type="text/javascript">
@@ -32,10 +33,27 @@ export default {
       }, (result) => {
           // _this.totalCount = result.page_list.length; //获取数据长度
       });
-      Cookie.set("express","mng",6000000);
+      Cookie.set("express1","mng",6000000);
       this.$router.push({
         path: "/"
       })
+    },
+    loginInText() {
+          Cookie.set("express1","mng",6000000);
+      // const URL = "/loginProxy" http://sendexmng-sit.alipay-eco.com/smc
+      window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURI(window.location.href);
+      // this.$http.get(URL,{
+      //   "realUrl":"http://sendexmng-sit.alipay-eco.com/smc"
+      // }, (result) => {
+      //     alert(result)
+      //     // _this.totalCount = result.page_list.length; //获取数据长度
+      // },(error) => {
+      //      console.log(error)
+      // });
+      // Cookie.set("express","mng",6000000);
+      // this.$router.push({
+      //   path: "/"
+      // })
     }
   }
 }

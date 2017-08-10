@@ -1,13 +1,6 @@
 <template type="html">
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-alert
-       style="margin-left:100px;margin-bottom:30px;width:800px;"
-       title="检查表单数据"
-       type="error"
-       v-if="showAlert"
-       >
-  </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="name">
       <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
@@ -32,7 +25,12 @@
       <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
-      <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+      <el-select  v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
+         <el-option label="http://" value="http://"></el-option>
+         <el-option label="https://" value="https://"></el-option>
+      </el-select>
+      <el-input style="float:left;width:600px" v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+      <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
     </el-form-item>
     <el-form-item label="有效时段"  prop="date1">
       <el-date-picker
@@ -158,6 +156,7 @@ export default {
       gridDataCopy: [],
       // 对输入表单进行验证
       ruleForm: {
+        linkHeader:'http://',    // url的 默认头部
         name: '',
         sortWeight: '',
         linkUrl: '',
@@ -196,11 +195,12 @@ export default {
           }
       ],
         sortWeight: [
-          { required: true, message: '排序值不能为空'},
-          { type: 'number', message: '排序值必须为数字值'}
+          { required: false, message: '排序值不能为空'},
+          // { type: 'number', message: '排序值必须为数字值'}
+           { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         linkUrl: [{
-          type:'url',
+          // type:'url',
           required: true,
           message: "请输入正确链接",
           trigger: 'blur'
@@ -308,7 +308,7 @@ export default {
                   "name": _this.ruleForm.name,
                   "imageUrl": _this.ruleForm.fileList,
                   "sortWeight": _this.ruleForm.sortWeight,
-                  "linkUrl": _this.ruleForm.linkUrl,
+                  "linkUrl": _this.ruleForm.linkHeader+_this.ruleForm.linkUrl,
                   "gmtBegin": _this.ruleForm.gmtBegin,
                   "gmtEnd": _this.ruleForm.gmtEnd,
                   "opStatus": _this.ruleForm.status
@@ -320,7 +320,6 @@ export default {
                 }
               };
             _this.$http.post(_this.url,httpData,(result) => {
-               alert("result")
               _this.$store.dispatch('changeLoadingChange',true);
               _this.$router.go(-1);
             // _this.tableData = result.page_list;
@@ -336,7 +335,7 @@ export default {
 
         } else {
           console.log(_this);
-          _this.showAlert = true;
+
           return false;
         }
       })

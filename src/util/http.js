@@ -1,4 +1,5 @@
 'use strict'
+import Cookie from "@/util/cookie.js"
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
@@ -76,7 +77,7 @@ function checkErrorCode(response) {
        if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
           //  console.log(successfn(response.data.result))
           console.log(response);
-           successfn(response.data.result);
+           successfn(response.data.result||response.data);
        }else {
             if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
@@ -135,7 +136,7 @@ export default {
                   // before get the response data
                   return data;
             }],
-            withCredentials: false,   //  默认false
+            // withCredentials: false,   //  默认false
             data:data,
             // timeout:10000,
             responseType:'json',  // default
@@ -179,11 +180,13 @@ export default {
            }
        )
     },
-    get(url,successfn,errorfn){
-        axios({url:url,
+    get(url,data,successfn,errorfn){
+        axios({
+              url:url,
               method:'get',
-              // baseURL:URL,
+              baseURL:URL,
               timeout: 10000,
+              params: data,
               headers: {
                   'X-Requested-With': 'XMLHttpRequest'
                 },
