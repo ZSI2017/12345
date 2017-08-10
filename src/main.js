@@ -13,7 +13,7 @@ import store from "@/vuex/store.js";
 import {changeLoading} from "@/vuex/actions";
 import {getLoadingFlag} from "@/vuex/getters";
 
-// import localEvent from '@/vuex/function.js';
+import localEvent from '@/vuex/function.js';
 
 import PageStore from "@/util/table-store.js"
 import http from "@/util/http.js"
@@ -111,7 +111,7 @@ function filterMenu(result) {
       console.log("---------------------------------------------");
       console.log(Cookie.get("ECOACLJSESSIONID"));
       console.log(Cookie.get("ctoken"));
-      //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")
+      //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")
       console.log("---------------------------------------------");
       // Cookie.delete("express1");
 if(store.getters.getisAuthority)  {
@@ -123,7 +123,6 @@ if(store.getters.getisAuthority)  {
            if(localEvent.get("ACL") !== '') {
                  let result = localEvent.get("ACL");
                  filterMenu(result);
-
                     // window.location.reload();
            }else {
              http.post('/api/user/info/get',{},(result)=>{
@@ -156,6 +155,8 @@ if(store.getters.getisAuthority)  {
         });
       window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
+ } else {
+     store.dispatch('setAuthority',"开发者");
  }
 
 

@@ -6,7 +6,7 @@
       <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
     <el-form-item label="运营图" prop="imageList">
-      <!--   -->
+      <!--      action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"  -->
       <el-upload
         class="upload-demo"
         action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"

@@ -344,12 +344,12 @@ let routes =  [
         children:[
           {path:'',component:logismerchantMain},
           {path:'addData',name:'添加',component:logismerchantAddData},
-          {path:'editData',name:'修改',component:logismerchantEditData}          
+          {path:'editData',name:'修改',component:logismerchantEditData}
         ]
       },
       {path:'/dev/cache',component:cache,name:"缓存管理工具"},
       {path:'/dev/whitelist',component:whitelist,name:"白名单管理"}
-      
+
    ]
   //  path:'/orderCancle',component:orderCancle
 
