@@ -13,3 +13,9 @@ export const setUid = ({commit,state},value) => {
 export const setAuthority = ({commit,state},value) => {
        commit('SETAUth',value)
 }
+export const setLoginOutFlag= ({commit,state},value) => {
+       commit('SETLOGINOUT',value)
+}
+export const setIsAuthority= ({commit,state},value) => {
+       commit('SETISAUTHORITY',value)
+}

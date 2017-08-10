@@ -282,15 +282,15 @@ export default {
   watch: {
     '$route': function(to, from) {
 
-      ((this.$route.path == "/sendExpress" &&
+      ((this.$route.path == "/promotion/sendExpress" &&
           (this.pageId = "SD1010")) ||
-        (this.$route.path == "/chooseExpress" &&
+        (this.$route.path == "/promotion/chooseExpress" &&
           (this.pageId = "BM1010")) ||
-        (this.$route.path == "/expressOrder" &&
+        (this.$route.path == "/promotion/expressOrder" &&
           (this.pageId = "SS1010")))
       // this.pageId = "SD1010"; // 寄快递首页
       this.activeName2 = this.initActiveName;
-      this.handleTabClick({label:this.activeName2},null);
+      this.handleTabClick({label:this.activeName2},null,undefined,true);
       // alert(this.auditStatusFlage)
       // 默认状态是 运营位管理的 寄快递首页
 
@@ -450,9 +450,11 @@ export default {
       this.myDiglogContent = "确认后，该内容将待审详情";
     },
     // 标签页导航
-    handleTabClick(tab, event,countPage) {
+    handleTabClick(tab, event,countPage,loadingFlag) {
       var _this = this;
-      _this.listLoading = true;
+      if(loadingFlag === undefined){
+        _this.listLoading = true;
+      }
       _this.tableFalg = false
       _this.showConfig = false;
       _this.showflag = false;

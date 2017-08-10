@@ -22,7 +22,7 @@
       v-loading.body.fullscreen.lock="fullscreenLoading"
       v-show="fold"
       >
-      <el-menu  :default-active="$route.fullPath" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
+      <el-menu  v-if="menuFlag" :default-active="$route.fullPath" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
 
@@ -89,6 +89,7 @@ import Cookie from "@/util/cookie.js"
 export default {
   data() {
     return {
+      menuFlag:true,
       showClose:false,
       fullscreenLoading:false,
       defaultActive:"",
@@ -117,13 +118,16 @@ export default {
       this.sayHello();
   },
   created() {
+    this.menuFlag = false;
+    // this.menuFlag = true;
     if(this.$router.currentRoute.fullPath == "/home") {
         this.isActive = true;
     }
     var _this = this;
     setTimeout(() => {
       console.log(_this);
-    },3000)
+        _this.menuFlag = true;
+    },300);
     console.log("router");
     console.log(this);
   },
@@ -206,12 +210,21 @@ export default {
       }
     },
     handleLogout(){
-
-        this.$router.push({path:'/login'});
+        this.$store.dispatch('setLoginOutFlag',true);
+        // let url = window.location.href;
+        // let topLevel_domains = window.location.href.replace(/http:\/\/.*?([^\.]+\.(com\.cn|org\.cn|net\.cn|[^\.]+))\/.+/, "$1")
+        let topLevel_domains = ".alipay-eco.com"
+        console.log(topLevel_domains);
         localEvent.clear("ACL");
-        Cookie.delete("ECOACLJSESSIONID");
         Cookie.delete("SMJSESSIONID");
-        Cookie.delete("ctoken");
+        Cookie.delete('ALIPAYJSESSIONID');
+        Cookie.delete("ctoken",topLevel_domains);
+        Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
+        Cookie.delete('express1');
+        // let clearInternet = setInterval(function(){console.log(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken"));},600);
+        // setTimeout(function(){
+        this.$router.push({path:'/login'});
+        // },2000)
 
         // this.$router.
     }
