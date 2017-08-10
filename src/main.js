@@ -14,6 +14,8 @@ import store from "@/vuex/store.js";
 import {changeLoading} from "@/vuex/actions";
 import {getLoadingFlag} from "@/vuex/getters";
 
+import localEvent from '@/vuex/function.js';
+
 import PageStore from "@/util/table-store.js"
 import http from "@/util/http.js"
 
@@ -268,6 +270,14 @@ const router = new VueRouter({
              next();
         }
       // }
+
+
+       if((to.path != "/orderManage/main") && (to.path != "/orderManage/orderDetail")){
+            localEvent.clear("localorderKeyword");
+            localEvent.clear("localorderRadio"); 
+       }
+          
+        
 
   });
 new Vue({
