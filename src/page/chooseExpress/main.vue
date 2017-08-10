@@ -237,6 +237,8 @@ export default {
   },
   computed: {
       Authority() {
+        // this.activeName2 = this.$store.getters.getAuthority== "审核"?"已上线":'配置';
+
         return this.$store.getters.getAuthority;
       }
       // table2:function(){
@@ -250,27 +252,34 @@ export default {
 
   },
   created() {
+    // alert(this.Authority)
 
     //  alert(this.$store.state.loadingFlag)
     // 在页面初始化时，获取pageName,标签页，单选框 的记录值
-    this.initActiveName = this.Authority == "审核"?"已上线":'配置'
-    this.activeName2 = this.PageStore.tabName;
-    this.currentPage = this.PageStore.pageCount;
-    this.radio2= Number(this.PageStore.radio);
-    console.log("$router: %o",this.$route);
-    if(this.activeName2 == "配置") {
-      this.url = "/api/promotion/audit/list"; // 默认展开 配置
-    } else {
-      this.url = "/api/promotion/onlineList"
-    }
-    // this.url = '/api/promotion/audit/list';
+
     this.pageId = "SD1010"; // 寄快递首页
-    ((this.$route.path == "/chooseExpress" &&
+    ((this.$route.path == "/promotion/chooseExpress" &&
         (this.pageId = "BM1010")) ||
-      (this.$route.path == "/expressOrder" &&
+      (this.$route.path == "/promotion/expressOrder" &&
         (this.pageId = "SS1010")))
 
-       this.handleTabClick({label:this.activeName2},null,this.currentPage)
+
+    // if(this.Authority){}
+    var _this = this;
+    var interval = setInterval(function(){
+         console.log(_this.Authority);
+    },100);
+    setTimeout(function(){
+      _this.initActiveName = _this.Authority == "审核"?"已上线":'配置'
+      // alert(this.PageStore.tabName);
+      _this.activeName2 = _this.PageStore.tabName ||   _this.initActiveName;
+
+      _this.currentPage = _this.PageStore.pageCount;
+      _this.radio2= Number(_this.PageStore.radio);
+      console.log("$router: %o",_this.$route);
+      _this.handleTabClick({label:_this.activeName2},null,_this.currentPage)
+    },600)
+
 
   },
   filters: {
@@ -280,8 +289,11 @@ export default {
     }
   },
   watch: {
+   '$store.getters.getAuthority':function(){
+      // alert("5555555555555555555")
+   },
     '$route': function(to, from) {
-
+    //  alert("$router")
       ((this.$route.path == "/promotion/sendExpress" &&
           (this.pageId = "SD1010")) ||
         (this.$route.path == "/promotion/chooseExpress" &&
@@ -304,9 +316,9 @@ export default {
       // this.auditStatusFlage = true;
       // this.showConfig = true;
       // this.showflag = true;
-      // this.PageStore.commit("setPage",1);
-      // this.PageStore.commit("setRadio",1);
-      // this.PageStore.commit("setTabName",this.initActiveName);
+      this.PageStore.commit("setPage",1);
+      this.PageStore.commit("setRadio",1);
+      this.PageStore.commit("setTabName",this.initActiveName);
 
       //
       // var _this = this;

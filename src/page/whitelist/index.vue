@@ -7,12 +7,16 @@
                 <el-input :span="10" v-model="keyword" type="text" size="large" @keyup.enter.native="loadData" placeholder="请输入用户ID"></el-input>
             </el-col>
             <el-col :span="4" class="import-search">
-                <el-button type="primary" @click="loadData" style="width:100px;">搜 索</el-button>           
+                <el-button type="primary" @click="loadData" style="width:100px;">搜 索</el-button>
             </el-col>
         </el-row>
          <el-row>
             <el-col :span="2" class="import-search" style="float:right;">
+<<<<<<< HEAD
                 <el-button type="primary" @click="handleAddData" style="width:100px;float:right;"><i class="el-icon-plus"></i> 添加</el-button>                
+=======
+                <el-button type="primary" @click="loadData" style="width:100px;float:right;"><i class="el-icon-plus"></i> 添加</el-button>
+>>>>>>> 04a28ef129444efcbcfe7dd91fae9968a9159ad2
             </el-col>
         </el-row>
     </div>
@@ -36,7 +40,7 @@
                 <!--<el-button @click="handleClick(scope.row)" type="text" size="small">修改</el-button>-->
                 <el-button ref='allIfo' @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>
                 <!--<el-button ref='allIfo' @click="handleEdit(scope.$index,scope.row)" type="text" size="small">生产二维码</el-button>-->
-                
+
             </template>
         </el-table-column>
     </el-table>
@@ -221,7 +225,7 @@ export default {
 </script>
 
 <style lang="scss">
-            
+
 .keyword-input{
   margin: 20px 0 10px;
 }
@@ -231,7 +235,7 @@ export default {
   text-align: right;
   padding-right: 20px;
   font-weight: 700;
-}       
+}
 .import-search{
   margin-left: 20px;
 }     
@@ -243,6 +247,7 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
 -webkit-appearance: none;
 margin: 0;
+
 }
 
 </style>

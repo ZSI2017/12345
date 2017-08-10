@@ -98,19 +98,19 @@ export default {
   mounted() {
       if(localEvent.get("localorderKeyword")){
           var localKeyword = localEvent.get("localorderKeyword");
-          var localRadio = localEvent.get("localorderRadio");  
-          
+          var localRadio = localEvent.get("localorderRadio");
+
           this.keyword = localKeyword;
           this.type = localRadio;
           this.radio = localRadio;
           console.log(localKeyword);
-          
+
           this.loadData();
       }else{
           this.radir = '1';
           this.keyWord = '';
       }
-      
+
   },
   created() {
     // this.loadData();
@@ -194,7 +194,7 @@ export default {
       localEvent.set("localorderManage", row.orderNo);
       localEvent.set("localorderKeyword", this.keyword);
       localEvent.set("localorderRadio", this.radio);
-      
+
       this.$router.push({path:'/orderManage/orderDetail'});
     },
     handleEdit(index,row) {
@@ -225,7 +225,7 @@ export default {
           'isFull':'0'
         }
         this.tableData[index].checked = false;
-        
+
       }
       // if(this.checked  == false){
       //   requestData = {

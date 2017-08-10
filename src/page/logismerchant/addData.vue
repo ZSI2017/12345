@@ -162,12 +162,12 @@
             minTime: ruleForm.acceptOrderFrom
             }">
         </el-time-select>
-        
+
     </el-form-item>
     <el-form-item label="服务时间段间隔">
-        <el-input 
-        placeholder="请选择服务时间段间隔" 
-        style='width:100%;' 
+        <el-input
+        placeholder="请选择服务时间段间隔"
+        style='width:100%;'
         v-model="ruleForm.serviceTimeInterval">
           <template slot="append">小时</template>
         </el-input>
@@ -198,7 +198,7 @@
         <el-date-picker
           v-model="ruleForm.authTokenExpried"
           type="datetime"
-          style='width:100%;'                      
+          style='width:100%;'
           placeholder="请选择商户有权令牌有效期">
         </el-date-picker>
     </el-form-item>
@@ -206,7 +206,7 @@
         <el-date-picker
           v-model="ruleForm.rtExpried"
           type="datetime"
-          style='width:100%;'                      
+          style='width:100%;'
           placeholder="请选择刷新令牌有效期">
         </el-date-picker>
     </el-form-item>
@@ -243,7 +243,7 @@ export default {
       value:'',
       value1:'',
       dialogImg:[],
-      dialogImg2:[],      
+      dialogImg2:[],
       // 对输入表单进行验证
       ruleForm: {
         merchantCode:'',
@@ -303,7 +303,7 @@ export default {
         }, {
           value: '0',
           label: '未授权'
-        }], 
+        }],
         //接入方式
         options2:[{
           value: '1',
@@ -362,7 +362,7 @@ export default {
       // console.log(this.ruleForm.gmtEnd)
       console.log(this.ruleForm.accessType)
       console.log(this.ruleForm.alipayAuthStatus)
-      
+
       let httpData = {
             "data": {
               'merchantCode':this.ruleForm.merchantCode,
@@ -443,7 +443,7 @@ export default {
       console.log(file.result)
       this.dialogImg = file.result;
       console.log(this.dialogImg)
-    
+
     },
     handlerror(err, file, fileList){
       alert(err);
@@ -462,7 +462,7 @@ export default {
     handleSuccess2(file){
       console.log(file.result)
       this.dialogImg2 = file.result;
-      console.log(this.dialogImg2)   
+      console.log(this.dialogImg2)
     },
     handlerror2(err, file, fileList){
       alert(err);

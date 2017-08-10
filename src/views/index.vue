@@ -127,7 +127,7 @@ export default {
     setTimeout(() => {
       console.log(_this);
         _this.menuFlag = true;
-    },300);
+    },600);
     console.log("router");
     console.log(this);
   },
@@ -178,10 +178,6 @@ export default {
          this.PageStore.commit("setPage",1);
          this.PageStore.commit("setRadio",1);
          this.PageStore.commit("setTabName",this.Authority == "审核"?"已上线":'配置');
-      // this.fullscreenLoading = true;
-      //  this.defaultActive =""+key;
-      //  console.log("this.$route.path");
-      //  console.log(this.$route.path);
       if (this.$route.path == "/sendExpress/addData"
            ||this.$route.path == "/sendExpressEnter/addData"
            ||this.$route.path == "/chooseExpress/addData"
@@ -211,8 +207,6 @@ export default {
     },
     handleLogout(){
         this.$store.dispatch('setLoginOutFlag',true);
-        // let url = window.location.href;
-        // let topLevel_domains = window.location.href.replace(/http:\/\/.*?([^\.]+\.(com\.cn|org\.cn|net\.cn|[^\.]+))\/.+/, "$1")
         let topLevel_domains = ".alipay-eco.com"
         console.log(topLevel_domains);
         localEvent.clear("ACL");
@@ -221,12 +215,7 @@ export default {
         Cookie.delete("ctoken",topLevel_domains);
         Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
         Cookie.delete('express1');
-        // let clearInternet = setInterval(function(){console.log(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken"));},600);
-        // setTimeout(function(){
         this.$router.push({path:'/login'});
-        // },2000)
-
-        // this.$router.
     }
   }
 }

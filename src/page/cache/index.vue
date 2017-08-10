@@ -12,7 +12,7 @@
         </el-row>
     </div>
 
-  
+
     <div class=" " style="margin-top:30px;">
         缓存内容
     </div>
@@ -28,6 +28,7 @@ export default {
   data() {
     return {
         keyword:'',
+        url:'/api/ocs/info/get',
         tableData:[],
 
     }
@@ -37,8 +38,30 @@ export default {
   },
   methods: {
     loadData(){
+      // var _this =this;
+      this.$http.post(this.url,{
+          "key":this.keyword
+      },(rsp)=>{
 
+        // _this.listLoading = false;
+        console.log(rsp)
+        // _this.tableData = rsp.page_list;
+        // _this.totalCount = parseInt(rsp.pages.cnt);
+        // if(_this.totalCount == "0"){
+        //   this.$message({
+        //     message: '未查询到内容，请重新输入！',
+        //     type: 'warning'
+        //   });
+        // }
+      },(error)=>{
+        this.$message({
+            message: '未查询到内容，请重新输入！',
+            type: 'warning'
+          });
+        console.log('failed');
+      });
     },
+
   }
 }
 </script>
