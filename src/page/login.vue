@@ -44,8 +44,16 @@ export default {
           this.$store.dispatch('setIsAuthority',true);
         this.$store.dispatch('setLoginOutFlag',false);
           Cookie.set("express1","mng",6000000);
+     let hashURL = this.$store.getters.getNextRouter;
+     if(hashURL == "/login"||hashURL== "/") {
+         hashURL= "/home";
+     };
+      let index = window.location.href.indexOf("#");
+      let baseURL = window.location.href.slice(0,index);
+      let fullPath = baseURL +"#"+hashURL;
+      // alert(fullPath)
       // const URL = "/loginProxy" http://sendexmng-sit.alipay-eco.com/smc
-      window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURI(window.location.href);
+      window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(fullPath);
       // this.$http.get(URL,{
       //   "realUrl":"http://sendexmng-sit.alipay-eco.com/smc"
       // }, (result) => {

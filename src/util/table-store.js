@@ -8,7 +8,7 @@
 
 const PageStore = function(pageCount) {
        this.pageCount = "1";    // 默认的数据类型
-       this.tabName =  "配置";  // tab 菜单页
+       this.tabName =  "";  // tab 菜单页
        this.radio=  "1";       // 单选按钮
 }
 PageStore.prototype.mutations = {

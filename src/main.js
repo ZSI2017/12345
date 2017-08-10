@@ -111,7 +111,7 @@ function filterMenu(result) {
       console.log("---------------------------------------------");
       console.log(Cookie.get("ECOACLJSESSIONID"));
       console.log(Cookie.get("ctoken"));
-      //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")
+      //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")
       console.log("---------------------------------------------");
       // Cookie.delete("express1");
 if(store.getters.getisAuthority)  {
@@ -136,11 +136,11 @@ if(store.getters.getisAuthority)  {
                         // router.go(0)
                  });
            }
-           if(to.fullPath == "/login") {
-               next({
-                      path:"/home",
-                  });
-           };
+          //  if(to.fullPath == "/login") {
+          //      next({
+          //             path:"/home",
+          //         });
+          //  };
        // 跳转到登录页面
 
    } else if(to.fullPath == "/login") {
@@ -150,10 +150,13 @@ if(store.getters.getisAuthority)  {
       //  Cookie.delete("SMJSESSIONID");
       //  Cookie.delete("ctoken");
    } else {
-     next({
-            path:"/login",
-        });
-      window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
+       store.dispatch('changeNextRouter',to.fullPath);
+      //  alert(from.fullPath);
+         console.log(to)
+       next({
+              path:"/login",
+          });
+      // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
  } else {
      store.dispatch('setAuthority',"开发者");
@@ -195,9 +198,6 @@ if(store.getters.getisAuthority)  {
           ||(from.path == '/expressCompany/editData')
           ||(from.path == "/chooseExpressOrder/editData")
         )&&store.getters.getLoadingChange === false) {
-
-            // console.log("to login");
-            // console.log(to);
             store.dispatch('changeLoadingFlag');
             next({path:from.path});
          }else{

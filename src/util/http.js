@@ -2,6 +2,8 @@
 import Cookie from "@/util/cookie.js"
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+import store from "@/vuex/store.js";
+import localEvent from '@/vuex/function.js';
 import 'element-ui/lib/theme-default/index.css'
 import $ from'jquery';
 Vue.use(ElementUI);
@@ -9,7 +11,7 @@ var vue = new Vue();
 import axios from "axios";
 
 // let URL = "http://sendexmng-sit.alipay-eco.com"
-let URL  = "http://192.168.12.54:8080/"
+let URL  = "http://sendexmng-sit.alipay-eco.com"
 
 // alert(process.env.npm_config_report)
 if(process.env.NODE_ENV === "development"){
@@ -54,6 +56,35 @@ axios.interceptors.response.use(
     return Promise.reject(error);
 
 });
+
+//登陸超時提醒
+function loginTime() {
+  vue.$confirm('登录超时, 请重新登录！', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+
+        store.dispatch('setLoginOutFlag',true);
+        let topLevel_domains = ".alipay-eco.com"
+        console.log(topLevel_domains);
+        localEvent.clear("ACL");
+        Cookie.delete("SMJSESSIONID");
+        Cookie.delete('ALIPAYJSESSIONID');
+        Cookie.delete("ctoken",topLevel_domains);
+        Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
+        Cookie.delete('express1');
+        this.$router.push({path:'/login'});
+      }).catch(() => {
+
+        vue.$message({
+          type: 'info',
+          message: '已取消重新登录'
+        });
+
+      });
+}
+
 
 // 这里
 function checkErrorCode(response) {
@@ -162,11 +193,14 @@ export default {
                       //  发出了请求，服务端返回了 状态码 2xx
                       console.log("%cresponse error %o","color:red;font-size:16px;",error.response.data)
                       if(error.response.status === 0){
-                            vue.$message.error('登录超时');
+                            // vue.$message.error('登录超时');
+                            // loginTime();
                         }
                     } else if(error.request) {
                       if(error.request.status === 0){
-                            vue.$message.error('登录超时');
+                                //  loginTime();
+                            // vue.$message.error('登录超时');
+
                         }
                          // 请求发出了，但是没有接受到 响应
                         //  'error.request' 是一个 浏览器中的XMLHttpRequest 实例，
