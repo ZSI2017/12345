@@ -61,13 +61,13 @@ const router = new VueRouter({
       console.log(Cookie.get("ECOACLJSESSIONID"));
       console.log(Cookie.get("ctoken"));
       // console.log(Cookie.get("ctoken"));
-      // console.log(Cookie.get("express"));
+      // console.log(Cookie.get("express"));&&Cookie.get("SMJSESSIONID")
       //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")
 
      console.log("---------------------------------------------");
       // Cookie.delete("express1");
 
-   if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")) {
+   if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")) {
           if(to.fullPath == "/login") {
               next({
                      path:"/home",
