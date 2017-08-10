@@ -43,8 +43,14 @@
             <template scope="scope">
                 <el-button @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
                 <el-button ref='allIfo' @click="handleDelete(scope.$index,scope.row)" type="text" size="small">删除</el-button>
-                <el-button ref='allIfo' @click="handleEdit(scope.$index,scope.row)" type="text" size="small">生产二维码</el-button>
-                
+                <el-button ref='allIfo' @click='useqrcode(scope.row)' type="text" size="small" v-popover:popover2>生产二维码</el-button>
+                <el-popover
+                    ref="popover2"
+                    trigger="click"
+                    >
+                    <div id='code'></div>
+                    <canvas id="canvas"></canvas>
+                </el-popover>             
             </template>
         </el-table-column>
     </el-table>
@@ -65,7 +71,9 @@
 
 <script>
 import localEvent from 'src/vuex/function.js';
-
+import Vue from 'vue'
+import QRCode from 'qrcode'
+Vue.use(QRCode)
 
 export default {
   data() {
@@ -78,7 +86,8 @@ export default {
         listLoading: false, //loading框
         bigImageUrl:'',
         dialogVisible:false,
-        url:'/api/logisMerchant/list/get'
+        url:'/api/logisMerchant/list/get',
+        codes:''
 
     }
   },
@@ -95,7 +104,7 @@ export default {
           "page_num": this.currentPage - 1
         },
         "con": {
-          "name": this.keyword
+          "searchStr": this.keyword
         }
       },(rsp)=>{
         // _this.listLoading = false;
@@ -173,10 +182,22 @@ export default {
     },
     //切换分页
     handleCurrentChange(val) {
-        alert(val)
+        this.$message(`当前页${val}`);
         this.currentPage = val;
         this.loadData();
     },
+    useqrcode(row){
+        alert(1)
+        console.log(row.id)
+        var canvas = document.getElementById('canvas');
+        // let codeHttp = 'www.baidu.com';
+        let codeHttp = 'alipays://platformapi/startapp?appId=60000146&url=https%3A%2F%2Fsendex.alipay-eco.com%2Fh5%2Forder-grey-test.html?id=' + row.id;
+        QRCode.toCanvas(canvas, codeHttp, function (error) {
+            if (error) console.error(error)
+            console.log('success!');
+        })
+    }
+    
   }
 }
 </script>
@@ -196,5 +217,6 @@ export default {
 .import-search{
   margin-left: 20px;
 }     
+#canvas{width:200px!important;height:200px!important;}
 
 </style>

@@ -32,9 +32,6 @@
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            <el-dialog v-model="dialogVisible" size="tiny">
-              <img width="100%" :src="ruleForm.merchantLogo[0].url" alt="">
-            </el-dialog>
       </el-upload>
     </el-form-item>
     <el-form-item label="物流机构LOGO_CARD的URL">
@@ -50,9 +47,6 @@
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            <el-dialog v-model="dialogVisible2" size="tiny">
-              <img width="100%" :src="ruleForm.merchantLogo_card[0].url" alt="">
-            </el-dialog>
         </el-upload>
     </el-form-item>
     <el-form-item label="收款人支付宝PID">
@@ -171,7 +165,7 @@
         </el-input>
     </el-form-item>
     <el-form-item label="授权状态">
-        <el-select v-model="ruleForm.accessStatus" placeholder="请选择授权状态" style="width:100%;">
+        <el-select v-model="ruleForm.alipayAuthStatus" placeholder="请选择授权状态" style="width:100%;">
             <el-option
             v-for="item in options1"
             :key="item.value"
@@ -214,9 +208,21 @@
     <el-form-item label="后台操作用户名称">
       <el-input v-model="ruleForm.mngUname" placeholder="请输入后台操作用户名称"> </el-input>
     </el-form-item>
+    <el-form-item label="创建时间">
+      <el-input v-model="ruleForm.gmtCreate" placeholder="请输入创建时间"> </el-input>
+    </el-form-item>
+    <el-form-item label="修改时间">
+      <el-input v-model="ruleForm.gmtModified" placeholder="请输入创建时间"> </el-input>
+    </el-form-item>
+
     <el-button type="primary" size="large" @click="handleSubmit('ruleForm')">提 交</el-button>
   </el-form>
-
+  <el-dialog v-model="dialogVisible" size="tiny">
+    <img width="100%" :src="ruleForm.merchantLogo[0].url" alt="">
+  </el-dialog>
+  <el-dialog v-model="dialogVisible2" size="tiny">
+    <img width="100%" :src="ruleForm.merchantLogo_card[0].url" alt="">
+  </el-dialog>
 </section>
 </template>
 <script type="text/javascript">
@@ -230,9 +236,10 @@ export default {
       showAlert:false, // 展示警告信息
       dialogVisible:false,
       dialogVisible2:false,
-      url:'/api/promotion/audit/add',
+      url:'/api/logisMerchant/update',
       value:'',
       value1:'',
+      localDeleteId:'',
       // 对输入表单进行验证
       ruleForm: {
         merchantCode:'',
@@ -325,14 +332,18 @@ export default {
   mounted() {
     console.log("router params %c %o","fontSize:20px",this.$route.params);
 
-    var localDeleteId = localEvent.get('localDelete')
-    console.log(localDeleteId)
+    this.localDeleteId = localEvent.get('localDelete')
+    console.log(this.localDeleteId)
     var _this = this;
     var httpUrl = '/api/logisMerchant/get'
-    _this.$http.post(httpUrl,{id:localDeleteId},(result) => {
+    _this.$http.post(httpUrl,{id:this.localDeleteId},(result) => {
         console.log(result)
         console.log(result.merchantLogo)
         _this.$store.dispatch('changeLoadingChange',true);
+        let newDate3 = new Date(result.gmtCreate);
+        let newDate4 = new Date(result.gmtModified);
+        console.log(newDate3)
+        
         // this.$router.go(-1);
         _this.ruleForm.merchantCode = result.merchantCode;
         _this.ruleForm.merchantType = result.merchantType;
@@ -357,12 +368,7 @@ export default {
         _this.ruleForm.isvMerchantId = result.isvMerchantId;
         _this.ruleForm.outSysName = result.outSysName;
         _this.ruleForm.accessType = result.accessType;
-        // _this.ruleForm.accessStatus = result.accessStatus;
-        if(result.accessStatus == '0'){
-            this.ruleForm.accessStatus = '未授权'
-        }else{
-            this.ruleForm.accessStatus = '已授权'          
-        }
+        _this.ruleForm.accessStatus = result.accessStatus;
         _this.ruleForm.acceptOrderFrom = result.acceptOrderFrom;
         _this.ruleForm.acceptOrderTo = result.acceptOrderTo;
         _this.ruleForm.alipayAuthStatus = result.alipayAuthStatus;
@@ -377,8 +383,8 @@ export default {
         _this.ruleForm.mngUname = result.mngUname;
         _this.ruleForm.serviceAreaAcqMethod = result.serviceAreaAcqMethod;
         _this.ruleForm.serviceTimeInterval = result.serviceTimeInterval;
-        _this.ruleForm.gmtCreate = result.gmtCreate;
-        _this.ruleForm.gmtModified = result.gmtModified;
+        _this.ruleForm.gmtCreate = formatDate(newDate3, 'yyyy-MM-dd hh:mm:ss');
+        _this.ruleForm.gmtModified = formatDate(newDate4, 'yyyy-MM-dd hh:mm:ss');
 
         
     },(error) => {
@@ -397,65 +403,78 @@ export default {
 
   },
   methods: {
-    //  点击提交
+      //  点击提交
     handleSubmit(formName) {
       var _this = this;
       console.log("-----------------------");
-        console.log(this.$refs[formName]),
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log('error submit');
-          // router.app.$store.state.loadingChange = true
-          // _this.$router.app.$store.state.loadingChange = true;
-          // _this.$store.dispatch('changeLoadingChange',true);
-          // _this.$router.go(-1);
-          //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
-          let submitDate = _this.ruleForm.date1;
-          console.log(submitDate)
-          this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
-          this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
-          console.log(this.ruleForm.gmtBegin)
-          console.log(this.ruleForm.gmtEnd)
-
-          let httpData = {
-                "data": {
-                  "pageId": _this.pageId,
-                  "name": _this.ruleForm.name,
-                  "imageUrl": _this.ruleForm.fileList,
-                  "sortWeight": _this.ruleForm.sortWeight,
-                  "linkUrl": _this.ruleForm.linkUrl,
-                  "gmtBegin": _this.ruleForm.gmtBegin,
-                  "gmtEnd": _this.ruleForm.gmtEnd,
-                  "opStatus": _this.ruleForm.status
-                },
-                "area": {
-                  "code": "000000",
-                  "check": _this.check,
-                  "provinces": _this.gridData,
-                }
-              };
-            _this.$http.post(_this.url,httpData,(result) => {
-                alert("result")
-                // _this.$store.dispatch('changeLoadingChange',true);
-                _this.$router.go(-1);
-
-
-
-            },(error) => {
-                this.$message({
-                    type: 'error',
-                    message: error.data.meta.code+"--"+error.data.meta.msg
-                });
+      console.log(this.$refs[formName]);
+      console.log(this.ruleForm.accessType)
+      let newData1 = new Date(this.ruleForm.authTokenExpried);
+      let newData2 = new Date(this.ruleForm.rtExpried);
+      console.log(newData1)
+      console.log(this.ruleForm.accessStatus)
+      let httpData = {
+            "data": {
+              'id':this.localDeleteId,
+              'merchantCode':this.ruleForm.merchantCode,
+              'merchantType':this.ruleForm.merchantType,
+              'merchantName':this.ruleForm.merchantName,
+              'merchantLogo':this.dialogImg,
+              'merchantLogo_card':this.dialogImg2,
+              'payeePid':this.ruleForm.payeePid,
+              'payeeAccount':this.ruleForm.payeeAccount,
+              'contactName':this.ruleForm.contactName,
+              'contactMobile':this.ruleForm.contactMobile,
+              'businessLicenceCode':this.ruleForm.businessLicenceCode,
+              'businessLicencePic':this.ruleForm.businessLicencePic,
+              'logisLicenceCode':this.ruleForm.logisLicenceCode,
+              'logisLicencePic':this.ruleForm.logisLicencePic,
+              'provinceCode':this.ruleForm.provinceCode,
+              'cityCode':this.ruleForm.cityCode,
+              'districtCode':this.ruleForm.districtCode,
+              'address':this.ruleForm.address,
+              'zip':this.ruleForm.zip,
+              'email':this.ruleForm.email,
+              'merchantTel':this.ruleForm.merchantTel,
+              'isvMerchantId':this.ruleForm.isvMerchantId,
+              'outSysName':this.ruleForm.outSysName,
+              'accessType':this.ruleForm.accessType,
+              'accessStatus':this.ruleForm.accessStatus,
+              'acceptOrderFrom':this.ruleForm.acceptOrderFrom,
+              'acceptOrderTo':this.ruleForm.acceptOrderTo,
+              'alipayAuthStatus':this.ruleForm.alipayAuthStatus,
+              'alipayPid':this.ruleForm.alipayPid,
+              'alipayAppid':this.ruleForm.alipayAppid,
+              'alipayAuthToken':this.ruleForm.alipayAuthToken,
+              'refreshToken':this.ruleForm.refreshToken,
+              'authTokenExpried':formatDate(newData1, 'yyyy-MM-dd hh:mm:ss'),
+              'rtExpried':formatDate(newData2, 'yyyy-MM-dd hh:mm:ss'),
+              'mngUid':this.ruleForm.mngUid,
+              'mngUname':this.ruleForm.mngUname,
+              'serviceAreaAcqMethod':this.ruleForm.serviceAreaAcqMethod,
+              'serviceTimeInterval':this.ruleForm.serviceTimeInterval,
+              // 'gmtCreate':this.ruleForm.gmtCreate,
+              // 'gmtModified':this.ruleForm.gmtModified
+            }
+          };
+        _this.$http.post(_this.url,httpData,(result) => {
+            this.$message({
+                type: 'success',
+                message: '提交成功'
             });
+            console.log(result)
+            // _this.$store.dispatch('changeLoadingChange',true);
+            _this.$router.go(-1);
 
-          // console.log(this.$route.matched);
 
-        } else {
-          console.log(_this);
-          _this.showAlert = true;
-          return false;
-        }
-      })
+
+        },(error) => {
+            this.$message({
+                type: 'error',
+                message: error.data.meta.code+"--"+error.data.meta.msg
+            });
+        });
+
     },
     // 点击返回 对应的事件处理
     handleBackClick() {

@@ -44,6 +44,19 @@ export default {
 </script>
 
 <style>
+.keyword-input{
+  margin: 20px 0 10px;
+}
+.import-font{
+  height:42px;
+  line-height: 42px;
+  text-align: right;
+  padding-right: 20px;
+  font-weight: 700;
+}       
+.import-search{
+  margin-left: 20px;
+}     
 
 
 </style>

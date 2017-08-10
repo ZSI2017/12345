@@ -194,7 +194,7 @@
     <el-form-item label="刷新令牌">
       <el-input v-model="ruleForm.refreshToken" placeholder="请输入刷新令牌"> </el-input>
     </el-form-item>
-    <el-form-item label="商户有权令牌有效期">
+    <!--<el-form-item label="商户有权令牌有效期">
         <el-date-picker
           v-model="ruleForm.authTokenExpried"
           type="datetime"
@@ -215,7 +215,7 @@
     </el-form-item>
     <el-form-item label="后台操作用户名称">
       <el-input v-model="ruleForm.mngUname" placeholder="请输入后台操作用户名称"> </el-input>
-    </el-form-item>
+    </el-form-item>-->
     <el-button type="primary" size="large" @click="handleSubmit('ruleForm')">提 交</el-button>
   </el-form>
   <!--//图片预览、-->
@@ -396,10 +396,10 @@ export default {
               'alipayAppid':this.ruleForm.alipayAppid,
               'alipayAuthToken':this.ruleForm.alipayAuthToken,
               'refreshToken':this.ruleForm.refreshToken,
-              'authTokenExpried':formatDate(this.ruleForm.authTokenExpried, 'yyyy-MM-dd hh:mm:ss'),
-              'rtExpried':formatDate(this.ruleForm.rtExpried, 'yyyy-MM-dd hh:mm:ss'),
-              'mngUid':this.ruleForm.mngUid,
-              'mngUname':this.ruleForm.mngUname,
+              // 'authTokenExpried':formatDate(this.ruleForm.authTokenExpried, 'yyyy-MM-dd hh:mm:ss'),
+              // 'rtExpried':formatDate(this.ruleForm.rtExpried, 'yyyy-MM-dd hh:mm:ss'),
+              // 'mngUid':this.ruleForm.mngUid,
+              // 'mngUname':this.ruleForm.mngUname,
               'serviceAreaAcqMethod':this.ruleForm.serviceAreaAcqMethod,
               'serviceTimeInterval':this.ruleForm.serviceTimeInterval,
               // 'gmtCreate':this.ruleForm.gmtCreate,
@@ -407,10 +407,13 @@ export default {
             }
           };
         _this.$http.post(_this.url,httpData,(result) => {
-            alert("result")
+            this.$message({
+                type: 'success',
+                message: '提交成功'
+            });
             console.log(result)
             // _this.$store.dispatch('changeLoadingChange',true);
-            // _this.$router.go(-1);
+            _this.$router.go(-1);
 
 
 

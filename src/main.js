@@ -8,12 +8,13 @@ import Axios from "axios";
 import Vuex from "vuex";
 import Cookie from "@/util/cookie.js"
 
+ 
 // 引入vuex 进行全局状态管理
 import store from "@/vuex/store.js";
 import {changeLoading} from "@/vuex/actions";
 import {getLoadingFlag} from "@/vuex/getters";
 
-// import localEvent from '@/vuex/function.js';
+import localEvent from '@/vuex/function.js';
 
 import PageStore from "@/util/table-store.js"
 import http from "@/util/http.js"
@@ -22,6 +23,7 @@ import http from "@/util/http.js"
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+
 
 //  axios  加入到 vue 的原型方法中
 Object.defineProperty(Vue.prototype, '$http', { value: http})
