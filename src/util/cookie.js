@@ -28,13 +28,17 @@ export default {
                      cookie_str += "path=/;";
                      document.cookie = cookie_str;
                },
-               'delete': function(cookie_name) {
+               'delete': function(cookie_name,domain) {
                    if (!cookie_name || cookie_name == '') {
                        return;
                    }
                    var date = new Date(0);
                   //  date.getDate(date.getDate() - 10000);
-                   document.cookie = cookie_name + "=; expires=" + date.toGMTString() + ";path=/;";
+                  if(domain === undefined) {
+                     document.cookie = cookie_name + "='adfsd'; expires=" + date.toUTCString()+ ";path=/;";
+                  }else {
+                     document.cookie = cookie_name + "='adfsd'; expires=" + date.toUTCString()+ ";path=/;domain=" + domain+';';
+                  }
                }
 
               //    store

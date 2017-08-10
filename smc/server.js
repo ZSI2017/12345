@@ -1,8 +1,7 @@
-var express = require('express');
-var fs = require('fs');
-// var path = require('path')
+var express = require("express");
+
+// var fs = require("fs");
 var app = express();
-// var bodyParser = require("body-parser");
 
 var crypto = require('crypto');
 
@@ -13,38 +12,26 @@ function cryptPwd(password) {
      var result = md5.update(saltPassword).digest('hex');  // 值经过编码后，以16 进制输出
      return result;
 }
-// var urlencodeParser = bodyParser.urlencoded({extended: false})
-
-// var staticPath = path.posix.join('static', "static")
-app.use('/static',express.static('static'));
- // app.get('/',function(req,res){
- //     res.send("111hello world")
- // })
-app.get('/',function(request,response){
-       request.headers.cookie && request.headers.cookie.split(';').forEach(function(value){
+app.use(express.static(__dirname + "/static"));
+app.get("/smc", function (request, response) {
+  // console.log("adfasdfasdf");
+    // cryptPwd("password");
+    if(request.headers.cookie !== null) {
+       console.log("cookie: "+request.headers.cookie);
+    }
+    request.headers.cookie && request.headers.cookie.split(';').forEach(function(value){
              var tempArr = value.split('=');
              console.log("cookie: "+tempArr[0]+' '+tempArr[1]);
-             if(tempArr[0] == " ASDSASASSS") {
-               response.cookie('ASDSASASSS', cryptPwd(tempArr[1]), { expires: new Date(Date.now() + 900000), httpOnly: true });
+             if(tempArr[0] == "ALIPAYJSESSIONID") {
+                response.cookie('SMJSESSIONID', cryptPwd(tempArr[1]));
              }
-       })
-       response.cookie('ASDSASASSS', cryptPwd("ASDSASASSS"), { expires: new Date(Date.now() + 900000), httpOnly: true });
-      // response.cookie("name","value")
-     // response.send("111hello world")
-      response.sendFile( __dirname + "/" + "index.html" );
-    //  fs.readFile('/index.html',function(err,data){
-    //    console.log("dsdfsd")
-    //       if(err) {
-    //
-    //       }else {
-    //          response.send("sdfasdfasd");
-    //       }
-    //
-    //  })
-})
+       });
+  // response.cookie('ASDSASASSS', cryptPwd("ASDSASASSS"), { expires: new Date(Date.now() + 900000), httpOnly: true });
+   response.sendFile( __dirname + "/" + "index.html" );
+});
 
-var server = app.listen(8081,function(){
-    var host = server.address().address;
-    var port = server.address().port;
-    console.log('应用实例，访问地址端口为 localhost://',port);
+var server = app.listen(9090, function () {
+      var host = server.address().address;
+      var port = server.address().port;
+      console.log("应用实例，访问地址端口为", host, port);
 })

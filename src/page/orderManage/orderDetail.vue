@@ -99,7 +99,7 @@
          <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单切显示支付完成，不再提示用户支付，请与用户、快递双方核实情况后再操作。</p>
           <el-form>
             <el-form-item label="标记其他渠道支付原因">
-                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" :value="invalid1"></el-input>
+                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" v-model="invalid1"></el-input>
            </el-form-item>
          </el-form>
           <div slot="footer" class="dialog-footer">
@@ -143,7 +143,7 @@ import localEvent from 'src/vuex/function.js';
         InvaliOrderFlag:true,
         OtherPayFlag:true,
         ChangeExpressFlag:true,
-        cancelFlag:true,   // 默认没有取消
+        // cancelFlag:true,   // 默认没有取消
         // 作废订单相关
         invalid:'',
         invalid1:'',
@@ -241,14 +241,18 @@ import localEvent from 'src/vuex/function.js';
         }],
         expressPays:[{
             name: "支付方式",
-            message: '',
+            message: '支付宝在线支付',
         },
         {
             name: "预计费用",
             message: "",
         },
         {
-            name: "实际费用",
+            name: "账单费用",
+            message: "",
+        },
+        {
+            name: "实付费用",
             message: '',
         }],
         requestData:{},
@@ -274,27 +278,26 @@ import localEvent from 'src/vuex/function.js';
             _this.url = "/api/order/details"; // 默认展开
             _this.$http.post(this.url,this.requestData,(rsp)=>{
                 console.log(rsp);
-                if(rsp.orderStatus == "2"){
-                    this.cancleOrderFlag = true;
-                }else{
-                    this.cancleOrderFlag = false;
-                }
-                if(rsp.payStatus == '1'){
-                    this.InvaliOrderFlag = true;
-                }else{
-                    this.InvaliOrderFlag = false;
-                }
-                if(rsp.orderStatus == '1'){
-                    this.ChangeExpressFlag = true;
-                }else{
-                    this.ChangeExpressFlag = false;
-                }
-                if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
-                    this.OtherPayFlag = true;
-                }else{
-                    this.OtherPayFlag = false;
-                }
-
+                // if(rsp.orderStatus == "2"){
+                //     this.cancleOrderFlag = true;
+                // }else{
+                //     this.cancleOrderFlag = false;
+                // }
+                // if(rsp.payStatus == '1' && rsp.orderStatus != '0'){
+                //     this.InvaliOrderFlag = true;
+                // }else{
+                //     this.InvaliOrderFlag = false;
+                // }
+                // if(rsp.orderStatus == '1'){
+                //     this.ChangeExpressFlag = true;
+                // }else{
+                //     this.ChangeExpressFlag = false;
+                // }
+                // if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
+                //     this.OtherPayFlag = true;
+                // }else{
+                //     this.OtherPayFlag = false;
+                // }
                 //基本信息
                 this.items[0].message = rsp.expName || '暂无';
                 this.items[1].message = rsp.actCarrierName || '暂无';
@@ -307,18 +310,7 @@ import localEvent from 'src/vuex/function.js';
                 this.items[8].message = rsp.outOrderNo || '暂无';
                 this.items[9].message = rsp.expNameOld? '是':'否';//是否转运快递
                 this.items[10].message = rsp.gmtBill || '暂无';
-                this.items[11].message = rsp.orderStatus || '暂无';
-                if(rsp.orderStatus == '1'){
-                    this.items[11].message = '待接单';
-                }else if(rsp.orderStatus == '2'){
-                    this.items[11].message = '待取件';
-                }else if(rsp.orderStatus == '3'){
-                    this.items[11].message = '已取件';
-                }else if(rsp.orderStatus == '4'){
-                    this.items[11].message = '已取消';
-                }else{
-                    this.items[11].message = '已作废';
-                }
+                this.items[11].message = rsp.strOrderStatus || '暂无';
                 //寄件人信息
                 this.senderItems[0].message = rsp.snderName || '暂无';
                 this.senderItems[1].message = rsp.snderMobile || '暂无';
@@ -403,9 +395,9 @@ import localEvent from 'src/vuex/function.js';
                                 console.log(rsp)
                                 this.$message({
                                     type: 'success',
-                                    message: '删除成功!'
+                                    message: '取消成功!'
                                 });
-                                this.cancelFlag = false;
+                                // this.cancelFlag = false;
                         },(error)=>{
                             this.$message({
                                 type: 'error',
@@ -421,50 +413,57 @@ import localEvent from 'src/vuex/function.js';
         },
         handleOtherPay(){
             this.dialogOtherpayVisible = true;
-
+            this.invalid1 = '';
         },
         handleDialogOtherpaySave(){
-            this.dialogOtherpayVisible = false;
-           this.$confirm('确定后该订单将被标记为其他渠道支付，请与客户提前沟通', '确定将该订单将被标记为其他渠道支付吗？', {
-                              confirmButtonText: '确定',
-                              cancelButtonText: '取消',
-                              type: 'warning'
-                      }).then(() => {
-                        this.$http.post("/api/order/otherPay",{"cause":this.invalid1.region,orderNo:this.orderNo},(rsp)=>{
-                                console.log(rsp)
-                                this.$message({
-                                    type: 'success',
-                                    message: '标记成功!'
-                                });
-                        },(error)=>{
-                            this.$message({
-                                type: 'error',
-                                message: error.data.meta.code+"--"+error.data.meta.msg
-                            });
-                        });
-                        }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消标记其他渠道'
-                        });
-                        });
+            this.$http.post("/api/order/otherPay",{"cause":this.invalid1,orderNo:this.orderNo},(rsp)=>{
+                console.log(rsp)
+                this.$message({
+                    type: 'success',
+                    message: '标记成功!'
+                });
+                this.dialogOtherpayVisible = false;
+            },(error)=>{
+                if(error.data.meta.code == '0011'){
+                    this.$message({
+                        type: 'warning',
+                        message: '请记录具体原因，字数在150字以内。'
+                    });
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: error.data.meta.code+"--"+error.data.meta.msg
+                    });
+                    this.dialogOtherpayVisible = false;
+                }
+            });
+
         },
         handleInvalidorder(){
-                this.dialogOrderVisible = true;
+            this.dialogOrderVisible = true;
+            this.invalid = '';
         },
         //  确定 作废
         handleDialogOrderSave () {
-            this.dialogOrderVisible = false;
             this.$http.post("/api/order/cancelConfirm",{"cause":this.invalid,orderNo:this.orderNo},(rsp)=>{
                 this.$message({
                     type: 'success',
                     message: '作废成功!'
                 });
+                this.dialogOrderVisible = false;
             },(error)=>{
+                if(error.data.meta.code == '0011'){
+                    this.$message({
+                        type: 'warning',
+                        message: '请记录具体原因，字数在150字以内。'
+                    });
+                }else{
                     this.$message({
                         type: 'error',
                         message: error.data.meta.code+"--"+error.data.meta.msg
                     });
+                    this.dialogOrderVisible = false;
+                }
             })
         },
         handleChangeExpress(){

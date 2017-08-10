@@ -1,9 +1,9 @@
 <template>
 <div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
-    <el-tab-pane label="配置" name="配置">配置</el-tab-pane>
+    <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
-    <el-tab-pane label="待审核" name="待审核">待审核</el-tab-pane>
+    <el-tab-pane  v-if ="(Authority == '审核'||Authority == '开发者')" label="待审核" name="待审核">待审核</el-tab-pane>
   </el-tabs>
   <!--  单选框   -->
   <el-row :span="24" type="flex" align="middle" v-if="showConfig" style="padding-left:5px;">
@@ -212,6 +212,7 @@ export default {
       gridData: [],
       radio2: 1,
       activeName2: '配置',
+      initActiveName:'',
       showHeader: false,
       dialogTableVisible: false,
       //审核状态分类显示
@@ -234,12 +235,15 @@ export default {
       bigImageUrl:'',
     }
   },
-  computed() {
-    return {
+  computed: {
+      Authority() {
+        // this.activeName2 = this.$store.getters.getAuthority== "审核"?"已上线":'配置';
+
+        return this.$store.getters.getAuthority;
+      }
       // table2:function(){
       //     return this.tableData[0]
       // }
-    }
   },
   activated(){
 
@@ -248,26 +252,34 @@ export default {
 
   },
   created() {
+    // alert(this.Authority)
 
     //  alert(this.$store.state.loadingFlag)
     // 在页面初始化时，获取pageName,标签页，单选框 的记录值
-    this.activeName2 = this.PageStore.tabName;
-    this.currentPage = this.PageStore.pageCount;
-    this.radio2= Number(this.PageStore.radio);
-    console.log("$router: %o",this.$route);
-    if(this.activeName2 == "配置") {
-      this.url = "/api/promotion/audit/list"; // 默认展开 配置
-    } else {
-      this.url = "/api/promotion/onlineList"
-    }
-    // this.url = '/api/promotion/audit/list';
+
     this.pageId = "SD1010"; // 寄快递首页
-    ((this.$route.path == "/chooseExpress" &&
+    ((this.$route.path == "/promotion/chooseExpress" &&
         (this.pageId = "BM1010")) ||
-      (this.$route.path == "/expressOrder" &&
+      (this.$route.path == "/promotion/expressOrder" &&
         (this.pageId = "SS1010")))
 
-       this.handleTabClick({label:this.activeName2},null,this.currentPage)
+
+    // if(this.Authority){}
+    var _this = this;
+    var interval = setInterval(function(){
+         console.log(_this.Authority);
+    },100);
+    setTimeout(function(){
+      _this.initActiveName = _this.Authority == "审核"?"已上线":'配置'
+      // alert(this.PageStore.tabName);
+      _this.activeName2 = _this.PageStore.tabName ||   _this.initActiveName;
+
+      _this.currentPage = _this.PageStore.pageCount;
+      _this.radio2= Number(_this.PageStore.radio);
+      console.log("$router: %o",_this.$route);
+      _this.handleTabClick({label:_this.activeName2},null,_this.currentPage)
+    },600)
+
 
   },
   filters: {
@@ -277,50 +289,61 @@ export default {
     }
   },
   watch: {
+   '$store.getters.getAuthority':function(){
+      // alert("5555555555555555555")
+   },
     '$route': function(to, from) {
+    //  alert("$router")
+      ((this.$route.path == "/promotion/sendExpress" &&
+          (this.pageId = "SD1010")) ||
+        (this.$route.path == "/promotion/chooseExpress" &&
+          (this.pageId = "BM1010")) ||
+        (this.$route.path == "/promotion/expressOrder" &&
+          (this.pageId = "SS1010")))
+      // this.pageId = "SD1010"; // 寄快递首页
+      this.activeName2 = this.initActiveName;
+      this.handleTabClick({label:this.activeName2},null,undefined,true);
       // alert(this.auditStatusFlage)
       // 默认状态是 运营位管理的 寄快递首页
-      this.url = "/api/promotion/audit/list";
-      // this.pageId = "SD1010"; // 寄快递首页
-      this.activeName2 = "配置";
-      this.currentPage = 1;
-      this.radio2 = 1;
-      this.auditStatusFlage = true;
-      this.showConfig = true;
-      this.showflag = true;
+
+      // if(this.activeName2 == "配置") {
+      //   this.url = "/api/promotion/audit/list"; // 默认展开 配置
+      // } else {
+      //   this.url = "/api/promotion/onlineList"
+      // }
+      // this.currentPage = 1;
+      // this.radio2 = 1;
+      // this.auditStatusFlage = true;
+      // this.showConfig = true;
+      // this.showflag = true;
       this.PageStore.commit("setPage",1);
       this.PageStore.commit("setRadio",1);
-      this.PageStore.commit("setTabName","配置");
-      ((this.$route.path == "/sendExpress" &&
-          (this.pageId = "SD1010")) ||
-        (this.$route.path == "/chooseExpress" &&
-          (this.pageId = "BM1010")) ||
-        (this.$route.path == "/expressOrder" &&
-          (this.pageId = "SS1010")))
+      this.PageStore.commit("setTabName",this.initActiveName);
 
-      var _this = this;
-      _this.$http.post(this.url, {
-        "pages": {
-          "page_size": this.pageSize,
-          "page_num": _this.currentPage - 1
-        },
-        "con": {
-          "pageId": this.pageId,
-          "status":this.radio2
-        }
-      }, (rsp) => {
-        _this.tableData = rsp.page_list
-        _this.totalCount =  parseInt(rsp.pages.cnt);
-        //  console.log("success");
-        //  console.log(data);
-      })
+      //
+      // var _this = this;
+      // _this.$http.post(this.url, {
+      //   "pages": {
+      //     "page_size": this.pageSize,
+      //     "page_num": _this.currentPage - 1
+      //   },
+      //   "con": {
+      //     "pageId": this.pageId,
+      //     "status":this.radio2
+      //   }
+      // }, (rsp) => {
+      //   _this.tableData = rsp.page_list
+      //   _this.totalCount =  parseInt(rsp.pages.cnt);
+      //   //  console.log("success");
+      //   //  console.log(data);
+      // })
     }
   },
   methods: {
     //点击图片显示大图
     showImg(row){
       this.dialogVisible = true;
-      this.bigImageUrl = row;
+      this.bigImageUrl = row || '11';
     },
     // 监听 子组件覆盖对话框 的回调函数
     changeVisible(flag) {
@@ -400,10 +423,8 @@ export default {
       }
       this.promotionID = row.promotionId || row.id;
       this.promotionURL = '/api/promotion/status/update';
-
       this.promotionType = 'success';
       this.url = "/api/promotion/audit/list"; // 刷新列表 url
-
     },
     Operationchange() {
       this.loadingTakeOffFlag = true;
@@ -429,7 +450,6 @@ export default {
       this.promotionMessage = '申请已驳回！';
       this.promotionType = 'success';
       this.url = "/api/promotion/audit/list"; // 默认展开 配置
-
     },
     OperationEffectDetail() {
       this.loadingTakeOffFlag = true;
@@ -442,9 +462,11 @@ export default {
       this.myDiglogContent = "确认后，该内容将待审详情";
     },
     // 标签页导航
-    handleTabClick(tab, event,countPage) {
+    handleTabClick(tab, event,countPage,loadingFlag) {
       var _this = this;
-      _this.listLoading = true;
+      if(loadingFlag === undefined){
+        _this.listLoading = true;
+      }
       _this.tableFalg = false
       _this.showConfig = false;
       _this.showflag = false;

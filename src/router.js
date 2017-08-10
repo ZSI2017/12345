@@ -1,4 +1,6 @@
 import home from './page/home.vue'
+import hljs from "highlight.js";
+hljs.initHighlightingOnLoad()
 //订单管理
 import orderManage from './page/orderManage/index.vue'
 import orderDetail from './page/orderManage/orderDetail.vue'
@@ -73,6 +75,17 @@ import blankList from './page/blankList/index.vue'
 import totalpages from './page/priceManage/totalpages.vue'
 import priceManage from './page/priceManage/index.vue'
 import detail from './page/priceManage/detail.vue'
+
+//开发者工具
+import lbs from './page/lbs/index.vue'
+import logismerchant from './page/logismerchant/index.vue'
+import logismerchantMain from './page/logismerchant/main.vue'
+import logismerchantAddData from "./page/logismerchant/addData.vue";
+import logismerchantEditData from "./page/logismerchant/editData.vue";
+import cache from './page/cache/index.vue'
+import whitelist from './page/whitelist/index.vue'
+
+
 
 import page1 from './page/priceManage/page1.vue'
 import page2 from './page/priceManage/page2.vue'
@@ -149,14 +162,14 @@ let routes =  [
    component:index,
    hasChild:true,
    children:[
-     { path:'/sendExpress',component:operationPosition,name:"寄快递首页",
+     { path:'/promotion/sendExpress',component:operationPosition,name:"寄快递首页",
        children:[
           {path:'',component:operationPositionMain},
           {path:'addData',name:'添加',component:addData},
           {path:'editData',name:'修改',component:editData},
           {path:'detail',name:'查看详情',component:editData}
        ]},
-      {path:'/chooseExpress',component:operationPosition,name:"选择快递页",
+      {path:'/promotion/chooseExpress',component:operationPosition,name:"选择快递页",
       children:[
           {path:'',component:operationPositionMain},
           {path:'addData',name:'添加',component:addData},
@@ -164,7 +177,7 @@ let routes =  [
           {path:'detail',name:'查看详情',component:editData}
       ]
     },
-      {path:'/expressOrder',component:operationPosition,name:"选快递下单页",
+      {path:'/promotion/expressOrder',component:operationPosition,name:"选快递下单页",
       children:[
          {path:'',component:operationPositionMain},
          {path:'addData',name:'添加',component:addData},
@@ -320,6 +333,30 @@ let routes =  [
     }
    ]
  },
+
+ //物流机构
+{
+   path:'/',
+   name:"开发者管理",
+   component:index,
+   hasChild:true,
+   children:[
+      {path:'/dev/lbs',component:lbs,name:"矫正坐标"},
+      {path:'/dev/logismerchant',component:logismerchant,name:"物流机构",
+        children:[
+          {path:'',component:logismerchantMain},
+          {path:'addData',name:'添加',component:logismerchantAddData},
+          {path:'editData',name:'修改',component:logismerchantEditData}
+        ]
+      },
+      {path:'/dev/cache',component:cache,name:"缓存管理工具"},
+      {path:'/dev/whitelist',component:whitelist,name:"白名单管理"}
+
+   ]
+  //  path:'/orderCancle',component:orderCancle
+
+},
+
  //公告管理
 
  //用户管理
@@ -332,7 +369,9 @@ let routes =  [
       {path:'/login',component:oneCitySend,name:"退出登录"}
    ]
 
- }
+ },
+
+
  //黑名单管理
 //  {
 //    path:'/',

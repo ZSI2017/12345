@@ -22,7 +22,7 @@
       v-loading.body.fullscreen.lock="fullscreenLoading"
       v-show="fold"
       >
-      <el-menu  :default-active="$route.fullPath" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
+      <el-menu  v-if="menuFlag" :default-active="$route.fullPath" :unique-opened="uniqueOpened" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router style="background:#fff;">
         <!-- <p style="color:white;text-align:center;font-weight:bold">  后台管理</p> -->
         <template v-for="(items,index) in $router.options.routes">
 
@@ -79,6 +79,8 @@
 <script>
 import "@/style/common.scss";
 import { getLoadingFlag } from "@/vuex/getters";
+import localEvent from 'src/vuex/function.js';
+import Cookie from "@/util/cookie.js"
 // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
@@ -87,6 +89,7 @@ import { getLoadingFlag } from "@/vuex/getters";
 export default {
   data() {
     return {
+      menuFlag:true,
       showClose:false,
       fullscreenLoading:false,
       defaultActive:"",
@@ -94,7 +97,7 @@ export default {
       uniqueOpened: true,
       fold: true,
       headerFixed: true,
-      userID:"2088702773405612@alipay",
+      // userID:"2088702773405612@alipay",
       title: "寄件平台运营管理系统",
       input: '',
       isActive:false
@@ -103,19 +106,28 @@ export default {
   computed:{
       loadingFlag() {
           return this.$store.state.loadingFlag;
+      },
+      Authority() {
+        return this.$store.getters.getAuthority;
+      },
+      userID() {
+          return this.$store.state.uid;
       }
   },
   mounted() {
       this.sayHello();
   },
   created() {
+    this.menuFlag = false;
+    // this.menuFlag = true;
     if(this.$router.currentRoute.fullPath == "/home") {
         this.isActive = true;
     }
     var _this = this;
     setTimeout(() => {
       console.log(_this);
-    },3000)
+        _this.menuFlag = true;
+    },600);
     console.log("router");
     console.log(this);
   },
@@ -165,11 +177,7 @@ export default {
     handleSelect(key, keyPath) {
          this.PageStore.commit("setPage",1);
          this.PageStore.commit("setRadio",1);
-         this.PageStore.commit("setTabName","配置");
-      // this.fullscreenLoading = true;
-      //  this.defaultActive =""+key;
-      //  console.log("this.$route.path");
-      //  console.log(this.$route.path);
+         this.PageStore.commit("setTabName",this.Authority == "审核"?"已上线":'配置');
       if (this.$route.path == "/sendExpress/addData"
            ||this.$route.path == "/sendExpressEnter/addData"
            ||this.$route.path == "/chooseExpress/addData"
@@ -197,10 +205,18 @@ export default {
         },600);
       }
     },
-    // handleLogout(){
-    //     this.$router.push({path:'/login'});
-    //     // this.$router.
-    // }
+    handleLogout(){
+        this.$store.dispatch('setLoginOutFlag',true);
+        let topLevel_domains = ".alipay-eco.com"
+        console.log(topLevel_domains);
+        localEvent.clear("ACL");
+        Cookie.delete("SMJSESSIONID");
+        Cookie.delete('ALIPAYJSESSIONID');
+        Cookie.delete("ctoken",topLevel_domains);
+        Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
+        Cookie.delete('express1');
+        this.$router.push({path:'/login'});
+    }
   }
 }
 </script>
