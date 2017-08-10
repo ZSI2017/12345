@@ -187,7 +187,6 @@ export default {
         this.loadData();
     },
     useqrcode(row){
-        alert(1)
         console.log(row.id)
         var canvas = document.getElementById('canvas');
         // let codeHttp = 'www.baidu.com';
