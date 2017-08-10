@@ -241,14 +241,18 @@ import localEvent from 'src/vuex/function.js';
         }],
         expressPays:[{
             name: "支付方式",
-            message: '',
+            message: '支付宝在线支付',
         },
         {
             name: "预计费用",
             message: "",
         },
         {
-            name: "实际费用",
+            name: "账单费用",
+            message: "",
+        },
+        {
+            name: "实付费用",
             message: '',
         }],
         requestData:{},
@@ -307,18 +311,7 @@ import localEvent from 'src/vuex/function.js';
                 this.items[8].message = rsp.outOrderNo || '暂无';
                 this.items[9].message = rsp.expNameOld? '是':'否';//是否转运快递
                 this.items[10].message = rsp.gmtBill || '暂无';
-                this.items[11].message = rsp.orderStatus || '暂无';
-                if(rsp.orderStatus == '1'){
-                    this.items[11].message = '待接单';
-                }else if(rsp.orderStatus == '2'){
-                    this.items[11].message = '待取件';                    
-                }else if(rsp.orderStatus == '3'){
-                    this.items[11].message = '已取件';                    
-                }else if(rsp.orderStatus == '4'){
-                    this.items[11].message = '已取消';                    
-                }else{
-                    this.items[11].message = '已作废';                                        
-                }
+                this.items[11].message = rsp.strOrderStatus || '暂无';
                 //寄件人信息
                 this.senderItems[0].message = rsp.snderName || '暂无';
                 this.senderItems[1].message = rsp.snderMobile || '暂无';

@@ -4,7 +4,7 @@
     <el-row>
       <el-col :span="6" class="import-font">关键字：</el-col>
       <el-col :span="10">
-          <el-input :span="10" v-model="keyword" type="number" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
+          <el-input :span="10"  v-model="keyword" type="number" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
         <el-button type="primary" @click="loadData" style="width:100px;">搜 索</el-button>
@@ -33,20 +33,20 @@
     </el-table-column>
     <el-table-column align="center" label="相关订单号" width="260">
       <template scope="scope">
-          <p>订单号：{{scope.row.orderNo}}</p>
-          <p>运单号：{{scope.row.waybillNo || "-"}}</p>
+          <p style="text-align:left">订单号：{{scope.row.orderNo}}</p>
+          <p style="text-align:left">运单号：{{scope.row.waybillNo || "-"}}</p>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="寄件人信息">
+    <el-table-column align="center" label="寄件人信息" width="220">
       <template scope="scope">
-          <p><span>{{scope.row.snderName}}</span> <span>{{scope.row.snderMobile}}</span></p>
-          <p>{{scope.row.snderAddress}}</p>
+          <span>{{scope.row.snderName}}</span> <span>{{scope.row.snderMobile}}</span><br/>
+          <span>{{scope.row.snderAddress}}</span>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="收件人信息">
+    <el-table-column align="center" label="收件人信息" width="220">
       <template scope="scope">
-          <p>{{scope.row.rcvrName}} {{scope.row.rcvrMobile}}</p>
-          <p>{{scope.row.rcvrAddress}}</p>
+          <span>{{scope.row.rcvrName}} {{scope.row.rcvrMobile}}</span><br/>
+          <span>{{scope.row.rcvrAddress}}</span>
       </template>
     </el-table-column>
     <el-table-column prop="expName" align="center" label="快递公司">
@@ -94,6 +94,23 @@ export default {
       showAllifo:'查看完整信息',
       viewIfoArray:[]
     }
+  },
+  mounted() {
+      if(localEvent.get("localorderKeyword")){
+          var localKeyword = localEvent.get("localorderKeyword");
+          var localRadio = localEvent.get("localorderRadio");  
+          
+          this.keyword = localKeyword;
+          this.type = localRadio;
+          this.radio = localRadio;
+          console.log(localKeyword);
+          
+          this.loadData();
+      }else{
+          this.radir = '1';
+          this.keyWord = '';
+      }
+      
   },
   created() {
     // this.loadData();
@@ -175,6 +192,9 @@ export default {
     },
     handleClick(row) {
       localEvent.set("localorderManage", row.orderNo);
+      localEvent.set("localorderKeyword", this.keyword);
+      localEvent.set("localorderRadio", this.radio);
+      
       this.$router.push({path:'/orderManage/orderDetail'});
     },
     handleEdit(index,row) {
