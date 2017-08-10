@@ -27,6 +27,8 @@ export default {
   },
   methods: {
     loginIn() {
+        this.$store.dispatch('setIsAuthority',false);
+      this.$store.dispatch('setLoginOutFlag',false);
       const URL = "/loginProxy"
       this.$http.get(URL,{
         "realUrl":"http://192.168.11.88:8080/#/home"
@@ -39,6 +41,8 @@ export default {
       })
     },
     loginInText() {
+          this.$store.dispatch('setIsAuthority',true);
+        this.$store.dispatch('setLoginOutFlag',false);
           Cookie.set("express1","mng",6000000);
       // const URL = "/loginProxy" http://sendexmng-sit.alipay-eco.com/smc
       window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURI(window.location.href);

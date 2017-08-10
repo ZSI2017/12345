@@ -11,7 +11,9 @@ const state = {
     loadingChange:false,   // 记录是否 要进行 离开的路由监控
     nextRouter:'',          // 记录即将进入 的路由路径
     uid:'',               // 记录用户的uid
-    authority:''          // 记录 当前用户的权限
+    authority:'',     // 记录 当前用户的权限
+    loginOutFlag:false,    // 记录 是否点击登出 按钮
+    isAuthority:true,     // 默认是不开启 权限登录；
 }
 
 const mutations = {
@@ -29,6 +31,12 @@ const mutations = {
      },
      SETAUth(state,str) {
            state.authority = str;
+     },
+     SETLOGINOUT(state,flag) {
+          state.loginOutFlag = flag;
+     },
+     SETISAUTHORITY(state,flag) {
+          state.isAuthority = flag;
      }
 
 }
