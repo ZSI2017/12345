@@ -18,8 +18,6 @@ if(process.env.NODE_ENV === "development"){
 // add request interceptor
 axios.interceptors.request.use(function(config) {
 
-
-    alert(encodeURI(window.location.href));
     // TODO  before request is sent
      console.log("%c[axios log]before request:%s\n %o","color:green;font-size:16px;",config.url,config);
     return config;
@@ -76,7 +74,7 @@ function checkErrorCode(response) {
        if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
           //  console.log(successfn(response.data.result))
           console.log(response);
-           successfn(response.data.result);
+           successfn(response.data.result||response.data);
        }else {
             if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
@@ -135,7 +133,7 @@ export default {
                   // before get the response data
                   return data;
             }],
-            withCredentials: false,   //  默认false
+            // withCredentials: false,   //  默认false
             data:data,
             // timeout:10000,
             responseType:'json',  // default

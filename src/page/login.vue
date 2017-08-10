@@ -41,7 +41,7 @@ export default {
     loginInText() {
           Cookie.set("express1","mng",6000000);
       // const URL = "/loginProxy" http://sendexmng-sit.alipay-eco.com/smc
-      window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURI('http://192.168.11.88:8080/#/home');
+      window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURI(window.location.href);
       // this.$http.get(URL,{
       //   "realUrl":"http://sendexmng-sit.alipay-eco.com/smc"
       // }, (result) => {

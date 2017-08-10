@@ -79,6 +79,8 @@
 <script>
 import "@/style/common.scss";
 import { getLoadingFlag } from "@/vuex/getters";
+import localEvent from 'src/vuex/function.js';
+import Cookie from "@/util/cookie.js"
 // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
@@ -103,6 +105,9 @@ export default {
   computed:{
       loadingFlag() {
           return this.$store.state.loadingFlag;
+      },
+      Authority() {
+        return this.$store.getters.getAuthority;
       },
       userID() {
           return this.$store.state.uid;
@@ -168,7 +173,7 @@ export default {
     handleSelect(key, keyPath) {
          this.PageStore.commit("setPage",1);
          this.PageStore.commit("setRadio",1);
-         this.PageStore.commit("setTabName","配置");
+         this.PageStore.commit("setTabName",this.Authority == "审核"?"已上线":'配置');
       // this.fullscreenLoading = true;
       //  this.defaultActive =""+key;
       //  console.log("this.$route.path");
@@ -200,10 +205,16 @@ export default {
         },600);
       }
     },
-    // handleLogout(){
-    //     this.$router.push({path:'/login'});
-    //     // this.$router.
-    // }
+    handleLogout(){
+
+        this.$router.push({path:'/login'});
+        localEvent.clear("ACL");
+        Cookie.delete("ECOACLJSESSIONID");
+        Cookie.delete("SMJSESSIONID");
+        Cookie.delete("ctoken");
+
+        // this.$router.
+    }
   }
 }
 </script>

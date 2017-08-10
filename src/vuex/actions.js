@@ -10,3 +10,6 @@ export const changeLoadingChange = ({commit,state},value) =>{
 export const setUid = ({commit,state},value) => {
        commit('SETUID',value)
 }
+export const setAuthority = ({commit,state},value) => {
+       commit('SETAUth',value)
+}

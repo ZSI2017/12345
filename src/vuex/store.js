@@ -10,7 +10,8 @@ const state = {
     loadingFlag :false,    // 记录是否 弹出 离开提示的弹框
     loadingChange:false,   // 记录是否 要进行 离开的路由监控
     nextRouter:'',          // 记录即将进入 的路由路径
-    uid:''                // 记录用户的uid
+    uid:'',               // 记录用户的uid
+    authority:''          // 记录 当前用户的权限
 }
 
 const mutations = {
@@ -25,7 +26,11 @@ const mutations = {
      },
      SETUID(state,uid) {
           state.uid = uid;
+     },
+     SETAUth(state,str) {
+           state.authority = str;
      }
+
 }
 
 export default new Vuex.Store({

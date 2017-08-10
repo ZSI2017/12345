@@ -328,7 +328,7 @@ export default {
   },
   computed: {
     GETEDITFORM() {
-      alert(this.$store.getters.GETEDITFORM)
+      // alert(this.$store.getters.GETEDITFORM)
       return this.$store.getters.GETEDITFORM;
     }
   },
