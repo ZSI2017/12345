@@ -16,7 +16,15 @@
       <el-input v-model="ruleForm.merchantName" placeholder="请输入机构名称"> </el-input>
     </el-form-item>
     <el-form-item label="物流机构类型">
-      <el-input v-model="ruleForm.merchantType" placeholder="请输入物流机构类型"> </el-input>
+      <!--<el-input v-model="ruleForm.merchantType" placeholder="请输入物流机构类型"> </el-input>-->
+      <el-select v-model="ruleForm.merchantType" @change="handleAccessType" placeholder="请选择物流机构类型" style="width:100%;">
+            <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+            </el-option>
+        </el-select>
     </el-form-item>
     <el-form-item label="物流机构LOGO的URL">
         <!--<el-input v-model="ruleForm.merchantLogo" placeholder="请输入物流机构LOGO的URL"> </el-input>      -->
@@ -35,16 +43,15 @@
       </el-upload>
     </el-form-item>
     <el-form-item label="物流机构LOGO_CARD的URL">
-        <!--<el-input v-model="ruleForm.merchantLogo_card" placeholder="请输入物流机构LOGO_CARD的URL"> </el-input>      -->
         <el-upload
             class="upload-demo"
             action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
-            :on-change="handleImageChange"
+            :on-change="handleImageChange2"
             :file-list="ruleForm.merchantLogo_card"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :on-success='handleSuccess'
-            :on-error='handlerror'
+            :on-preview="handlePreview2"
+            :on-remove="handleRemove2"
+            :on-success='handleSuccess2'
+            :on-error='handlerror2'
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -102,9 +109,9 @@
       <el-input v-model="ruleForm.outSysName" placeholder="请输入外部ISV系统名"> </el-input>
     </el-form-item>
     <el-form-item label="接入方式">
-        <el-select v-model="value" placeholder="请选择接入方式" style="width:100%;">
+        <el-select v-model="ruleForm.accessType" @change="handleAccessType" placeholder="请选择接入方式" style="width:100%;">
             <el-option
-            v-for="item in options"
+            v-for="item in options2"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -112,10 +119,9 @@
         </el-select>
     </el-form-item>
     <el-form-item label="接入状态">
-      <!--<el-input v-model="ruleForm.accessStatus" placeholder="请输入接入状态"> </el-input>-->
-        <el-select v-model="value" placeholder="请选择接入状态" style="width:100%;">
+        <el-select v-model="ruleForm.accessStatus" placeholder="请选择接入状态" style="width:100%;">
             <el-option
-            v-for="item in options"
+            v-for="item in options3"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -123,10 +129,9 @@
         </el-select>
     </el-form-item>
     <el-form-item label="服务区域获取方式">
-      <!--<el-input v-model="ruleForm.serviceAreaAcqMethod" placeholder="请输入服务区域获取方式"> </el-input>-->
-        <el-select v-model="value" placeholder="请选择服务区域获取方式" style="width:100%;">
+        <el-select v-model="ruleForm.serviceAreaAcqMethod" placeholder="请选择服务区域获取方式" style="width:100%;">
             <el-option
-            v-for="item in options"
+            v-for="item in options4"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -134,36 +139,43 @@
         </el-select>
     </el-form-item>
     <el-form-item label="接单开始时间">
-        <el-date-picker
+        <el-time-select
+            placeholder="请选择接单开始时间"
             v-model="ruleForm.acceptOrderFrom"
-            type="datetime"
-            style='width:100%;'
-            placeholder="请选择接单开始时间">
-        </el-date-picker>
+            style="width:100%;"
+            :picker-options="{
+            start: '08:30',
+            step: '00:15',
+            end: '18:30'
+            }">
+        </el-time-select>
     </el-form-item>
     <el-form-item label="接单结束时间">
-        <!--<el-input v-model="ruleForm.acceptOrderTo" placeholder="请输入接单结束时间"> </el-input>-->
-        <el-date-picker
+        <el-time-select
+            placeholder="请输入接单结束时间"
             v-model="ruleForm.acceptOrderTo"
-            type="datetime"
-            style='width:100%;'            
-            placeholder="请选择接单开始时间">
-        </el-date-picker>
+            style="width:100%;"
+            :picker-options="{
+            start: '08:30',
+            step: '00:15',
+            end: '18:30',
+            minTime: ruleForm.acceptOrderFrom
+            }">
+        </el-time-select>
+        
     </el-form-item>
     <el-form-item label="服务时间段间隔">
-      <!--<el-input v-model="ruleForm.serviceTimeInterval" placeholder="请输入服务时间段间隔"> </el-input>-->
-        <el-date-picker
-            v-model="ruleForm.serviceTimeInterval"
-            type="datetimerange"
-            style='width:100%;'            
-            placeholder="请选择服务时间段间隔">
-        </el-date-picker>
+        <el-input 
+        placeholder="请选择服务时间段间隔" 
+        style='width:100%;' 
+        v-model="ruleForm.serviceTimeInterval">
+          <template slot="append">小时</template>
+        </el-input>
     </el-form-item>
     <el-form-item label="授权状态">
-      <!--<el-input v-model="ruleForm.alipayAuthStatus" placeholder="请输入授权状态"> </el-input>-->
-        <el-select v-model="value" placeholder="请选择授权状态" style="width:100%;">
+        <el-select v-model="ruleForm.alipayAuthStatus" placeholder="请选择授权状态" style="width:100%;">
             <el-option
-            v-for="item in options"
+            v-for="item in options1"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -176,7 +188,7 @@
     <el-form-item label="授权商户APPID">
       <el-input v-model="ruleForm.alipayAppid" placeholder="请输入授权商户APPID"> </el-input>
     </el-form-item>
-    <!--<el-form-item label="商户授权令牌">
+    <el-form-item label="商户授权令牌">
       <el-input v-model="ruleForm.alipayAuthToken" placeholder="请输入商户授权令牌"> </el-input>
     </el-form-item>
     <el-form-item label="刷新令牌">
@@ -184,18 +196,18 @@
     </el-form-item>
     <el-form-item label="商户有权令牌有效期">
         <el-date-picker
-            v-model="ruleForm.authTokenExpried"
-            type="datetimerange"
-            style='width:100%;'            
-            placeholder="请选择商户有权令牌有效期">
+          v-model="ruleForm.authTokenExpried"
+          type="datetime"
+          style='width:100%;'                      
+          placeholder="请选择商户有权令牌有效期">
         </el-date-picker>
     </el-form-item>
     <el-form-item label="刷新令牌有效期">
         <el-date-picker
-            v-model="ruleForm.rtExpried"
-            type="datetimerange"
-            style='width:100%;'            
-            placeholder="请选择刷新令牌有效期">
+          v-model="ruleForm.rtExpried"
+          type="datetime"
+          style='width:100%;'                      
+          placeholder="请选择刷新令牌有效期">
         </el-date-picker>
     </el-form-item>
     <el-form-item label="后台操作用户ID">
@@ -203,13 +215,15 @@
     </el-form-item>
     <el-form-item label="后台操作用户名称">
       <el-input v-model="ruleForm.mngUname" placeholder="请输入后台操作用户名称"> </el-input>
-    </el-form-item>-->
+    </el-form-item>
     <el-button type="primary" size="large" @click="handleSubmit('ruleForm')">提 交</el-button>
   </el-form>
-
-  <!--图片预览 框  -->
-   <el-dialog v-model="dialogVisible" size="tiny">
-     <img width="100%" :src="ruleForm.fileList" alt="">
+  <!--//图片预览、-->
+  <el-dialog v-model="dialogVisible" size="tiny">
+    <img width="100%" :src="dialogImg" alt="">
+  </el-dialog>
+  <el-dialog v-model="dialogVisible2" size="tiny">
+    <img width="100%" :src="dialogImg2" alt="">
   </el-dialog>
 
 </section>
@@ -218,14 +232,18 @@
   import {
     formatDate
   } from 'src/util/date.js';
+
 export default {
   data() {
     return {
       showAlert:false, // 展示警告信息
       dialogVisible:false,
-      url:'/api/promotion/audit/add',
+      dialogVisible2:false,
+      url:'/api/logisMerchant/save',
       value:'',
       value1:'',
+      dialogImg:[],
+      dialogImg2:[],      
       // 对输入表单进行验证
       ruleForm: {
         merchantCode:'',
@@ -257,39 +275,70 @@ export default {
         alipayAuthStatus:'',
         alipayPid:'',
         alipayAppid:'',
-        // alipayAuthToken:'',
-        // refreshToken:'',
-        // authTokenExpried:'',
-        // rtExpried:'',
-        // mngUid:'',
-        // mngUname:'',
-        // serviceAreaAcqMethod:'',
-        // serviceTimeInterval:'',
-        // gmtCreate:'',
-        // gmtModified:''
+        alipayAuthToken:'',
+        refreshToken:'',
+        authTokenExpried:'',
+        rtExpried:'',
+        mngUid:'',
+        mngUname:'',
+        serviceAreaAcqMethod:'',
+        serviceTimeInterval:'',
+        gmtCreate:'',
+        gmtModified:''
       },
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
+      options:[{
+          value: '1',
+          label: '物流公司'
         }, {
-          value: '选项2',
-          label: '双皮奶'
+          value: '0',
+          label: 'ISV'
         }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }]
+          value: '3',
+          label: '物流平台'
+        }],
+        //授权状态
+       options1: [{
+          value: '1',
+          label: '已授权'
+        }, {
+          value: '0',
+          label: '未授权'
+        }], 
+        //接入方式
+        options2:[{
+          value: '1',
+          label: '物流公司直接接入'
+        }, {
+          value: '2',
+          label: '通过isv接入'
+        }],
+        //接入方式
+        options3:[{
+          value: '0',
+          label: '未接入'
+        }, {
+          value: '1',
+          label: '已接入'
+        }],
+        //接入方式
+        options4:[{
+          value: '1',
+          label: '内部数据'
+        }, {
+          value: '2',
+          label: '外部接口'
+        }],
 
     }
   },
   created() {
-
 
   },
   beforeMount() {
 
   },
   mounted() {
-     console.log("router params %c %o","fontSize:20px",this.$route.params);
+    console.log("router params %c %o","fontSize:20px",this.$route.params);
 
   },
   beforeDestory() {
@@ -303,77 +352,95 @@ export default {
     handleSubmit(formName) {
       var _this = this;
       console.log("-----------------------");
-        console.log(this.$refs[formName]),
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log('error submit');
-          // router.app.$store.state.loadingChange = true
-          // _this.$router.app.$store.state.loadingChange = true;
-          // _this.$store.dispatch('changeLoadingChange',true);
-          // _this.$router.go(-1);
-          //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
-          let submitDate = _this.ruleForm.date1;
-          console.log(submitDate)
-          this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
-          this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
-          console.log(this.ruleForm.gmtBegin)
-          console.log(this.ruleForm.gmtEnd)
+      console.log(this.$refs[formName]);
+      //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
+      // let submitDate = _this.ruleForm.date1;
+      // console.log(submitDate)
+      // this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
+      // this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
+      // console.log(this.ruleForm.gmtBegin)
+      // console.log(this.ruleForm.gmtEnd)
+      console.log(this.ruleForm.accessType)
+      console.log(this.ruleForm.alipayAuthStatus)
+      
+      let httpData = {
+            "data": {
+              'merchantCode':this.ruleForm.merchantCode,
+              'merchantType':this.ruleForm.merchantType,
+              'merchantName':this.ruleForm.merchantName,
+              'merchantLogo':this.dialogImg,
+              'merchantLogo_card':this.dialogImg2,
+              'payeePid':this.ruleForm.payeePid,
+              'payeeAccount':this.ruleForm.payeeAccount,
+              'contactName':this.ruleForm.contactName,
+              'contactMobile':this.ruleForm.contactMobile,
+              'businessLicenceCode':this.ruleForm.businessLicenceCode,
+              'businessLicencePic':this.ruleForm.businessLicencePic,
+              'logisLicenceCode':this.ruleForm.logisLicenceCode,
+              'logisLicencePic':this.ruleForm.logisLicencePic,
+              'provinceCode':this.ruleForm.provinceCode,
+              'cityCode':this.ruleForm.cityCode,
+              'districtCode':this.ruleForm.districtCode,
+              'address':this.ruleForm.address,
+              'zip':this.ruleForm.zip,
+              'email':this.ruleForm.email,
+              'merchantTel':this.ruleForm.merchantTel,
+              'isvMerchantId':this.ruleForm.isvMerchantId,
+              'outSysName':this.ruleForm.outSysName,
+              'accessType':this.ruleForm.accessType,
+              'accessStatus':this.ruleForm.accessStatus,
+              'acceptOrderFrom':this.ruleForm.acceptOrderFrom,
+              'acceptOrderTo':this.ruleForm.acceptOrderTo,
+              'alipayAuthStatus':this.ruleForm.alipayAuthStatus,
+              'alipayPid':this.ruleForm.alipayPid,
+              'alipayAppid':this.ruleForm.alipayAppid,
+              'alipayAuthToken':this.ruleForm.alipayAuthToken,
+              'refreshToken':this.ruleForm.refreshToken,
+              'authTokenExpried':formatDate(this.ruleForm.authTokenExpried, 'yyyy-MM-dd hh:mm:ss'),
+              'rtExpried':formatDate(this.ruleForm.rtExpried, 'yyyy-MM-dd hh:mm:ss'),
+              'mngUid':this.ruleForm.mngUid,
+              'mngUname':this.ruleForm.mngUname,
+              'serviceAreaAcqMethod':this.ruleForm.serviceAreaAcqMethod,
+              'serviceTimeInterval':this.ruleForm.serviceTimeInterval,
+              // 'gmtCreate':this.ruleForm.gmtCreate,
+              // 'gmtModified':this.ruleForm.gmtModified
+            }
+          };
+        _this.$http.post(_this.url,httpData,(result) => {
+            alert("result")
+            console.log(result)
+            // _this.$store.dispatch('changeLoadingChange',true);
+            // _this.$router.go(-1);
 
-          let httpData = {
-                "data": {
-                  "pageId": _this.pageId,
-                  "name": _this.ruleForm.name,
-                  "imageUrl": _this.ruleForm.fileList,
-                  "sortWeight": _this.ruleForm.sortWeight,
-                  "linkUrl": _this.ruleForm.linkUrl,
-                  "gmtBegin": _this.ruleForm.gmtBegin,
-                  "gmtEnd": _this.ruleForm.gmtEnd,
-                  "opStatus": _this.ruleForm.status
-                },
-                "area": {
-                  "code": "000000",
-                  "check": _this.check,
-                  "provinces": _this.gridData,
-                }
-              };
-            _this.$http.post(_this.url,httpData,(result) => {
-               alert("result")
-              _this.$store.dispatch('changeLoadingChange',true);
-              _this.$router.go(-1);
-            // _this.tableData = result.page_list;
-            // _this.totalCount = parseInt(result.pages.cnt);
-          },(error) => {
-              this.$message({
-                  type: 'error',
-                  message: error.data.meta.code+"--"+error.data.meta.msg
-              });
-          });
 
-          // console.log(this.$route.matched);
 
-        } else {
-          console.log(_this);
-          _this.showAlert = true;
-          return false;
-        }
-      })
+        },(error) => {
+            this.$message({
+                type: 'error',
+                message: error.data.meta.code+"--"+error.data.meta.msg
+            });
+        });
+
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
         this.$router.go(-1);
       // this.loadingFlag = true;
     },
-    // 对图片操作的控制
+    // 对 物流机构LOGO的URL 图片操作的控制
     handleImageChange(file,fileList){
-        this.ruleForm.merchantLogo = fileList.slice(-1);
+        this.ruleForm.merchantLogo= fileList.slice(-1);
     },
     handlePreview(file) {
       this.dialogVisible = true;
       console.log(file.response)
     },
     handleSuccess(file){
+      console.log(file)
       console.log(file.result)
-      this.ruleForm.fileList = file.result;
+      this.dialogImg = file.result;
+      console.log(this.dialogImg)
+    
     },
     handlerror(err, file, fileList){
       alert(err);
@@ -381,6 +448,29 @@ export default {
       alert(fileList);
     },
     handleRemove() {},
+    // 对 物流机构LOGO_CARD的URL 图片操作的控制
+    handleImageChange2(file,fileList){
+        this.ruleForm.merchantLogo_card = fileList.slice(-1);
+    },
+    handlePreview2(file) {
+      this.dialogVisible2 = true;
+      console.log(file.response)
+    },
+    handleSuccess2(file){
+      console.log(file.result)
+      this.dialogImg2 = file.result;
+      console.log(this.dialogImg2)   
+    },
+    handlerror2(err, file, fileList){
+      alert(err);
+      alert(file);
+      alert(fileList);
+    },
+    handleRemove() {},
+    //接入方式 change
+    handleAccessType(){
+      console.log(this.ruleForm.accessType)
+    },
 
     onSubmit() {
       console.log('submit!');

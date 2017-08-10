@@ -32,22 +32,27 @@
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <el-dialog v-model="dialogVisible" size="tiny">
+              <img width="100%" :src="ruleForm.merchantLogo[0].url" alt="">
+            </el-dialog>
       </el-upload>
     </el-form-item>
     <el-form-item label="物流机构LOGO_CARD的URL">
-        <!--<el-input v-model="ruleForm.merchantLogo_card" placeholder="请输入物流机构LOGO_CARD的URL"> </el-input>      -->
         <el-upload
             class="upload-demo"
             action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
-            :on-change="handleImageChange"
+            :on-change="handleImageChange2"
             :file-list="ruleForm.merchantLogo_card"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :on-success='handleSuccess'
-            :on-error='handlerror'
+            :on-preview="handlePreview2"
+            :on-remove="handleRemove2"
+            :on-success='handleSuccess2'
+            :on-error='handlerror2'
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <el-dialog v-model="dialogVisible2" size="tiny">
+              <img width="100%" :src="ruleForm.merchantLogo_card[0].url" alt="">
+            </el-dialog>
         </el-upload>
     </el-form-item>
     <el-form-item label="收款人支付宝PID">
@@ -212,11 +217,6 @@
     <el-button type="primary" size="large" @click="handleSubmit('ruleForm')">提 交</el-button>
   </el-form>
 
-  <!--图片预览 框  -->
-   <el-dialog v-model="dialogVisible" size="tiny">
-     <img width="100%" :src="ruleForm.fileList" alt="">
-  </el-dialog>
-
 </section>
 </template>
 <script type="text/javascript">
@@ -229,6 +229,7 @@ export default {
     return {
       showAlert:false, // 展示警告信息
       dialogVisible:false,
+      dialogVisible2:false,
       url:'/api/promotion/audit/add',
       value:'',
       value1:'',
@@ -237,8 +238,14 @@ export default {
         merchantCode:'',
         merchantType:'',
         merchantName:'',
-        merchantLogo:[],
-        merchantLogo_card:[],
+        merchantLogo:[{
+          name: '',
+          url: ""
+        }],
+        merchantLogo_card:[{
+          name: '',
+          url: ""
+        }],
         payeePid:'',
         payeeAccount:'',
         contactName:'',
@@ -274,16 +281,6 @@ export default {
         gmtCreate:'',
         gmtModified:''
       },
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }],
         //授权状态
        options1: [{
           value: '1',
@@ -333,14 +330,15 @@ export default {
     var _this = this;
     var httpUrl = '/api/logisMerchant/get'
     _this.$http.post(httpUrl,{id:localDeleteId},(result) => {
-        console.log(result.acceptOrderFrom)
+        console.log(result)
+        console.log(result.merchantLogo)
         _this.$store.dispatch('changeLoadingChange',true);
         // this.$router.go(-1);
         _this.ruleForm.merchantCode = result.merchantCode;
         _this.ruleForm.merchantType = result.merchantType;
         _this.ruleForm.merchantName = result.merchantName;
-        _this.ruleForm.merchantLogo = [];
-        _this.ruleForm.merchantLogo_card = [];
+        _this.ruleForm.merchantLogo[0].url = result.merchantLogo;
+        _this.ruleForm.merchantLogo_card[0].url = result.merchantLogo_card;
         _this.ruleForm.payeePid = result.payeePid;
         _this.ruleForm.payeeAccount = result.payeeAccount;
         _this.ruleForm.contactName = result.contactName;
@@ -464,9 +462,9 @@ export default {
         this.$router.go(-1);
       // this.loadingFlag = true;
     },
-    // 对图片操作的控制
+    // 对 物流机构LOGO的URL 图片操作的控制
     handleImageChange(file,fileList){
-        this.ruleForm.merchantLogo = fileList.slice(-1);
+        this.ruleForm.merchantLogo= fileList.slice(-1);
     },
     handlePreview(file) {
       this.dialogVisible = true;
@@ -474,9 +472,27 @@ export default {
     },
     handleSuccess(file){
       console.log(file.result)
-      this.ruleForm.fileList = file.result;
+      this.ruleForm.merchantLogo[0].url = file.result;
     },
     handlerror(err, file, fileList){
+      alert(err);
+      alert(file);
+      alert(fileList);
+    },
+    handleRemove() {},
+    // 对 物流机构LOGO_CARD的URL 图片操作的控制
+    handleImageChange2(file,fileList){
+        this.ruleForm.merchantLogo = fileList.slice(-1);
+    },
+    handlePreview2(file) {
+      this.dialogVisible2 = true;
+      console.log(file.response)
+    },
+    handleSuccess2(file){
+      console.log(file.result)
+      this.ruleForm.merchantLogo_card[0].url = file.result;      
+    },
+    handlerror2(err, file, fileList){
       alert(err);
       alert(file);
       alert(fileList);

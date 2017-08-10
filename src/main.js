@@ -7,7 +7,6 @@ import routes  from "./router.js"
 import Axios from "axios";
 import Vuex from "vuex";
 import Cookie from "@/util/cookie.js"
-import localEvent from 'src/vuex/function.js';
 
 // 引入vuex 进行全局状态管理
 import store from "@/vuex/store.js";
@@ -69,159 +68,159 @@ const router = new VueRouter({
      console.log("---------------------------------------------");
       // Cookie.delete("express1");
 
-   if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")) {
-          if(to.fullPath == "/login") {
-              next({
-                     path:"/home",
-                 });
-          };
-             console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID")
-             localEvent.get("ACL")
-             console.log(localEvent.get("ACL") == '');
-           if(localEvent.get("ACL") !== '') {
-                let result = localEvent.get("ACL");
-                let uid= result.userInfo.uid;
-                store.dispatch('setUid',uid);
-                let pm = result.pm;
-                let routerArr = router.options.routes;
-                let filterName = [];
-                if(pm.Auditor) {
-                        if(pm.Operator) {
-                          store.dispatch('setAuthority',"开发者");
-                            if(pm.CustomerService){
-                              filterName = [];
-                            }else {
-                               filterName = ['订单管理','黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                            }
-                        }else {
-                          store.dispatch('setAuthority',"审核");
-                          if(pm.CustomerService){
-                            filterName = ['服务类型及折扣管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                          }else {
-                             filterName = ["订单管理","服务类型及折扣管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                          }
-                        }
-                 }else {
-                     if(pm.Operator) {
-                          store.dispatch('setAuthority',"配置");
-                         if(pm.CustomerService){
-                           filterName = ['非服务地区管理',"价格管理","运线快递费管理","开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                         }else {
-                            filterName = ['订单管理','非服务地区管理',"价格管理","运线快递费管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                         }
-                     }else {
-                       if(pm.CustomerService){
-                         filterName = ['运营位管理','订单取消频次管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                       }else {
-                          filterName = ['运营位管理',"订单管理","用户管理",'黑名单管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理','订单取消频次管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                       }
-                     }
-                 }
-                for (var i = 0; i < routerArr.length; i++) {
-                     if(routerArr[i].children !== undefined) {
-                          for(let j =0;j<filterName.length;j++) {
-                              if(routerArr[i].children.length <= 1) {
-                                if(routerArr[i].children[0].name === filterName[j]) {
-                                   router.options.routes[i].isHide = true;
-                                }
-                              } else {
-                                 if( filterName[j] ==="黑名单管理"&&router.options.routes[i].name === "用户管理") {
-                                    router.options.routes[i].children[1].isHideChild = true;
-                                 } else if( filterName[j] ==="订单取消频次管理"&&router.options.routes[i].name === "用户管理") {
-                                    router.options.routes[i].children[0].isHideChild = true;
-                                 } else {
-                                   if(routerArr[i].children[0].name === filterName[j]) {
-                                      router.options.routes[i].isHide = true;
-                                   }
-                                 }
-                              }
-                          }
-                     }
-                   }
-           }else {
-             console.log(http);
-             http.post('/api/user/info/get',{},(result)=>{
-                    // if(result.error ==  "ACL_NO_PRIVILEGE"){
-                    //    window.loaction.redrect =  result.redrect
-                    // }
-                      console.log("+++++++++++++++++");
-                      console.log(result);
-                      localEvent.set('ACL',result)
+  //  if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")) {
+  //         if(to.fullPath == "/login") {
+  //             next({
+  //                    path:"/home",
+  //                });
+  //         };
+  //            console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID")
+  //            localEvent.get("ACL")
+  //            console.log(localEvent.get("ACL") == '');
+  //          if(localEvent.get("ACL") !== '') {
+  //               let result = localEvent.get("ACL");
+  //               let uid= result.userInfo.uid;
+  //               store.dispatch('setUid',uid);
+  //               let pm = result.pm;
+  //               let routerArr = router.options.routes;
+  //               let filterName = [];
+  //               if(pm.Auditor) {
+  //                       if(pm.Operator) {
+  //                         store.dispatch('setAuthority',"开发者");
+  //                           if(pm.CustomerService){
+  //                             filterName = [];
+  //                           }else {
+  //                              filterName = ['订单管理','黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                           }
+  //                       }else {
+  //                         store.dispatch('setAuthority',"审核");
+  //                         if(pm.CustomerService){
+  //                           filterName = ['服务类型及折扣管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                         }else {
+  //                            filterName = ["订单管理","服务类型及折扣管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                         }
+  //                       }
+  //                }else {
+  //                    if(pm.Operator) {
+  //                         store.dispatch('setAuthority',"配置");
+  //                        if(pm.CustomerService){
+  //                          filterName = ['非服务地区管理',"价格管理","运线快递费管理","开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                        }else {
+  //                           filterName = ['订单管理','非服务地区管理',"价格管理","运线快递费管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                        }
+  //                    }else {
+  //                      if(pm.CustomerService){
+  //                        filterName = ['运营位管理','订单取消频次管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                      }else {
+  //                         filterName = ['运营位管理',"订单管理","用户管理",'黑名单管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理','订单取消频次管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                      }
+  //                    }
+  //                }
+  //               for (var i = 0; i < routerArr.length; i++) {
+  //                    if(routerArr[i].children !== undefined) {
+  //                         for(let j =0;j<filterName.length;j++) {
+  //                             if(routerArr[i].children.length <= 1) {
+  //                               if(routerArr[i].children[0].name === filterName[j]) {
+  //                                  router.options.routes[i].isHide = true;
+  //                               }
+  //                             } else {
+  //                                if( filterName[j] ==="黑名单管理"&&router.options.routes[i].name === "用户管理") {
+  //                                   router.options.routes[i].children[1].isHideChild = true;
+  //                                } else if( filterName[j] ==="订单取消频次管理"&&router.options.routes[i].name === "用户管理") {
+  //                                   router.options.routes[i].children[0].isHideChild = true;
+  //                                } else {
+  //                                  if(routerArr[i].children[0].name === filterName[j]) {
+  //                                     router.options.routes[i].isHide = true;
+  //                                  }
+  //                                }
+  //                             }
+  //                         }
+  //                    }
+  //                  }
+  //          }else {
+  //            console.log(http);
+  //            http.post('/api/user/info/get',{},(result)=>{
+  //                   // if(result.error ==  "ACL_NO_PRIVILEGE"){
+  //                   //    window.loaction.redrect =  result.redrect
+  //                   // }
+  //                     console.log("+++++++++++++++++");
+  //                     console.log(result);
+  //                     localEvent.set('ACL',result)
 
-                      let uid= result.userInfo.uid;
-                      store.dispatch('setUid',uid);
-                      let pm = result.pm;
-                      let routerArr = router.options.routes;
-                      let filterName = [];
-                      if(pm.Auditor) {
-                              if(pm.Operator) {
-                                store.dispatch('setAuthority',"开发者");
-                                  if(pm.CustomerService){
-                                    filterName = [];
-                                  }else {
-                                     filterName = ['订单管理','黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                                  }
-                              }else {
-                                store.dispatch('setAuthority',"审核");
-                                if(pm.CustomerService){
-                                  filterName = ['服务类型及折扣管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                                }else {
-                                   filterName = ["订单管理","服务类型及折扣管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                                }
-                              }
-                       }else {
-                           if(pm.Operator) {
-                                store.dispatch('setAuthority',"配置");
-                               if(pm.CustomerService){
-                                 filterName = ['非服务地区管理',"价格管理","运线快递费管理","开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                               }else {
-                                  filterName = ['订单管理','非服务地区管理',"价格管理","运线快递费管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                               }
-                           }else {
-                             if(pm.CustomerService){
-                               filterName = ['运营位管理','订单取消频次管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                             }else {
-                                filterName = ['运营位管理',"订单管理","用户管理",'黑名单管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理','订单取消频次管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
-                             }
-                           }
-                       }
-                      for (var i = 0; i < routerArr.length; i++) {
-                           if(routerArr[i].children !== undefined) {
-                                for(let j =0;j<filterName.length;j++) {
-                                    if(routerArr[i].children.length <= 1) {
-                                      if(routerArr[i].children[0].name === filterName[j]) {
-                                         router.options.routes[i].isHide = true;
-                                      }
-                                    } else {
-                                       if( filterName[j] ==="黑名单管理"&&router.options.routes[i].name === "用户管理") {
-                                          router.options.routes[i].children[1].isHideChild = true;
-                                       } else if( filterName[j] ==="订单取消频次管理"&&router.options.routes[i].name === "用户管理") {
-                                          router.options.routes[i].children[0].isHideChild = true;
-                                       } else {
-                                         if(routerArr[i].children[0].name === filterName[j]) {
-                                            router.options.routes[i].isHide = true;
-                                         }
-                                       }
-                                    }
-                                }
-                           }
-                         }
-                 })
+  //                     let uid= result.userInfo.uid;
+  //                     store.dispatch('setUid',uid);
+  //                     let pm = result.pm;
+  //                     let routerArr = router.options.routes;
+  //                     let filterName = [];
+  //                     if(pm.Auditor) {
+  //                             if(pm.Operator) {
+  //                               store.dispatch('setAuthority',"开发者");
+  //                                 if(pm.CustomerService){
+  //                                   filterName = [];
+  //                                 }else {
+  //                                    filterName = ['订单管理','黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                                 }
+  //                             }else {
+  //                               store.dispatch('setAuthority',"审核");
+  //                               if(pm.CustomerService){
+  //                                 filterName = ['服务类型及折扣管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                               }else {
+  //                                  filterName = ["订单管理","服务类型及折扣管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                               }
+  //                             }
+  //                      }else {
+  //                          if(pm.Operator) {
+  //                               store.dispatch('setAuthority',"配置");
+  //                              if(pm.CustomerService){
+  //                                filterName = ['非服务地区管理',"价格管理","运线快递费管理","开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                              }else {
+  //                                 filterName = ['订单管理','非服务地区管理',"价格管理","运线快递费管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                              }
+  //                          }else {
+  //                            if(pm.CustomerService){
+  //                              filterName = ['运营位管理','订单取消频次管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                            }else {
+  //                               filterName = ['运营位管理',"订单管理","用户管理",'黑名单管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理','订单取消频次管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+  //                            }
+  //                          }
+  //                      }
+  //                     for (var i = 0; i < routerArr.length; i++) {
+  //                          if(routerArr[i].children !== undefined) {
+  //                               for(let j =0;j<filterName.length;j++) {
+  //                                   if(routerArr[i].children.length <= 1) {
+  //                                     if(routerArr[i].children[0].name === filterName[j]) {
+  //                                        router.options.routes[i].isHide = true;
+  //                                     }
+  //                                   } else {
+  //                                      if( filterName[j] ==="黑名单管理"&&router.options.routes[i].name === "用户管理") {
+  //                                         router.options.routes[i].children[1].isHideChild = true;
+  //                                      } else if( filterName[j] ==="订单取消频次管理"&&router.options.routes[i].name === "用户管理") {
+  //                                         router.options.routes[i].children[0].isHideChild = true;
+  //                                      } else {
+  //                                        if(routerArr[i].children[0].name === filterName[j]) {
+  //                                           router.options.routes[i].isHide = true;
+  //                                        }
+  //                                      }
+  //                                   }
+  //                               }
+  //                          }
+  //                        }
+  //                })
 
-           }
-       // 跳转到登录页面
+  //          }
+  //      // 跳转到登录页面
 
-   } else if(to.fullPath == "/login") {
-      //  localEvent.clear("ACL",'');
-      //  Cookie.delete("ECOACLJSESSIONID");
-      //  Cookie.delete("SMJSESSIONID");
-      //  Cookie.delete("ctoken");
-   } else {
-     next({
-            path:"/login",
-        });
-      window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
-   }
+  //  } else if(to.fullPath == "/login") {
+  //     //  localEvent.clear("ACL",'');
+  //     //  Cookie.delete("ECOACLJSESSIONID");
+  //     //  Cookie.delete("SMJSESSIONID");
+  //     //  Cookie.delete("ctoken");
+  //  } else {
+  //    next({
+  //           path:"/login",
+  //       });
+  //     window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
+  //  }
 
 
       // 这里是对于 登录时的 状态验证
