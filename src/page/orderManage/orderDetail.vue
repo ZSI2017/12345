@@ -277,24 +277,24 @@ import localEvent from 'src/vuex/function.js';
                 if(rsp.orderStatus == "2"){
                     this.cancleOrderFlag = true;
                 }else{
-                    this.cancleOrderFlag = false;                    
+                    this.cancleOrderFlag = false;
                 }
                 if(rsp.payStatus == '1'){
                     this.InvaliOrderFlag = true;
                 }else{
-                    this.InvaliOrderFlag = false;                    
+                    this.InvaliOrderFlag = false;
                 }
                 if(rsp.orderStatus == '1'){
                     this.ChangeExpressFlag = true;
                 }else{
-                    this.ChangeExpressFlag = false;                    
+                    this.ChangeExpressFlag = false;
                 }
                 if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
                     this.OtherPayFlag = true;
                 }else{
-                    this.OtherPayFlag = false;                    
+                    this.OtherPayFlag = false;
                 }
-                
+
                 //基本信息
                 this.items[0].message = rsp.expName || '暂无';
                 this.items[1].message = rsp.actCarrierName || '暂无';
@@ -311,13 +311,13 @@ import localEvent from 'src/vuex/function.js';
                 if(rsp.orderStatus == '1'){
                     this.items[11].message = '待接单';
                 }else if(rsp.orderStatus == '2'){
-                    this.items[11].message = '待取件';                    
+                    this.items[11].message = '待取件';
                 }else if(rsp.orderStatus == '3'){
-                    this.items[11].message = '已取件';                    
+                    this.items[11].message = '已取件';
                 }else if(rsp.orderStatus == '4'){
-                    this.items[11].message = '已取消';                    
+                    this.items[11].message = '已取消';
                 }else{
-                    this.items[11].message = '已作废';                                        
+                    this.items[11].message = '已作废';
                 }
                 //寄件人信息
                 this.senderItems[0].message = rsp.snderName || '暂无';
@@ -339,7 +339,7 @@ import localEvent from 'src/vuex/function.js';
                 this.expressPays[1].message = rsp.estimatePrice || '暂无';
                 this.expressPays[2].message = rsp.orderAmount || '暂无';
                 this.expressPays[3].message = rsp.receiptAmount || '暂无';
-                
+
             },(error)=>{
                 console.log('failed');
             });
