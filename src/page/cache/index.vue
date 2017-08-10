@@ -11,7 +11,24 @@
             </el-col>
         </el-row>
     </div>
+    <p v-html="markdownhtml" v-highlight>
+        <pre><code class="lang-javascript" > function init(){
+                $scope.req.getArticle();
+                $('pre code').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                });
+            }</code></pre>
+    </p>
 
+
+
+
+    <pre><code class="lang-javascript"  v-highlight> function init(){
+            $scope.req.getArticle();
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        }</code></pre>
 
     <div class=" " style="margin-top:30px;">
         缓存内容
@@ -22,6 +39,8 @@
 
 <script>
 import localEvent from 'src/vuex/function.js';
+import hljs from "highlight.js";
+import "@/style/tomorrow-night-eighties.css"
 
 
 export default {
@@ -34,7 +53,12 @@ export default {
     }
   },
   created() {
+    hljs.initHighlightingOnLoad()
+    console.log(hljs);
     // this.loadData();
+  },
+  mounted() {
+       hljs.initHighlightingOnLoad()
   },
   methods: {
     loadData(){
@@ -76,10 +100,10 @@ export default {
   text-align: right;
   padding-right: 20px;
   font-weight: 700;
-}       
+}
 .import-search{
   margin-left: 20px;
-}     
+}
 
 
 </style>

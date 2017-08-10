@@ -8,7 +8,7 @@ import Axios from "axios";
 import Vuex from "vuex";
 import Cookie from "@/util/cookie.js"
 
- 
+
 // 引入vuex 进行全局状态管理
 import store from "@/vuex/store.js";
 import {changeLoading} from "@/vuex/actions";
@@ -18,11 +18,23 @@ import localEvent from '@/vuex/function.js';
 
 import PageStore from "@/util/table-store.js"
 import http from "@/util/http.js"
-
+import "@/style/tomorrow-night-eighties.css"
+import hljs from 'highlight.js'
+import 'highlight.js/styles/googlecode.css' //样式文件
+// import hljs from "highlight.js";
+// hljs.initHighlightingOnLoad()
 
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+
+
+Vue.directive('highlight',function (el) {
+  let blocks = el.querySelectorAll('pre code');
+  blocks.forEach((block)=>{
+    hljs.highlightBlock(block)
+  })
+})
 
 
 //  axios  加入到 vue 的原型方法中
