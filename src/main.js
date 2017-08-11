@@ -181,24 +181,26 @@ if(store.getters.getisAuthority)  {
         // 从运营位管理 选择快递页面的 添加返回时出现提示框
         //  记录即将进入的路由
         store.dispatch('changeNextRouter',to.fullPath);
-        if(((from.path == "/sendExpress/addData")
-          ||(from.path == "/chooseExpress/addData")
-          ||(from.path == "/expressOrder/addData")
+        if(((from.path == "/promotion/sendExpress/addData")
+          ||(from.path == "/promotion/chooseExpress/addData")
+          ||(from.path == "/promotion/expressOrder/addData")
           ||(from.path == "/sendExpressEnter/addData")
           ||(from.path == "/noticeManage/addData")
           ||(from.path == "/nearExpress/addData")
           ||(from.path == "/oneCitySend/addData")
           ||(from.path == '/expressCompany/addData')
           ||(from.path == "/chooseExpressOrder/addData")
-          ||(from.path == "/sendExpress/editData")
-          ||(from.path == "/chooseExpress/editData")
-          ||(from.path == "/expressOrder/editData")
+          ||(from.path == "/dev/logismerchant/addData")          
+          ||(from.path == "/promotion/sendExpress/editData")
+          ||(from.path == "/promotion/chooseExpress/editData")
+          ||(from.path == "/promotion/expressOrder/editData")
           ||(from.path == "/sendExpressEnter/editData")
           ||(from.path == "/noticeManage/editData")
           ||(from.path == "/nearExpress/editData")
           ||(from.path == "/oneCitySend/editData")
           ||(from.path == '/expressCompany/editData')
           ||(from.path == "/chooseExpressOrder/editData")
+          ||(from.path == "/dev/logismerchant/editData")
         )&&store.getters.getLoadingChange === false) {
             store.dispatch('changeLoadingFlag');
             next({path:from.path});

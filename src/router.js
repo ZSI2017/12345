@@ -48,6 +48,11 @@ import oneCitySendMain from "./page/OneCitySend/main.vue"
 import oneCitySendAddData from "./page/oneCitySend/addData.vue";
 import oneCitySendEditData from "./page/oneCitySend/editData.vue";
 
+//同城货运管理
+import oneCityFreight from './page/oneCityFreight/index.vue'
+import oneCityFreightMain from "./page/oneCityFreight/main.vue"
+import oneCityFreightAddData from "./page/oneCityFreight/addData.vue";
+import oneCityFreightEditData from "./page/oneCityFreight/editData.vue";
 
 //附近快递资源管理
 // import nearExpress from './page/nearExpress/nearExpress.vue'
@@ -67,7 +72,7 @@ import noticeManageEditData from "./page/noticeManage/editData.vue";
 import orderCancle from './page/orderCancle/index.vue'
 
 //黑名单管理
-import blankList from './page/blankList/index.vue'
+import blackList from './page/blackList/index.vue'
 
 // 价格管理
 import totalpages from './page/priceManage/totalpages.vue'
@@ -143,18 +148,36 @@ let routes =  [
          {path:'/orderManage/orderDetail',name:'查看详情',component:orderDetail}
       ]},
    ]
- },{
+ },
+ {
    path:'/',
-   name:"用户管理",
+   name:"首页",
    component:index,
-   hasChild:true,
    children:[
-      {path:'/orderCancle',component:orderCancle,name:"订单取消频次管理"},
-      {path:'/blankList',component:blankList,name:"黑名单管理"}
+      {path:'/orderCancle',component:orderCancle,name:"订单取消频次管理"}
    ]
-  //  path:'/orderCancle',component:orderCancle
+}, 
+{
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'/blackList',component:blackList,name:"黑名单管理"}
+   ]
+}, 
+//  {
+//    path:'/',
+//    name:"用户管理",
+//    component:index,
+//    hasChild:true,
+//    children:[
+//       {path:'/orderCancle',component:orderCancle,name:"订单取消频次管理"},
+//       {path:'/blackList',component:blackList,name:"黑名单管理"}
+//    ]
+//   //  path:'/orderCancle',component:orderCancle
 
-}, {
+// }, 
+{
    path:'/',
    name:"运营位管理",
    component:index,
@@ -312,6 +335,26 @@ let routes =  [
       ]
     }
    ]
+   
+  //  path:'/oneCitySend',component:oneCitySend
+
+ },
+ //同城货运管理
+ {
+   path:'/',
+   name:"首页",
+   component:index,
+   children:[
+      {path:'/oneCityFreight',component:oneCityFreight,name:"同城货运管理",
+      children:[
+        {path:'',component:oneCityFreightMain},
+        {path:'addData',name:'添加',component:oneCityFreightAddData},
+        {path:'editData',name:'修改',component:oneCityFreightEditData},
+        {path:'detail',name:'查看详情',component:oneCityFreightEditData}
+      ]
+    }
+   ]
+   
   //  path:'/oneCitySend',component:oneCitySend
 
  },
@@ -376,9 +419,9 @@ let routes =  [
 //    name:"首页",
 //    component:index,
 //    children:[
-//       {path:'blankList',component:blankList,name:"黑名单管理"}
+//       {path:'blackList',component:blackList,name:"黑名单管理"}
 //    ]
-//   //  path:'/blankList',component:blankList
+//   //  path:'/blackList',component:blackList
 
 //  },
 

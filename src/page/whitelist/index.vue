@@ -12,11 +12,7 @@
         </el-row>
          <el-row>
             <el-col :span="2" class="import-search" style="float:right;">
-<<<<<<< HEAD
                 <el-button type="primary" @click="handleAddData" style="width:100px;float:right;"><i class="el-icon-plus"></i> 添加</el-button>                
-=======
-                <el-button type="primary" @click="loadData" style="width:100px;float:right;"><i class="el-icon-plus"></i> 添加</el-button>
->>>>>>> 04a28ef129444efcbcfe7dd91fae9968a9159ad2
             </el-col>
         </el-row>
     </div>

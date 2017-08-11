@@ -266,9 +266,9 @@ export default {
 
     // if(this.Authority){}
     var _this = this;
-    var interval = setInterval(function(){
-         console.log(_this.Authority);
-    },100);
+    // var interval = setInterval(function(){
+    //      console.log(_this.Authority);
+    // },100);
     setTimeout(function(){
       _this.initActiveName = _this.Authority == "审核"?"已上线":'配置'
       // alert(this.PageStore.tabName);

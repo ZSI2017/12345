@@ -43,18 +43,20 @@
             <template scope="scope">
                 <el-button @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
                 <el-button ref='allIfo' @click="handleDelete(scope.$index,scope.row)" type="text" size="small">删除</el-button>
-                <el-button ref='allIfo' @click='useqrcode(scope.row)' type="text" size="small" v-popover:popover2>生产二维码</el-button>
                 <el-popover
-                    ref="popover2"
+                    ref="popover"
                     trigger="click"
+                    placement="left"
+                    width="200"
                     >
                     <div id='code'></div>
                     <canvas id="canvas"></canvas>
-                </el-popover>             
+                </el-popover>     
+                <el-button ref='allIfo' @click='useqrcode(scope.row)' type="text" size="small" v-popover:popover >生产二维码</el-button>
+                        
             </template>
         </el-table-column>
     </el-table>
-
     <div class="block pagination" style="margin-top:30px;float:right;">
         <el-pagination
         @size-change="handleSizeChange"
@@ -87,7 +89,8 @@ export default {
         bigImageUrl:'',
         dialogVisible:false,
         url:'/api/logisMerchant/list/get',
-        codes:''
+        codes:'',
+        codeVisible:false,
 
     }
   },
@@ -187,6 +190,7 @@ export default {
         this.loadData();
     },
     useqrcode(row){
+        // this.codeVisible = true;
         console.log(row.id)
         var canvas = document.getElementById('canvas');
         // let codeHttp = 'www.baidu.com';
@@ -195,6 +199,7 @@ export default {
             if (error) console.error(error)
             console.log('success!');
         })
+
     }
     
   }

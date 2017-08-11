@@ -18,28 +18,38 @@
         :on-error='handlerror'
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
+        <div slot="tip" class="el-upload__tip">文件类型限制:jpg,png,尺寸40*40，请保持5kb以内</div>
       </el-upload>
     </el-form-item>
-    <el-form-item label="角标" prop="imageList">
-      <!--      action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"  -->
-      <el-upload
-        class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
-        :on-change="handleImageChange"
-        :file-list="ruleForm.imageList"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :on-success='handleSuccess'
-        :on-error='handlerror'
-        >
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip" style='color:red;'>（非必填）</div>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过3kb</div>
-      </el-upload>
+    <el-form-item label="广告语" prop="name">
+      <el-input v-model.trim="ruleForm.name" placeholder="请输入广告语"> </el-input>
     </el-form-item>
-    <el-form-item label="描述" prop="name">
-      <el-input v-model.trim="ruleForm.name" placeholder="请输入描述内容"> </el-input>
+    <el-form-item label="标签">
+      <el-tag
+        :key="tag"
+        v-for="tag in dynamicTags"
+        :closable="true"
+        hit="true"
+        :close-transition="false"
+        @close="handleClose(tag)"
+        type="gray"
+        style="margin-right:10px;"
+      >
+      {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="handleInputConfirm"
+        @blur="handleInputConfirm"
+        style="width:100px;"
+      >
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
+      <div style="color:#888;">最多添加两个标签</div>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
       <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
@@ -52,14 +62,14 @@
       <el-input style="float:left;width:600px" v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
       <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
     </el-form-item>
-    <el-form-item label="有效时段"  prop="date1">
+    <!--<el-form-item label="有效时段"  prop="date1">
       <el-date-picker
          @change="dataChagne"
          v-model="ruleForm.date1"
          type="datetimerange"
          placeholder="选择时间范围">
       </el-date-picker>
-    </el-form-item>
+    </el-form-item>-->
     <el-form-item label="覆盖地区" prop="coverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
       <!-- <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button> -->
@@ -71,6 +81,11 @@
         <el-radio class="radio" v-model="radio" label="1">下架</el-radio>
       </el-radio-group>
     </el-form-item>
+    <el-form-item label="当前状态" prop="sortWeight">
+      <el-input placeholder="请输入价格" v-model="ruleForm.sortWeight">
+        <template slot="append">元</template>
+      </el-input>
+    </el-form-item>      
     <el-col class="line" :span="2"> </el-col>
     <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
@@ -174,6 +189,11 @@ export default {
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy: [],
+      //标签数据
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
+      addTag:true,
       // 对输入表单进行验证
       ruleForm: {
         linkHeader:'http://',    // url的 默认头部
@@ -284,10 +304,10 @@ export default {
   },
   methods: {
     //
-    dataChagne(value) {
-      console.log(value);
-      console.log(this.ruleForm.date1);
-    },
+    // dataChagne(value) {
+    //   console.log(value);
+    //   console.log(this.ruleForm.date1);
+    // },
     // 为表格中的行设置样式，
     handleRowStyle(row,index) {
 
@@ -589,6 +609,33 @@ export default {
     },
     onSubmit() {
       console.log('submit!');
+    },
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      if(this.dynamicTags.length >= 2){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }  
+    },
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+        if(this.dynamicTags.length >= 2){
+          this.addTag = false;
+        }else{
+          this.addTag = true;
+        }      
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     }
   }
 }

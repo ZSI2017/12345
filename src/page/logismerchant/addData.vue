@@ -8,14 +8,14 @@
        v-if="showAlert"
        >
   </el-alert>
-  <el-form ref="ruleForm" label-width="240px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label='物流机构编码'>
-      <el-input v-model="ruleForm.merchantCode" type='number' placeholder="请输入物流机构编码"> </el-input>
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="240px" label-position="left" style="width:800px;padding-left:100px">
+    <el-form-item label='物流机构编码' prop="merchantCode">
+      <el-input v-model.number="ruleForm.merchantCode" placeholder="请输入物流机构编码"> </el-input>
     </el-form-item>
-    <el-form-item label="机构名称">
+    <el-form-item label="机构名称" prop="merchantName">
       <el-input v-model="ruleForm.merchantName" placeholder="请输入机构名称"> </el-input>
     </el-form-item>
-    <el-form-item label="物流机构类型">
+    <el-form-item label="物流机构类型" prop="merchantType">
       <!--<el-input v-model="ruleForm.merchantType" placeholder="请输入物流机构类型"> </el-input>-->
       <el-select v-model="ruleForm.merchantType" @change="handleAccessType" placeholder="请选择物流机构类型" style="width:100%;">
             <el-option
@@ -26,7 +26,7 @@
             </el-option>
         </el-select>
     </el-form-item>
-    <el-form-item label="物流机构LOGO的URL">
+    <el-form-item label="物流机构LOGO的URL" prop="merchantLogo">
         <!--<el-input v-model="ruleForm.merchantLogo" placeholder="请输入物流机构LOGO的URL"> </el-input>      -->
         <el-upload
             class="upload-demo"
@@ -42,7 +42,7 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
     </el-form-item>
-    <el-form-item label="物流机构LOGO_CARD的URL">
+    <el-form-item label="物流机构LOGO_CARD的URL" prop="merchantLogo_card">
         <el-upload
             class="upload-demo"
             action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
@@ -57,58 +57,58 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
     </el-form-item>
-    <el-form-item label="收款人支付宝PID">
-      <el-input v-model="ruleForm.payeePid" placeholder="请输入收款人支付宝PID"> </el-input>
+    <el-form-item label="收款人支付宝PID" prop="payeePid">
+      <el-input v-model.number="ruleForm.payeePid" placeholder="请输入收款人支付宝PID"> </el-input>
     </el-form-item>
-    <el-form-item label="收款人支付宝账号">
+    <el-form-item label="收款人支付宝账号" prop="payeeAccount">
       <el-input v-model="ruleForm.payeeAccount" placeholder="请输入收款人支付宝账号"> </el-input>
     </el-form-item>
-    <el-form-item label="机构联系人姓名">
+    <el-form-item label="机构联系人姓名" prop="contactName">
       <el-input v-model="ruleForm.contactName" placeholder="请输入机构联系人姓名"> </el-input>
     </el-form-item>
-    <el-form-item label="机构联系人手机号码">
-      <el-input v-model="ruleForm.contactMobile" placeholder="请输入机构联系人手机号"> </el-input>
+    <el-form-item label="机构联系人手机号码" prop="contactMobile">
+      <el-input v-model.number="ruleForm.contactMobile" placeholder="请输入机构联系人手机号"> </el-input>
     </el-form-item>
-    <el-form-item label="营业执照代码">
-      <el-input v-model="ruleForm.businessLicenceCode" placeholder="请输入营业执照代码"> </el-input>
+    <el-form-item label="营业执照代码" prop="businessLicenceCode">
+      <el-input v-model.number="ruleForm.businessLicenceCode" placeholder="请输入营业执照代码"> </el-input>
     </el-form-item>
-    <el-form-item label="营业执照照片URL">
+    <el-form-item label="营业执照照片URL" prop="businessLicencePic">
       <el-input v-model="ruleForm.businessLicencePic" placeholder="请输入营业执照照片URL"> </el-input>
     </el-form-item>
-    <el-form-item label="物流行业许可证代码">
-      <el-input v-model="ruleForm.logisLicenceCode" placeholder="请输入物流许可证代码"> </el-input>
+    <el-form-item label="物流行业许可证代码" prop="logisLicenceCode">
+      <el-input v-model.number="ruleForm.logisLicenceCode" placeholder="请输入物流许可证代码"> </el-input>
     </el-form-item>
-    <el-form-item label="物流行业许可证照片的URL">
+    <el-form-item label="物流行业许可证照片的URL" prop="logisLicencePic">
       <el-input v-model="ruleForm.logisLicencePic" placeholder="请输入物流行业许可证照片的URL"> </el-input>
     </el-form-item>
-    <el-form-item label="省代码">
-      <el-input v-model="ruleForm.provinceCode" placeholder="请输入省代码"> </el-input>
+    <el-form-item label="省代码" prop="provinceCode">
+      <el-input v-model.number="ruleForm.provinceCode" placeholder="请输入省代码"> </el-input>
     </el-form-item>
-    <el-form-item label="市代码">
-      <el-input v-model="ruleForm.cityCode" placeholder="请输入市代码"> </el-input>
+    <el-form-item label="市代码" prop="cityCode">
+      <el-input v-model.number="ruleForm.cityCode" placeholder="请输入市代码"> </el-input>
     </el-form-item>
-    <el-form-item label="区县代码">
-      <el-input v-model="ruleForm.districtCode" placeholder="请输入区县代码"> </el-input>
+    <el-form-item label="区县代码" prop="districtCode">
+      <el-input v-model.number="ruleForm.districtCode" placeholder="请输入区县代码"> </el-input>
     </el-form-item>
-    <el-form-item label="详细地址">
+    <el-form-item label="详细地址" prop="address">
       <el-input v-model="ruleForm.address" placeholder="请输入详细地址"> </el-input>
     </el-form-item>
-    <el-form-item label="邮编">
-      <el-input v-model="ruleForm.zip" placeholder="请输入邮编"> </el-input>
+    <el-form-item label="邮编" prop="zip">
+      <el-input v-model.number="ruleForm.zip" placeholder="请输入邮编"> </el-input>
     </el-form-item>
-    <el-form-item label="Email">
+    <el-form-item label="Email" prop="email">
       <el-input v-model="ruleForm.email" placeholder="请输入Email"> </el-input>
     </el-form-item>
-    <el-form-item label="机构联系电话">
-      <el-input v-model="ruleForm.merchantTel" placeholder="请输入机构联系电话"> </el-input>
+    <el-form-item label="机构联系电话" prop="merchantTel">
+      <el-input v-model.number="ruleForm.merchantTel" placeholder="请输入机构联系电话"> </el-input>
     </el-form-item>
-    <el-form-item label="ISVID">
-      <el-input v-model="ruleForm.isvMerchantId" placeholder="请输入ISVID"> </el-input>
+    <el-form-item label="ISVID" prop="isvMerchantId">
+      <el-input v-model.number="ruleForm.isvMerchantId" placeholder="请输入ISVID"> </el-input>
     </el-form-item>
-    <el-form-item label="外部ISV系统名">
+    <el-form-item label="外部ISV系统名" prop="outSysName">
       <el-input v-model="ruleForm.outSysName" placeholder="请输入外部ISV系统名"> </el-input>
     </el-form-item>
-    <el-form-item label="接入方式">
+    <el-form-item label="接入方式" prop="accessType">
         <el-select v-model="ruleForm.accessType" @change="handleAccessType" placeholder="请选择接入方式" style="width:100%;">
             <el-option
             v-for="item in options2"
@@ -118,7 +118,7 @@
             </el-option>
         </el-select>
     </el-form-item>
-    <el-form-item label="接入状态">
+    <el-form-item label="接入状态" prop="accessStatus">
         <el-select v-model="ruleForm.accessStatus" placeholder="请选择接入状态" style="width:100%;">
             <el-option
             v-for="item in options3"
@@ -128,7 +128,7 @@
             </el-option>
         </el-select>
     </el-form-item>
-    <el-form-item label="服务区域获取方式">
+    <el-form-item label="服务区域获取方式" prop="serviceAreaAcqMethod">
         <el-select v-model="ruleForm.serviceAreaAcqMethod" placeholder="请选择服务区域获取方式" style="width:100%;">
             <el-option
             v-for="item in options4"
@@ -152,7 +152,7 @@
     </el-form-item>
     <el-form-item label="接单结束时间">
         <el-time-select
-            placeholder="请输入接单结束时间"
+            placeholder="请选择接单结束时间"
             v-model="ruleForm.acceptOrderTo"
             style="width:100%;"
             :picker-options="{
@@ -164,15 +164,15 @@
         </el-time-select>
 
     </el-form-item>
-    <el-form-item label="服务时间段间隔">
+    <el-form-item label="服务时间段间隔" prop="serviceTimeInterval">
         <el-input
-        placeholder="请选择服务时间段间隔"
+        placeholder="请输入服务时间段间隔"
         style='width:100%;'
-        v-model="ruleForm.serviceTimeInterval">
+        v-model.number="ruleForm.serviceTimeInterval">
           <template slot="append">小时</template>
         </el-input>
     </el-form-item>
-    <el-form-item label="授权状态">
+    <el-form-item label="授权状态" prop="alipayAuthStatus">
         <el-select v-model="ruleForm.alipayAuthStatus" placeholder="请选择授权状态" style="width:100%;">
             <el-option
             v-for="item in options1"
@@ -182,16 +182,16 @@
             </el-option>
         </el-select>
     </el-form-item>
-    <el-form-item label="授权商户PID">
-      <el-input v-model="ruleForm.alipayPid" placeholder="请输入授权商户PID"> </el-input>
+    <el-form-item label="授权商户PID" prop="alipayPid">
+      <el-input v-model.number="ruleForm.alipayPid" placeholder="请输入授权商户PID"> </el-input>
     </el-form-item>
-    <el-form-item label="授权商户APPID">
-      <el-input v-model="ruleForm.alipayAppid" placeholder="请输入授权商户APPID"> </el-input>
+    <el-form-item label="授权商户APPID" prop="alipayAppid">
+      <el-input v-model.number="ruleForm.alipayAppid" placeholder="请输入授权商户APPID"> </el-input>
     </el-form-item>
-    <el-form-item label="商户授权令牌">
+    <el-form-item label="商户授权令牌" prop="alipayAuthToken">
       <el-input v-model="ruleForm.alipayAuthToken" placeholder="请输入商户授权令牌"> </el-input>
     </el-form-item>
-    <el-form-item label="刷新令牌">
+    <el-form-item label="刷新令牌" prop="refreshToken">
       <el-input v-model="ruleForm.refreshToken" placeholder="请输入刷新令牌"> </el-input>
     </el-form-item>
     <!--<el-form-item label="商户有权令牌有效期">
@@ -286,6 +286,122 @@ export default {
         gmtCreate:'',
         gmtModified:''
       },
+      rules: {
+        merchantCode: [
+          {required: true,message:'请输入物流机构编码'},
+          {required: true,message:'请输入数字',type: "number"}
+        ],
+        merchantName: [
+          {type: "string",required: true,message: '请输入正确运营图名称',trigger: 'blur'},
+          {min:1,max:10,message:'名称长度不大于10'}
+        ],
+        merchantType: [
+          { required: true, message: '请选择物流机构类型', trigger: 'change' }
+        ],
+        merchantLogo: [
+          { required: true, message: '请上传物流机构LOGO', trigger: 'on-change',type:"array"}
+        ],
+        merchantLogo_card: [
+          { required: true, message: '物流机构LOGO_CARD', trigger: 'on-change',type:"array"}
+        ],
+        payeePid: [
+          {required: true, message: '请输入收款人支付宝PID'},
+          {required: true, message:'请输入数字',type: "number"}                       
+        ],
+        payeeAccount: [
+          { required: true, message: '请输入收款人支付宝账号',type:"string"}                 
+        ],
+        contactName: [
+          { required: true, message: '请输入机构联系人姓名', trigger: 'blur',type:"string"}
+        ],
+        contactMobile: [
+          { required: true, message: '请输入机构联系人手机号码'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        businessLicenceCode: [
+          { required: true, message: '请输入营业执照代码',},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        businessLicencePic: [
+          { required: true, message: '请输入营业执照照片URL', trigger: 'blur',type:"string"}
+        ],
+        logisLicenceCode: [
+          { required: true, message: '请输入物流行业许可证代码'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        logisLicencePic: [
+          { required: true, message: '请输入物流行业许可证照片的URL', trigger: 'blur',type:"string"}
+        ],
+        provinceCode: [
+          { required: true, message: '请输入省代码'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        cityCode: [
+          { required: true, message: '请输入市代码'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        districtCode: [
+          { required: true, message: '请输入区县代码'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        address: [
+          { required: true, message: '请输入详细地址', trigger: 'blur',type:"string"}
+        ],
+        zip: [
+          { required: true, message: '请输入邮编'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        email: [
+          { required: true, message: '请输入Email', trigger: 'blur',type:"string"}
+        ],
+        merchantTel: [
+          { required: true, message: '请输入机构联系电话'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        isvMerchantId: [
+          { required: true, message: '请输入ISVID'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        outSysName: [
+          { required: true, message: '请输入外部ISV系统名', trigger: 'blur',type:"string"}
+        ],
+        accessType: [
+          { required: true, message: '请选择接入方式', trigger: 'change' }
+        ],
+        accessStatus: [
+          { required: true, message: '请选择接入状态', trigger: 'change' }
+        ],
+        serviceAreaAcqMethod: [
+          { required: true, message: '请选择服务区域获取方式', trigger: 'change' }
+        ],
+        acceptOrderFrom: [
+          { type: 'date', required: true, message: '请选择接单开始时间', trigger: 'change' }
+        ],
+        acceptOrderTo: [
+          { type: 'date', required: true, message: '请选择接单结束时间', trigger: 'change' }
+        ],
+        serviceTimeInterval: [
+          { required: true, message: '请输入服务时间段间隔'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        alipayAuthStatus: [
+          { required: true, message: '请选择授权状态', trigger: 'change' }
+        ],
+        alipayPid: [
+          { required: true, message: '请输入授权商户PID'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        alipayAppid: [
+          { required: true, message: '请输入授权商户APPID'},
+          {required: true, message:'请输入数字',type: "number"} 
+        ],
+        alipayAuthToken: [
+          { type: 'string', required: true, message: '请输入商户授权令牌', trigger: 'blur' }
+        ],
+        refreshToken: [
+          { type: 'string', required: true, message: '请输入刷新令牌', trigger: 'blur' }
+        ]
+      },
       options:[{
           value: '1',
           label: '物流公司'
@@ -350,20 +466,14 @@ export default {
   methods: {
     //  点击提交
     handleSubmit(formName) {
-      var _this = this;
+      // var _this = this;
       console.log("-----------------------");
       console.log(this.$refs[formName]);
-      //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
-      // let submitDate = _this.ruleForm.date1;
-      // console.log(submitDate)
-      // this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
-      // this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
-      // console.log(this.ruleForm.gmtBegin)
-      // console.log(this.ruleForm.gmtEnd)
       console.log(this.ruleForm.accessType)
       console.log(this.ruleForm.alipayAuthStatus)
-
-      let httpData = {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let httpData = {
             "data": {
               'merchantCode':this.ruleForm.merchantCode,
               'merchantType':this.ruleForm.merchantType,
@@ -406,23 +516,32 @@ export default {
               // 'gmtModified':this.ruleForm.gmtModified
             }
           };
-        _this.$http.post(_this.url,httpData,(result) => {
-            this.$message({
-                type: 'success',
-                message: '提交成功'
-            });
-            console.log(result)
-            // _this.$store.dispatch('changeLoadingChange',true);
-            _this.$router.go(-1);
+          this.$http.post(this.url,httpData,(result) => {
+              this.$message({
+                  type: 'success',
+                  message: '提交成功'
+              });
+              console.log(result)
+              // _this.$store.dispatch('changeLoadingChange',true);
+              this.$router.go(-1);
 
 
 
-        },(error) => {
-            this.$message({
-                type: 'error',
-                message: error.data.meta.code+"--"+error.data.meta.msg
-            });
-        });
+          },(error) => {
+              this.$message({
+                  type: 'error',
+                  message: error.data.meta.code+"--"+error.data.meta.msg
+              });
+          });
+
+
+        } else {
+          console.log(this);
+
+          return false;
+        }
+      })
+      
 
     },
     // 点击返回 对应的事件处理
@@ -490,15 +609,6 @@ label {
        padding-top:15px !important;
 
     }
-}
-/*// 去掉input[type=number]默认的加减号*/
-input[type=‘number‘] {
-    -moz-appearance:textfield;
-}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
--webkit-appearance: none;
-margin: 0;
 }
 
 </style>
