@@ -11,29 +11,16 @@
             </el-col>
         </el-row>
     </div>
-    <p v-highlight><pre><code>sdfasdfasdfasdfasd</code></pre> </p>
-    <p v-html="markdownhtml" v-highlight>
-        <pre><code class="lang-javascript" > function init(){
-                $scope.req.getArticle();
-                $('pre code').each(function(i, block) {
-                    hljs.highlightBlock(block);
-                });
-            }</code></pre>
-    </p>
-
-
-
-
-    <pre><code class="lang-javascript"  v-highlight> function init(){
-            $scope.req.getArticle();
-            $('pre code').each(function(i, block) {
-                hljs.highlightBlock(block);
-            });
-        }</code></pre>
-
     <div class=" " style="margin-top:30px;">
         缓存内容
     </div>
+
+<pre>
+    <code v-html="content" style="display: block;overflow-x: auto;font-size:20px;padding: 0.5em;background: #474949;color: #d1d9e1;" >
+    </code>
+</pre>
+
+
 
 </div>
 </template>
@@ -50,24 +37,28 @@ export default {
         keyword:'',
         url:'/api/ocs/info/get',
         tableData:[],
+        content:{
+                  code:'adsfasdf',
+                   backgroudn:'ADSFASDF',
+              },
 
     }
   },
   created() {
-    hljs.initHighlightingOnLoad()
+
     console.log(hljs);
     // this.loadData();
   },
   mounted() {
-       hljs.initHighlightingOnLoad()
+
   },
   methods: {
     loadData(){
-      // var _this =this;
+      var _this =this;
       this.$http.post(this.url,{
           "key":this.keyword
       },(rsp)=>{
-
+         _this.content = rsp.
         // _this.listLoading = false;
         console.log(rsp)
         // _this.tableData = rsp.page_list;
