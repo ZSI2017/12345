@@ -11,6 +11,7 @@
             </el-col>
         </el-row>
     </div>
+    <p v-highlight><pre><code>sdfasdfasdfasdfasd</code></pre> </p>
     <p v-html="markdownhtml" v-highlight>
         <pre><code class="lang-javascript" > function init(){
                 $scope.req.getArticle();

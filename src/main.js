@@ -18,7 +18,6 @@ import localEvent from '@/vuex/function.js';
 
 import PageStore from "@/util/table-store.js"
 import http from "@/util/http.js"
-import "@/style/tomorrow-night-eighties.css"
 import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css' //样式文件
 // import hljs from "highlight.js";
