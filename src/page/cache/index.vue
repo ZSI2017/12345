@@ -29,9 +29,6 @@
 
 <script>
 import localEvent from 'src/vuex/function.js';
-import hljs from "highlight.js";
-import "@/style/tomorrow-night-eighties.css"
-
 
 export default {
   data() {
@@ -49,7 +46,7 @@ export default {
   },
   created() {
 
-    console.log(hljs);
+    // console.log(hljs);
     // this.loadData();
   },
   mounted() {

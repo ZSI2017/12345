@@ -20,22 +20,12 @@ import PageStore from "@/util/table-store.js"
 import http from "@/util/http.js"
 
 
-// import hljs from 'highlight.js'
-// import 'highlight.js/styles/googlecode.css' //样式文件
-// import hljs from "highlight.js";
-// hljs.initHighlightingOnLoad()
+
 
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-
-// Vue.directive('highlight',function (el) {
-//   let blocks = el.querySelectorAll('pre code');
-//   blocks.forEach((block)=>{
-//     hljs.highlightBlock(block)
-//   })
-// })
 
 
 //  axios  加入到 vue 的原型方法中

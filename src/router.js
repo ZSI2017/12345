@@ -1,6 +1,5 @@
 import home from './page/home.vue'
-import hljs from "highlight.js";
-hljs.initHighlightingOnLoad()
+
 //订单管理
 import orderManage from './page/orderManage/index.vue'
 import orderDetail from './page/orderManage/orderDetail.vue'
