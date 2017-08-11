@@ -46,7 +46,7 @@ import nonServerDistrict from './page/nonServerDistrict/index.vue'
 
 //同城直送管理
 import oneCitySend from './page/oneCitySend/index.vue'
-import oneCitySendMain from "./page/OneCitySend/main.vue"
+import oneCitySendMain from "./page/oneCitySend/main.vue"
 import oneCitySendAddData from "./page/oneCitySend/addData.vue";
 import oneCitySendEditData from "./page/oneCitySend/editData.vue";
 

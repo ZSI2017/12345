@@ -45,7 +45,7 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
               )
 
        }
-      console.log("%c from table-column %o","color:blue",  this.$scopedSlots.default? this.$scopedSlots.default():this.$slots.default)
+      // console.log("%c from table-column %o","color:blue",  this.$scopedSlots.default? this.$scopedSlots.default():this.$slots.default)
        // this.columnConfig = { children : 这里定义了 table-column 中 的各种配置方法  }
        this.columnConfig = {
            headerName:this.headerName,

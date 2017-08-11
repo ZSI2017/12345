@@ -157,7 +157,7 @@ export default {
                 // this.dialogCheckVisible= true;
                 let url = "/rest/list7";
                 var _this = this;
-                _this.$http.get(url, (data) => {
+                _this.$http.get(url,{},(data) => {
                     _this.result = data.data.data;
                     _this.dialogConfigVisible = true;
                 }, (error) => {
@@ -169,7 +169,7 @@ export default {
                 this.isCheckServer = false;
                 let url = "/rest/list7";
                 var _this = this;
-                _this.$http.get(url, (data) => {
+                _this.$http.get(url, {},(data) => {
                     _this.result = data.data.data
                     _this.dialogConfigVisible = true;
                 }, (error) => {
@@ -189,15 +189,15 @@ export default {
         let url = "/rest/list2";
         var _this = this;
         // _this.fullscreenLoading = true;
-        _this.$http.get(url, (data) => {
-            console.log("success");
+        _this.$http.get(url,{}, (data) => {
+            console.log("successadsafasdf");
             console.log(data);
 
             setTimeout(() => {
                 _this.tableData = data.data.data;
             }, 0);
         }, (error) => {
-            console.log("error");
+            console.log("errorasdfawefasdfaweasdfew");
             console.log(error);
         });
     }

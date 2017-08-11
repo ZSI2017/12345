@@ -1,14 +1,16 @@
 <template>
 <div class="section">
     <div class="keyword-input">
-        <el-row>
+        <el-row :span="24">
             <el-col :span="6" class="import-font">KEY：</el-col>
             <el-col :span="10">
                 <el-input :span="10" v-model="keyword" type="text" size="large" @keyup.enter.native="loadData" placeholder="请输入缓存关键字"></el-input>
             </el-col>
             <el-col :span="4" class="import-search">
                 <el-button type="primary" @click="loadData" style="width:100px;">搜 索</el-button>
+                <el-button v-if="hasData" type="primary" @click="clearData" style="width:100px;">清 除</el-button>
             </el-col>
+
         </el-row>
     </div>
     <div class=" " style="margin-top:30px;">
@@ -34,6 +36,7 @@ import "@/style/tomorrow-night-eighties.css"
 export default {
   data() {
     return {
+        hasData:false,
         keyword:'',
         url:'/api/ocs/info/get',
         tableData:[],
@@ -58,7 +61,8 @@ export default {
       this.$http.post(this.url,{
           "key":this.keyword
       },(rsp)=>{
-         _this.content = rsp.
+         _this.content = rsp;
+         _this.hasData = true;
         // _this.listLoading = false;
         console.log(rsp)
         // _this.tableData = rsp.page_list;
@@ -77,6 +81,24 @@ export default {
         console.log('failed');
       });
     },
+    clearData() {
+      var _this =this;
+      this.$http.post(this.url,{
+          "key":this.keyword
+      },(rsp)=>{
+         _this.content = '';
+         _this.hasData = false;
+         this.$message({
+             message: '清除成功',
+             type: 'success'
+           });
+      },(error)=>{
+        this.$message({
+            message: '清除失敗，請重試！',
+            type: 'warning'
+          });
+      });
+    }
 
   }
 }

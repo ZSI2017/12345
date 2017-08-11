@@ -10,16 +10,16 @@ Vue.use(ElementUI);
 var vue = new Vue();
 import axios from "axios";
 
-// let URL = "http://sendexmng-sit.alipay-eco.com"
+let URL = "http://sendexmng-sit.alipay-eco.com"
 
-let URL  = "http://sendexmng-sit.alipay-eco.com"
+// let URL  = "http://sendexmng-sit.alipay-eco.com"
 
 // alert(process.env.npm_config_report)
 if(process.env.NODE_ENV === "development"){
      // 开发环境下调用
-    URL = "http://192.168.12.54:8080/"
+    URL = "http://sendexmng-sit.alipay-eco.com"
 }else {
-    // URL = "http://sendexmng-sit.alipay-eco.com"
+    URL = "http://sendexmng-sit.alipay-eco.com"
 }
 
 // add request interceptor
@@ -38,7 +38,6 @@ axios.interceptors.request.use(function(config) {
 // add a respose interceptor
 axios.interceptors.response.use(
   response =>{
-
       console.log("%c[axios log]success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
     if(response.error === "ACL_NO_PRIVILEGE") {
@@ -65,7 +64,6 @@ function loginTime() {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
         store.dispatch('setLoginOutFlag',true);
         let topLevel_domains = ".alipay-eco.com"
         console.log(topLevel_domains);
