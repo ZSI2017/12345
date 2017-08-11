@@ -38,9 +38,10 @@ axios.interceptors.request.use(function(config) {
 // add a respose interceptor
 axios.interceptors.response.use(
   response =>{
+    // loginTimeout();
       console.log("%c[axios log]success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
-    if(response.error === "ACL_NO_PRIVILEGE") {
+    if(response.data.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
         window.location.href=response.redrect;
         return Promise.reject(error);
@@ -48,22 +49,46 @@ axios.interceptors.response.use(
     return response;
 },
   (error) =>{
+    console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
+    if(error.response) {
+      //  发出了请求，服务端返回了 状态码 2xx
+      console.log("%cresponse error %o","color:red;font-size:16px;",error.response.data)
+      if(error.response.status === 0){
+            // vue.$message.error('登录超时');
+            // loginTimeout();
+
+        }
+    } else if(error.request) {
+      if(error.request.status === 0){
+                //  loginTimeout();
+            // vue.$message.error('登录超时');
+
+        }
+         // 请求发出了，但是没有接受到 响应
+        //  'error.request' 是一个 浏览器中的XMLHttpRequest 实例，
+        //   在node.js 中 就是 http.ClientRequest 实例；
+           console.log("%crequest error %o","color:red;font-size:16px;",error.request);
+      } else {
+        //   vue.$message.error('接口调用失败2222');
+          console.log("Error",error.message);
+      }
       // if(error.response)
       // vue.$message.error('接口调用失败！sdfasd');
-      console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
+
       // console.log(code);
     //  TODO width response error
-    return Promise.reject(error);
+     return Promise.reject(error);
 
 });
 
 //登陸超時提醒
-function loginTime() {
+function loginTimeout() {
   vue.$confirm('登录超时, 请重新登录！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+
         store.dispatch('setLoginOutFlag',true);
         let topLevel_domains = ".alipay-eco.com"
         console.log(topLevel_domains);
@@ -73,18 +98,18 @@ function loginTime() {
         Cookie.delete("ctoken",topLevel_domains);
         Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
         Cookie.delete('express1');
-        this.$router.push({path:'/login'});
+        let index = window.location.href.indexOf("#");
+        let baseURL = window.location.href.slice(0,index);
+        let fullPath = baseURL +"#"+"/login";
+        window.location.href = fullPath;
+        // vue.$router.push({path:'/login'});
       }).catch(() => {
-
-        vue.$message({
-          type: 'info',
-          message: '已取消重新登录'
-        });
-
+          vue.$message({
+            type: 'info',
+            message: '已取消'
+          });
       });
 }
-
-
 // 这里
 function checkErrorCode(response) {
       if(typeof response.data.meta.code !== "undefined") {
@@ -154,7 +179,7 @@ export default {
        axios({
             url:url,
             method:'post',
-            baseURL:URL,
+            // baseURL:URL,
             // baseURL:"http://192.168.12.54:8080/",
             transformRequrest:[function(data) {
                 // before the request data is sent to the server

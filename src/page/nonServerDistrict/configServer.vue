@@ -4,7 +4,7 @@
     <el-col :span="8">
       <li class="commonli-class li-title">省份</li>
       <ul class="ul-block">
-        <li class="commonli-class" :class="[index ==li0 ?activeClass:'',commonliClass]" @click="li1Click($event,index,item)" v-for="(item,index) in sourceData.noProvinces">{{item.provinceName}}</li>
+        <li v-if='(item.check)&&onlyRead||!onlyRead' class="commonli-class" :class="[index ==li0 ?activeClass:'',commonliClass]" @click="li1Click($event,index,item)" v-for="(item,index) in sourceData.noProvinces">{{item.provinceName}}</li>
       </ul>
     </el-col>
     <el-col :span="8">
@@ -13,7 +13,7 @@
         <el-collapse-transition>
           <div v-if="showLi">
             <checkbox-group v-model="checkCity">
-              <li :class="[index==li1?activeClass:'', commonliClass]" @click="li1Click2($event,item,index)" v-for="(item,index) in list2" :key="index" style="position:relative">
+              <li v-if='(item.check&&onlyRead)||!onlyRead' :class="[index==li1?activeClass:'', commonliClass]" @click="li1Click2($event,item,index)" v-for="(item,index) in list2" :key="index" style="position:relative">
                 <span style="margin-right:20px">{{item.cityName}}</span>
                 <checkbox v-if="!onlyRead" style="position:absolute;left:10px;top:9px;" :label="item.cityName" :key="item.cityName" @change="handleCheckAllChange(index,item,$event)" >全选</checkbox>
               </li>
@@ -28,7 +28,7 @@
         <el-collapse-transition>
           <div v-if="showLi2">
             <checkbox-group v-model="checkedDistric" @change="handleDistricChange">
-              <li class="commonli-class" :style="{'text-align':onlyRead?'center':'left'}" v-for="(item,index) in list3">
+              <li  v-if='(item.check&&onlyRead)||!onlyRead' class="commonli-class" :style="{'text-align':onlyRead?'center':'left'}" v-for="(item,index) in list3">
                 <checkbox v-if="!onlyRead" :label="item.districName"  :key="item.districName">{{item.districName}}</checkbox>
                 <span v-if="onlyRead">{{item.districName}}</span>
               </li>
@@ -40,7 +40,7 @@
   </el-row>
   <div v-if="!onlyRead" slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false">保 存</el-button>
+    <el-button type="primary" @click="handleSave">保 存</el-button>
   </div>
 
 </el-dialog>
@@ -79,6 +79,10 @@ export default {
     sourceData: Object,
     onlyRead: Boolean
   },
+  created(){
+    
+
+  },
   watch: {
     onlyRead: function(newData, oldData) {
         this.li0='-1';
@@ -92,7 +96,14 @@ export default {
       // this.lists1 =
       // console.log(newData);
       // console.log(oldData);
+    },
+    sourceData:function(newData,oldData) {
+       console.log(newData);
+       console.log(newData+"++++++++++++++++"+oldData);
+       console.log(oldData);
+       this.checkedData = newData.noProvinces;
     }
+
   },
   methods: {
     // 点击全选
@@ -112,20 +123,22 @@ export default {
       //   console.log(this.checkedData);
       if (event.target.checked) {
         // this.checkedData[this.li0]
-        this.checkedData[this.li0].noServiceCitys[index] = Object.assign({
-          Checked: true
-        }, item)
+        this.checkedData[this.li0].noServiceCitys[index].check = 1
+        //  = Object.assign({
+        //   check: true
+        // }, item)
         //  {provinceName:'',Checked:true,noServiceCitys:item}
       } else {
-        this.checkedData[this.li0].noServiceCitys[index].Checked = false;
-        this.checkedData[this.li0].noServiceCitys[index].noServiceDistricts = [];
+        this.checkedData[this.li0].noServiceCitys[index].check = 0;
+        // this.checkedData[this.li0].noServiceCitys[index].noServiceDistricts = [];
         // this.checkedData[this.li0].noServiceCitys[index]=Object.assign({},{cityName:item.cityName,Checked:false})
       }
       //  console.log(this.checkedData);
       // this.sourceData.no
       let tempArr = [];
       for (let i = 0; i < item.noServiceDistricts.length; i++) {
-        tempArr.push(item.noServiceDistricts[i].districName);
+          item.noServiceDistricts[i].check = true;
+          tempArr.push(item.noServiceDistricts[i].districName);
       }
 
       this.checkedDistric = event.target.checked ?
@@ -174,8 +187,8 @@ export default {
         this.checkedData[this.li0].noServiceCitys[this.li1].Checked = false;
         if (this.checkCity.indexOf(tempCityName) >= 0) this.checkCity.splice(this.checkCity.indexOf(tempCityName), 1);
       }
-      console.log(tempdistricName.length);
-      console.log(this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].noServiceDistricts.length);
+      // console.log(tempdistricName.length);
+      // console.log(this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].noServiceDistricts.length);
       //   let targetPlace = this.checkedData[this.li0].length;
       //  for(let m =0;m<this.checkedData[this.li0].length;m++) {
       //       if(this.checkedData[this.li0][m].cityName == tempCityName){
@@ -190,10 +203,11 @@ export default {
       //       this.checkedData[this.li0][targetPlace] = {cityName:tempCityName};
       //    }
       //     this.checkedData[this.li0][targetPlace].noServiceDistricts = tempdistricName;
-      console.log(this.checkedData);
+      // console.log(this.checkedData);
     },
     li1Click(event, index, item) {
       this.li0 = index;
+      // console.log(this.checkedData);
       if(!this.onlyRead){
           this.checkedData[this.li0] = this.checkedData[this.li0] ?
             this.checkedData[this.li0] :
@@ -201,6 +215,8 @@ export default {
               provinceName: item.provinceName,
               noServiceCitys: []
             };
+            console.log("li1li1li1li1li1li1li1li1li1lil1li1li1l.");
+            console.log(this.check);
           // console.log(event);
           // this.sourceData.noProvinces[index].noServiceCitys;
           var noServiceCitysArr = this.checkedData[index].noServiceCitys;
@@ -208,7 +224,7 @@ export default {
             let tempArr = [];
             for (let k = 0; k < noServiceCitysArr.length; k++) {
               if (typeof noServiceCitysArr[k] === "object") {
-                if (noServiceCitysArr[k].Checked) tempArr.push(noServiceCitysArr[k].cityName);
+                if (noServiceCitysArr[k].check) tempArr.push(noServiceCitysArr[k].cityName);
                 // else
                 // toDo  增加不确定状态的标记
               }
@@ -241,7 +257,7 @@ export default {
               let tempArr = [];
               // this.sourceData.no
               for (let i = 0; i < noServiceDistrictsArr.length; i++) {
-                tempArr.push(noServiceDistrictsArr[i].districName);
+                if(noServiceDistrictsArr[i].check)  tempArr.push(noServiceDistrictsArr[i].districName);
               }
               this.checkedDistric = tempArr;
 
@@ -284,12 +300,28 @@ export default {
       //        this.checkedDistric =[];
       //       //  this.districChecked = false;
       //  }
-
       //  console.log(this.checkedDistric);
       this.showLi2 = true;
     },
     dialogClose() {
       this.$emit("listenToConfig", false)
+    },
+    handleSave() {
+        this.dialogFormVisible = false;
+        this.$http.post(' ',{data:this.checkedData},(result) =>{
+        this.$message({
+              message: '保存成功',
+              type: 'success'
+            });
+        },(error) => {
+             this.$message({
+                message:'保存失败',
+                type:'warning'
+             })
+        })
+    },
+    handleCancel() {
+        this.dialogFormVisible = false;
     }
   }
 }
