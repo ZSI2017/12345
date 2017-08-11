@@ -281,24 +281,23 @@ import localEvent from 'src/vuex/function.js';
                 // if(rsp.orderStatus == "2"){
                 //     this.cancleOrderFlag = true;
                 // }else{
-                //     this.cancleOrderFlag = false;                    
+                //     this.cancleOrderFlag = false;
                 // }
                 // if(rsp.payStatus == '1' && rsp.orderStatus != '0'){
                 //     this.InvaliOrderFlag = true;
                 // }else{
-                //     this.InvaliOrderFlag = false;                    
+                //     this.InvaliOrderFlag = false;
                 // }
                 // if(rsp.orderStatus == '1'){
                 //     this.ChangeExpressFlag = true;
                 // }else{
-                //     this.ChangeExpressFlag = false;                    
+                //     this.ChangeExpressFlag = false;
                 // }
                 // if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
                 //     this.OtherPayFlag = true;
                 // }else{
-                //     this.OtherPayFlag = false;                    
+                //     this.OtherPayFlag = false;
                 // }
-                
                 //基本信息
                 this.items[0].message = rsp.expName || '暂无';
                 this.items[1].message = rsp.actCarrierName || '暂无';
@@ -332,7 +331,7 @@ import localEvent from 'src/vuex/function.js';
                 this.expressPays[1].message = rsp.estimatePrice || '暂无';
                 this.expressPays[2].message = rsp.orderAmount || '暂无';
                 this.expressPays[3].message = rsp.receiptAmount || '暂无';
-                
+
             },(error)=>{
                 console.log('failed');
             });
@@ -423,7 +422,7 @@ import localEvent from 'src/vuex/function.js';
                     type: 'success',
                     message: '标记成功!'
                 });
-                this.dialogOtherpayVisible = false;                
+                this.dialogOtherpayVisible = false;
             },(error)=>{
                 if(error.data.meta.code == '0011'){
                     this.$message({
@@ -434,15 +433,15 @@ import localEvent from 'src/vuex/function.js';
                     this.$message({
                         type: 'error',
                         message: error.data.meta.code+"--"+error.data.meta.msg
-                    });  
-                    this.dialogOtherpayVisible = false;                       
-                }    
+                    });
+                    this.dialogOtherpayVisible = false;
+                }
             });
 
         },
         handleInvalidorder(){
             this.dialogOrderVisible = true;
-            this.invalid = '';  
+            this.invalid = '';
         },
         //  确定 作废
         handleDialogOrderSave () {
@@ -451,8 +450,8 @@ import localEvent from 'src/vuex/function.js';
                     type: 'success',
                     message: '作废成功!'
                 });
-                this.dialogOrderVisible = false;                
-            },(error)=>{   
+                this.dialogOrderVisible = false;
+            },(error)=>{
                 if(error.data.meta.code == '0011'){
                     this.$message({
                         type: 'warning',
@@ -462,9 +461,9 @@ import localEvent from 'src/vuex/function.js';
                     this.$message({
                         type: 'error',
                         message: error.data.meta.code+"--"+error.data.meta.msg
-                    });  
-                    this.dialogOrderVisible = false;                       
-                }                                         
+                    });
+                    this.dialogOrderVisible = false;
+                }
             })
         },
         handleChangeExpress(){

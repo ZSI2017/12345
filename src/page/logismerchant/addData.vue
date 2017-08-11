@@ -517,6 +517,7 @@ export default {
             }
           };
           this.$http.post(this.url,httpData,(result) => {
+              _this.$store.dispatch('changeLoadingChange',true);
               this.$message({
                   type: 'success',
                   message: '提交成功'

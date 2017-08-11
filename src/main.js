@@ -8,7 +8,7 @@ import Axios from "axios";
 import Vuex from "vuex";
 import Cookie from "@/util/cookie.js"
 
- 
+
 // 引入vuex 进行全局状态管理
 import store from "@/vuex/store.js";
 import {changeLoading} from "@/vuex/actions";
@@ -20,9 +20,12 @@ import PageStore from "@/util/table-store.js"
 import http from "@/util/http.js"
 
 
+
+
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+
 
 
 //  axios  加入到 vue 的原型方法中
@@ -107,14 +110,9 @@ function filterMenu(result) {
 }
 // 注册全局的构子 路由
  router.beforeEach((to,from,next) => {
-     // 模拟 权限管理
-    //  隐藏 或者显示 导航菜单 服务类型及折扣改管理
-      console.log('router -------------- ----  %o',router);
-      console.log("---------------------------------------------");
-      console.log(Cookie.get("ECOACLJSESSIONID"));
-      console.log(Cookie.get("ctoken"));
-      //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")
-      console.log("---------------------------------------------");
+        // 模拟 权限管理
+       //  隐藏 或者显示 导航菜单 服务类型及折扣改管理
+       //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")  &&Cookie.get("SMJSESSIONID")
       // Cookie.delete("express1");
 if(store.getters.getisAuthority)  {
    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
@@ -146,8 +144,8 @@ if(store.getters.getisAuthority)  {
        // 跳转到登录页面
 
    } else if(to.fullPath == "/login") {
-       store.dispatch('setLoginOutFlag',false);
-      //  localEvent.clear("ACL",'');
+      store.dispatch('setLoginOutFlag',false);
+       localEvent.clear("ACL");
       //  Cookie.delete("ECOACLJSESSIONID");
       //  Cookie.delete("SMJSESSIONID");
       //  Cookie.delete("ctoken");
