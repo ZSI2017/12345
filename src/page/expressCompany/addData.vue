@@ -139,55 +139,54 @@ export default {
       },
       rules: {
         merchantName: [{
-          type: "string",
-          required: true,
+          required: false,
           message: '请选择公司名称',
           trigger: 'change'
-        }, ],
+        }],
         sortWeight: [
           { required: false, message: '排序值不能为空'},
           { required: false, type: 'number', message: '排序值必须为数字值'}
         ],
         custServiceTel: [{
           type: 'number',
-          required: true,
+          required: false,
           message: '请输入电话号码',
           trigger: 'blur'
         }],
         opStatus: [{
-          required: true,
+          required: false,
           message: '请选择状态',
           trigger: 'change'
         }],
         isManualPrice: [{
-          required: true,
+          required: false,
           message: '请选择状态',
           trigger: 'change'
         }],
         currentParice: [{
-          required: true,
+          required: false,
           message: '请选择状态',
           trigger: 'change'
         }],
         hotStatus: [{
-          required: true,
+          required: false,
           message: '请选择状态',
           trigger: 'change'
         }],
         newStatus: [{
-          required: true,
+          required: false,
           message: '请选择状态',
           trigger: 'change'
         }],
         opMap: [{
-          required: true,
+          required: false,
           message: '请上传图片'
         }],
         cornerMark: [{
           required: false
         }],
         slogan:[{
-          required: true,
+          required: false,
           message: '请输入广告语'
         }]
       }
@@ -254,11 +253,11 @@ export default {
                 "data": {
                   "pageId": _this.pageId,
                   // "businessType":_this.ruleForm.businessType,
-                  "isvMerchantId": _this.ruleForm.isvMerchantId,
+                  "isvMerchantId": '1',
                   "slogan": _this.ruleForm.slogan,
                   "tag":_this.ruleForm.tag,
-                  "custServiceTel":_this.ruleForm.custServiceTel.toString(),                                    
-                  "sortWeight":_this.ruleForm.sortWeight.toString(),  
+                  "custServiceTel":_this.ruleForm.custServiceTel,                                    
+                  "sortWeight":_this.ruleForm.sortWeight,  
                   "isManualPrice":_this.ruleForm.isManualPrice,                                  
                   "pricingMode":_this.ruleForm.pricingMode,
                   "hotStatus":_this.ruleForm.hotStatus,                  
