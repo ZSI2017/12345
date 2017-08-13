@@ -1,33 +1,33 @@
 <template type="html">
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-alert
-       style="margin-left:100px;margin-bottom:30px;width:800px;"
-       title="检查表单数据"
-       type="error"
-       v-if="showAlert"
-       >
-  </el-alert>
+
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="公司名称" prop="photoName">
-        <el-select label="复选框 A" v-model="express" placeholder="请选择公司名称" style="width:100%;">
+    <el-form-item label="公司名称" prop="merchantName">
+        <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
             <el-option
               v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.merchantLogo"
+              :merchantLogo="item.merchantLogo"
+              :label="item.merchantName"
+              :value="item">
             </el-option>
         </el-select>
       </el-col>
     </el-form-item>
-    <el-form-item label="LOGO" prop="opMap">
-      <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
+    <el-form-item label="LOGO">
+      <!--<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
-      </el-upload>
+      </el-upload>-->
+      <img width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
+      <!--<el-popover ref="popover4" placement="right" trigger="click">
+        <img :src="merchantLogo">
+      </el-popover>-->
+      <!--<el-button style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>-->
     </el-form-item>
-    <el-form-item label="广告语" prop="content">
-      <el-input v-model.number="ruleForm.content" placeholder="请输入广告语"> </el-input>
+    <el-form-item label="广告语" prop="slogan">
+      <el-input v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
     </el-form-item>
     <el-form-item label="标签">
       <el-tag
@@ -50,132 +50,116 @@
         size="small"
         @keyup.enter.native="handleInputConfirm"
         @blur="handleInputConfirm"
-        style="width:100px;"
       >
       </el-input>
       <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
       <div style="color:#888;">最多添加两个标签</div>
     </el-form-item>
-    <el-form-item label="客服电话" prop="orderNumber">
-      <el-input v-model.number="ruleForm.orderNumber" placeholder="请输入客服电话"> </el-input>
+    <el-form-item label="客服电话" prop="custServiceTel">
+      <el-input v-model.number="ruleForm.custServiceTel" placeholder="请输入客服电话"> </el-input>
     </el-form-item>
-    <el-form-item label="排序值" prop="number">
-      <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    <el-form-item label="排序值" prop="sortWeight">
+      <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <el-form-item label="是否由系统发起支付" prop="currentPay">
-      <el-radio-group v-model="ruleForm.currentPay">
-        <el-radio class="radio" v-model="payRadio" label="1">是</el-radio>
-        <el-radio class="radio" v-model="payRadio" label="2">否</el-radio>
+    <el-form-item label="是否由系统发起支付" prop="isManualPrice">
+      <el-radio-group v-model="ruleForm.isManualPrice">
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否允许议价" prop="currentPrice">
-      <el-radio-group v-model="ruleForm.currentPrice">
-        <el-radio class="radio" v-model="priceRadio" label="1">是</el-radio>
-        <el-radio class="radio" v-model="priceRadio" label="2">否</el-radio>
+    <el-form-item label="是否允许议价" prop="pricingMode">
+      <el-radio-group v-model="ruleForm.pricingMode">
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否最热" prop="currentHot">
-      <el-radio-group v-model="ruleForm.currentHot">
-        <el-radio class="radio" v-model="hotRadio" label="1">是</el-radio>
-        <el-radio class="radio" v-model="hotRadio" label="2">否</el-radio>
+    <el-form-item label="是否最热" prop="hotStatus">
+      <el-radio-group v-model="ruleForm.hotStatus">
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否最新" prop="currentNew">
-      <el-radio-group v-model="ruleForm.currentNew">
-        <el-radio class="radio" v-model="newRadio" label="1">是</el-radio>
-        <el-radio class="radio" v-model="newRadio" label="2">否</el-radio>
+    <el-form-item label="是否最新" prop="newStatus">
+      <el-radio-group v-model="ruleForm.newStatus">
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="当前状态" prop="currentState">
-      <el-radio-group v-model="ruleForm.currentState">
-        <el-radio class="radio" v-model="statusRadio" label="1">上架</el-radio>
-        <el-radio class="radio" v-model="statusRadio" label="2">下架</el-radio>
+    <el-form-item label="当前状态" prop="opStatus">
+      <el-radio-group v-model="ruleForm.opStatus">
+        <el-radio class="radio" :label="0">上架</el-radio>
+        <el-radio class="radio" :label="1">下架</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
     <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
 
+    <!--图片预览 框  -->
+  <el-dialog v-model="dialogVisible" size="tiny">
+     <img width="100%" :src="merchantLogo" alt="">
+  </el-dialog>
+
 </section>
 </template>
 <script type="text/javascript">
- import coverArea from "@/page/chooseExpress/coverArea.vue";
+//  import coverArea from "@/page/chooseExpress/coverArea.vue";
+import localEvent from 'src/vuex/function.js';
+
 export default {
-  components:{
-     coverArea
-  },
   data() {
     return {
-     // 展示警告信息
-      showAlert:false,
+      dialogVisible:false,//大图显示
       // 即将离开的对话框
       loadingFlag: false,
       //标签添加控制
       addTag: true,
-      // radio 代表上下架状态的选择
-      payRadio: 1,
-      priceRadio: 1,
-      hotRadio: 1,
-      newRadio: 1,
-      statusRadio: 1,
-
+      url:'/api/expresscompany/audit/save',
       //标签数据
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
       dialogTableVisible: false,
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-      express: '',
+      //select 快递公司选项
+      options: [],
+      value:'',
+      merchantLogo:'',
+      merchantName:'',
       // 对输入表单进行验证
       ruleForm: {
-        photoName: '',
-        number: '',
-        orderNumber:'',
-        currentState: false,
-        currentPay: false,
-        currentPrice: false,
-        currentHot: false,
-        currentNew: false,
-        content:''
+        slogan: '',
+        tag: '',
+        custServiceTel:'',
+        sortWeight:'',
+        isManualPrice: 1,
+        pricingMode:1,
+        hotStatus: 1,
+        newStatus: 1,
+        opStatus:1
       },
       rules: {
-        photoName: [{
+        merchantName: [{
           type: "string",
           required: true,
           message: '请选择公司名称',
-          trigger: 'blur'
+          trigger: 'change'
         }, ],
-        number: [
-          { required: true, message: '排序值不能为空'},
-          { type: 'number', message: '排序值必须为数字值'}
+        sortWeight: [
+          { required: false, message: '排序值不能为空'},
+          { required: false, type: 'number', message: '排序值必须为数字值'}
         ],
-        orderNumber: [{
+        custServiceTel: [{
           type: 'number',
           required: true,
           message: '请输入电话号码',
           trigger: 'blur'
         }],
-        currentState: [{
+        opStatus: [{
           required: true,
           message: '请选择状态',
           trigger: 'change'
         }],
-        currentPay: [{
+        isManualPrice: [{
           required: true,
           message: '请选择状态',
           trigger: 'change'
@@ -185,12 +169,12 @@ export default {
           message: '请选择状态',
           trigger: 'change'
         }],
-        currentHot: [{
+        hotStatus: [{
           required: true,
           message: '请选择状态',
           trigger: 'change'
         }],
-        currentNew: [{
+        newStatus: [{
           required: true,
           message: '请选择状态',
           trigger: 'change'
@@ -202,7 +186,7 @@ export default {
         cornerMark: [{
           required: false
         }],
-        content:[{
+        slogan:[{
           required: true,
           message: '请输入广告语'
         }]
@@ -210,6 +194,7 @@ export default {
     }
   },
   created() {
+    this.pageId = localEvent.get('pageId')
     console.log(this);
 
   },
@@ -217,7 +202,23 @@ export default {
 
   },
   mounted() {
+    let _this = this;
+    let AccessHttp = '/api/logisMerchant/getListByAccessStatus';
+    _this.$http.post(AccessHttp,{'accessStatus':1},(result) => {
+        console.log(result)
+        this.options = result;
 
+        this.$message({
+            type: 'success',
+            message: '快递公司列表获取成功'
+        });
+
+    },(error) => {
+        this.$message({
+            type: 'error',
+            message: error.data.meta.code+"--"+error.data.meta.msg
+        });
+    });
   },
   beforeDestory() {
     alert("beforeDestory")
@@ -232,29 +233,64 @@ export default {
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
+      console.log("-----------------------");
+        console.log(this.$refs[formName]),
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
           console.log('error submit');
-          _this.$store.dispatch('changeLoadingChange',true);
-          _this.$router.go(-1);
-          alert('sumbit');
-        } else {
-          console.log(_this);
-          _this.showAlert = true;
-          return false;
-        }
-      })
+          // router.app.$store.state.loadingChange = true
+          // _this.$router.app.$store.state.loadingChange = true;
+          // _this.$store.dispatch('changeLoadingChange',true);
+          // _this.$router.go(-1);
+          //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
+          // let submitDate = _this.ruleForm.date1;
+          // console.log(submitDate)
+          // this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
+          // this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
+          // console.log(this.ruleForm.gmtBegin)
+          // console.log(this.ruleForm.gmtEnd)
+
+          let httpData = {
+                "data": {
+                  "pageId": _this.pageId,
+                  // "businessType":_this.ruleForm.businessType,
+                  "isvMerchantId": _this.ruleForm.isvMerchantId,
+                  "slogan": _this.ruleForm.slogan,
+                  "tag":_this.ruleForm.tag,
+                  "custServiceTel":_this.ruleForm.custServiceTel.toString(),                                    
+                  "sortWeight":_this.ruleForm.sortWeight.toString(),  
+                  "isManualPrice":_this.ruleForm.isManualPrice,                                  
+                  "pricingMode":_this.ruleForm.pricingMode,
+                  "hotStatus":_this.ruleForm.hotStatus,                  
+                  "newStatus":_this.ruleForm.newStatus,
+                  "opStatus":_this.ruleForm.opStatus,
+                }
+              };
+          _this.$http.post(_this.url,httpData,(result) => {
+              _this.$store.dispatch('changeLoadingChange',true);
+              _this.$router.go(-1);
+            // _this.tableData = result.page_list;
+            // _this.totalCount = parseInt(result.pages.cnt);
+          },(error) => {
+              this.$message({
+                  type: 'error',
+                  message: error.data.meta.code+"--"+error.data.meta.msg
+              });
+          });
+
+          // console.log(this.$route.matched);
+
+      //   } else {
+      //     console.log(_this);
+
+      //     return false;
+      //   }
+      // })
 
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
       this.$router.go(-1);
-    },
-    handlePreview() {
-
-    },
-    handleRemove() {
-
     },
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -274,6 +310,7 @@ export default {
       let inputValue = this.inputValue;
       if (inputValue) {
         this.dynamicTags.push(inputValue);
+        this.ruleForm.tag = this.dynamicTags.join(',');
         if(this.dynamicTags.length >= 2){
           this.addTag = false;
         }else{
@@ -282,7 +319,17 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = '';
-    }
+    },
+    handleMerchant(){
+      this.merchantLogo = this.value.merchantLogo;
+      this.merchantName = this.value.merchantName;
+      this.ruleForm.isvMerchantId = this.value.id;
+    },
+    handlePreview(file) {
+      this.dialogVisible = true;
+    },
+
+
   }
 }
 </script>

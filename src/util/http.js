@@ -12,7 +12,7 @@ import axios from "axios";
 
 let URL = "http://sendexmng-sit.alipay-eco.com"
 
-// let URL  = "http://sendexmng-sit.alipay-eco.com"
+// let URL  = "http://192.168.12.54:8080/"
 
 // alert(process.env.npm_config_report)
 if(process.env.NODE_ENV === "development"){
@@ -179,7 +179,7 @@ export default {
        axios({
             url:url,
             method:'post',
-            // baseURL:URL,
+            baseURL:URL,
             // baseURL:"http://192.168.12.54:8080/",
             transformRequrest:[function(data) {
                 // before the request data is sent to the server

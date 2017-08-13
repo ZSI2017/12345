@@ -41,7 +41,6 @@
         size="small"
         @keyup.enter.native="handleInputConfirm"
         @blur="handleInputConfirm"
-        style="width:100px;"
       >
       </el-input>
       <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
@@ -56,36 +55,36 @@
     </el-form-item>
     <el-form-item label="是否由系统发起支付">
       <el-radio-group v-if="isFromAddData" v-model="payRadio">
-        <el-radio class="radio" :label="1">是</el-radio>
-        <el-radio class="radio" :label="2">否</el-radio>
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
     </el-form-item>
     <el-form-item label="是否允许议价">
       <el-radio-group v-if="isFromAddData" v-model="priceRadio">
-        <el-radio class="radio" :label="1">是</el-radio>
-        <el-radio class="radio" :label="2">否</el-radio>
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
     </el-form-item>
     <el-form-item label="是否最热">
       <el-radio-group v-if="isFromAddData" v-model="hotRadio">
-        <el-radio class="radio" :label="1">是</el-radio>
-        <el-radio class="radio" :label="2">否</el-radio>
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
     </el-form-item>
     <el-form-item label="是否最新">
       <el-radio-group v-if="isFromAddData" v-model="newRadio">
-        <el-radio class="radio" :label="1">是</el-radio>
-        <el-radio class="radio" :label="2">否</el-radio>
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-if="isFromAddData" v-model="statusRadio">
-        <el-radio class="radio" :label="1">上架</el-radio>
-        <el-radio class="radio" :label="2">下架</el-radio>
+        <el-radio class="radio" :label="0">上架</el-radio>
+        <el-radio class="radio" :label="1">下架</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
@@ -137,24 +136,22 @@ export default {
   mounted() {
     var localData = localEvent.get("localExpressCompany");
     console.log(localData);
-    console.log(localData.activeTime1);
-    this.form.name = localData.operationsMapName;
-    this.form.Forder = localData.Forder;
-    this.form.orderNumber = localData.ordernumber;    
-    this.form.link = localData.link;
-    this.form.content = localData.content;
-    this.currentStateText = localData.currentState;
+    // console.log(localData.activeTime1);
+    // this.form.name = localData.operationsMapName;
+    // this.form.Forder = localData.Forder;
+    // this.form.orderNumber = localData.ordernumber;    
+    // this.form.link = localData.link;
+    // this.form.content = localData.content;
+    // this.currentStateText = localData.currentState;
 
-    if (localData.currentState = "上架") {
-      this.statusRadio = 1;
-    } else {
-      this.statusRadio = 2;
-    }
+    // if (localData.currentState = "上架") {
+    //   this.statusRadio = 1;
+    // } else {
+    //   this.statusRadio = 2;
+    // }
   },
   created() {
-    if ( this.$route.path == "/expressCompany/detail"
-          || this.$route.path == "/expressCompany/detail"
-          || this.$route.path == "/expressCompany/detail") {
+    if ( this.$route.path == "/expressCompany/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
