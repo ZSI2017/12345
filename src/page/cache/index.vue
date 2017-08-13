@@ -5,9 +5,9 @@
             <el-col :span="6" class="import-font">KEY：</el-col>
             <el-col :span="10">
                 <el-input :span="10" v-model="keyword" type="text" size="large" @keyup.enter.native="handleSearchData" placeholder="请输入缓存关键字"></el-input>
-                
+
             </el-col>
-            <el-col :span="4" class="import-search">
+            <el-col :span="6" class="import-search">
                 <el-button type="primary" @click="loadData" style="width:100px;">搜 索</el-button>
                 <el-button v-if="hasData" type="primary" @click="clearData" style="width:100px;">清 除</el-button>
             </el-col>
@@ -19,7 +19,7 @@
     </div>
 
 <pre>
-    <code v-html="content" style="display: block;overflow-x: auto;font-size:20px;padding: 0.5em;background: #474949;color: #d1d9e1;" >
+    <code  v-if = "showCode"v-html="content" style="display: block;overflow-x: auto;font-size:18px;padding: 0.5em;background: #474949;color: #d1d9e1;" >
     </code>
 </pre>
 
@@ -38,10 +38,8 @@ export default {
         keyword:'',
         url:'/api/ocs/info/get',
         tableData:[],
-        content:{
-                  code:'adsfasdf',
-                   backgroudn:'ADSFASDF',
-              },
+        content:'',
+        showCode:false
 
     }
   },
@@ -59,18 +57,29 @@ export default {
       this.$http.post(this.url,{
           "key":this.keyword
       },(rsp)=>{
-         _this.content = rsp;
-         _this.hasData = true;
+
         // _this.listLoading = false;
         console.log(rsp)
-        
+        if(rsp.result){
+          this.$message({
+            message: '查询到内容！',
+            type: 'success'
+          });
+          _this.content = rsp;
+          _this.hasData = true;
+          _this.showCode = true;
+        }else {
+          this.$message({
+              message: '未查询到内容，请重新输入！',
+              type: 'warning'
+            });
+              _this.showCode = false;
+        }
 
-        this.$message({
-          message: '查询到内容！',
-          type: 'success'
-        });
+
 
       },(error)=>{
+          _this.showCode = false;
         this.$message({
             message: '未查询到内容，请重新输入！',
             type: 'warning'

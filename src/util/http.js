@@ -10,12 +10,11 @@ Vue.use(ElementUI);
 var vue = new Vue();
 import axios from "axios";
 
-
 // let URL = "http://sendexmng-sit.alipay-eco.com"
 // let URL = 'http://192.168.12.54:8080'
 let URL  = "http://sendexmng-sit.alipay-eco.com"
 
-// alert(process.env.npm_config_report)
+   // alert(process.env.npm_config_report)
 if(process.env.NODE_ENV === "development"){
      // 开发环境下调用
     // URL = 'http://192.168.12.54:8080'
@@ -43,7 +42,7 @@ axios.interceptors.response.use(
     // loginTimeout();
       console.log("%c[axios log]success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
-    if(response.data.error&&response.data.error === "ACL_NO_PRIVILEGE") {
+    if(response.data&&response.data.error&&response.data.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
         window.location.href=response.redrect;
         return Promise.reject(error);

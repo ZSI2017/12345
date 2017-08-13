@@ -7,12 +7,12 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.title}} </div>
     </el-form-item>
     <el-form-item label="公告内容" prop="content">
-      <el-input type="textarea" v-model.trim="form.content" placeholder="请输入公告内容"> </el-input>
+      <el-input type="textarea" v-if="isFromAddData" v-model.trim="form.content" placeholder="请输入公告内容"> </el-input>
         <div class="detail-content" v-if="!isFromAddData"> {{form.content}} </div>
     </el-form-item>
     <!-- <el-form-item label="运营图" prop="fileList2">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/notice/upload"
         :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
@@ -175,8 +175,8 @@ export default {
         // date1 代表时间段选择的
         date1: [],   // 有效日期
         content:'',  // 公告内容
-        name: '',
-        promotionId:'',
+        title: '',
+        noticeId:'',
         gmtBegin:'',
         gmtEnd:'',
         pageId:'',
@@ -184,7 +184,7 @@ export default {
       },
      // 表单验证规则
      rules: {
-       name: [{type: "string",
+       title: [{type: "string",
          required: true,
          message: '请输入正确公告名称',
          trigger: 'blur'
@@ -239,18 +239,17 @@ export default {
     var localData = localEvent.get("localChooseExpress");
     this.localData = localData;
     // console.log(localData);
-    // console.log(localData.promotionId);
-    this.form.promotionId = localData.promotionId;
+    // console.log(localData.noticeId);
+    this.form.noticeId = localData.noticeId;
     this.id = localData.id;
     var _this =this;
     var httpId = '';
     if(localData.tabName == '配置'){  //配置 修改
-        _this.url = "/api/promotion/audit/get";
+        _this.url = "/api/notice/audit/get";
         httpId = this.id;
-        console.log("配置 修改")
     }else if(!localData.tabName){  // 待审核 已生效详情
-        _this.url = "/api/promotion/get";
-        httpId = this.form.promotionId;``
+        _this.url = "/api/notice/get";
+        httpId = this.form.noticeId;``
         console.log("待审核 已生效详情")
     }else{
       alert('错误')
@@ -261,9 +260,10 @@ export default {
     },(rsp)=>{
       console.log(rsp)
       console.log(rsp.imageUrl)
-      this.form.name = rsp.name;
+      this.form.title = rsp.title;
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
+      this.form.content = rsp.content;
       this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
       if (rsp.opStatus == "1") {
         this.form.radio = 1;
@@ -283,9 +283,7 @@ export default {
 
   },
   created() {
-    if ( this.$route.path == "/chooseExpress/detail"
-          || this.$route.path == "/sendExpress/detail"
-          || this.$route.path == "/expressOrder/detail") {
+    if ( this.$route.path == "/noticeManage/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
@@ -332,9 +330,10 @@ export default {
          var result = {
              "data":{
                  "id":this.id,
-                 "pageId":this.localData.pageId,
-                 "promotionId":this.localData.promotionId,
-                 "name":this.form.name,
+                 "pageId":"BW1010",
+                 "noticeId":this.localData.noticeId,
+                 "content":this.form.content,
+                 "title":this.form.title,
                  "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
                  "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
                  'opStatus':this.form.radio,
@@ -348,7 +347,7 @@ export default {
          }
          console.log("result%o ",result);
          var _this = this;
-        this.$http.post("/api/promotion/audit/update",result,(result) => {
+        this.$http.post("/api/notice/audit/update",result,(result) => {
           _this.$store.dispatch('changeLoadingChange', true);
                   console.log(this);
                   this.$router.go(-1);
@@ -480,9 +479,9 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/promotion/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/notice/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
       if(this.tabName === "已上线") {
-          URL = "/api/promotion/areaConf/all";
+          URL = "/api/notice/areaConf/all";
       }
       _this.$http.post(URL,{id:this.id},
         (rsp) => {
