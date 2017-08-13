@@ -121,7 +121,7 @@ export default {
       var _this =this;
       _this.currentPage = 1;
       _this.listLoading = true;
-      _this.url = "/api/order/getList"; // 默认展开
+      _this.url = "/api/order/list"; // 默认展开
       if(this.keyword == ""){
         this.$message({
           message: '请输入关键字查询！',
