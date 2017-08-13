@@ -157,7 +157,7 @@ let routes =  [
    children:[
       {path:'/orderCancle',component:orderCancle,name:"订单取消频次管理"}
    ]
-}, 
+},
 {
    path:'/',
    name:"首页",
@@ -165,7 +165,81 @@ let routes =  [
    children:[
       {path:'/blackList',component:blackList,name:"黑名单管理"}
    ]
-}, 
+},
+
+
+
+{
+   path:'/',
+   name:"快递公司管理",
+   component:index,
+   hasChild:true,
+   children:[
+     {path:'/expressCompany',component:expressCompany,name:"预约寄件管理",
+       children:[
+           {path:'',component:expressCompanyMain},
+           {path:'addData',name:'添加',component:expressCompanyAddData},
+           {path:'editData',name:'修改',component:expressCompanyEditData},
+           {path:'detail',name:'查看详情',component:expressCompanyEditData}
+         ]
+     },
+        {path:'/serverTypeDiscount',component:serverTypeDiscount,name:"服务类型及折扣管理"},
+        {path:'/nonServerDistrict',component:nonServerDistrict,name:"非服务地区管理"},
+          {path:'/priceManage',component:priceManage,name:"运线快递费管理"}
+   ]
+ },
+{
+   path:'/',
+   name:"入口管理",
+   component:index,
+   hasChild:true,
+   children:[
+     { path:'/sendExpressEnter',component:sendExpressEnter,name:"寄快递首页",
+     children:[
+       {path:'',component:sendExpressEnterMain},
+       {path:'addData',name:'添加',component:sendExpressEnterAddData},
+       {path:'editData',name:'修改',component:sendExpressEnterEditData},
+       {path:'detail',name:'查看详情',component:sendExpressEnterEditData}
+     ]
+     },
+      {path:'/oneCitySend',component:oneCitySend,name:"同城直送管理",
+      children:[
+        {path:'',component:oneCitySendMain},
+        {path:'addData',name:'添加',component:oneCitySendAddData},
+        {path:'editData',name:'修改',component:oneCitySendEditData},
+        {path:'detail',name:'查看详情',component:oneCitySendEditData}
+      ]
+    },
+    {path:'/oneCityFreight',component:oneCityFreight,name:"同城货运管理",
+    children:[
+      {path:'',component:oneCityFreightMain},
+      {path:'addData',name:'添加',component:oneCityFreightAddData},
+      {path:'editData',name:'修改',component:oneCityFreightEditData},
+      {path:'detail',name:'查看详情',component:oneCityFreightEditData}
+    ]
+  },
+  {path:'/nearExpress',component:nearExpress,name:"附近快递资源管理",
+   children:[
+      {path:'',component:nearExpressMain},
+      {path:'addData',name:'添加',component:nearExpressAddData},
+      {path:'editData',name:'修改',component:nearExpressEditData},
+      {path:'detail',name:'查看详情',component:nearExpressEditData}
+   ]
+},
+{path:'/chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理",
+    children:[
+      {path:'',component:chooseExpressOrderMain},
+      {path:'addData',name:'添加',component:chooseExpressOrderAddData},
+      {path:'editData',name:'修改',component:chooseExpressOrderEditData},
+      {path:'detail',name:'查看详情',component:chooseExpressOrderEditData}
+    ]
+
+}
+   ]
+ },
+
+
+
 //  {
 //    path:'/',
 //    name:"用户管理",
@@ -177,7 +251,7 @@ let routes =  [
 //    ]
 //   //  path:'/orderCancle',component:orderCancle
 
-// }, 
+// },
 {
    path:'/',
    name:"运营位管理",
@@ -224,24 +298,7 @@ let routes =  [
   ]
 
  },
- //寄快递入口
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/sendExpressEnter',component:sendExpressEnter,name:"寄快递首页管理",
-          children:[
-            {path:'',component:sendExpressEnterMain},
-            {path:'addData',name:'添加',component:sendExpressEnterAddData},
-            {path:'editData',name:'修改',component:sendExpressEnterEditData},
-            {path:'detail',name:'查看详情',component:sendExpressEnterEditData}
-          ]
-      }
-   ]
-  //  path:'/sendExpressEnter',component:sendExpressEnter
 
- },
  //选快递下单页
 //  {
 //    path:'/',
@@ -253,128 +310,11 @@ let routes =  [
 //   //  path:'/expressOrder',component:expressOrder
 
 //  },
- //快递公司管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/expressCompany',component:expressCompany,name:"快递公司管理",
-        children:[
-            {path:'',component:expressCompanyMain},
-            {path:'addData',name:'添加',component:expressCompanyAddData},
-            {path:'editData',name:'修改',component:expressCompanyEditData},
-            {path:'detail',name:'查看详情',component:expressCompanyEditData}
-          ]
-      }
-   ]
-  //  path:'/expressCompany',component:expressCompany
 
- },
- //选快递下单管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理",
-          children:[
-            {path:'',component:chooseExpressOrderMain},
-            {path:'addData',name:'添加',component:chooseExpressOrderAddData},
-            {path:'editData',name:'修改',component:chooseExpressOrderEditData},
-            {path:'detail',name:'查看详情',component:chooseExpressOrderEditData}
-          ]
 
-      }
-   ]
-  //  path:'/chooseExpressOrder',component:chooseExpressOrder
 
- },
- //服务类型及折扣管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/serverTypeDiscount',component:serverTypeDiscount,name:"服务类型及折扣管理"}
-   ]
-  //  path:'/serverTypeDiscount',component:serverTypeDiscount
 
- },
- //非服务地区管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/nonServerDistrict',component:nonServerDistrict,name:"非服务地区管理"}
-   ]
-  //  path:'/nonServerDistrict',component:nonServerDistrict
 
- },
- // 价格管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/priceManage',component:priceManage,name:"运线快递费管理"}
-   ]
- },
- //同城直送管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/oneCitySend',component:oneCitySend,name:"同城直送管理",
-      children:[
-        {path:'',component:oneCitySendMain},
-        {path:'addData',name:'添加',component:oneCitySendAddData},
-        {path:'editData',name:'修改',component:oneCitySendEditData},
-        {path:'detail',name:'查看详情',component:oneCitySendEditData}
-      ]
-    }
-   ]
-   
-  //  path:'/oneCitySend',component:oneCitySend
-
- },
- //同城货运管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/oneCityFreight',component:oneCityFreight,name:"同城货运管理",
-      children:[
-        {path:'',component:oneCityFreightMain},
-        {path:'addData',name:'添加',component:oneCityFreightAddData},
-        {path:'editData',name:'修改',component:oneCityFreightEditData},
-        {path:'detail',name:'查看详情',component:oneCityFreightEditData}
-      ]
-    }
-   ]
-   
-  //  path:'/oneCitySend',component:oneCitySend
-
- },
- //附近快递资源管理
- {
-   path:'/',
-   name:"首页",
-   component:index,
-   children:[
-      {path:'/nearExpress',component:nearExpress,name:"附近快递资源管理",
-       children:[
-          {path:'',component:nearExpressMain},
-          {path:'addData',name:'添加',component:nearExpressAddData},
-          {path:'editData',name:'修改',component:nearExpressEditData},
-          {path:'detail',name:'查看详情',component:nearExpressEditData}
-       ]
-    }
-   ]
- },
 
  //物流机构
 {
