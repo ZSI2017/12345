@@ -3,11 +3,11 @@
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="name">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
+      <el-input v-if="isFromaddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
+      <div class="detail-content" v-if="!isFromaddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="运营图" prop="fileList2">
-      <el-upload v-if="isFromAddData"
+      <el-upload v-if="isFromaddData"
         action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
         :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
@@ -18,52 +18,52 @@
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
+      <img v-if="!isFromaddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
 
       <el-popover ref="popover4" placement="right" trigger="click">
         <img :src="form.fileList2[0].url">
       </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
+      <el-button v-if="!isFromaddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
     <el-form-item label="排序值" prop="Forder">
-      <el-input v-if="isFromAddData" v-model.number="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
+      <el-input v-if="isFromaddData" v-model.number="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <div class="detail-content" v-if="!isFromaddData"> {{form.Forder}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="link">
 
-      <el-select v-if="isFromAddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
+      <el-select v-if="isFromaddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
          <el-option label="http://" value="http://"></el-option>
          <el-option label="https://" value="https://"></el-option>
       </el-select>
-      <el-input style="float:left;width:600px" v-if="isFromAddData"  v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
-      <!-- <el-input  v-if="isFromAddData" placeholder="请输入内容" v-model="form.link"> -->
+      <el-input style="float:left;width:600px" v-if="isFromaddData"  v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <!-- <el-input  v-if="isFromaddData" placeholder="请输入内容" v-model="form.link"> -->
          <!-- <template slot="prepend">Http://</template>  -->
          <!-- <el-select v-model="form.link" slot="prepend" placeholder="请选择">
              <el-option label="http" value="http"></el-option>
              <el-option label="https" value="https"></el-option>
            </el-select> -->
        <!-- </el-input> -->
-      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
+      <div class="detail-content" v-if="!isFromaddData"> {{form.link}} </div>
     </el-form-item>
     <el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-if="isFromAddData" v-model="form.date1" type="datetimerange" placeholder="选择时间范围">
+      <el-date-picker v-if="isFromaddData" v-model="form.date1" type="datetimerange" placeholder="选择时间范围">
       </el-date-picker>
-      <div class="detail-content" v-if="!isFromAddData"><span>{{form.gmtBegin | formatDate}}</span> ---- <span>{{form.gmtEnd | formatDate}}</span></div>
+      <div class="detail-content" v-if="!isFromaddData"><span>{{form.gmtBegin | formatDate}}</span> ---- <span>{{form.gmtEnd | formatDate}}</span></div>
     </el-form-item>
     <el-form-item label="覆盖地区" prop="coverArea">
-      <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button v-if="!isFromAddData"  size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+      <el-button v-if="isFromaddData" size="mini" @click="dialogConfig">点击配置</el-button>
+      <el-button v-if="!isFromaddData"  size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
     <el-form-item label="当前状态"  prop="radio">
-      <el-radio-group v-if="isFromAddData" v-model="form.radio">
+      <el-radio-group v-if="isFromaddData" v-model="form.radio">
         <el-radio class="radio" :label="2">上线</el-radio>
         <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
+      <div class="detail-content" v-if="!isFromaddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit('form')">提交</el-button>
+    <el-button v-if="isFromaddData" type="primary" @click="handleSubmit('form')">提交</el-button>
   </el-form>
 
   <!--  查看大图对话框 -->
@@ -306,12 +306,12 @@ export default {
 
   },
   created() {
-    if ( this.$route.path == "/chooseExpress/detail"
-          || this.$route.path == "/sendExpress/detail"
-          || this.$route.path == "/expressOrder/detail") {
-      this.isFromAddData = false;
+    if ( this.$route.path == "/promotion/chooseExpress/detail"
+          || this.$route.path == "/promotion/sendExpress/detail"
+          || this.$route.path == "/promotion/expressOrder/detail") {
+      this.isFromaddData = false;
     } else {
-      this.isFromAddData = true;
+      this.isFromaddData = true;
     }
 
 
@@ -398,7 +398,7 @@ export default {
     // 点击返回 对应的事件处理
     handleBackClick() {
       this.$router.go(-1);
-      // if (this.isFromAddData) {
+      // if (this.isFromaddData) {
       //   this.loadingFlag = true;
       // } else {
       //     this.$router.go(-1);
