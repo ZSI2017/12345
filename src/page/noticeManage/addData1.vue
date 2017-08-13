@@ -8,7 +8,7 @@
        v-if="showAlert"
        >
   </el-alert>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="photoName">
       <el-input v-model.trim="ruleForm.Name" placeholder="请输入公告名称"> </el-input>
     </el-form-item>

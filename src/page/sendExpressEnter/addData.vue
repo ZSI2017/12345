@@ -1,7 +1,7 @@
 <template type="html">
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="入口名称" prop="name">
       <el-input v-model.trim="ruleForm.name" placeholder="请输入入口名称"> </el-input>
     </el-form-item>

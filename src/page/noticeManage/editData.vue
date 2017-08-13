@@ -1,7 +1,7 @@
 <template type="html">
 <section class="section editData-class">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="form" :model="form" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="title">
       <el-input v-if="isFromAddData" v-model="form.title" placeholder="请输入公告名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.title}} </div>
@@ -198,7 +198,11 @@ export default {
        required: true,
        message: '请输入公告内容',
        trigger: 'change'
-        }],
+     },
+     {  min:1,
+        max:50,
+        message:'内容长度不大于50'
+     }],
        date1: [{
          required: true,
          message: '请选择日期',

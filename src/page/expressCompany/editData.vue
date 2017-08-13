@@ -1,7 +1,7 @@
 <template type="html">
 <section class="section editData-class">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="form" :model="form" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="form" :model="form" label-width="180px"  style="width:800px;padding-left:100px">
     <el-form-item label="公司名称">
       <div class="detail-content"> {{form.name}} </div>
     </el-form-item>
