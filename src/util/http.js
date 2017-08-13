@@ -10,14 +10,16 @@ Vue.use(ElementUI);
 var vue = new Vue();
 import axios from "axios";
 
-let URL = "http://sendexmng-sit.alipay-eco.com"
 
-// let URL  = "http://192.168.12.54:8080/"
+// let URL = "http://sendexmng-sit.alipay-eco.com"
+// let URL = 'http://192.168.12.54:8080'
+let URL  = "http://sendexmng-sit.alipay-eco.com"
 
 // alert(process.env.npm_config_report)
 if(process.env.NODE_ENV === "development"){
      // 开发环境下调用
-    URL = "http://sendexmng-sit.alipay-eco.com"
+    // URL = 'http://192.168.12.54:8080'
+    URL  = "http://sendexmng-sit.alipay-eco.com";
 }else {
     URL = "http://sendexmng-sit.alipay-eco.com"
 }
@@ -41,7 +43,7 @@ axios.interceptors.response.use(
     // loginTimeout();
       console.log("%c[axios log]success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
-    if(response.data.error === "ACL_NO_PRIVILEGE") {
+    if(response.data.error&&response.data.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
         window.location.href=response.redrect;
         return Promise.reject(error);
@@ -52,13 +54,15 @@ axios.interceptors.response.use(
     console.log("%c[axios log]error response:\n %o","color:red;font-size:16px;",error);
     if(error.response) {
       //  发出了请求，服务端返回了 状态码 2xx
-      console.log("%cresponse error %o","color:red;font-size:16px;",error.response.data)
+      console.log("%cresponse error %o","color:red;font-size:16px;",error.response)
+
       if(error.response.status === 0){
             // vue.$message.error('登录超时');
             // loginTimeout();
 
         }
     } else if(error.request) {
+      // 500 503 504
       if(error.request.status === 0){
                 //  loginTimeout();
             // vue.$message.error('登录超时');
@@ -185,9 +189,9 @@ export default {
                 // before the request data is sent to the server
                 return data;
             }],
-            headers:{
-                 'X-Requested-With':'XMLHttpRequest'
-            },
+            // headers:{
+            //      'X-Requested-With':'XMLHttpRequest'
+            // },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
@@ -215,7 +219,7 @@ export default {
            (error) => {
                     if(error.response) {
                       //  发出了请求，服务端返回了 状态码 2xx
-                      console.log("%cresponse error %o","color:red;font-size:16px;",error.response.data)
+                      console.log("%cresponse error %o","color:red;font-size:16px;",error.response)
                       if(error.response.status === 0){
                             // vue.$message.error('登录超时');
                             // loginTime();
@@ -259,14 +263,14 @@ export default {
               (error) => {
                 if(error.response) {
                   //  发出了请求，服务端返回了 状态码 2xx
-                  console.log("%cresponse error %o","color:red;font-size:16px;",error.response.data)
+                  console.log("%cresponse error %o","color:red;font-size:16px;",error.response)
                   if(error.response.status === 0){
-                        vue.$message.error('登录超时');
+                        // vue.$message.error('登录超时');
                     }
                 } else if(error.request) {
-                  if(error.request.status === 0){
-                        vue.$message.error('登录超时');
-                    }
+                  // if(error.request.status === 0){
+                  //       vue.$message.error('登录超时');
+                  //   }
                      // 请求发出了，但是没有接受到 响应
                     //  'error.request' 是一个 浏览器中的XMLHttpRequest 实例，
                     //   在node.js 中 就是 http.ClientRequest 实例；
@@ -275,7 +279,9 @@ export default {
                       vue.$message.error('接口调用失败');
                       console.log("Error",error.message);
                   }
-                   errorfn(error);
+                  if(typeof errorfn !== "undefined"){
+                    errorfn(error);
+                  }
               }
         )
        }

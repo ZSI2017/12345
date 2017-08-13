@@ -9,10 +9,14 @@
               <el-tab-pane label="待审核" name="third">待审核</el-tab-pane>
           </el-tabs>
        </el-col>
-       <el-col :span="16" style="position: absolute;top:-13px;right:0;">
+       <el-col :span="8" style="position: absolute;top:-13px;right:0;">
           <el-form style="width:80%;float:right;">
             <el-form-item label-position="right" label-width="160px" label="快递公司">
-              <el-select v-model="value" placeholder="请选择快递公司" style="width:100%;" @change="handleCommand">
+
+              <el-autocomplete class="inline-input" v-model="searchContent" style="" :fetch-suggestions="querySearch" placeholder="请输入快递公司名" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+
+
+              <!-- <el-select v-model="value" placeholder="请选择快递公司" style="width:100%;" @change="handleCommand">
                 <el-option
                   v-for="(item,index) in options"
                   :key="item.value"
@@ -20,7 +24,7 @@
                   :value="index"
                   >
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-form-item>
           </el-form>
        </el-col>
@@ -47,7 +51,8 @@
       max-height="450"
       empty-text="暂无数据"
       class="mainTable"
-      :default-sort="{prop: 'date', order: 'descending'}">
+      :default-sort="{prop: 'date', order: 'descending'}"
+      >
       <el-table-column prop="name" label="快递公司" sortable min-width="100">
       </el-table-column>
       <el-table-column prop="name" min-width="100" label="服务类型">
@@ -234,28 +239,39 @@
           //操作栏显示
           showOperation: true,
           showOperation2: false,
+          // 快递公司名
+          companyName:'',
+          searchContent:'',
           //详情页背景控制
           grayBg:{
             'grayBg':false
           },
-          options: [{
-            value: '选项1',
+        searchCompanyName: [{
+            value: '黄金糕',
             label: '黄金糕'
           }, {
-            value: '选项2',
+            value: '双皮奶',
             label: '双皮奶'
           }, {
-            value: '选项3',
+            value: '蚵仔煎',
             label: '蚵仔煎'
-          }],
-           items: [{
-            value: '选项1',
-            label: '黄金糕'
           }, {
-            value: '选项2',
-            label: '双皮奶'
+            value: '蚵仔煎123',
+            label: '蚵仔煎'
           }, {
-            value: '选项3',
+            value: '蚵仔煎23',
+            label: '蚵仔煎'
+          }, {
+            value: '蚵仔煎33',
+            label: '蚵仔煎'
+          }, {
+            value: '蚵仔煎44',
+            label: '蚵仔煎'
+          }, {
+            value: '蚵仔煎55',
+            label: '蚵仔煎'
+          }, {
+            value: '蚵仔煎77',
             label: '蚵仔煎'
           }],
           value: '',
@@ -316,6 +332,32 @@
           console.log(index)
           this.$message('click on item ' + this.options[index].label);
 
+        },
+
+        // 搜索框
+        querySearch(queryString, cb) {
+          if(queryString === '') {
+            this.companyName = '';
+          }
+          var searchCompanyName = this.searchCompanyName;
+          var results = queryString ? searchCompanyName.filter(this.createFilter(queryString)) : searchCompanyName;
+          cb(results);
+        },
+        createFilter(queryString) {
+          return (companyName) => {
+            return (companyName.value.indexOf(queryString.toLowerCase()) === 0);
+          };
+        },
+        handleQuerySelect(items) {
+             this.showProvinces = items.value
+
+              this.$http.post('',data,(result) => {
+
+              })
+        },
+        handleIconClick(ev) {
+          this.showProvinces = ''
+          this.searchContent = '';
         },
         // 操作栏对应的事件响应
         OperationTakeOff() {

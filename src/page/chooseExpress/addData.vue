@@ -146,7 +146,7 @@ export default {
       showProvinces:'',
       // radio 代表上下架状态的选择
       radio: "1",
-      url:'/api/promotion/audit/add',
+      url:'/api/promotion/audit/save',
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
       // 查看配置地区中的表格数据 和 是否显示的标志
