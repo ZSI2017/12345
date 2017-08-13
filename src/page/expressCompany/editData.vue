@@ -1,164 +1,215 @@
 <template type="html">
-<section class="section editData-class">
+<section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="form" :model="form" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
-    <el-form-item label="公司名称">
-      <div class="detail-content"> {{form.name}} </div>
-    </el-form-item>
 
-    <el-form-item label="LOGO" prop="opMap">
-      <img width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
-      <el-dialog v-model="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-      <el-popover ref="popover4" placement="right" trigger="click">
-        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
-      </el-popover>
-      <el-button style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
+  <el-form ref="ruleForm" :model="ruleForm" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
+    <el-form-item label="公司名称">
+        <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
+            <el-option
+              v-for="item in options"
+              :key="item.merchantLogo"
+              :merchantLogo="item.merchantLogo"
+              :label="item.merchantName"
+              :value="item">
+            </el-option>
+        </el-select>
+      </el-col>
+    </el-form-item>
+    <el-form-item label="LOGO">
+      <!--<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
+        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
+      </el-upload>-->
+      <img width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
+      <!--<el-popover ref="popover4" placement="right" trigger="click">
+        <img :src="merchantLogo">
+      </el-popover>-->
+      <!--<el-button style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>-->
     </el-form-item>
     <el-form-item label="广告语">
-      <el-input v-if="isFromAddData" v-model="form.content" placeholder="请输入广告语"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.content}} </div>
+      <el-input v-if="isFromAddData" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.slogan}} </div>
     </el-form-item>
     <el-form-item label="标签">
-      <el-tag
-        :key="tag"
-        v-for="tag in dynamicTags"
-        :closable="true"
-        hit="true"
-        :close-transition="false"
-        @close="handleClose(tag)"
-        type="gray"
-        style="margin-right:10px;"
-      >
-      {{tag}}
-      </el-tag>
-      <el-input
-        class="input-new-tag"
-        v-if="inputVisible"
-        v-model="inputValue"
-        ref="saveTagInput"
-        size="small"
-        @keyup.enter.native="handleInputConfirm"
-        @blur="handleInputConfirm"
-      >
-      </el-input>
-      <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
+      <div v-if="isFromAddData">
+        <el-tag
+          :key="tag"
+          v-for="tag in dynamicTags"
+          :closable="true"
+          hit="true"
+          :close-transition="false"
+          @close="handleClose(tag)"
+          type="gray"
+          style="margin-right:10px;"
+        >
+        {{tag}}
+        </el-tag>
+        <el-input
+          class="input-new-tag"
+          v-if="inputVisible"
+          v-model="inputValue"
+          ref="saveTagInput"
+          size="small"
+          @keyup.enter.native="handleInputConfirm"
+          @blur="handleInputConfirm"
+        >
+        </el-input>
+        <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
+        <div style="color:#888;">最多添加两个标签</div>
+      </div>  
+      <div class="detail-content" v-if="!isFromAddData">
+        <sapn style="margin:2px;">{{dynamicTags.join(' ')}}</sapn>
+      </div>   
     </el-form-item>
     <el-form-item label="客服电话">
-      <el-input v-if="isFromAddData" v-model="form.orderNumber" placeholder="请输入客服电话"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.orderNumber}} </div>
+      <el-input v-model.number="ruleForm.custServiceTel" v-if="isFromAddData" placeholder="请输入客服电话"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.custServiceTel}} </div>      
     </el-form-item>
     <el-form-item label="排序值">
-      <el-input v-if="isFromAddData" v-model="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
+      <el-input v-model.number="ruleForm.sortWeight" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>            
     </el-form-item>
     <el-form-item label="是否由系统发起支付">
-      <el-radio-group v-if="isFromAddData" v-model="payRadio">
+      <el-radio-group :disabled='!disabled'  v-model="ruleForm.isManualPrice">
         <el-radio class="radio" :label="0">是</el-radio>
         <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
     </el-form-item>
     <el-form-item label="是否允许议价">
-      <el-radio-group v-if="isFromAddData" v-model="priceRadio">
+      <el-radio-group :disabled='!disabled' v-model="ruleForm.pricingMode">
         <el-radio class="radio" :label="0">是</el-radio>
         <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
     </el-form-item>
     <el-form-item label="是否最热">
-      <el-radio-group v-if="isFromAddData" v-model="hotRadio">
+      <el-radio-group :disabled='!disabled' v-model="ruleForm.hotStatus">
         <el-radio class="radio" :label="0">是</el-radio>
         <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
     </el-form-item>
     <el-form-item label="是否最新">
-      <el-radio-group v-if="isFromAddData" v-model="newRadio">
+      <el-radio-group :disabled='!disabled' v-model="ruleForm.newStatus">
         <el-radio class="radio" :label="0">是</el-radio>
         <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>      
     </el-form-item>
     <el-form-item label="当前状态">
-      <el-radio-group v-if="isFromAddData" v-model="statusRadio">
+      <el-radio-group :disabled='!disabled' v-model="ruleForm.opStatus">
         <el-radio class="radio" :label="0">上架</el-radio>
         <el-radio class="radio" :label="1">下架</el-radio>
       </el-radio-group>
-      <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
+    <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
+
+    <!--图片预览 框  -->
+  <el-dialog v-model="dialogVisible" size="tiny">
+     <img width="100%" :src="merchantLogo" alt="">
+  </el-dialog>
 
 </section>
 </template>
 <script type="text/javascript">
+//  import coverArea from "@/page/chooseExpress/coverArea.vue";
 import localEvent from 'src/vuex/function.js';
-// import coverArea from "../chooseExpress/coverArea.vue";
+
 export default {
-  // components:{
-  //    coverArea
-  // },
   data() {
     return {
-      // 从详情页面
-      isDetail: false,
-      currentStateText: '',
+      dialogVisible:false,//大图显示
       // 即将离开的对话框
       loadingFlag: false,
-      dialogVisible: false,
-      fileList2: [{
-        name: 'food.jpeg',
-        url: "https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png"
-      }],
-      // radio 代表上下架状态的选择
-      payRadio: 1,
-      priceRadio: 1,
-      hotRadio: 1,
-      newRadio: 1,
-      statusRadio: 1,
+      //标签添加控制
+      addTag: true,
+      url:'/api/expresscompany/audit/save',
       //标签数据
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
-      addTag:"true",
-      form: {
-        name: '',
-        type: [],
-        Forder: '',
-        content:'',
-        orderNumber:'',
-      }
+      dialogTableVisible: false,
+      //select 快递公司选项
+      options: [],
+      value:'',
+      merchantLogo:'',
+      merchantName:'',
+      // 对输入表单进行验证
+      ruleForm: {
+        slogan: '',
+        tag: '',
+        custServiceTel:'',
+        sortWeight:'',
+        isManualPrice: 1,
+        pricingMode:1,
+        hotStatus: 1,
+        newStatus: 1,
+        opStatus:1
+      },
+      disabled:true,
+      isFromAddData:false
     }
-  },
-  mounted() {
-    var localData = localEvent.get("localExpressCompany");
-    console.log(localData);
-    // console.log(localData.activeTime1);
-    // this.form.name = localData.operationsMapName;
-    // this.form.Forder = localData.Forder;
-    // this.form.orderNumber = localData.ordernumber;    
-    // this.form.link = localData.link;
-    // this.form.content = localData.content;
-    // this.currentStateText = localData.currentState;
-
-    // if (localData.currentState = "上架") {
-    //   this.statusRadio = 1;
-    // } else {
-    //   this.statusRadio = 2;
-    // }
   },
   created() {
     if ( this.$route.path == "/expressCompany/detail") {
       this.isFromAddData = false;
+      this.disabled = false;
     } else {
       this.isFromAddData = true;
     }
+
   },
   beforeMount() {
 
+  },
+  mounted() {
+      
+    var localData = localEvent.get("localExpressCompany");
+    console.log(localData);
+    // console.log(localData.promotionId);
+    var promotionId = localData.pageMenuConfId;
+    this.id = localData.id;
+    var _this =this;
+    var httpId = '';
+    if(localData.tabName == '配置'){  //配置 修改
+        _this.url = "/api/expresscompany/audit/get";
+        httpId = this.id;
+        console.log("配置 修改")
+    }else if(!localData.tabName){  // 待审核 已生效详情
+        _this.url = "/api/expresscompany/get";
+        httpId = promotionId;
+        console.log("待审核 已生效详情")
+    }else{
+      alert('错误')
+    }
+
+    _this.$http.post(_this.url,{
+      "id":httpId
+    },(rsp)=>{
+      console.log(rsp)
+
+      this.ruleForm.slogan = rsp.slogan;
+      this.ruleForm.custServiceTel = rsp.custServiceTel;
+      this.ruleForm.sortWeight = rsp.sortWeight;
+      this.ruleForm.isManualPrice = Number(rsp.isManualPrice);
+      this.ruleForm.hotStatus =  Number(rsp.hotStatus);
+      this.ruleForm.newStatus =  Number(rsp.newStatus);
+      this.ruleForm.pricingMode =  Number(rsp.pricingMode);
+      // this.ruleForm.opStatus =  Number(rsp.opStatus);
+      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+      console.log(this.dynamicTags)
+      if (rsp.opStatus == "1") {
+        this.ruleForm.opStatus = 0;
+        // this.currentStateText = "已下线"
+      } else {
+        this.ruleForm.opStatus = 1;
+        // this.currentStateText = "已上线"
+      }
+      this.dialogConfig(true)
+
+    },(error)=>{
+      console.log(error)
+      console.log('failed');
+    });
   },
   beforeDestory() {
     alert("beforeDestory")
@@ -166,20 +217,67 @@ export default {
   watch: {
 
   },
-  computed: {
-    GETEDITFORM() {
-      alert(this.$store.getters.GETEDITFORM)
-      return this.$store.getters.GETEDITFORM;
-    }
-  },
   methods: {
+    changeVisible(flag){
+      this.dialogTableVisible = flag;
+    },
     //  点击提交
-    handleSubmit() {
-      // this.$router.app.$store.state.loadingFlag = true;
-      _this.$store.dispatch('changeLoadingChange', true);
-      // this.$router.app.$store.state.loadingChange = true;
-      console.log(this);
-      this.$router.go(-1);
+    handleSubmit(formName) {
+      var _this = this;
+      console.log("-----------------------");
+        console.log(this.$refs[formName]),
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+          console.log('error submit');
+          // router.app.$store.state.loadingChange = true
+          // _this.$router.app.$store.state.loadingChange = true;
+          // _this.$store.dispatch('changeLoadingChange',true);
+          // _this.$router.go(-1);
+          //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
+          // let submitDate = _this.ruleForm.date1;
+          // console.log(submitDate)
+          // this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
+          // this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
+          // console.log(this.ruleForm.gmtBegin)
+          // console.log(this.ruleForm.gmtEnd)
+
+          let httpData = {
+                "data": {
+                  "pageId": _this.pageId,
+                  // "businessType":_this.ruleForm.businessType,
+                  "isvMerchantId": '1',
+                  "slogan": _this.ruleForm.slogan,
+                  "tag":_this.ruleForm.tag,
+                  "custServiceTel":_this.ruleForm.custServiceTel,                                    
+                  "sortWeight":_this.ruleForm.sortWeight,  
+                  "isManualPrice":_this.ruleForm.isManualPrice,                                  
+                  "pricingMode":_this.ruleForm.pricingMode,
+                  "hotStatus":_this.ruleForm.hotStatus,                  
+                  "newStatus":_this.ruleForm.newStatus,
+                  "opStatus":_this.ruleForm.opStatus,
+                }
+              };
+          _this.$http.post(_this.url,httpData,(result) => {
+              _this.$store.dispatch('changeLoadingChange',true);
+              _this.$router.go(-1);
+            // _this.tableData = result.page_list;
+            // _this.totalCount = parseInt(result.pages.cnt);
+          },(error) => {
+              this.$message({
+                  type: 'error',
+                  message: error.data.meta.code+"--"+error.data.meta.msg
+              });
+          });
+
+          // console.log(this.$route.matched);
+
+      //   } else {
+      //     console.log(_this);
+
+      //     return false;
+      //   }
+      // })
+
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
@@ -191,7 +289,7 @@ export default {
         this.addTag = false;
       }else{
         this.addTag = true;
-      }  
+      }
     },
     showInput() {
       this.inputVisible = true;
@@ -199,32 +297,41 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
-
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (inputValue) {
         this.dynamicTags.push(inputValue);
+        this.ruleForm.tag = this.dynamicTags.join(',');
         if(this.dynamicTags.length >= 2){
           this.addTag = false;
         }else{
           this.addTag = true;
-        }      
+        }
       }
       this.inputVisible = false;
       this.inputValue = '';
-    }
+    },
+    handleMerchant(){
+      this.merchantLogo = this.value.merchantLogo;
+      this.merchantName = this.value.merchantName;
+      this.ruleForm.isvMerchantId = this.value.id;
+    },
+    handlePreview(file) {
+      this.dialogVisible = true;
+    },
+
+
   }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-.editData-class {
-    label {
-        font-weight: bold;
-    }
-    .dialog-class {
-        .el-dialog__body {
-            padding-top: 15px !important;
-        }
+label {
+    font-weight: bold;
+}
+.dialog-class {
+    .el-dialog__body{
+       padding-top:15px !important;
     }
 }
+
 </style>

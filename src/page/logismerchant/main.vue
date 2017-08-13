@@ -88,7 +88,7 @@ export default {
         listLoading: false, //loading框
         bigImageUrl:'',
         dialogVisible:false,
-        url:'/api/logisMerchant/list/get',
+        url:'/api/logisMerchant/list',
         codes:'',
         codeVisible:false,
 
