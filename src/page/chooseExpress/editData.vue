@@ -497,6 +497,7 @@ handleSubmit(formName) {
       // }
 
        this.handleIconClick();
+       this.form.coverArea = "hasClick";
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
