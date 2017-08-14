@@ -202,7 +202,7 @@ let routes =  [
        {path:'detail',name:'查看详情',component:sendExpressEnterEditData}
      ]
      },
-      {path:'/oneCitySend',component:oneCitySend,name:"同城直送管理",
+      {path:'/oneCitySend',component:oneCitySend,name:"同城直送页",
       children:[
         {path:'',component:oneCitySendMain},
         {path:'addData',name:'添加',component:oneCitySendAddData},
@@ -210,7 +210,7 @@ let routes =  [
         {path:'detail',name:'查看详情',component:oneCitySendEditData}
       ]
     },
-    {path:'/oneCityFreight',component:oneCityFreight,name:"同城货运管理",
+    {path:'/oneCityFreight',component:oneCityFreight,name:"同城货运页",
     children:[
       {path:'',component:oneCityFreightMain},
       {path:'addData',name:'添加',component:oneCityFreightAddData},
@@ -218,7 +218,7 @@ let routes =  [
       {path:'detail',name:'查看详情',component:oneCityFreightEditData}
     ]
   },
-  {path:'/nearExpress',component:nearExpress,name:"附近快递资源管理",
+  {path:'/nearExpress',component:nearExpress,name:"附近快递资源页",
    children:[
       {path:'',component:nearExpressMain},
       {path:'addData',name:'添加',component:nearExpressAddData},
@@ -226,7 +226,7 @@ let routes =  [
       {path:'detail',name:'查看详情',component:nearExpressEditData}
    ]
 },
-{path:'/chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单管理",
+{path:'/chooseExpressOrder',component:chooseExpressOrder,name:"选快递下单页",
     children:[
       {path:'',component:chooseExpressOrderMain},
       {path:'addData',name:'添加',component:chooseExpressOrderAddData},

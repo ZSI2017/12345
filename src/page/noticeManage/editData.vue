@@ -1,5 +1,5 @@
 <template type="html">
-<section class="section editData-class">
+<section class="section editData-class" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form ref="form" :model="form" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="title">
@@ -135,7 +135,7 @@ export default {
   },
   data() {
     return {
-
+      listLoading:false,  // 全局的loading 框
       url: '', // 待审详情的 url
       id:'',
       tabName:'', // 标签页 名称
@@ -329,6 +329,7 @@ export default {
 
     //  点击提交
     handleSubmit(formName) {
+      this.listLoading = true;
    this.$refs[formName].validate((valid) => {
      if(valid) {
          var result = {
@@ -352,11 +353,13 @@ export default {
          console.log("result%o ",result);
          var _this = this;
         this.$http.post("/api/notice/audit/update",result,(result) => {
+          this.listLoading = false;
           _this.$store.dispatch('changeLoadingChange', true);
                   console.log(this);
                   this.$router.go(-1);
                     // alert(result);
         },(error) => {
+          this.listLoading = false;
           if(error.data.meta.code == "0017") {
               this.$message.error('"名称重复！"')
           } else {
@@ -368,7 +371,7 @@ export default {
 
         });
      } else {
-
+        this.listLoading = false;
      }
      })
     },
@@ -470,6 +473,7 @@ export default {
       // }
 
        this.handleIconClick();
+        this.form.coverArea = "hasClick";
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
@@ -482,7 +486,9 @@ export default {
             return;
           }
       }
+
       var _this = this;
+      this.listLoading = true;
       var URL = "/api/notice/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
       if(this.tabName === "已上线") {
           URL = "/api/notice/areaConf/all";
@@ -498,6 +504,7 @@ export default {
             if(visible === undefined) {
                 _this.initCheckBox(rsp.check);
             }else {
+              this.listLoading = false;
               this.initCheckBox(rsp.check,visible);
             }
           // _this.gridDataCopy = rsp.provinces.slice(0);
@@ -521,6 +528,8 @@ export default {
           // console.log(_this.checkAll);
           // _this.dialogFormVisible = true;
           // console.log(_this.gridData);
+        },(error) => {
+              this.listLoading = false;
         })
     },
     initCheckBox(isAllcheck,visible){
@@ -553,6 +562,7 @@ export default {
         this.handleCheckAll({target:{checked:true}})
       }
       if(visible === undefined) {
+          this.listLoading =false;
         this.dialogFormVisible = true;
       }
 
@@ -582,6 +592,9 @@ export default {
          }else {
                this.form.coverArea = "";
          }
+         console.log(this.check);
+         console.log(this.checkAll.filter(function(value){return value === true }));
+         console.log(this.checkedCities.filter(function(value){return value.length>0} ));
       localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
         this.dialogFormVisible = false;
         this.DialogConfigSaveFlag = true;

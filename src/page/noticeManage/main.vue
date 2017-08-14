@@ -374,9 +374,11 @@ export default {
     //dialog 确认按钮
     handleConfirm(){
       this.loadingTakeOffFlag = false;
+      this.listLoading = true;
       this.$http.post(this.noticeURL, {
           "id": this.noticeID,
       }, (rsp) => {
+        this.listLoading = false;
         console.log(rsp);
         this.$message({
           message: this.noticeMessage,
@@ -406,6 +408,11 @@ export default {
         // });
 
         // console.log(this.$route.matched);
+      },(error) => {
+           this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+           this.listLoading = false;
+           console.log(error);
+
       })
 
     },

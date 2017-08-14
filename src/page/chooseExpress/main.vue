@@ -374,10 +374,12 @@ export default {
     //dialog 确认按钮
     handleConfirm(){
       this.loadingTakeOffFlag = false;
+          this.listLoading = true;
       this.$http.post(this.promotionURL, {
           "id": this.promotionID,
       }, (rsp) => {
         console.log(rsp);
+          this.listLoading = false;
         this.$message({
           message: this.promotionMessage,
           type: this.promotionType
@@ -406,6 +408,10 @@ export default {
         // });
 
         // console.log(this.$route.matched);
+      },(error) => {
+       this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+        this.listLoading = false;
+        console.log(error);
       })
 
     },
