@@ -55,7 +55,7 @@
     </el-table-column>
     <el-table-column label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click">
+        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click" style="word-break: break-all;">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
@@ -516,7 +516,7 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = false;
-        // _this.radio2 = 1;
+        _this.radio2 = '';
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
         _this.url = "/api/promotion/onlineList";
@@ -545,7 +545,7 @@ export default {
         _this.showflag = true;
         _this.showOperation2 = true;
         _this.showOperation3 = false;
-        // _this.radio2 = 1;
+        _this.radio2 = '';
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
         _this.url = "/api/promotion/audit/list"
@@ -555,7 +555,8 @@ export default {
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId
+            "pageId": _this.pageId,
+            "status":_this.radio2            
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;

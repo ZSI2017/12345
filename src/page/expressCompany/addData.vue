@@ -1,5 +1,5 @@
 <template type="html">
-<section class="section">
+<section class="section" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
 
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
@@ -37,8 +37,8 @@
         hit="true"
         :close-transition="false"
         @close="handleClose(tag)"
-        type="gray"
-        style="margin-right:10px;"
+        type="primary"
+        style="margin-right:10px;height:28px;line-height:28px;"
       >
       {{tag}}
       </el-tag>
@@ -61,31 +61,31 @@
     <el-form-item label="排序值" prop="sortWeight">
       <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <el-form-item label="是否由系统发起支付" prop="isManualPrice">
+    <el-form-item label="是否由系统发起支付">
       <el-radio-group v-model="ruleForm.isManualPrice">
         <el-radio class="radio" :label="0">是</el-radio>
         <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否允许议价" prop="pricingMode">
+    <el-form-item label="是否允许议价">
       <el-radio-group v-model="ruleForm.pricingMode">
         <el-radio class="radio" :label="0">是</el-radio>
         <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否最热" prop="hotStatus">
+    <el-form-item label="是否最热">
       <el-radio-group v-model="ruleForm.hotStatus">
         <el-radio class="radio" :label="0">是</el-radio>
         <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否最新" prop="newStatus">
+    <el-form-item label="是否最新">
       <el-radio-group v-model="ruleForm.newStatus">
         <el-radio class="radio" :label="0">是</el-radio>
         <el-radio class="radio" :label="1">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="当前状态" prop="opStatus">
+    <el-form-item label="当前状态">
       <el-radio-group v-model="ruleForm.opStatus">
         <el-radio class="radio" :label="0">上架</el-radio>
         <el-radio class="radio" :label="1">下架</el-radio>
@@ -110,8 +110,7 @@ export default {
   data() {
     return {
       dialogVisible:false,//大图显示
-      // 即将离开的对话框
-      loadingFlag: false,
+      listLoading: false,//loading框
       //标签添加控制
       addTag: true,
       url:'/api/expresscompany/audit/save',
@@ -124,9 +123,11 @@ export default {
       options: [],
       value:'',
       merchantLogo:'',
-      merchantName:'',
+      
       // 对输入表单进行验证
       ruleForm: {
+        merchantName:'',
+        isvMerchantId:'',
         slogan: '',
         tag: '',
         custServiceTel:'',
@@ -139,54 +140,22 @@ export default {
       },
       rules: {
         merchantName: [{
-          required: false,
+          required: true,
           message: '请选择公司名称',
           trigger: 'change'
         }],
         sortWeight: [
-          { required: false, message: '排序值不能为空'},
-          { required: false, type: 'number', message: '排序值必须为数字值'}
+          { required: true, message: '排序值不能为空'},
+          { required: true, type: 'number', message: '排序值必须为数字值'}
         ],
         custServiceTel: [{
           type: 'number',
-          required: false,
+          required: true,
           message: '请输入电话号码',
           trigger: 'blur'
         }],
-        opStatus: [{
-          required: false,
-          message: '请选择状态',
-          trigger: 'change'
-        }],
-        isManualPrice: [{
-          required: false,
-          message: '请选择状态',
-          trigger: 'change'
-        }],
-        currentParice: [{
-          required: false,
-          message: '请选择状态',
-          trigger: 'change'
-        }],
-        hotStatus: [{
-          required: false,
-          message: '请选择状态',
-          trigger: 'change'
-        }],
-        newStatus: [{
-          required: false,
-          message: '请选择状态',
-          trigger: 'change'
-        }],
-        opMap: [{
-          required: false,
-          message: '请上传图片'
-        }],
-        cornerMark: [{
-          required: false
-        }],
         slogan:[{
-          required: false,
+          required: true,
           message: '请输入广告语'
         }]
       }
@@ -232,10 +201,11 @@ export default {
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
+      _this.listLoading = true;
       console.log("-----------------------");
         console.log(this.$refs[formName]),
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
           console.log('error submit');
           // router.app.$store.state.loadingChange = true
           // _this.$router.app.$store.state.loadingChange = true;
@@ -253,7 +223,7 @@ export default {
                 "data": {
                   "pageId": _this.pageId,
                   // "businessType":_this.ruleForm.businessType,
-                  "isvMerchantId": '1',
+                  "logisMerchId": _this.ruleForm.isvMerchantId,
                   "slogan": _this.ruleForm.slogan,
                   "tag":_this.ruleForm.tag,
                   "custServiceTel":_this.ruleForm.custServiceTel,                                    
@@ -266,25 +236,27 @@ export default {
                 }
               };
           _this.$http.post(_this.url,httpData,(result) => {
-              _this.$store.dispatch('changeLoadingChange',true);
-              _this.$router.go(-1);
+            _this.$store.dispatch('changeLoadingChange',true);
+            _this.listLoading = false;
+            _this.$router.go(-1);
             // _this.tableData = result.page_list;
             // _this.totalCount = parseInt(result.pages.cnt);
           },(error) => {
-              this.$message({
-                  type: 'error',
-                  message: error.data.meta.code+"--"+error.data.meta.msg
-              });
+            _this.listLoading = false;
+            this.$message({
+                type: 'error',
+                message: error.data.meta.code+"--"+error.data.meta.msg
+            });
           });
 
           // console.log(this.$route.matched);
 
-      //   } else {
-      //     console.log(_this);
-
-      //     return false;
-      //   }
-      // })
+        } else {
+          _this.listLoading = false;
+          console.log(_this);
+          return false;
+        }
+      })
 
     },
     // 点击返回 对应的事件处理
@@ -321,7 +293,7 @@ export default {
     },
     handleMerchant(){
       this.merchantLogo = this.value.merchantLogo;
-      this.merchantName = this.value.merchantName;
+      this.ruleForm.merchantName = this.value.merchantName;
       this.ruleForm.isvMerchantId = this.value.id;
     },
     handlePreview(file) {

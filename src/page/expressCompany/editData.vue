@@ -1,5 +1,5 @@
 <template type="html">
-<section class="section">
+<section class="section" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
 
   <el-form ref="ruleForm" :model="ruleForm" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
@@ -39,8 +39,8 @@
           hit="true"
           :close-transition="false"
           @close="handleClose(tag)"
-          type="gray"
-          style="margin-right:10px;"
+          type="primary"
+          style="margin-right:10px;height:28px;line-height:28px;"
         >
         {{tag}}
         </el-tag>
@@ -58,7 +58,7 @@
         <div style="color:#888;">最多添加两个标签</div>
       </div>  
       <div class="detail-content" v-if="!isFromAddData">
-        <sapn style="margin:2px;">{{dynamicTags.join(' ')}}</sapn>
+        <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
       </div>   
     </el-form-item>
     <el-form-item label="客服电话">
@@ -100,7 +100,7 @@
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
+    <el-button v-if="!isFromAddData" type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
 
     <!--图片预览 框  -->
@@ -118,11 +118,11 @@ export default {
   data() {
     return {
       dialogVisible:false,//大图显示
-      // 即将离开的对话框
-      loadingFlag: false,
+      listLoading:false,//loading框
       //标签添加控制
       addTag: true,
       url:'/api/expresscompany/audit/save',
+      pageId: '',
       //标签数据
       dynamicTags: [],
       inputVisible: false,
@@ -163,26 +163,28 @@ export default {
   },
   mounted() {
       
-    var localData = localEvent.get("localExpressCompany");
+    let localData = localEvent.get("localExpressCompany");
     console.log(localData);
     // console.log(localData.promotionId);
-    var promotionId = localData.pageMenuConfId;
+    let promotionId = localData.pageMenuConfId;
     this.id = localData.id;
-    var _this =this;
-    var httpId = '';
+    this.pageId = localData.pageId;
+    let _this =this;
+    let httpId = '';
+    let httpUrl = '';
     if(localData.tabName == '配置'){  //配置 修改
-        _this.url = "/api/expresscompany/audit/get";
+        httpUrl = "/api/expresscompany/audit/get";
         httpId = this.id;
         console.log("配置 修改")
     }else if(!localData.tabName){  // 待审核 已生效详情
-        _this.url = "/api/expresscompany/get";
+        httpUrl = "/api/expresscompany/get";
         httpId = promotionId;
         console.log("待审核 已生效详情")
     }else{
       alert('错误')
     }
 
-    _this.$http.post(_this.url,{
+    _this.$http.post(httpUrl,{
       "id":httpId
     },(rsp)=>{
       console.log(rsp)
@@ -194,16 +196,9 @@ export default {
       this.ruleForm.hotStatus =  Number(rsp.hotStatus);
       this.ruleForm.newStatus =  Number(rsp.newStatus);
       this.ruleForm.pricingMode =  Number(rsp.pricingMode);
-      // this.ruleForm.opStatus =  Number(rsp.opStatus);
+      this.ruleForm.opStatus =  rsp.opStatus=='1'?0:1;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       console.log(this.dynamicTags)
-      if (rsp.opStatus == "1") {
-        this.ruleForm.opStatus = 0;
-        // this.currentStateText = "已下线"
-      } else {
-        this.ruleForm.opStatus = 1;
-        // this.currentStateText = "已上线"
-      }
       this.dialogConfig(true)
 
     },(error)=>{
@@ -224,6 +219,7 @@ export default {
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
+      _this.listLoading = true;
       console.log("-----------------------");
         console.log(this.$refs[formName]),
       // this.$refs[formName].validate((valid) => {
@@ -260,9 +256,15 @@ export default {
           _this.$http.post(_this.url,httpData,(result) => {
               _this.$store.dispatch('changeLoadingChange',true);
               _this.$router.go(-1);
+              _this.listLoading = false;
             // _this.tableData = result.page_list;
             // _this.totalCount = parseInt(result.pages.cnt);
+             this.$message({
+                  type: 'success',
+                  message: "报存成功！"
+              });
           },(error) => {
+              _this.listLoading = false;            
               this.$message({
                   type: 'error',
                   message: error.data.meta.code+"--"+error.data.meta.msg

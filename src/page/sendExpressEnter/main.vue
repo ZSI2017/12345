@@ -31,9 +31,15 @@
     empty-text="暂无数据"
     align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="name" label="运营图称">
+    <el-table-column prop="imageUrl" label="LOGO">
+      <template scope="scope">
+            <img width="50px" style="cursor:pointer;" :src="scope.row.imageUrl" trigger="click" placement="right" @click="showImg(scope.row.imageUrl)">
+            <el-dialog v-model="dialogVisible" size="tiny">
+              <img width="100%" :src="bigImageUrl" alt="">
+            </el-dialog>
+        </template>
     </el-table-column>
-    <el-table-column prop="imageUrl" label="运营图">
+    <el-table-column prop="imageUrl" label="角标">
        <template scope="scope">
             <img width="50px" style="cursor:pointer;" :src="scope.row.imageUrl" trigger="click" placement="right" @click="showImg(scope.row.imageUrl)">
             <el-dialog v-model="dialogVisible" size="tiny">
@@ -41,9 +47,13 @@
             </el-dialog>
         </template>
     </el-table-column>
+    <el-table-column prop="name" label="入口名称">
+    </el-table-column>
+    <el-table-column prop="name" label="描述">
+    </el-table-column>
     <el-table-column label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click">
+        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click" style="word-break:break-all;">
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
@@ -51,23 +61,6 @@
     <el-table-column prop="address" label="覆盖地区">
        <template scope="scope">
          <el-button @click="checkArea(scope.row.id)" type="text" size="small">查看</el-button>
-       </template>
-    </el-table-column>
-    <el-table-column prop="gmtCreate" label="创建时间" width="160">
-      <template scope="scope">
-          {{scope.row.gmtCreate | formatDate}}
-      </template>
-    </el-table-column>
-    <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
-      <template scope="scope">
-          {{scope.row.gmtModified | formatDate}}
-      </template>
-    </el-table-column>
-    <el-table-column prop="activeTime" label="有效时段" width="220">
-      <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtBegin | formatDate}}</p>
-          <p style="padding:0;margin:0;text-align:center">至</p>
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtEnd | formatDate}}</p>
        </template>
     </el-table-column>
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
