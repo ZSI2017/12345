@@ -2,7 +2,7 @@
 <section class="section" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
 
-  <el-form ref="ruleForm" :model="ruleForm" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="ruleForm" :model="ruleForm" label-width="180px" tyle="width:800px;padding-left:100px">
     <el-form-item label="公司名称">
         <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
             <el-option
@@ -56,18 +56,18 @@
         </el-input>
         <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
         <div style="color:#888;">最多添加两个标签</div>
-      </div>  
+      </div>
       <div class="detail-content" v-if="!isFromAddData">
         <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
       </div>   
     </el-form-item>
     <el-form-item label="客服电话">
       <el-input v-model.number="ruleForm.custServiceTel" v-if="isFromAddData" placeholder="请输入客服电话"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.custServiceTel}} </div>      
+      <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.custServiceTel}} </div>
     </el-form-item>
     <el-form-item label="排序值">
       <el-input v-model.number="ruleForm.sortWeight" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>            
+      <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="是否由系统发起支付">
       <el-radio-group :disabled='!disabled'  v-model="ruleForm.isManualPrice">
@@ -161,8 +161,7 @@ export default {
   beforeMount() {
 
   },
-  mounted() {
-      
+  mounted() {    
     let localData = localEvent.get("localExpressCompany");
     console.log(localData);
     // console.log(localData.promotionId);
@@ -244,11 +243,11 @@ export default {
                   "isvMerchantId": '1',
                   "slogan": _this.ruleForm.slogan,
                   "tag":_this.ruleForm.tag,
-                  "custServiceTel":_this.ruleForm.custServiceTel,                                    
-                  "sortWeight":_this.ruleForm.sortWeight,  
-                  "isManualPrice":_this.ruleForm.isManualPrice,                                  
+                  "custServiceTel":_this.ruleForm.custServiceTel,
+                  "sortWeight":_this.ruleForm.sortWeight,
+                  "isManualPrice":_this.ruleForm.isManualPrice,
                   "pricingMode":_this.ruleForm.pricingMode,
-                  "hotStatus":_this.ruleForm.hotStatus,                  
+                  "hotStatus":_this.ruleForm.hotStatus,
                   "newStatus":_this.ruleForm.newStatus,
                   "opStatus":_this.ruleForm.opStatus,
                 }

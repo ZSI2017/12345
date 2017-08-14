@@ -2,7 +2,7 @@
 <section class="section" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
 
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="180px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="180px"  style="width:800px;padding-left:100px">
     <el-form-item label="公司名称" prop="merchantName">
         <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
             <el-option

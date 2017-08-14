@@ -1,7 +1,8 @@
 <template type="html">
-<section class="section editData-class">
+<section class="section editData-class"
+  v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="form" :model="form" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="name">
       <el-input v-if="isFromaddData" v-model="form.name" placeholder="请输入运营图名称"> </el-input>
       <div class="detail-content" v-if="!isFromaddData"> {{form.name}} </div>
@@ -136,7 +137,7 @@ export default {
   },
   data() {
     return {
-
+      listLoading:false,  // 全局的loading 框
       url: '', // 待审详情的 url
       id:'',
       tabName:'', // 标签页 名称
@@ -203,13 +204,13 @@ export default {
          }
      ],
        Forder: [
-         { required: false, message: '排序值不能为空'},
+         { required: true, message: '排序值不能为空'},
         //  { type: 'number', message: '排序值必须为数字值'},
          { type: 'number', min:1, max:999,message:'排序值范围1-999'}
        ],
        link: [{
         //  type:'url',
-         required: true,
+         required: false,
          message: "请输入正确链接",
          trigger: 'blur'
        }],
@@ -349,7 +350,8 @@ export default {
     },
 
     //  点击提交
-    handleSubmit(formName) {
+handleSubmit(formName) {
+      this.listLoading = true;
    this.$refs[formName].validate((valid) => {
      if(valid) {
          var result = {
@@ -375,11 +377,13 @@ export default {
          console.log("result%o ",result);
          var _this = this;
         this.$http.post("/api/promotion/audit/update",result,(result) => {
+          this.listLoading = false;
           _this.$store.dispatch('changeLoadingChange', true);
                   console.log(this);
                   this.$router.go(-1);
                     // alert(result);
         },(error) => {
+              this.listLoading = false;
           if(error.data.meta.code == "0017") {
               this.$message.error('"名称重复！"')
           } else {
@@ -391,7 +395,7 @@ export default {
 
         });
      } else {
-
+          this.listLoading = false;
      }
      })
     },
@@ -491,8 +495,9 @@ export default {
       //       return;
       //     }
       // }
-       this.form.coverArea = "hasClick";
+
        this.handleIconClick();
+       this.form.coverArea = "hasClick";
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
@@ -506,6 +511,7 @@ export default {
           }
       }
       var _this = this;
+        this.listLoading = true;
       var URL = "/api/promotion/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
       if(this.tabName === "已上线") {
           URL = "/api/promotion/areaConf/all";
@@ -521,6 +527,7 @@ export default {
             if(visible === undefined) {
                 _this.initCheckBox(rsp.check);
             }else {
+                this.listLoading = false;
               this.initCheckBox(rsp.check,visible);
             }
           // _this.gridDataCopy = rsp.provinces.slice(0);
@@ -544,6 +551,10 @@ export default {
           // console.log(_this.checkAll);
           // _this.dialogFormVisible = true;
           // console.log(_this.gridData);
+        },(error) =>{
+             this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+             this.listLoading = false;
+             console.log(error);
         })
     },
     initCheckBox(isAllcheck,visible){
@@ -576,6 +587,7 @@ export default {
         this.handleCheckAll({target:{checked:true}})
       }
       if(visible === undefined) {
+          this.listLoading =false;
         this.dialogFormVisible = true;
       }
 
@@ -599,6 +611,12 @@ export default {
     },
     // 配置覆盖地区 保存
     handleDialogConfigSave(){
+      if(this.check || this.checkAll.filter(function(value){return value === true }).length>0 || this.checkedCities.filter(function(value){return value.length>0} ).length>0) {
+             this.form.coverArea = "hasClick";
+      }else {
+            this.form.coverArea = "";
+      }
+
       localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
         this.dialogFormVisible = false;
         this.DialogConfigSaveFlag = true;

@@ -9,7 +9,7 @@
         </div>
         <div>
             <div style='height: 70px;'>
-                <el-form :inline="true" :model="form" ref="form" class="s-form-noerror" label-width="40px" label-position="left">
+                <el-form :inline="true" :model="form" ref="form" class="s-form-noerror" label-width="40px" >
                     <el-row :gutter="5">
                         <el-col :span="5">
                             <el-form-item label="仓店" style="width: 100%;">
@@ -127,7 +127,7 @@
         <!--dialog-->
         <el-dialog :title="dialog2.title" v-model="dialog2.show" :loading='dialog2.loading'  @close='dialogClose' :size="dialog.size" :show_footer='dialog2.show_footer'>
             <div class="search-date">
-                <el-form :inline='false' :model="form1"  ref="form1" class="s-form-noerror" label-width="70px" label-position="left">
+                <el-form :inline='false' :model="form1"  ref="form1" class="s-form-noerror" label-width="70px" >
                     <el-row style="margin:0 0 20px 0">
                         <el-col :span="10" style="line-height: 16px;padding:0;margin:0">
                             <el-form-item label="查询日期" stytle="line-height:35px">

@@ -1,7 +1,7 @@
 <template type="html">
-<section class="section">
+<section class="section"  v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="名称" prop="title">
       <el-input v-model.trim="ruleForm.title" placeholder="请输入公告名称"> </el-input>
     </el-form-item>
@@ -133,7 +133,10 @@ export default {
   },
   data() {
     return {
+      // loading 框
+      listLoading:false,
      // 展示警告信息
+
       showAlert:false,
       dialogVisible:false,
       // 添加搜索框
@@ -160,13 +163,14 @@ export default {
       // 对输入表单进行验证
       ruleForm: {
         title: '',
-       content:'',
+        content:'',
         date1: [],
         gmtBegin:'',
         gmtEnd:'',
         status:"1",
         coverArea:''
       },
+
       // 上传图片列表
 
       // pickerO:ptions2: {
@@ -197,7 +201,10 @@ export default {
         required: true,
         message: '请输入公告内容',
         trigger: 'change'
-         }],
+      },{  min:1,
+           max:50,
+           message:'内容长度不大于50'
+      }],
         date1: [{
           required: true,
           message: '请选择日期',
@@ -272,8 +279,9 @@ export default {
     handleSubmit(formName) {
       var _this = this;
       console.log("-----------------------");
-        console.log(this.$refs[formName]),
-      this.$refs[formName].validate((valid) => {
+      console.log(this.$refs[formName]),
+      this.listLoading = true;
+       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
           // router.app.$store.state.loadingChange = true
@@ -307,11 +315,13 @@ export default {
                 }
               };
             _this.$http.post(_this.url,httpData,(result) => {
+              _this.listLoading = false
               _this.$store.dispatch('changeLoadingChange',true);
               _this.$router.go(-1);
             // _this.tableData = result.page_list;
             // _this.totalCount = parseInt(result.pages.cnt);
           },(error) => {
+            _this.listLoading = false
               this.$message({
                   type: 'error',
                   message: error.data.meta.code+"--"+error.data.meta.msg
@@ -321,6 +331,7 @@ export default {
           // console.log(this.$route.matched);
 
         } else {
+          _this.listLoading = false
           console.log(_this);
 
           return false;
@@ -412,7 +423,7 @@ export default {
       // })
       // 初始化话搜索框
       this.handleIconClick();
-       this.ruleForm.coverArea = "hasClick";
+
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
@@ -426,9 +437,11 @@ export default {
           }
       }
       var _this = this;
+        this.listLoading = true
       var URL = "/api/notice/areaConf/all";   // 默认是 配置 中的覆盖地区
       _this.$http.post(URL,{id:"0"},
         (rsp) => {
+
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
              _this.searchProvinces[i]={};
@@ -441,6 +454,8 @@ export default {
 
           // console.log(_this.gridData);
         }, (error) => {
+            _this.listLoading = false
+            this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
           console.log(error);
         })
     },
@@ -473,6 +488,7 @@ export default {
       if(this.check){
         this.handleCheckAll({target:{checked:true}})
       }
+      this.listLoading = false
       this.dialogFormVisible = true;
 
     },
@@ -487,7 +503,6 @@ export default {
         };
         this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity : [])
       }
-
     },
     // 配置覆盖地区 取消
     handleDialogConfigCancel(){
@@ -496,10 +511,18 @@ export default {
     },
     // 配置覆盖地区 保存
     handleDialogConfigSave(){
-        localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
-        this.dialogFormVisible = false;
-        this.DialogConfigSaveFlag = true;
-
+       if(this.check || this.checkAll.filter(function(value){return value === true }).length>0 || this.checkedCities.filter(function(value){return value.length>0} ).length>0) {
+              this.ruleForm.coverArea = "hasClick"
+       }else {
+               this.ruleForm.coverArea = "";
+       }
+      //  console.log(this.check);
+      //  console.log(this.checkAll.filter(function(value){return value === true }).length>0);
+      //  console.log(this.checkedCities.filter(function(value){return value.length>0} ).length>0);
+      //  console.log(this.ruleForm.coverArea);
+      localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
+      this.dialogFormVisible = false;
+      this.DialogConfigSaveFlag = true;
     },
     observeCheckAll() {
       let checkall = this.checkAll.filter(function(value) {

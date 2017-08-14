@@ -8,7 +8,7 @@
        v-if="showAlert"
        >
   </el-alert>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="公司名称" prop="photoName">
         <el-select label="复选框 A" v-model="express" placeholder="请选择快递公司" style="width:100%;">
             <el-option

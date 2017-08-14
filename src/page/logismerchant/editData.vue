@@ -8,7 +8,7 @@
        v-if="showAlert"
        >
   </el-alert>
-  <el-form ref="ruleForm" label-width="240px" label-position="left" style="width:800px;padding-left:100px">
+  <el-form ref="ruleForm" label-width="240px"  style="width:800px;padding-left:100px">
     <el-form-item label='物流机构编码'>
       <el-input v-model="ruleForm.merchantCode" type='number' placeholder="请输入物流机构编码"> </el-input>
     </el-form-item>

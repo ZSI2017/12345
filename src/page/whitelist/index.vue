@@ -42,7 +42,7 @@
     </el-table>
 
     <el-dialog title="添加白名单" :visible.sync="dialogFormVisible" size="tiny">
-        <el-form :model="form" ref="form" label-position="left" label-width="80px">
+        <el-form :model="form" ref="form"  label-width="80px">
             <el-form-item label="用户名称" :label-width="formLabelWidth">
                 <el-input v-model="form.userName" placeholder="请填写用户名称" auto-complete="off"></el-input>
             </el-form-item>
