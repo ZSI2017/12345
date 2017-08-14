@@ -44,9 +44,15 @@
     </el-table-column>
     <el-table-column prop="tag" label="标签" width="110">
       <template scope="scope">
-        <el-tag type="gray" style="margin:2px;" close-transition='true' hit='true' :key="tag" v-for="tag in scope.row.tag.split(',',(scope.row.tag.split(',').length-1))">{{tag}}</el-tag>
-        <!--<el-tag type="gray" hit='true'>{{scope.row.tag.split(',')[1]}}</el-tag>-->
-         
+        <el-tag 
+            type="primary" 
+            style="margin:2px;height:24px;line-height:24px;" 
+            close-transition='true' 
+            hit='true' 
+            :key="tag" 
+            v-for="tag in scope.row.tag.split(',',(scope.row.tag.split(',').length-1))"
+            >{{tag}}
+        </el-tag>
       </template>
     </el-table-column>
     <el-table-column prop="custServiceTel" label="客服电话">
@@ -429,7 +435,7 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = true;
-        // _this.radio2 = 1;
+        _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
         _this.url = "/api/expresscompany/audit/list"
@@ -457,7 +463,7 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = false;
-        // _this.radio2 = 1;
+        _this.radio2 = '';
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
         _this.url = "/api/expresscompany/onlineList";
@@ -485,17 +491,18 @@ export default {
         _this.showflag = true;
         _this.showOperation2 = true;
         _this.showOperation3 = false;
-        // _this.radio2 = 1;
+        _this.radio2 = '';
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/expresscompany/audit/list"
+        _this.url = "/api/expresscompany/audit/list";
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId
+            "pageId": _this.pageId,
+            "status":_this.radio2
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
