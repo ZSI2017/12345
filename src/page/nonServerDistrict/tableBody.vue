@@ -113,7 +113,7 @@ export default {
 </script>
 <style lang ="scss">
 .tableBody {
-    height:460px;
+    max-height:460px;
     overflow-y:auto;
     border-bottom:1px solid #dfe6ec;
     table {

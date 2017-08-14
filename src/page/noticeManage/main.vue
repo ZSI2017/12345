@@ -43,9 +43,9 @@
     empty-text="暂无数据"
     align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="title" label="公告名称">
+    <el-table-column prop="title" width="130" label="公告名称">
     </el-table-column>
-    <el-table-column prop="content" label="内容">
+    <el-table-column prop="content" min-width="160" label="内容">
     </el-table-column>
     <!-- <el-table-column prop="imageUrl" label="内容">
        <template scope="scope">

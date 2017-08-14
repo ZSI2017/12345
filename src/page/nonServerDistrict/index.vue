@@ -44,31 +44,40 @@
                  <div>{{scope.msg.aaa}}</div>
               </template>
        </mysolt> -->
+<el-row :span="24" style="background-color:white;margin-bottom:10px;">
+  <el-col :span="3" style="height:40px;line-height:40px;">
+      <span style="float:left;">按照快递公司名搜索:</span>
+  </el-col>
+   <el-col :span="5" style="height:40px">
+    <el-autocomplete class="inline-input" v-model="searchContent" style="float:left;" :fetch-suggestions="querySearch" placeholder="请输入快递公司名" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+  </el-col>
+</el-row>
+
     <my-table
        :data ="tableData"
     >
       <table-column
            headerName="快递公司名称"
-           myProps = "name"
+           myProps = "logisMerchName"
            >
       </table-column>
       <table-column
            headerName="非服务地区"
            >
            <template scope="scope">
-               <el-button @click="handleClick" type="text" size="small">查看</el-button>
+               <el-button @click="handleClick(scope)" type="text" size="small">查看</el-button>
            </template>
       </table-column>
       <table-column
            headerName="修改时间"
-           myProps = "createTime"
+           myProps = "gmtModified"
            >
       </table-column>
       <table-column
            headerName="操作"
            >
            <template scope="scope">
-                <el-button @click="handleEdit" type="text" size="small">编辑</el-button>
+                <el-button @click="handleEdit(scope)" type="text" size="small">编辑</el-button>
            </template>
       </table-column>
     </my-table>
@@ -97,6 +106,7 @@
     <config-server
       :visible="dialogConfigVisible"
       :sourceData="result"
+      :logisMerchId = 'logisMerchId'
       :onlyRead='isCheckServer'
       @listenToConfig="changeConfigVisible"
       > </config-server>
@@ -122,6 +132,7 @@ export default {
     },
     data() {
         return {
+            searchContent:'',  // 搜索内容
             checkboxArr: ["A1", "B1", "C1"],
             checkedNames1: [],
             myCheckedNames: ["A1", "B1"],
@@ -130,19 +141,75 @@ export default {
             myMessage: true,
             tableData: [],
             result: {},
+            logisMerchId:'',
             input: '',
             dialogCheckVisible: false,
             dialogConfigVisible: false,
             isCheckServer: false,
             fullscreenLoading: false,
+            // searchCompanyName:[],
+            searchCompanyName: [{
+                value: '黄金糕',
+                label: '黄金糕'
+              }, {
+                value: '双皮奶',
+                label: '双皮奶'
+              }, {
+                value: '蚵仔煎',
+                label: '蚵仔煎'
+              }, {
+                value: '蚵仔煎123',
+                label: '蚵仔煎'
+              }]
         }
     },
     methods: {
+
+    // 搜索框 相关事件
+    // 搜索框
+    querySearch(queryString, cb) {
+      if(queryString === '') {
+        // this.showProvinces = '';
+        this.tableData= this.searchCompanyName;
+      }
+      var searchCompanyName = this.searchCompanyName;
+      var results = queryString ? searchCompanyName.filter(this.createFilter(queryString)) : searchCompanyName;
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (companyName) => {
+        return (companyName.value.indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    handleQuerySelect(items) {
+      //  this.showProvinces = items.value
+      var _this = this;
+       this.tableData=[items];
+       console.log(items);
+      //  setTimeout(function(){
+      //      _this.tableData= items
+      //  },3000)
+      // console.log(items);
+      // for(let i =0;i<this.gridData.length;i++) {
+      //      if(this.gridData[i].provinceName === items.value) {
+      //         this.gridData[i].isShow= true;
+      //      } else {
+      //         this.gridData[i].isShow = false;
+      //      }
+      // }
+      // console.log(this.gridData);
+    },
+    handleIconClick(ev) {
+       this.tableData= this.searchCompanyName;
+
+      // this.gridData = this.gridDataCopy;
+      this.searchContent = '';
+    },
       CheckAllChange(ev) {
            console.log("handleCheckAllChange");
            console.log(ev);
       },
-        mockInput(val) {
+      mockInput(val) {
                 //  console.log("mockInput");
                 //  console.log(arguments);
                 this.myCheckedNames = arguments[0]
@@ -152,25 +219,28 @@ export default {
                 console.log("____________event__________");
                 console.log(value);
             },
-            handleClick() {
+            handleClick(scope) {
+                console.log(scope);
                 this.isCheckServer = true;
                 // this.dialogCheckVisible= true;
-                let url = "/rest/list7";
+                let url = "/api/noService/areaConf/all";
                 var _this = this;
-                _this.$http.get(url,{},(data) => {
-                    _this.result = data.data.data;
+                _this.$http.post(url,{"logisMerchId":scope.logisMerchId},(data) => {
+                    console.log(data);
+                    _this.result = data;
                     _this.dialogConfigVisible = true;
                 }, (error) => {
                     console.log("error");
                     console.log(error);
                 });
             },
-            handleEdit() {
+            handleEdit(scope) {
+               this.logisMerchId = scope.logisMerchId;
                 this.isCheckServer = false;
-                let url = "/rest/list7";
+                let url = "/api/noService/areaConf/all";
                 var _this = this;
-                _this.$http.get(url, {},(data) => {
-                    _this.result = data.data.data
+                _this.$http.post(url,{"logisMerchId":scope.logisMerchId},(data) => {
+                    _this.result = data;
                     _this.dialogConfigVisible = true;
                 }, (error) => {
                     console.log("error");
@@ -186,15 +256,22 @@ export default {
             }
     },
     created() {
-        let url = "/rest/list2";
+        let url = "/api/noService/list";
         var _this = this;
         // _this.fullscreenLoading = true;
-        _this.$http.get(url,{}, (data) => {
+        _this.$http.post(url,{}, (data) => {
             console.log("successadsafasdf");
-            console.log(data);
-
+            this.searchCompanyName = data.slice(0)
+            // console.log(data);
+            for(let i =0;i<data.length;i++) {
+              this.searchCompanyName[i].value= data[i].logisMerchName;
+              this.searchCompanyName[i].label= data[i].logisMerchName;
+              this.searchCompanyName[i].index = i;
+              // console.log(data[i].logisMerchName)
+            }
+            console.log(this.searchCompanyName);
             setTimeout(() => {
-                _this.tableData = data.data.data;
+                _this.tableData = data.slice(0);
             }, 0);
         }, (error) => {
             console.log("errorasdfawefasdfaweasdfew");

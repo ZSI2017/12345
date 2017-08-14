@@ -319,7 +319,7 @@ let routes =  [
  //物流机构
 {
    path:'/',
-   name:"开发者管理",
+   name:"开发者工具",
    component:index,
    hasChild:true,
    children:[

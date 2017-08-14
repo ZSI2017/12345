@@ -29,8 +29,8 @@
           <div v-if="showLi2">
             <checkbox-group v-model="checkedDistric" @change="handleDistricChange">
               <li  v-if='(item.check&&onlyRead)||!onlyRead' class="commonli-class" :style="{'text-align':onlyRead?'center':'left'}" v-for="(item,index) in list3">
-                <checkbox v-if="!onlyRead" :label="item.districName"  :key="item.districName">{{item.districName}}</checkbox>
-                <span v-if="onlyRead">{{item.districName}}</span>
+                <checkbox v-if="!onlyRead" :label="item.districtName"  :key="item.districtName">{{item.districtName}}</checkbox>
+                <span v-if="onlyRead">{{item.districtName}}</span>
               </li>
             </checkbox-group>
           </div>
@@ -77,10 +77,11 @@ export default {
   props: {
     visible: Boolean,
     sourceData: Object,
-    onlyRead: Boolean
+    onlyRead: Boolean,
+    logisMerchId:Number
   },
   created(){
-    
+
 
   },
   watch: {
@@ -116,7 +117,7 @@ export default {
       //    for(let k =0;k<this.checkCity.length;k++) {
       //        let tempCitysObj = {};
       //        tempCitysObj.cityName = this.checkCity[k];
-      //        tempCitysObj.districName = this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].noServiceDistricts,
+      //        tempCitysObj.districtName = this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].noServiceDistricts,
       //        tempCitysArr.push(tempCitysObj);
       //    }
       // this.checkedData[this.li0] = tempCitysArr;
@@ -137,10 +138,9 @@ export default {
       // this.sourceData.no
       let tempArr = [];
       for (let i = 0; i < item.noServiceDistricts.length; i++) {
-          item.noServiceDistricts[i].check = true;
-          tempArr.push(item.noServiceDistricts[i].districName);
+          item.noServiceDistricts[i].check = event.target.checked;
+          tempArr.push(item.noServiceDistricts[i].districtName);
       }
-
       this.checkedDistric = event.target.checked ?
         tempArr :
         [];
@@ -150,14 +150,14 @@ export default {
 
       // this.checkedData=   [
       // {provinceName:" ",
-      //   noServiceCitys:[ {cityName:' ',Checked:true,noServiceDistricts:[{districName:'云霄县'}]  }      ]}
+      //   noServiceCitys:[ {cityName:' ',Checked:true,noServiceDistricts:[{districtName:'云霄县'}]  }      ]}
       // {provinceName:" ",
-      //   noServiceCitys:[ {cityName:' ',Checked:true,noServiceDistricts:[{districName:'云霄县'}]  }      ]}
+      //   noServiceCitys:[ {cityName:' ',Checked:true,noServiceDistricts:[{districtName:'云霄县'}]  }      ]}
       // {provinceName:" ",
-      //   noServiceCitys:[ {cityName:' ',Checked:true,noServiceDistricts:[{districName:'云霄县'}]  }      ]}
-      //     [{cityName:' ',districName:[]},{cityName:' ',districName:[]},{cityName:' ',districName:[]} ],
-      //     [{cityName:' ',districName:[]},{cityName:' ',districName:[]},{cityName:' ',districName:[]} ],
-      //     [{cityName:' ',districName:[]},{cityName:' ',districName:[]},{cityName:' ',districName:[]} ],
+      //   noServiceCitys:[ {cityName:' ',Checked:true,noServiceDistricts:[{districtName:'云霄县'}]  }      ]}
+      //     [{cityName:' ',districtName:[]},{cityName:' ',districtName:[]},{cityName:' ',districtName:[]} ],
+      //     [{cityName:' ',districtName:[]},{cityName:' ',districtName:[]},{cityName:' ',districtName:[]} ],
+      //     [{cityName:' ',districtName:[]},{cityName:' ',districtName:[]},{cityName:' ',districtName:[]} ],
       //   ]
     },
     // 区县选择 多选框
@@ -169,25 +169,25 @@ export default {
       // 如果在 对应的 数组对象还没有生成的情况下，先指定期 cityName：值
       this.checkedData[this.li0].noServiceCitys[this.li1].cityName = tempCityName;
       //  生成对应的 noServiceDistricts 数组，保持跟当前 this.checkedDistric 里面的内容一致;
-      let tempdistricName = [];
+      let tempdistrictName = [];
       for (let j = 0; j < this.checkedDistric.length; j++) {
-        tempdistricName.push({
-          districName: this.checkedDistric[j]
+        tempdistrictName.push({
+          districtName: this.checkedDistric[j]
         })
       }
-      this.checkedData[this.li0].noServiceCitys[this.li1].noServiceDistricts = tempdistricName;
+      this.checkedData[this.li0].noServiceCitys[this.li1].noServiceDistricts = tempdistrictName;
       // 将原始数据和 动态生成的已勾选数据    noServiceDistricts 长度 的 进行比较
-      let checkedDataDistricNameLength = tempdistricName.length;
-      let sourceDataDistricNameLength = this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].noServiceDistricts.length
-      if (checkedDataDistricNameLength >= sourceDataDistricNameLength) {
+      let checkedDataDistrictNameLength = tempdistrictName.length;
+      let sourceDataDistrictNameLength = this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].noServiceDistricts.length
+      if (checkedDataDistrictNameLength >= sourceDataDistrictNameLength) {
         // 代表已经把未覆盖区县中的数据手动全选了
-        this.checkedData[this.li0].noServiceCitys[this.li1].Checked = true;
+        this.checkedData[this.li0].noServiceCitys[this.li1].check = true;
         if (this.checkCity.indexOf(tempCityName) < 0) this.checkCity.push(tempCityName);
       } else {
-        this.checkedData[this.li0].noServiceCitys[this.li1].Checked = false;
+        this.checkedData[this.li0].noServiceCitys[this.li1].check= false;
         if (this.checkCity.indexOf(tempCityName) >= 0) this.checkCity.splice(this.checkCity.indexOf(tempCityName), 1);
       }
-      // console.log(tempdistricName.length);
+      // console.log(tempdistrictName.length);
       // console.log(this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].noServiceDistricts.length);
       //   let targetPlace = this.checkedData[this.li0].length;
       //  for(let m =0;m<this.checkedData[this.li0].length;m++) {
@@ -195,14 +195,14 @@ export default {
       //            targetPlace = m;
       //       }
       //  }
-      //   let tempdistricName = [];
+      //   let tempdistrictName = [];
       //    for(let j =0 ;j<this.checkedDistric.length;j++) {
-      //            tempdistricName.push({districName: this.checkedDistric[j]})
+      //            tempdistrictName.push({districtName: this.checkedDistric[j]})
       //    }
       //    if(Object.prototype.toString.call(this.checkedData[this.li0][targetPlace]) !== "[object Object]") {
       //       this.checkedData[this.li0][targetPlace] = {cityName:tempCityName};
       //    }
-      //     this.checkedData[this.li0][targetPlace].noServiceDistricts = tempdistricName;
+      //     this.checkedData[this.li0][targetPlace].noServiceDistricts = tempdistrictName;
       // console.log(this.checkedData);
     },
     li1Click(event, index, item) {
@@ -257,7 +257,7 @@ export default {
               let tempArr = [];
               // this.sourceData.no
               for (let i = 0; i < noServiceDistrictsArr.length; i++) {
-                if(noServiceDistrictsArr[i].check)  tempArr.push(noServiceDistrictsArr[i].districName);
+                if(noServiceDistrictsArr[i].check)  tempArr.push(noServiceDistrictsArr[i].districtName);
               }
               this.checkedDistric = tempArr;
 
@@ -271,11 +271,11 @@ export default {
    }
 
       //  if( Object.prototype.toString.call(this.checkedData[this.li0]) === "[object Array]" && this.checkedData[this.li0].length>0) {
-      //  if(this.checkedData[this.li0][this.li1].districName === "all") {
+      //  if(this.checkedData[this.li0][this.li1].districtName === "all") {
       //    let tempArr = [];
       //    // this.sourceData.no
       //    for(let i =0;i<item.noServiceDistricts.length;i++) {
-      //       tempArr.push(item.noServiceDistricts[i].districName);
+      //       tempArr.push(item.noServiceDistricts[i].districtName);
       //    }
       //
       //    this.checkedDistric =tempArr
@@ -291,7 +291,7 @@ export default {
       //              let tempArr = [];
       //               // this.sourceData.no
       //               for(let i =0;i<noServiceArr.length;i++) {
-      //                  tempArr.push(noServiceArr[i].districName);
+      //                  tempArr.push(noServiceArr[i].districtName);
       //               }
       //               this.checkedDistric =tempArr;
       //          }
@@ -304,11 +304,16 @@ export default {
       this.showLi2 = true;
     },
     dialogClose() {
+      this.showLi = false;
+      this.showLi2 = false;
       this.$emit("listenToConfig", false)
+
     },
     handleSave() {
         this.dialogFormVisible = false;
-        this.$http.post(' ',{data:this.checkedData},(result) =>{
+        let url = "/api/noService/update"
+        console.log(this.checkedData);
+        this.$http.post(url,{"noService":JSON.stringify({noProvinces:this.checkedData}),"logisMerchId":this.logisMerchId},(result) =>{
         this.$message({
               message: '保存成功',
               type: 'success'
