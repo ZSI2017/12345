@@ -195,13 +195,13 @@ export default {
           }
       ],
         sortWeight: [
-          { required: false, message: '排序值不能为空'},
+          { required: true, message: '排序值不能为空'},
           // { type: 'number', message: '排序值必须为数字值'}
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         linkUrl: [{
           // type:'url',
-          required: true,
+          required: false,
           message: "请输入正确链接",
           trigger: 'blur'
         }],
@@ -425,7 +425,6 @@ export default {
       // })
       // 初始化话搜索框
       this.handleIconClick();
-       this.ruleForm.coverArea = "hasClick";
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
@@ -509,6 +508,12 @@ export default {
     },
     // 配置覆盖地区 保存
     handleDialogConfigSave(){
+      if(this.check || this.checkAll.filter(function(value){return value === true }).length>0 || this.checkedCities.filter(function(value){return value.length>0} ).length>0) {
+             this.ruleForm.coverArea = "hasClick"
+      }else {
+              this.ruleForm.coverArea = "";
+      }
+
         localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
         this.dialogFormVisible = false;
         this.DialogConfigSaveFlag = true;

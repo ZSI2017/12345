@@ -468,7 +468,7 @@ export default {
       //       return;
       //     }
       // }
-       this.form.coverArea = "hasClick";
+
        this.handleIconClick();
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
@@ -576,6 +576,12 @@ export default {
     },
     // 配置覆盖地区 保存
     handleDialogConfigSave(){
+
+         if(this.check || this.checkAll.filter(function(value){return value === true }).length>0 || this.checkedCities.filter(function(value){return value.length>0} ).length>0) {
+               this.form.coverArea = "hasClick";
+         }else {
+               this.form.coverArea = "";
+         }
       localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
         this.dialogFormVisible = false;
         this.DialogConfigSaveFlag = true;

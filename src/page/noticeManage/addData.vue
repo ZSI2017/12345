@@ -160,13 +160,14 @@ export default {
       // 对输入表单进行验证
       ruleForm: {
         title: '',
-       content:'',
+        content:'',
         date1: [],
         gmtBegin:'',
         gmtEnd:'',
         status:"1",
         coverArea:''
       },
+
       // 上传图片列表
 
       // pickerO:ptions2: {
@@ -415,7 +416,7 @@ export default {
       // })
       // 初始化话搜索框
       this.handleIconClick();
-       this.ruleForm.coverArea = "hasClick";
+
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
@@ -490,7 +491,6 @@ export default {
         };
         this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity : [])
       }
-
     },
     // 配置覆盖地区 取消
     handleDialogConfigCancel(){
@@ -499,10 +499,18 @@ export default {
     },
     // 配置覆盖地区 保存
     handleDialogConfigSave(){
-        localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
-        this.dialogFormVisible = false;
-        this.DialogConfigSaveFlag = true;
-
+       if(this.check || this.checkAll.filter(function(value){return value === true }).length>0 || this.checkedCities.filter(function(value){return value.length>0} ).length>0) {
+              this.ruleForm.coverArea = "hasClick"
+       }else {
+               this.ruleForm.coverArea = "";
+       }
+      //  console.log(this.check);
+      //  console.log(this.checkAll.filter(function(value){return value === true }).length>0);
+      //  console.log(this.checkedCities.filter(function(value){return value.length>0} ).length>0);
+      //  console.log(this.ruleForm.coverArea);
+      localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
+      this.dialogFormVisible = false;
+      this.DialogConfigSaveFlag = true;
     },
     observeCheckAll() {
       let checkall = this.checkAll.filter(function(value) {
