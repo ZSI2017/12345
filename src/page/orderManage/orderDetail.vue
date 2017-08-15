@@ -54,7 +54,7 @@
             <el-button :plain="true" v-if="ChangeExpressFlag" class="serverRecord" @click="handleChangeExpress" type="danger">超时转快递</el-button>
         </el-row>
         <!--  取消原因对话框       :label-width="formLabelWidth" -->
-        <el-dialog title="取消原因" :visible.sync="dialogCancelVisible">
+        <el-dialog title="取消原因" :visible.sync="dialogCancelVisible" size="tiny">
             <el-form :model="cancelCause" :rules="cancelRules">
               <el-form-item label="请选择取消原因" :label-width="formLabelWidth">
                <el-select v-model="cancelCause.region" placeholder="请选择">
@@ -486,10 +486,10 @@ import localEvent from 'src/vuex/function.js';
                     });
                 });
                 }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
+                    // this.$message({
+                    //     type: 'info',
+                    //     message: '已取消删除'
+                    // });
                 });
 
         }
