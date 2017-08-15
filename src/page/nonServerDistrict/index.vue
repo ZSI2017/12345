@@ -45,11 +45,11 @@
               </template>
        </mysolt> -->
 <el-row :span="24" style="background-color:white;margin-bottom:10px;">
-  <el-col :span="3" style="height:40px;line-height:40px;">
+  <el-col  style="width:170px;height:40px;line-height:40px;">
       <span style="float:left;">按照快递公司名搜索:</span>
   </el-col>
    <el-col :span="5" style="height:40px">
-    <el-autocomplete class="inline-input" v-model="searchContent" style="float:left;" :fetch-suggestions="querySearch" placeholder="请输入快递公司名" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+    <el-autocomplete class="inline-input" v-model="searchContent" style="float:left;" :fetch-suggestions="querySearch" placeholder="请输入快递公司名" icon="close" :on-icon-click="handleIconClick"  @keyup.enter.native="enterSelect" @select="handleQuerySelect"></el-autocomplete>
   </el-col>
 </el-row>
 
@@ -178,9 +178,26 @@ export default {
     },
     createFilter(queryString) {
       return (companyName) => {
-        return (companyName.value.indexOf(queryString.toLowerCase()) === 0);
+        return (companyName.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
+    enterSelect(item){
+      let value = item.srcElement.value;
+      let items =  this.searchCompanyName.filter(function(company){
+          console.log(company.value + value);
+           return company.value == value;
+       })
+       if(item){
+         if(items.length <=0 ){
+           this.$message({
+             message: '未查询到快递公司，请重新输入！',
+             type: 'warning'
+           });
+         } else {
+            this.tableData = items;
+         }
+       }
+     },
     handleQuerySelect(items) {
       //  this.showProvinces = items.value
       var _this = this;
