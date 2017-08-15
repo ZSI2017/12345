@@ -91,11 +91,6 @@ import whitelist from './page/whitelist/index.vue'
 
 
 
-import page1 from './page/priceManage/page1.vue'
-import page2 from './page/priceManage/page2.vue'
-import page3 from './page/priceManage/page3.vue'
-import page4 from './page/priceManage/page4.vue'
-import page5 from './page/priceManage/page5.vue'
 
 
 import App from './App.vue';
