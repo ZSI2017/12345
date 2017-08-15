@@ -49,9 +49,9 @@
             type="primary" 
             style="margin:2px;height:24px;line-height:24px;" 
             close-transition='true' 
-            hit='true' 
-            :key="tag" 
-            v-for="tag in scope.row.tag.split(',',(scope.row.tag.split(',').length))"
+            hit='true'
+            :key="tag"
+            v-for="tag in scope.row.tag.split(',')"
             >{{tag}}
         </el-tag>
       </template>
@@ -125,10 +125,6 @@
            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">已生效详情</el-button>
            <br/>
           </div>
-          <!--<div v-if="showOperation2 || showOperation3">
-            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">待审详情</el-button>
-            <br/>
-          </div>-->
         </div>
 
         </template>
@@ -165,8 +161,6 @@
 <script>
 import store from 'src/vuex/store.js'
 import localEvent from 'src/vuex/function.js';
-// import coverArea from "../chooseExpress/coverArea.vue";
-// import PageStore from "@/page/chooseExpress/table-store.js"
 import {
   formatDate
 } from 'src/util/date.js';
@@ -275,28 +269,6 @@ export default {
         });
         this.handleTabClick({label:this.activeName2})
 
-        // this.pageId = "SD1010"; // 寄快递首页
-        // ((this.$route.path == "/chooseExpress" &&
-        //     (this.pageId = "BM1010")) ||
-        //   (this.$route.path == "/expressOrder" &&
-        //     (this.pageId = "SS1010")))
-        // var _this = this;
-        // _this.$http.post(_this.url,{
-        //   "pages": {
-        //     "page_size": this.pageSize,
-        //     "page_num": this.currentPage - 1
-        //   },
-        //   "con": {
-        //     "pageId": this.pageId,
-        //     "status":this.radio2
-        //   }
-        // }, (result) => {
-        //
-        //   _this.tableData = result.page_list;
-        //   _this.totalCount = parseInt(result.pages.cnt);
-        // });
-
-        // console.log(this.$route.matched);
       })
 
     },
