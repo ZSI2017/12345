@@ -2,29 +2,13 @@
 <section class="section" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
 
-  <el-form ref="ruleForm" :model="ruleForm" label-width="180px" tyle="width:800px;padding-left:100px">
+  <el-form ref="ruleForm" :model="ruleForm" labelPosition="left" label-width="180px" style="width:800px;padding-left:100px;">
     <el-form-item label="公司名称">
-        <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
-            <el-option
-              v-for="item in options"
-              :key="item.merchantLogo"
-              :merchantLogo="item.merchantLogo"
-              :label="item.merchantName"
-              :value="item">
-            </el-option>
-        </el-select>
+        <el-input disabled :value="merchantName"> </el-input>
       </el-col>
     </el-form-item>
     <el-form-item label="LOGO">
-      <!--<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
-      </el-upload>-->
       <img width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
-      <!--<el-popover ref="popover4" placement="right" trigger="click">
-        <img :src="merchantLogo">
-      </el-popover>-->
-      <!--<el-button style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>-->
     </el-form-item>
     <el-form-item label="广告语">
       <el-input v-if="isFromAddData" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
@@ -52,10 +36,11 @@
           size="small"
           @keyup.enter.native="handleInputConfirm"
           @blur="handleInputConfirm"
+          maxlength="8"
         >
         </el-input>
         <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
-        <div style="color:#888;">最多添加两个标签</div>
+        <div style="color:#888;">最多添加两个标签，每个标签最多8个字符。</div>
       </div>
       <div class="detail-content" v-if="!isFromAddData">
         <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
@@ -100,7 +85,7 @@
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button v-if="!isFromAddData" type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
+    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
 
     <!--图片预览 框  -->
@@ -111,7 +96,6 @@
 </section>
 </template>
 <script type="text/javascript">
-//  import coverArea from "@/page/chooseExpress/coverArea.vue";
 import localEvent from 'src/vuex/function.js';
 
 export default {
@@ -121,7 +105,7 @@ export default {
       listLoading:false,//loading框
       //标签添加控制
       addTag: true,
-      url:'/api/expresscompany/audit/save',
+      url:'/api/expresscompany/audit/update',
       pageId: '',
       //标签数据
       dynamicTags: [],
@@ -129,12 +113,11 @@ export default {
       inputValue: '',
       dialogTableVisible: false,
       //select 快递公司选项
-      options: [],
-      value:'',
       merchantLogo:'',
       merchantName:'',
       // 对输入表单进行验证
       ruleForm: {
+        logisMerchId: '',
         slogan: '',
         tag: '',
         custServiceTel:'',
@@ -166,6 +149,7 @@ export default {
     console.log(localData);
     // console.log(localData.promotionId);
     let promotionId = localData.pageMenuConfId;
+    this.ruleForm.logisMerchId = localData.logisMerchId;
     this.id = localData.id;
     this.pageId = localData.pageId;
     let _this =this;
@@ -182,7 +166,18 @@ export default {
     }else{
       alert('错误')
     }
-
+    //快递公司接口数据
+    _this.$http.post('/api/logisMerchant/get',{
+      "id":this.ruleForm.logisMerchId
+    },(rsp)=>{
+      console.log(rsp)
+      this.merchantLogo = rsp.merchantLogo;
+      this.merchantName = rsp.merchantName;
+    },(error)=>{
+      console.log(error)
+      console.log('failed');
+    });
+    //其余数据接口
     _this.$http.post(httpUrl,{
       "id":httpId
     },(rsp)=>{
@@ -198,12 +193,15 @@ export default {
       this.ruleForm.opStatus =  rsp.opStatus=='1'?0:1;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       console.log(this.dynamicTags)
+      console.log(rsp.tag)
       this.dialogConfig(true)
 
     },(error)=>{
       console.log(error)
       console.log('failed');
     });
+
+
   },
   beforeDestory() {
     alert("beforeDestory")
@@ -224,23 +222,13 @@ export default {
       // this.$refs[formName].validate((valid) => {
       //   if (valid) {
           console.log('error submit');
-          // router.app.$store.state.loadingChange = true
-          // _this.$router.app.$store.state.loadingChange = true;
-          // _this.$store.dispatch('changeLoadingChange',true);
-          // _this.$router.go(-1);
-          //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
-          // let submitDate = _this.ruleForm.date1;
-          // console.log(submitDate)
-          // this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
-          // this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
-          // console.log(this.ruleForm.gmtBegin)
-          // console.log(this.ruleForm.gmtEnd)
-
+          this.ruleForm.tag = this.dynamicTags.join(',');
           let httpData = {
                 "data": {
+                  "id": this.id,
                   "pageId": _this.pageId,
                   // "businessType":_this.ruleForm.businessType,
-                  "isvMerchantId": '1',
+                  "logisMerchId": _this.ruleForm.logisMerchId,
                   "slogan": _this.ruleForm.slogan,
                   "tag":_this.ruleForm.tag,
                   "custServiceTel":_this.ruleForm.custServiceTel,
@@ -256,11 +244,9 @@ export default {
               _this.$store.dispatch('changeLoadingChange',true);
               _this.$router.go(-1);
               _this.listLoading = false;
-            // _this.tableData = result.page_list;
-            // _this.totalCount = parseInt(result.pages.cnt);
              this.$message({
                   type: 'success',
-                  message: "报存成功！"
+                  message: "保存成功！"
               });
           },(error) => {
               _this.listLoading = false;            
@@ -312,11 +298,11 @@ export default {
       this.inputVisible = false;
       this.inputValue = '';
     },
-    handleMerchant(){
-      this.merchantLogo = this.value.merchantLogo;
-      this.merchantName = this.value.merchantName;
-      this.ruleForm.isvMerchantId = this.value.id;
-    },
+    // handleMerchant(){
+      // this.merchantLogo = this.value.merchantLogo;
+      // this.merchantName = this.value.merchantName;
+    //   this.ruleForm.isvMerchantId = this.value.id;
+    // },
     handlePreview(file) {
       this.dialogVisible = true;
     },
