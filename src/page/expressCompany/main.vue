@@ -25,6 +25,7 @@
     class="mainTable"
     :data="tableData"
     ref="tableDom"
+    @sort-change="handleSortChange"
     style="width: 100%;margin-top:10px;"
     max-height="3000"
     empty-text="暂无数据"
@@ -175,6 +176,7 @@ export default {
     return {
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
+      showSortable: 'custom',//默认排序
       totalCount: 0, //默认数据总数
       myDialogTitle: "确认置为下线？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下线'",
