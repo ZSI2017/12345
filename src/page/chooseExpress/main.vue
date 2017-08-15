@@ -535,7 +535,7 @@ export default {
           },
           "con": {
             "pageId": _this.pageId,
-            "status":this.radio2
+            "status":""
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list
@@ -563,7 +563,7 @@ export default {
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId           
+            "pageId": _this.pageId
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
@@ -640,6 +640,10 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
       this.PageStore.commit("setPage",1);
+      let status = this.radio2;
+      if(this.activeName2 == "待审核") {
+          status = "";
+      }
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -647,7 +651,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": this.radio2
+          "status": status
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
@@ -661,9 +665,9 @@ export default {
       this.halfListLoading = true;
       this.currentPage = val;
       this.PageStore.commit("setPage",val);
-      let statusFlag = this.radio2;
-      if(this.tabFlag == '待审核'){
-        statusFlag = '';
+      let status = this.radio2;
+      if(this.activeName2 == "待审核") {
+          status = "";
       }
       this.$http.post(this.url, {
         "pages": {
@@ -672,7 +676,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": statusFlag
+          "status": status
         }
       }, (rsp) => {
         this.halfListLoading = false;
