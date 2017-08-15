@@ -75,6 +75,7 @@ export default {
         table-layout:fixed;
         border: 1px solid #dfe6ec;
         text-align: center;
+        border-right:0;
     }
     ,
     th {

@@ -364,7 +364,7 @@ handleSubmit(formName) {
                  "sortWeight":this.form.Forder,
                  "linkUrl":this.form.linkHeader+this.form.link,
                  "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-                 "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+                 "gmtEnd":formatDate(this.form.date1[1], 'yyyy-MM-dd hh:mm:ss'),
                  'opStatus':this.form.radio,
                },
              "area":{
