@@ -522,7 +522,7 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = false;
-        _this.radio2 = '';
+        // _this.radio2 = '';
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
         _this.url = "/api/promotion/onlineList";
@@ -533,7 +533,7 @@ export default {
           },
           "con": {
             "pageId": _this.pageId,
-            "status":this.radio2
+            "status":""
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list
@@ -551,7 +551,7 @@ export default {
         _this.showflag = true;
         _this.showOperation2 = true;
         _this.showOperation3 = false;
-        _this.radio2 = '';
+        // _this.radio2 = '';
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
         _this.url = "/api/promotion/audit/list"
@@ -562,7 +562,7 @@ export default {
           },
           "con": {
             "pageId": _this.pageId,
-            "status":_this.radio2            
+            "status":""
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
@@ -639,6 +639,10 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
       this.PageStore.commit("setPage",1);
+      let status = this.radio2;
+      if(this.activeName2 == "待审核") {
+          status = "";
+      }
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -646,7 +650,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": this.radio2
+          "status": status
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
@@ -660,6 +664,10 @@ export default {
       this.halfListLoading = true;
       this.currentPage = val;
       this.PageStore.commit("setPage",val);
+      let status = this.radio2;
+      if(this.activeName2 == "待审核") {
+          status = "";
+      }
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -667,7 +675,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": this.radio2
+          "status": status
         }
       }, (rsp) => {
         this.halfListLoading = false;

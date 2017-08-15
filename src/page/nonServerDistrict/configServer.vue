@@ -29,7 +29,7 @@
           <div v-if="showLi2">
             <checkbox-group v-model="checkedDistric" @change="handleDistricChange">
               <li  v-if='(item.check&&onlyRead)||!onlyRead' class="commonli-class" :style="{'text-align':onlyRead?'center':'left'}" v-for="(item,index) in list3">
-                <checkbox v-if="!onlyRead" :label="item.districtName"  :key="item.districtName">{{item.districtName}}</checkbox>
+                <checkbox v-if="!onlyRead" :label="item.districtName" @change="handleCheckbox(index,$event)"  :key="item.districtName">{{item.districtName}}</checkbox>
                 <span v-if="onlyRead">{{item.districtName}}</span>
               </li>
             </checkbox-group>
@@ -39,7 +39,7 @@
     </el-col>
   </el-row>
   <div v-if="!onlyRead" slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button @click="visible = false">取 消</el-button>
     <el-button type="primary" @click="handleSave">保 存</el-button>
   </div>
 
@@ -138,8 +138,8 @@ export default {
       // this.sourceData.no
       let tempArr = [];
       for (let i = 0; i < item.noServiceDistricts.length; i++) {
-          item.noServiceDistricts[i].check = event.target.checked;
-          tempArr.push(item.noServiceDistricts[i].districtName);
+        this.checkedData[this.li0].noServiceCitys[index].noServiceDistricts[i].check = event.target.checked?1:0;
+        tempArr.push(item.noServiceDistricts[i].districtName);
       }
       this.checkedDistric = event.target.checked ?
         tempArr :
@@ -160,31 +160,38 @@ export default {
       //     [{cityName:' ',districtName:[]},{cityName:' ',districtName:[]},{cityName:' ',districtName:[]} ],
       //   ]
     },
+    handleCheckbox(index,event) {
+
+      if(this.onlyRead) return;
+
+      this.checkedData[this.li0].noServiceCitys[this.li1].noServiceDistricts[index].check = event.target.checked?1:0
+    },
     // 区县选择 多选框
     handleDistricChange() {
       if(this.onlyRead) return;
       //  记录对应的数据到指定的数据结构当中
       let tempCityName = this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].cityName;
-      // console.log(tempCityName
-      // 如果在 对应的 数组对象还没有生成的情况下，先指定期 cityName：值
-      this.checkedData[this.li0].noServiceCitys[this.li1].cityName = tempCityName;
-      //  生成对应的 noServiceDistricts 数组，保持跟当前 this.checkedDistric 里面的内容一致;
-      let tempdistrictName = [];
-      for (let j = 0; j < this.checkedDistric.length; j++) {
-        tempdistrictName.push({
-          districtName: this.checkedDistric[j]
-        })
-      }
-      this.checkedData[this.li0].noServiceCitys[this.li1].noServiceDistricts = tempdistrictName;
+      // // console.log(tempCityName
+      // // 如果在 对应的 数组对象还没有生成的情况下，先指定期 cityName：值
+      // this.checkedData[this.li0].noServiceCitys[this.li1].cityName = tempCityName;
+      // //  生成对应的 noServiceDistricts 数组，保持跟当前 this.checkedDistric 里面的内容一致;
+      // let tempdistrictName = [];
+      // for (let j = 0; j <  j++) {
+      //   tempdistrictName.push({
+      //     districtName: this.checkedDistric[j],
+      //     check:1,
+      //   })
+      // }
+      // this.checkedData[this.li0].noServiceCitys[this.li1].noServiceDistricts = tempdistrictName;
       // 将原始数据和 动态生成的已勾选数据    noServiceDistricts 长度 的 进行比较
-      let checkedDataDistrictNameLength = tempdistrictName.length;
+      let checkedDataDistrictNameLength = this.checkedDistric.length;
       let sourceDataDistrictNameLength = this.sourceData.noProvinces[this.li0].noServiceCitys[this.li1].noServiceDistricts.length
       if (checkedDataDistrictNameLength >= sourceDataDistrictNameLength) {
         // 代表已经把未覆盖区县中的数据手动全选了
-        this.checkedData[this.li0].noServiceCitys[this.li1].check = true;
+        this.checkedData[this.li0].noServiceCitys[this.li1].check = 1;
         if (this.checkCity.indexOf(tempCityName) < 0) this.checkCity.push(tempCityName);
       } else {
-        this.checkedData[this.li0].noServiceCitys[this.li1].check= false;
+        this.checkedData[this.li0].noServiceCitys[this.li1].check= 0;
         if (this.checkCity.indexOf(tempCityName) >= 0) this.checkCity.splice(this.checkCity.indexOf(tempCityName), 1);
       }
       // console.log(tempdistrictName.length);
@@ -310,10 +317,10 @@ export default {
 
     },
     handleSave() {
-        this.dialogFormVisible = false;
+        this.visible = false;
         let url = "/api/noService/update"
         console.log(this.checkedData);
-        this.$http.post(url,{"noService":JSON.stringify({noProvinces:this.checkedData}),"logisMerchId":this.logisMerchId},(result) =>{
+        this.$http.post(url,{"noService":{noProvinces:this.checkedData},"data":{"logisMerchId":this.logisMerchId}},(result) =>{
         this.$message({
               message: '保存成功',
               type: 'success'
@@ -326,7 +333,7 @@ export default {
         })
     },
     handleCancel() {
-        this.dialogFormVisible = false;
+        this.visible = false;
     }
   }
 }
