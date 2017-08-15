@@ -29,7 +29,7 @@
     <el-form-item label="广告语" prop="slogan">
       <el-input v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
     </el-form-item>
-    <el-form-item label="标签">
+    <el-form-item label="标签" prop="tag">
       <el-tag
         :key="tag"
         v-for="tag in dynamicTags"
@@ -50,10 +50,11 @@
         size="small"
         @keyup.enter.native="handleInputConfirm"
         @blur="handleInputConfirm"
+        maxlength="8"
       >
       </el-input>
       <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
-      <div style="color:#888;">最多添加两个标签</div>
+      <div style="color:#888;">最多添加两个标签，每个标签最多8个字符。</div>
     </el-form-item>
     <el-form-item label="客服电话" prop="custServiceTel">
       <el-input v-model.number="ruleForm.custServiceTel" placeholder="请输入客服电话"> </el-input>
@@ -139,25 +140,24 @@ export default {
         opStatus:1
       },
       rules: {
-        merchantName: [{
-          required: true,
-          message: '请选择公司名称',
-          trigger: 'change'
-        }],
+        merchantName: [
+          {required: true,message: '请选择公司名称',trigger: 'change'}
+        ],
         sortWeight: [
           { required: true, message: '排序值不能为空'},
-          { required: true, type: 'number', message: '排序值必须为数字值'}
+          { required: true,type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
-        custServiceTel: [{
-          type: 'number',
-          required: true,
-          message: '请输入电话号码',
-          trigger: 'blur'
-        }],
-        slogan:[{
-          required: true,
-          message: '请输入广告语'
-        }]
+        custServiceTel: [
+          {required: true,message: '请输入电话号码'},
+          {required: true,type: 'number',message: '电话号码必须为数字值'},          
+        ],
+        slogan:[
+          {required: true,message: '请输入广告语'}
+        ],
+        // tag:[
+        //   {required: true,message: '请输入标签',type: 'string',trigger: 'blur'},
+        //   {type: 'string', min:1, max:9,message:'标签范围1-8个字'}
+        // ],
       }
     }
   },
@@ -207,18 +207,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
-          // router.app.$store.state.loadingChange = true
-          // _this.$router.app.$store.state.loadingChange = true;
-          // _this.$store.dispatch('changeLoadingChange',true);
-          // _this.$router.go(-1);
-          //开始/结束 日期转换为  yyyy-MM-dd hh:mm:ss 格式
-          // let submitDate = _this.ruleForm.date1;
-          // console.log(submitDate)
-          // this.ruleForm.gmtBegin = formatDate(submitDate[0], 'yyyy-MM-dd hh:mm:ss');
-          // this.ruleForm.gmtEnd = formatDate(submitDate[1], 'yyyy-MM-dd hh:mm:ss');
-          // console.log(this.ruleForm.gmtBegin)
-          // console.log(this.ruleForm.gmtEnd)
-
           let httpData = {
                 "data": {
                   "pageId": _this.pageId,
@@ -241,6 +229,10 @@ export default {
             _this.$router.go(-1);
             // _this.tableData = result.page_list;
             // _this.totalCount = parseInt(result.pages.cnt);
+            this.$message({
+                type: 'success',
+                message: '保存成功！'
+            });
           },(error) => {
             _this.listLoading = false;
             this.$message({
