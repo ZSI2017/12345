@@ -6,72 +6,60 @@
       <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入入口名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-    <el-form-item label="LOGO" prop="fileList2">
+    <el-form-item label="LOGO" prop="logo">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
-        :file-list="form.fileList2">
+        :file-list="form.logo">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
+      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.logo[0].url" alt="">
 
       <el-popover ref="popover4" placement="right" trigger="click">
-        <img :src="form.fileList2[0].url">
+        <img :src="form.logo[0].url">
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
-        <el-form-item label="角标" prop="fileList2">
+    <el-form-item label="角标" prop="icon">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
-        :on-change="handleImageChange"
-        :on-preview="handlePictureCardPreview"
-        :on-remove="handleRemove"
-        :on-success='handleSuccess'
-        :on-error='handlerror'
-        :file-list="form.fileList2">
+        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        :on-change="handleImageChange2"
+        :on-preview="handlePictureCardPreview2"
+        :on-remove="handleRemove2"
+        :on-success='handleSuccess2'
+        :on-error='handlerror2'
+        :file-list="form.icon">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
+      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.icon[0].url" alt="">
 
       <el-popover ref="popover4" placement="right" trigger="click">
-        <img :src="form.fileList2[0].url">
+        <img :src="form.icon[0].url">
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
-    <el-form-item label="描述" prop="name">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入描述内容"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
+    <el-form-item label="描述" prop="description">
+      <el-input v-if="isFromAddData" v-model="form.description" placeholder="请输入描述内容"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.description}} </div>
     </el-form-item>
-    <el-form-item label="排序值" prop="Forder">
-      <el-input v-if="isFromAddData" v-model.number="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
+    <el-form-item label="排序值" prop="sortWeight">
+      <el-input v-if="isFromAddData" v-model.number="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
-    <el-form-item label="链接" prop="link">
+    <el-form-item label="链接" prop="linkUrl">
 
       <el-select v-if="isFromAddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
          <el-option label="http://" value="http://"></el-option>
          <el-option label="https://" value="https://"></el-option>
       </el-select>
-      <el-input style="float:left;width:600px" v-if="isFromAddData"  v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
-      <!-- <el-input  v-if="isFromAddData" placeholder="请输入内容" v-model="form.link"> -->
-         <!-- <template slot="prepend">Http://</template>  -->
-         <!-- <el-select v-model="form.link" slot="prepend" placeholder="请选择">
-             <el-option label="http" value="http"></el-option>
-             <el-option label="https" value="https"></el-option>
-           </el-select> -->
-       <!-- </el-input> -->
-      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
-    </el-form-item>
-    <el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-if="isFromAddData" v-model="form.date1" type="datetimerange" placeholder="选择时间范围">
-      </el-date-picker>
-      <div class="detail-content" v-if="!isFromAddData"><span>{{form.gmtBegin | formatDate}}</span> ---- <span>{{form.gmtEnd | formatDate}}</span></div>
+      <el-input style="float:left;width:600px" v-if="isFromAddData"  v-model="form.linkUrl" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.linkUrl}} </div>
     </el-form-item>
     <el-form-item label="覆盖地区" prop="coverArea">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
@@ -92,6 +80,9 @@
   <!--  查看大图对话框 -->
   <el-dialog v-model="dialogVisible" size="tiny">
     <img width="100%" :src="dialogImageUrl" alt="">
+  </el-dialog>
+  <el-dialog v-model="dialogVisible2" size="tiny">
+    <img width="100%" :src="dialogImageUrl2" alt="">
   </el-dialog>
 
   <!-- 覆盖地区   配置对话框 -->
@@ -161,15 +152,17 @@ export default {
     return {
 
       url: '', // 待审详情的 url
-      id:'',
+      id:'',      
       tabName:'', // 标签页 名称
       localData:{}, // 上一个页面的数据
       // 即将离开的对话框
       loadingFlag: false,
       dialogVisible: false,
+      dialogVisible2: false,      
       CoverData:[],
       DialogConfigSaveFlag:false,  // 配置覆盖地区
-
+      dialogImageUrl:'',//logo大图存放
+      dialogImageUrl2:'',
       // 添加搜索框
       // 搜索框中省名初始化
       searchProvinces:[],
@@ -194,24 +187,26 @@ export default {
       currentStateText: '',
 
       form: {
-        linkHeader:'http://',    // url的 默认头部
-        // radio 代表上下架状态的选择
-        radio: "",
-        // date1 代表时间段选择的
-        date1: [],
-        name: '',
-        Forder: '',
-        link:'',
-        imageUrl:'',
-        promotionId:'',
-        gmtBegin:'',
-        gmtEnd:'',
-        pageId:'',
-        coverArea:'',
-        fileList2: [{
+        name: '',   
+        logo: [{
           name: '',
           url: ""
         }],
+        icon: [{
+          name: '',
+          url: ""
+        }],  
+        description: '',  
+        sortWeight: '',
+        linkHeader:'http://',    // url的 默认头部
+        linkUrl: '',        
+        radio: "",  // radio 代表上下架状态的选择
+        Forder: '',
+        // promotionId:'',
+        gmtBegin:'',
+        gmtEnd:'',
+        coverArea:'',
+        
       },
      // 表单验证规则
      rules: {
@@ -236,28 +231,12 @@ export default {
          message: "请输入正确链接",
          trigger: 'blur'
        }],
-       date1: [{
-         required: true,
-         message: '请选择日期',
-         trigger: 'change',
-         type:'array',
-       },{
-          validator(rule,value,callback,source,options) {
-            var errors = [];
-            if(value[0] === null) {
-              errors.push(
-                new Error('请选择日期')
-              )
-            }
-            callback(errors)
-          }
-       }],
        status: [{
          required: true,
          message: '请选择状态',
          trigger: 'change'
        }],
-       fileList2: [{
+       logo: [{
          required: true,
          message: '请上传图片',
          type:'array',
@@ -283,17 +262,17 @@ export default {
     this.localData = localData;
     // console.log(localData);
     // console.log(localData.promotionId);
-    this.form.promotionId = localData.promotionId;
+    this.form.promotionId = localData.sendappId;
     this.id = localData.id;
     var _this =this;
     var httpId = '';
     if(localData.tabName == '配置'){  //配置 修改
-        _this.url = "/api/promotion/audit/get";
+        _this.url = "/api/sendapp/audit/get";
         httpId = this.id;
         console.log("配置 修改")
     }else if(!localData.tabName){  // 待审核 已生效详情
-        _this.url = "/api/promotion/get";
-        httpId = this.form.promotionId;``
+        _this.url = "/api/sendapp/get";
+        httpId = this.form.promotionId;
         console.log("待审核 已生效详情")
     }else{
       alert('错误')
@@ -305,12 +284,11 @@ export default {
       console.log(rsp)
       console.log(rsp.imageUrl)
       this.form.name = rsp.name;
-      this.form.Forder = rsp.sortWeight;
-      this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
-      this.form.fileList2[0].url = rsp.imageUrl;
-      this.form.gmtBegin = rsp.gmtBegin;
-      this.form.gmtEnd = rsp.gmtEnd;
-      this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
+      this.form.sortWeight = rsp.sortWeight;
+      this.form.linkUrl = rsp.linkUrl.replace('https://','').replace('http://','');
+      this.form.logo[0].url = rsp.logo;
+      this.form.icon[0].url = rsp.icon;  
+      this.form.description = rsp.description;
       if (rsp.opStatus == "1") {
         this.form.radio = 1;
         this.currentStateText = "已下线"
@@ -329,9 +307,7 @@ export default {
 
   },
   created() {
-    if ( this.$route.path == "/chooseExpress/detail"
-          || this.$route.path == "/sendExpress/detail"
-          || this.$route.path == "/expressOrder/detail") {
+    if ( this.$route.path == "/sendExpressEnter/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
@@ -373,19 +349,16 @@ export default {
 
     //  点击提交
     handleSubmit(formName) {
-   this.$refs[formName].validate((valid) => {
-     if(valid) {
          var result = {
              "data":{
                  "id":this.id,
                  "pageId":this.localData.pageId,
-                 "promotionId":this.localData.promotionId,
+                 "sendappId":this.localData.sendappId,
                  "name":this.form.name,
-                 "imageUrl":this.form.fileList2[0].url,
-                 "sortWeight":this.form.Forder,
-                 "linkUrl":this.form.linkHeader+this.form.link,
-                 "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-                 "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+                 "logo":this.form.logo[0].url,
+                 "icon":this.form.icon[0].url,                 
+                 "sortWeight":this.form.sortWeight,
+                 "linkUrl":this.form.linkHeader+this.form.linkUrl,
                  'opStatus':this.form.radio,
                },
              "area":{
@@ -397,7 +370,7 @@ export default {
          }
          console.log("result%o ",result);
          var _this = this;
-        this.$http.post("/api/promotion/audit/update",result,(result) => {
+        this.$http.post("/api/sendapp/audit/update",result,(result) => {
           _this.$store.dispatch('changeLoadingChange', true);
                   console.log(this);
                   this.$router.go(-1);
@@ -413,10 +386,7 @@ export default {
           }
 
         });
-     } else {
 
-     }
-     })
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
@@ -436,17 +406,7 @@ export default {
     //   //  this.$router.push({ path:this.defaultActive});
     //   //  this.$route.push({ path:this.defaultActive});
     // },
-    handlePreview() {},
-    handleRemove() {},
-    handleSuccess(file){
-      console.log(file.result)
-      this.form.fileList2[0].url = file.result;
-    },
-    handlerror(err, file, fileList){
-      alert(err);
-      alert(file);
-      alert(fileList);
-    },
+
     // 标签页选择
     handleTabClick(tab, event) {
       console.log("handTabClick");
@@ -529,9 +489,9 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/promotion/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/sendapp/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
       if(this.tabName === "已上线") {
-          URL = "/api/promotion/areaConf/all";
+          URL = "/api/sendapp/areaConf/all";
       }
       _this.$http.post(URL,{id:this.id},
         (rsp) => {
@@ -679,6 +639,7 @@ export default {
     onSubmit() {
       console.log('submit!');
     },
+    //对logo图片操作的控制
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -687,7 +648,36 @@ export default {
       this.dialogVisible = true;
     },
     handleImageChange(file,fileList){
-         this.form.fileList2 = fileList.slice(-1);
+         this.form.logo = fileList.slice(-1);
+    },
+    handleSuccess(file){
+      console.log(file.result)
+      this.form.logo[0].url = file.result;
+    },
+    handlerror(err, file, fileList){
+      alert(err);
+      alert(file);
+      alert(fileList);
+    },
+    //对icon图片操作的控制
+    handleRemove2(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePictureCardPreview2(file) {
+      this.dialogImageUrl2 = file.url;
+      this.dialogVisible2 = true;
+    },
+    handleImageChange2(file,fileList){
+         this.form.icon = fileList.slice(-1);
+    },
+    handleSuccess2(file){
+      console.log(file.result)
+      this.form.icon[0].url = file.result;
+    },
+    handlerror2(err, file, fileList){
+      alert(err);
+      alert(file);
+      alert(fileList);
     },
 
   }

@@ -175,11 +175,10 @@ export default {
     _this.$http.post(AccessHttp,{'accessStatus':1},(result) => {
         console.log(result)
         this.options = result;
-
-        this.$message({
-            type: 'success',
-            message: '快递公司列表获取成功'
-        });
+        // this.$message({
+        //     type: 'success',
+        //     message: '快递公司列表获取成功'
+        // });
 
     },(error) => {
         this.$message({
