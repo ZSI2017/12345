@@ -15,6 +15,7 @@ let URL = 'http://192.168.12.54:8080'
 // let URL  = "http://sendexmng-sit.alipay-eco.com"
 
    // alert(process.env.npm_config_report)
+<<<<<<< HEAD
 if(process.env.NODE_ENV === "development"){
      // 开发环境下调用
     URL = 'http://192.168.12.54:8080'
@@ -22,6 +23,15 @@ if(process.env.NODE_ENV === "development"){
 }else {
     URL = "http://sendexmng-sit.alipay-eco.com"
 }
+=======
+// if(process.env.NODE_ENV === "development"){
+//      // 开发环境下调用
+//     // URL = 'http://192.168.12.54:8080'
+//     URL  = "http://sendexmng-sit.alipay-eco.com";
+// }else {
+//     URL = "http://sendexmng-sit.alipay-eco.com"
+// }
+>>>>>>> b732c37f9de6a72a5ec9f22c9007f30349d76f2d
 
 // add request interceptor
 axios.interceptors.request.use(function(config) {

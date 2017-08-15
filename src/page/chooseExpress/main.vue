@@ -233,6 +233,7 @@ export default {
       promotionType: '', // message
       dialogVisible:false,
       bigImageUrl:'',
+      tabFlag:'' //标记tab切换
     }
   },
   computed: {
@@ -482,6 +483,7 @@ export default {
         _this.currentPage = 1;    //跳转标签页 页码归 1
       };
       console.log(tab.label);
+      this.tabFlag =  tab.label;
       this.PageStore.commit("setTabName",tab.label);   // 记录当前标签页
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
@@ -554,15 +556,14 @@ export default {
         // _this.radio2 = '';
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/promotion/audit/list"
+        _this.url = "/api/promotion/audit/list";
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,
             "page_num": _this.currentPage - 1
           },
           "con": {
-            "pageId": _this.pageId,
-            "status":""
+            "pageId": _this.pageId
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
