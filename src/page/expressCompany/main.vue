@@ -51,7 +51,7 @@
             close-transition='true' 
             hit='true'
             :key="tag"
-            v-for="tag in scope.row.tag.split(',')"
+            v-for="tag in scope.row.tag.split(',',(scope.row.tag.split(',').length)-1)"
             >{{tag}}
         </el-tag>
       </template>

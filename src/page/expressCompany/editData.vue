@@ -222,7 +222,7 @@ export default {
       // this.$refs[formName].validate((valid) => {
       //   if (valid) {
           console.log('error submit');
-          this.ruleForm.tag = this.dynamicTags.join(',');
+          this.ruleForm.tag = this.dynamicTags.join(',') + ',';
           let httpData = {
                 "data": {
                   "id": this.id,

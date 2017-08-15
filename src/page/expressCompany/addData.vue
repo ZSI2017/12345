@@ -273,7 +273,7 @@ export default {
       let inputValue = this.inputValue;
       if (inputValue) {
         this.dynamicTags.push(inputValue);
-        this.ruleForm.tag = this.dynamicTags.join(',');
+        this.ruleForm.tag = this.dynamicTags.join(',') + ',';
         if(this.dynamicTags.length >= 2){
           this.addTag = false;
         }else{
