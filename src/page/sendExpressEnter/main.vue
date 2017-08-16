@@ -53,7 +53,8 @@
     </el-table-column>
     <el-table-column label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click" style="word-break:break-all;">
+        <el-popover ref="popover4" width="300" trigger="click">
+            <span style="word-break:break-all;">{{scope.row.linkUrl}}</span>
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
@@ -239,7 +240,7 @@ export default {
     //  alert(this.$store.state.loadingFlag)
     // 在页面初始化时，获取pageName,标签页，单选框 的记录值
 
-    this.pageId = "CD1010"; // 寄快递首页
+    this.pageId = "SD1010"; // 寄快递首页
     // ((this.$route.path == "/sendapp/chooseExpress" &&
     //     (this.pageId = "BM1010")) ||
     //   (this.$route.path == "/sendapp/expressOrder" &&
