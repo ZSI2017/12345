@@ -574,7 +574,7 @@ export default {
       row.tabName = this.activeName2;
       var _this = this;
       row.pageId = _this.pageId
-      localEvent.set("localChooseExpress", row);
+      localEvent.set("localOnecitySend", row);
       this.$router.push({
         path: _this.$route.path + '/editData'
       });
@@ -582,7 +582,7 @@ export default {
     effectiveDetails(row) {
       var _this = this;
       row.pageId = _this.pageId
-      localEvent.set("localChooseExpress", row);
+      localEvent.set("localOnecitySend", row);
 
       this.$router.push({
         path: _this.$route.path + '/detail'

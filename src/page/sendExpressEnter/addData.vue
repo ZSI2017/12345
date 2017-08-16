@@ -151,7 +151,8 @@ export default {
   },
   data() {
     return {
-     // 展示警告信息
+      pageId:'',
+      // 展示警告信息
       showAlert:false,
       dialogVisible:false,
       dialogVisible2:false,      
@@ -234,12 +235,7 @@ export default {
     alert("beforeDestory")
   },
   watch: {
-    //  loadingFlag:{
-    //     handler:(val,old) => {
-    //          alert(val),
-    //          console.log(old);
-    //     }
-    //  }
+
   },
   methods: {
     // 为表格中的行设置样式，

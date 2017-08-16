@@ -154,8 +154,9 @@ export default {
   data() {
     return {
       pageId:'',
-      // 添加搜索框
       state1: "",
+      // 添加搜索框
+      searchContent: "",
       provinces: [],
       // 覆盖地区选择
       check: false,
@@ -163,6 +164,9 @@ export default {
       checkedCities: [],
       isIndeterminate: [],
       dialogFormVisible: false, // dialogFormVisible 代表是否打开配置地区的对话框
+      // 搜索框中省名初始化
+      searchProvinces:[],
+      showProvinces:'',
       //标签数据
       dynamicTags: [],
       inputVisible: false,
@@ -189,50 +193,35 @@ export default {
         markPrice:'',
       },
       rules: {
-        name: [{
-          type: "string",
-          required: true,
-          message: '请输入运营图名称',
-          trigger: 'blur'
-        }, ],
-        sortWeight: [{
-          type: 'number',
-          required: true,
-          message: '请输入排序值',
-          trigger: 'blur'
-        }],
-        linkUrl: [{
-          required: true,
-          message: "请输入链接",
-          trigger: 'blur'
-        }],
-        slogan:[{
-          type: 'string',
-          required: true,
-          message: '请输入广告语',
-          trigger: 'blur'
-        }],
-        opStatus: [{
-          required: true,
-          message: '请选择状态',
-          trigger: 'change'
-        }],
-        logo: [{
-          required: true,
-          message: '请上传图片',
-          type:'array',
-          trigger: 'on-change'
-        }],
-        coverArea: [{
-          required: true,
-          message: '请选择覆盖地区'
-        }],
-        markPrice:[{
-          type: 'number',
-          required: true,
-          message: '请输入价格',
-          trigger: 'blur'
-        }]
+        name: [
+          {type: "string",required: true,message: '请输入正确运营图名称',trigger: 'blur'},
+          {min:1,max:10,message:'名称长度不大于10'}
+        ],
+        logo: [
+          {required: true,message: '请上传图片',type:'array',trigger: 'on-change'}
+        ],
+        slogan:[
+          {type: 'string',required: true,message: '请输入广告语',trigger: 'blur'}
+        ],
+        sortWeight: [
+          { required: true, message: '排序值不能为空'},
+          // { type: 'number', message: '排序值必须为数字值'}
+           { type: 'number', min:1, max:999,message:'排序值范围1-999'}
+        ],
+        linkUrl: [
+          {required: true,message: "请输入正确链接",trigger: 'blur'}
+        ],
+        opStatus: [
+          {required: true,message: '请选择状态',trigger: 'change'}
+        ],
+        coverArea: [
+          {required: true,message: '请选择覆盖地区'}
+        ],
+        markPrice:[
+          { required: true, message: '标价不能为空'},
+          // { type: 'number', message: '排序值必须为数字值'}
+           { type: 'number',message:'标价必须为数字'}
+        ]
       }
     }
   },
@@ -263,13 +252,12 @@ export default {
       _this.listLoading = true;
       console.log("-----------------------");
         console.log(this.$refs[formName]),
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
           console.log('error submit');
           let httpData = {
                 "data": {
                   "pageId": _this.pageId,
-                  // "businessType":_this.ruleForm.businessType,
                   "name": _this.ruleForm.name,
                   "logo":_this.dialogImg,                                                      
                   "slogan": _this.ruleForm.slogan,
@@ -278,7 +266,6 @@ export default {
                   "linkUrl": _this.ruleForm.linkHeader+_this.ruleForm.linkUrl,
                   "opStatus": _this.ruleForm.opStatus,
                   "markPrice": _this.ruleForm.markPrice,
-                  
                 },
                 "area": {
                   "code": "000000",
@@ -289,7 +276,7 @@ export default {
           _this.$http.post(_this.url,httpData,(result) => {
             _this.$store.dispatch('changeLoadingChange',true);
             _this.listLoading = false;
-            // _this.$router.go(-1);
+            _this.$router.go(-1);
             // _this.tableData = result.page_list;
             // _this.totalCount = parseInt(result.pages.cnt);
             this.$message({
@@ -306,12 +293,12 @@ export default {
 
           // console.log(this.$route.matched);
 
-      //   } else {
-      //     _this.listLoading = false;
-      //     console.log(_this);
-      //     return false;
-      //   }
-      // })
+        } else {
+          _this.listLoading = false;
+          console.log(_this);
+          return false;
+        }
+      })
 
     },
     // 点击返回 对应的事件处理
@@ -410,7 +397,7 @@ export default {
         }, (error) => {
             _this.listLoading = false;
             this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
-            console.log(error);
+          console.log(error);
         })
     },
     initCheckBox(isAllcheck){
