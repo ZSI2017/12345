@@ -1,27 +1,29 @@
 <template type="html">
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-alert
-       style="margin-left:100px;margin-bottom:30px;width:800px;"
-       title="检查表单数据"
-       type="error"
-       v-if="showAlert"
-       >
-  </el-alert>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
-    <el-form-item label="名称" prop="photoName">
-      <el-input v-model.trim="ruleForm.photoName" placeholder="请输入运营图名称"> </el-input>
+    <el-form-item label="名称" prop="name">
+      <el-input v-model.trim="ruleForm.name" placeholder="请输入运营图名称"> </el-input>
     </el-form-item>
-    <el-form-item label="LOGO" prop="opMap">
-      <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
+    <el-form-item label="LOGO" prop="logo">
+      <el-upload
+        class="upload-demo"
+        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        :on-change="handleImageChange"
+        :file-list="ruleForm.logo"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :on-success='handleSuccess'
+        :on-error='handlerror'
+        >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">文件类型限：jpg,png,尺寸40*40, 请保持5kb以内</div>
       </el-upload>
     </el-form-item>
-    <el-form-item label="广告语" prop="description">
-      <el-input v-model.trim="ruleForm.description" placeholder="请输入广告语"> </el-input>
+    <el-form-item label="广告语" prop="slogan">
+      <el-input v-model.trim="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
     </el-form-item>
-    <el-form-item label="标签">
+    <el-form-item label="标签" prop="tag">
       <el-tag
         :key="tag"
         v-for="tag in dynamicTags"
@@ -29,8 +31,8 @@
         hit="true"
         :close-transition="false"
         @close="handleClose(tag)"
-        type="gray"
-        style="margin-right:10px;"
+        type="primary"
+        style="margin-right:10px;height:28px;line-height:28px;"
       >
       {{tag}}
       </el-tag>
@@ -42,30 +44,34 @@
         size="small"
         @keyup.enter.native="handleInputConfirm"
         @blur="handleInputConfirm"
-        style="width:100px;"
+        maxlength="8"
       >
       </el-input>
       <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
-      <div style="color:#888;">最多添加两个标签</div>
+      <div style="color:#888;">最多添加两个标签，每个标签最多8个字符。</div>
     </el-form-item>
-    <el-form-item label="排序值" prop="number">
-      <el-input v-model.number="ruleForm.number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    <el-form-item label="排序值" prop="sortWeight">
+      <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <el-form-item label="链接" prop="link">
-      <el-input v-model.trim="ruleForm.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+        <el-form-item label="链接" prop="linkUrl">
+      <el-select  v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
+         <el-option label="http://" value="http://"></el-option>
+         <el-option label="https://" value="https://"></el-option>
+      </el-select>
+      <el-input style="float:left;width:600px" v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+      <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
     </el-form-item>
     <el-form-item label="覆盖地区" prop="coverArea">
       <el-button size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
     </el-form-item>
-    <el-form-item label="当前状态" prop="currentState">
-      <el-radio-group v-model="ruleForm.currentState">
-        <el-radio class="radio" v-model="radio" label="1">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="2">下架</el-radio>
+    <el-form-item label="当前状态">
+      <el-radio-group v-model="ruleForm.opStatus">
+        <el-radio class="radio" :label="2">上架</el-radio>
+        <el-radio class="radio" :label="1">下架</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="标价" prop="priceUp">
-      <el-input placeholder="请输入价格" v-model="ruleForm.priceUp" style="width:200px;">
+    <el-form-item label="标价" prop="markPrice">
+      <el-input placeholder="请输入价格" v-model.number="ruleForm.markPrice" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
     </el-form-item>
@@ -73,66 +79,81 @@
     <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
 
+  <!--图片预览 框  -->
+  <el-dialog v-model="dialogVisible" size="tiny">
+     <img width="100%" :src="dialogImg" alt="">
+  </el-dialog>
+
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
+
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
       </el-col>
       <el-col :span="10" style="height:10px;"></el-col>
-      <el-col :span="10" style="font-weight:bold;font-size:16px;margin-top:2px;padding-left:20px;line-height:40px;height:40px;">
-        快速搜索:
-        <el-autocomplete class="inline-input" v-model="state1" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入搜索内容" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
+      <el-col :span="5" style="font-weight:bold;font-size:16px;margin-top:2px;line-height:40px;height:40px;">
+           <span style="float:right;padding-right:10px">按照省搜索:</span>
+      </el-col>
+      <el-col :span="5" style="font-weight:bold;font-size:16px;margin-top:2px;line-height:40px;height:40px;">
+
+        <el-autocomplete class="inline-input" v-model="searchContent" style="float:right;" :fetch-suggestions="querySearch" placeholder="请输入省名" icon="close" :on-icon-click="handleIconClick" @select="handleQuerySelect"></el-autocomplete>
       </el-col>
     </el-row>
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200">
-        <template scope="scope">
-            <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.value}}</el-tag>
-            <el-checkbox
-
+    <el-table :data="gridData" border :show-header="showHeader" max-height="400" :row-style="handleRowStyle" >
+      <el-table-column property="provinceName" label="省" width="200">
+        <template scope="scope" >
+          <el-checkbox
+                v-model="checkAll[scope.$index]"
+                @change="handleCheckAllChange(scope.$index,$event)"
+             ></el-checkbox>
+             {{scope.row.provinceName}}
+            <!-- <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.provinceName}}</el-tag> -->
+            <!-- <el-checkbox
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
-               >全选</el-checkbox>
+               ></el-checkbox> -->
           </template>
       </el-table-column>
-      <el-table-column property="city" label="市">
+      <el-table-column property="citys" label="市">
         <template scope="scope">
             <el-checkbox-group
                   v-model="checkedCities[scope.$index]"
                   @change="handleCheckedCitiesChange(scope.$index)"
                   >
-                 <el-checkbox style="margin-left:0;margin-right:15px;" v-for="city in scope.row.city" :label="city" :key="city">{{city}}</el-checkbox>
+                 <el-checkbox style="margin-left:0;margin-right:15px;"
+                   @change="handleCheckedEveryChange(scope.$index,index,$event)"
+                  v-for="(city,index) in scope.row.citys" :label="city.cityName" :key="city.cityName">{{city.cityName}}</el-checkbox>
             </el-checkbox-group>
 
      </template>
       </el-table-column>
     </el-table>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">保 存</el-button>
+      <el-button @click="handleDialogConfigCancel">取 消</el-button>
+      <el-button type="primary" @click="handleDialogConfigSave">保 存</el-button>
     </div>
   </el-dialog>
 
   <!--  覆盖地区 查看对话框 -->
   <cover-area
       :visible="dialogTableVisible"
-      :gridData="gridData"
+      :coverGridData="CoverData"
       @listenToCoverArea ="changeVisible"
-      >
-  </cover-area>
+      ></cover-area>
 </section>
 </template>
 <script type="text/javascript">
  import coverArea from "@/page/chooseExpress/coverArea.vue";
+ import localEvent from 'src/vuex/function.js';
+
 export default {
   components:{
      coverArea
   },
   data() {
     return {
-     // 展示警告信息
-      showAlert:false,
+      pageId:'',
       // 添加搜索框
       state1: "",
       provinces: [],
@@ -141,10 +162,7 @@ export default {
       checkAll: [],
       checkedCities: [],
       isIndeterminate: [],
-      // radio 代表上下架状态的选择
-      radio: 1,
-      // dialogFormVisible 代表是否打开配置地区的对话框
-      dialogFormVisible: false,
+      dialogFormVisible: false, // dialogFormVisible 代表是否打开配置地区的对话框
       //标签数据
       dynamicTags: [],
       inputVisible: false,
@@ -155,67 +173,61 @@ export default {
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy: [],
+      url:'/api/sendapp/audit/save',
+      dialogImg:[],
       // 对输入表单进行验证
       ruleForm: {
-        description:'',
-        photoName: '',
-        number: '',
-        link: '',
-        date1: '',
-        priceUp:'',
-        currentState: false,
+        name:'',
+        logo:[],
+        slogan:'',
+        tag:'',
+        sortWeight: '',
+        linkHeader:'http://',    // url的 默认头部
+        linkUrl: '',
+        opStatus:1,
+        coverArea:'',
+        markPrice:'',
       },
       rules: {
-        photoName: [{
+        name: [{
           type: "string",
           required: true,
           message: '请输入运营图名称',
           trigger: 'blur'
         }, ],
-        number: [{
+        sortWeight: [{
           type: 'number',
           required: true,
           message: '请输入排序值',
           trigger: 'blur'
         }],
-        link: [{
+        linkUrl: [{
           required: true,
           message: "请输入链接",
           trigger: 'blur'
         }],
-        date1: [{
-          type: 'date',
-          required: true,
-          message: '请选择日期',
-          trigger: 'change'
-        }],
-        description:[{
+        slogan:[{
           type: 'string',
           required: true,
-          message: '请输入描述',
-          trigger: 'change'
+          message: '请输入广告语',
+          trigger: 'blur'
         }],
-        currentState: [{
+        opStatus: [{
           required: true,
           message: '请选择状态',
           trigger: 'change'
         }],
-        opMap: [{
+        logo: [{
           required: true,
-          message: '请上传图片'
-        }],
-        cornerMark: [{
-          required: false
-        }],
-        content:[{
-          required: true,
-          message: '请上传图片'
+          message: '请上传图片',
+          type:'array',
+          trigger: 'on-change'
         }],
         coverArea: [{
           required: true,
           message: '请选择覆盖地区'
         }],
-        priceUp:[{
+        markPrice:[{
           type: 'number',
           required: true,
           message: '请输入价格',
@@ -225,6 +237,7 @@ export default {
     }
   },
   created() {
+    this.pageId = localEvent.get('pageId')
     console.log(this);
 
   },
@@ -247,18 +260,58 @@ export default {
     //  点击提交
     handleSubmit(formName) {
       var _this = this;
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
+      _this.listLoading = true;
+      console.log("-----------------------");
+        console.log(this.$refs[formName]),
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
           console.log('error submit');
-          _this.$store.dispatch('changeLoadingChange',true);
-          _this.$router.go(-1);
-          alert('sumbit');
-        } else {
-          console.log(_this);
-          _this.showAlert = true;
-          return false;
-        }
-      })
+          let httpData = {
+                "data": {
+                  "pageId": _this.pageId,
+                  // "businessType":_this.ruleForm.businessType,
+                  "name": _this.ruleForm.name,
+                  "logo":_this.dialogImg,                                                      
+                  "slogan": _this.ruleForm.slogan,
+                  "tag":_this.ruleForm.tag,
+                  "sortWeight":_this.ruleForm.sortWeight,  
+                  "linkUrl": _this.ruleForm.linkHeader+_this.ruleForm.linkUrl,
+                  "opStatus": _this.ruleForm.opStatus,
+                  "markPrice": _this.ruleForm.markPrice,
+                  
+                },
+                "area": {
+                  "code": "000000",
+                  "check": _this.check,
+                  "provinces": _this.gridData,
+                }
+              };
+          _this.$http.post(_this.url,httpData,(result) => {
+            _this.$store.dispatch('changeLoadingChange',true);
+            _this.listLoading = false;
+            // _this.$router.go(-1);
+            // _this.tableData = result.page_list;
+            // _this.totalCount = parseInt(result.pages.cnt);
+            this.$message({
+                type: 'success',
+                message: '保存成功！'
+            });
+          },(error) => {
+            _this.listLoading = false;
+            this.$message({
+                type: 'error',
+                message: error.data.meta.code+"--"+error.data.meta.msg
+            });
+          });
+
+          // console.log(this.$route.matched);
+
+      //   } else {
+      //     _this.listLoading = false;
+      //     console.log(_this);
+      //     return false;
+      //   }
+      // })
 
     },
     // 点击返回 对应的事件处理
@@ -276,61 +329,153 @@ export default {
     },
     // 搜索框
     querySearch(queryString, cb) {
-      // var provinces = this.provinces;
-      // var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
-      // // 调用 callback 返回建议列表的数据
-      // cb(results);
-      var provinces = this.provinces;
-      var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
-      // 调用 callback 返回建议列表的数据
+      if(queryString === '') {
+        this.showProvinces = '';
+      }
+      var searchProvinces = this.searchProvinces;
+      var results = queryString ? searchProvinces.filter(this.createFilter(queryString)) : searchProvinces;
       cb(results);
     },
     createFilter(queryString) {
-      // return (province) => {
-      //   return (province.province.indexOf(queryString.toLowerCase()) === 0);
-      // };
       return (province) => {
         return (province.value.indexOf(queryString.toLowerCase()) === 0);
       };
     },
     handleQuerySelect(items) {
+       this.showProvinces = items.value
       console.log(items);
-      this.gridData = this.gridDataCopy.filter(function(item) {
-        return item.value == items.value
-      })
-      console.log(this.gridData);
+      // for(let i =0;i<this.gridData.length;i++) {
+      //      if(this.gridData[i].provinceName === items.value) {
+      //         this.gridData[i].isShow= true;
+      //      } else {
+      //         this.gridData[i].isShow = false;
+      //      }
+      // }
+      // console.log(this.gridData);
     },
     handleIconClick(ev) {
-      this.gridData = this.gridDataCopy;
-      this.state1 = '';
+      this.showProvinces = ''
+      // this.gridData = this.gridDataCopy;
+      this.searchContent = '';
     },
     // 覆盖地区选择
     dialogConfig() {
+      // var _this = this;
+      // _this.$http.get("/rest/list3", (rsp) => {
+      //   _this.gridData = rsp.data.data;
+      //   _this.gridDataCopy = _this.gridData;
+      //   _this.provinces = _this.gridData;
+      //   // 初始化 配置的多选框操作
+      //   var tableDataLength = _this.gridData.length;
+      //   for (var i = 0; i < tableDataLength; i++) {
+      //     _this.checkAll[i] = false;
+      //     // _this.isIndeterminate[i] = true;
+      //     _this.checkedCities[i] = [];
+      //   }
+      //   _this.dialogFormVisible = true;
+      //   // console.log(_this.gridData);
+      // }, (error) => {
+      //   console.log(error);
+      // })
+      // 初始化话搜索框
+      this.handleIconClick();
+      if(this.gridData.length>0){
+          if(this.DialogConfigSaveFlag){
+              this.dialogFormVisible = true;
+              return;
+          }else {
+              let localResult = localEvent.get("gridData")
+              this.gridData = localResult.provinces;
+              console.log("12344444444444444%o",this.gridData);
+              this.initCheckBox(localResult.check)
+            return;
+          }
+      }
       var _this = this;
-      _this.$http.get("/rest/list3", (rsp) => {
-        _this.gridData = rsp.data.data;
-        _this.gridDataCopy = _this.gridData;
-        _this.provinces = _this.gridData;
-        // 初始化 配置的多选框操作
-        var tableDataLength = _this.gridData.length;
-        for (var i = 0; i < tableDataLength; i++) {
-          _this.checkAll[i] = false;
-          // _this.isIndeterminate[i] = true;
-          _this.checkedCities[i] = [];
-        }
-        _this.dialogFormVisible = true;
-        // console.log(_this.gridData);
-      }, (error) => {
-        console.log(error);
-      })
+      this.listLoading = true
+      var URL = "/api/promotion/areaConf/all";   // 默认是 配置 中的覆盖地区
+      _this.$http.post(URL,{id:"0"},
+        (rsp) => {
+          _this.gridData = rsp.provinces.slice(0);
+          for( let i =0;i<_this.gridData.length;i++) {
+             _this.searchProvinces[i]={};
+             _this.searchProvinces[i].value = _this.gridData[i].provinceName;
+          }
+          console.log(_this.searchProvinces);
+          localEvent.set("gridData", rsp);
+          _this.initCheckBox(rsp.check);
+          // _this.gridDataCopy123 = _this.gridData.slice(0);
+
+          // console.log(_this.gridData);
+        }, (error) => {
+            _this.listLoading = false;
+            this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+            console.log(error);
+        })
+    },
+    initCheckBox(isAllcheck){
+      // console.log(_this.gridDataCopy);
+
+      this.provinces = this.gridData;
+      // 初始化 配置的多选框操作
+      for (var i = 0; i < this.gridData.length; i++) {
+        // _this.isIndeterminate[i] = true;
+          this.checkedCities[i] = [];
+           if(this.gridData[i].check){
+              this.checkAll[i] = true;
+              for(let j = 0;j<this.gridData[i].citys.length;j++) {
+                  this.checkedCities[i].push(this.gridData[i].citys[j].cityName)
+              }
+           }else {
+              this.checkAll[i] = false;
+              for(let j = 0;j<this.gridData[i].citys.length;j++) {
+                  if(this.gridData[i].citys[j].check) {
+
+                    this.checkedCities[i].push(this.gridData[i].citys[j].cityName)
+                  }
+              }
+           }
+      }
+      console.log(this.checkAll);
+      // 检查是否 全选
+      this.check = isAllcheck;
+      if(this.check){
+        this.handleCheckAll({target:{checked:true}})
+      }
+      this.listLoading = false
+      this.dialogFormVisible = true;
+
     },
     handleCheckAll(event) {
       var allCount = this.gridData.length;
       for (var m = 0; m < allCount; m++) {
         this.isIndeterminate.splice(m, 1, !event.target.checked)
         this.checkAll.splice(m, 1, event.target.checked);
-        this.checkedCities.splice(m, 1, event.target.checked ? this.gridData[m].city : [])
+        let CityAllCity = [];
+        for(let i =0;i<this.gridData[m].citys.length;i++) {
+           CityAllCity.push(this.gridData[m].citys[i].cityName)
+        };
+        this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity : [])
       }
+
+    },
+    // 配置覆盖地区 取消
+    handleDialogConfigCancel(){
+        this.dialogFormVisible = false
+        this.DialogConfigSaveFlag = false;
+    },
+    // 配置覆盖地区 保存
+    handleDialogConfigSave(){
+      if(this.check || this.checkAll.filter(function(value){return value === true }).length>0 || this.checkedCities.filter(function(value){return value.length>0} ).length>0) {
+             this.ruleForm.coverArea = "hasClick"
+      }else {
+              this.ruleForm.coverArea = "";
+      }
+
+        localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
+        this.dialogFormVisible = false;
+        this.DialogConfigSaveFlag = true;
+
     },
     observeCheckAll() {
       let checkall = this.checkAll.filter(function(value) {
@@ -348,39 +493,55 @@ export default {
       }
     },
     handleCheckAllChange(index, event) {
-      this.checkedCities.splice(index, 1, event.target.checked ? this.gridData[index].city : [])
+      // 改变数据状态
+      let flag = event.target.checked
+      this.gridData[index].check = flag;
+      for(let j =0 ;j<this.gridData[index].citys.length;j++) {
+             this.gridData[index].citys[j].check = flag;
+            //  console.log(this.gridData[index].citys[j]);
+      }
+      let CityAllCity = [];
+      for(let i =0;i<this.gridData[index].citys.length;i++) {
+         CityAllCity.push(this.gridData[index].citys[i].cityName)
+      };
+      this.checkedCities.splice(index, 1, event.target.checked ? CityAllCity : [])
       this.isIndeterminate.splice(index, 1, false);
+      // console.log("%c handleCheckAllChange &o","font-size:20px",this.gridDataCopy123);
       this.observeCheckAll();
     },
     handleCheckedCitiesChange(index) {
       let value = this.checkedCities[index];
       let checkedCount = value.length;
-      this.checkAll.splice(index, 1, checkedCount === this.gridData[index].city.length)
-      console.log(checkedCount + "  " + this.gridData[index].city.length + " " + this.checkAll[index]);
-      this.isIndeterminate.splice(index, 1, checkedCount > 0 && checkedCount < this.gridData[index].city.length);
+      // if(checkedCount === this.gridData[index].citys.length) {
+         this.gridData[index].check = checkedCount === this.gridData[index].citys.length;
+      // }else {
+      //    this.gridData[index].check = false;
+      // }
+      this.checkAll.splice(index, 1, checkedCount === this.gridData[index].citys.length)
+      // console.log(checkedCount + "  " + this.gridData[index].city.length + " " + this.checkAll[index]);
+      // this.isIndeterminate.splice(index, 1, checkedCount > 0 && checkedCount < this.gridData[index].citys.length);
       this.observeCheckAll();
     },
-    dialogTable() {
-      var _this = this;
-      _this.$http.get("/rest/list3", (rsp) => {
-        _this.gridData = rsp.data.data;
-        _this.dialogTableVisible = true;
-
-        console.log(_this.gridData);
-      }, (error) => {
-        console.log(error);
-      })
+    handleCheckedEveryChange(outIndex,index,event) {
+        this.gridData[outIndex].citys[index].check = event.target.checked;
     },
+    dialogTable() {
+      let localResult = localEvent.get("gridData")
+      this.CoverData = localResult.provinces;
+      this.dialogTableVisible = true;
+    },
+
     onSubmit() {
       console.log('submit!');
     },
+    //tag 控制
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       if(this.dynamicTags.length >= 2){
         this.addTag = false;
       }else{
         this.addTag = true;
-      }  
+      }
     },
     showInput() {
       this.inputVisible = true;
@@ -392,15 +553,34 @@ export default {
       let inputValue = this.inputValue;
       if (inputValue) {
         this.dynamicTags.push(inputValue);
+        this.ruleForm.tag = this.dynamicTags.join(',') + ',';
         if(this.dynamicTags.length >= 2){
           this.addTag = false;
         }else{
           this.addTag = true;
-        }      
+        }
       }
       this.inputVisible = false;
       this.inputValue = '';
-    }
+    },
+    // 对图片操作的控制
+    handleImageChange(file,fileList){
+        this.ruleForm.logo = fileList.slice(-1);
+    },
+    handlePreview(file) {
+      this.dialogVisible = true;
+      console.log(file.response)
+    },
+    handleSuccess(file){
+      console.log(file.result)
+      this.dialogImg = file.result;
+    },
+    handlerror(err, file, fileList){
+      alert(err);
+      alert(file);
+      alert(fileList);
+    },
+    handleRemove() {},
   }
 }
 </script>

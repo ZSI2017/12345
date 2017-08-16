@@ -239,7 +239,7 @@ export default {
     //  alert(this.$store.state.loadingFlag)
     // 在页面初始化时，获取pageName,标签页，单选框 的记录值
 
-    this.pageId = "CD1010"; // 寄快递首页
+    this.pageId = "SD1010"; // 寄快递首页
     // ((this.$route.path == "/sendapp/chooseExpress" &&
     //     (this.pageId = "BM1010")) ||
     //   (this.$route.path == "/sendapp/expressOrder" &&

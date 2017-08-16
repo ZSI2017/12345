@@ -110,6 +110,7 @@ import localEvent from 'src/vuex/function.js';
 export default {
   data() {
     return {
+      pageId:'',
       dialogVisible:false,//大图显示
       listLoading: false,//loading框
       //标签添加控制
