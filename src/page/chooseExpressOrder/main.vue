@@ -23,43 +23,66 @@
   <!-- 表格  -->
   <el-table v-if="tableFalg"
     class="mainTable"
-    @sort-change="handleSortChange"
     :data="tableData"
     ref="tableDom"
+    @sort-change="handleSortChange"
     style="width: 100%;margin-top:10px;"
     max-height="3000"
     empty-text="暂无数据"
     align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="imageUrl" label="LOGO">
-      <template scope="scope">
-            <img width="50px" style="cursor:pointer;" :src="scope.row.imageUrl" trigger="click" placement="right" @click="showImg(scope.row.imageUrl)">
+    <el-table-column prop="logisMerchantLogo" label="LOGO">
+       <template scope="scope">
+            <img width="50px" style="cursor:pointer;" :src="scope.row.logisMerchantLogo || ''" trigger="click" placement="right" @click="showImg(scope.row.logisMerchantLogo)">
             <el-dialog v-model="dialogVisible" size="tiny">
               <img width="100%" :src="bigImageUrl" alt="">
             </el-dialog>
         </template>
     </el-table-column>
-    <el-table-column prop="name" label="公司名称">
+    <el-table-column prop="logisMerchantName" label="公司名称">
     </el-table-column>
-    <el-table-column prop="name" label="描述">
+    <el-table-column prop="slogan" label="广告语" width="130">
     </el-table-column>
-    <el-table-column prop="name" label="标签">
+    <el-table-column prop="tag" label="标签" width="160">
+      <template scope="scope">
+        <el-tag 
+            type="primary" 
+            style="margin:2px;height:24px;line-height:24px;" 
+            close-transition='true' 
+            hit='true'
+            :key="tag"
+            v-for="tag in scope.row.tag.split(',',(scope.row.tag.split(',').length)-1)"
+            >{{tag}}
+        </el-tag>
+      </template>
     </el-table-column>
     <el-table-column label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click" style="word-break:break-all;">
+        <el-popover class="popover" ref="popover4" width="300" trigger="click" >
+          <span style="word-break:break-all;">{{scope.row.url}}</span>
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
     </el-table-column>
-    <!--<el-table-column prop="address" label="覆盖地区">
-       <template scope="scope">
-         <el-button @click="checkArea(scope.row.id)" type="text" size="small">查看</el-button>
-       </template>
+    <!--<el-table-column prop="isManualPrice" label="系统发起支付" width="120">
+      <template scope="scope">
+        {{scope.row.tag == 0? "否" : "是" }}
+      </template>
     </el-table-column>-->
-    <el-table-column prop="sortWeight" align="center" label="是否最热">
+    <!--<el-table-column prop="pricingMode" label="允许议价">
+      <template scope="scope">
+        {{scope.row.pricingMode == 0? "否" : "是" }}
+      </template>
+    </el-table-column>-->
+    <el-table-column prop="hotStatus" label="是否最热">
+      <template scope="scope">
+        {{scope.row.hotStatus == 0? "否" : "是" }}
+      </template>
     </el-table-column>
-    <el-table-column prop="sortWeight" align="center" label="是否最新">
+    <el-table-column prop="newStatus" label="是否最新">
+      <template scope="scope">
+        {{scope.row.newStatus == 0? "否" : "是" }}
+      </template>
     </el-table-column>
     <el-table-column prop="gmtCreate" label="创建时间" width="100">
       <template scope="scope">
@@ -68,7 +91,7 @@
     </el-table-column>
     <el-table-column prop="sortWeight" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">>
+    <el-table-column prop="status" label="状态" sortable>
        <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下线":"待上线")))}}
         </template>
@@ -83,7 +106,7 @@
             </div>
       </template>
     </el-table-column>
-    <el-table-column v-if="showOperation||showOperation2||showOperation3||showOperation4" label="操作" width="130">
+    <el-table-column v-if="showOperation||showOperation2||showOperation3||showOperation4" label="操作" width="100">
       <template scope="scope">
         <div>
           <div v-if="showOperation">
@@ -108,10 +131,6 @@
            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">已生效详情</el-button>
            <br/>
           </div>
-          <!--<div v-if="showOperation2 || showOperation3">
-            <el-button @click="effectiveDetails(scope.row)" type="text" size="small">待审详情</el-button>
-            <br/>
-          </div>-->
         </div>
 
         </template>
@@ -129,21 +148,6 @@
         :total="totalCount">
     </el-pagination>
   </div>
-  <!--  覆盖地区 查看对话框 -->
-  <cover-area :visible="dialogTableVisible" :coverGridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-       <el-tag
-        style="margin-right:10px;margin-bottom:5px;"
-         v-for="(item,index) in scope.row.city"
-         >{{item}}</el-tag>
-     </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
 
   <!-- 置为下线 对话框  -->
 
@@ -163,22 +167,16 @@
 <script>
 import store from 'src/vuex/store.js'
 import localEvent from 'src/vuex/function.js';
-import coverArea from "../chooseExpress/coverArea.vue";
-// import PageStore from "@/page/chooseExpress/table-store.js"
 import {
   formatDate
 } from 'src/util/date.js';
 
 export default {
-  components: {
-    coverArea
-  },
   data() {
     return {
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
-      // 排序是否显示
-      showSortable: 'custom',
+      showSortable: 'custom',//设置后端排序
       totalCount: 0, //默认数据总数
       myDialogTitle: "确认置为下线？",
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下线'",
@@ -193,20 +191,14 @@ export default {
       tableFalg: true,
       showConfig: true,
       showflag:true,
-      gridData: [],
       radio2: 1,
       activeName2: '配置',
       initActiveName:'',
-      showHeader: false,
-      dialogTableVisible: false,
       //审核状态分类显示
       auditStatusFlage:true,
-      value: '',
       //遮罩层loading
       listLoading: false,
       halfListLoading: false,
-      orderColumn : "",//需要排序的字段，默认修改时间
-      orderStatus : "",//需要排序的状态，默认降序
       pageSize: 5,
       currentPage: 1,
       tableData: [],
@@ -217,17 +209,15 @@ export default {
       promotionType: '', // message
       dialogVisible:false,
       bigImageUrl:'',
+      tabFlag:'' //标记tab切换
     }
   },
   computed: {
       Authority() {
-        // this.activeName2 = this.$store.getters.getAuthority== "审核"?"已上线":'配置';
 
         return this.$store.getters.getAuthority;
       }
-      // table2:function(){
-      //     return this.tableData[0]
-      // }
+
   },
   activated(){
 
@@ -236,34 +226,16 @@ export default {
 
   },
   created() {
-    // alert(this.Authority)
-
-    //  alert(this.$store.state.loadingFlag)
-    // 在页面初始化时，获取pageName,标签页，单选框 的记录值
-
-    this.pageId = "SD1010"; // 寄快递首页
-    // ((this.$route.path == "/promotion/chooseExpress" &&
-    //     (this.pageId = "BM1010")) ||
-    //   (this.$route.path == "/promotion/expressOrder" &&
-    //     (this.pageId = "SS1010")))
-
-
-    // if(this.Authority){}
+    this.pageId = "SS1010"; // pageId
     var _this = this;
-    // var interval = setInterval(function(){
-    //      console.log(_this.Authority);
-    // },100);
     setTimeout(function(){
       _this.initActiveName = _this.Authority == "审核"?"已上线":'配置'
-      // alert(this.PageStore.tabName);
       _this.activeName2 = _this.PageStore.tabName ||   _this.initActiveName;
-
       _this.currentPage = _this.PageStore.pageCount;
       _this.radio2= Number(_this.PageStore.radio);
       console.log("$router: %o",_this.$route);
       _this.handleTabClick({label:_this.activeName2},null,_this.currentPage)
     },600)
-
 
   },
   filters: {
@@ -277,50 +249,11 @@ export default {
       // alert("5555555555555555555")
    },
     '$route': function(to, from) {
-    //  alert("$router")
-      // ((this.$route.path == "/promotion/sendExpress" &&
-      //     (this.pageId = "SD1010")) ||
-      //   (this.$route.path == "/promotion/chooseExpress" &&
-      //     (this.pageId = "BM1010")) ||
-      //   (this.$route.path == "/promotion/expressOrder" &&
-      //     (this.pageId = "SS1010")))
-      // this.pageId = "SD1010"; // 寄快递首页
       this.activeName2 = this.initActiveName;
       this.handleTabClick({label:this.activeName2},null,undefined,true);
-      // alert(this.auditStatusFlage)
-      // 默认状态是 运营位管理的 寄快递首页
-
-      // if(this.activeName2 == "配置") {
-      //   this.url = "/api/promotion/audit/list"; // 默认展开 配置
-      // } else {
-      //   this.url = "/api/promotion/onlineList"
-      // }
-      // this.currentPage = 1;
-      // this.radio2 = 1;
-      // this.auditStatusFlage = true;
-      // this.showConfig = true;
-      // this.showflag = true;
       this.PageStore.commit("setPage",1);
       this.PageStore.commit("setRadio",1);
       this.PageStore.commit("setTabName",this.initActiveName);
-
-      //
-      // var _this = this;
-      // _this.$http.post(this.url, {
-      //   "pages": {
-      //     "page_size": this.pageSize,
-      //     "page_num": _this.currentPage - 1
-      //   },
-      //   "con": {
-      //     "pageId": this.pageId,
-      //     "status":this.radio2
-      //   }
-      // }, (rsp) => {
-      //   _this.tableData = rsp.page_list
-      //   _this.totalCount =  parseInt(rsp.pages.cnt);
-      //   //  console.log("success");
-      //   //  console.log(data);
-      // })
     }
   },
   methods: {
@@ -328,32 +261,6 @@ export default {
     showImg(row){
       this.dialogVisible = true;
       this.bigImageUrl = row || '11';
-    },
-    // 监听 子组件覆盖对话框 的回调函数
-    changeVisible(flag) {
-      this.dialogTableVisible = flag;
-    },
-    // 操作排序值改变
-    handleSortChange(column) {
-        console.log(column.prop)
-        console.log(column.order)
-        // 创建时间进行排序
-        var _this = this;
-        _this.$http.post(this.url, {
-          "pages": {
-            "page_size": this.pageSize,
-            "page_num": _this.currentPage - 1
-          },
-          "con": {
-            "pageId": this.pageId,
-            "sortBy":column.prop,
-            "sortType":column.order == 'ascending'?'asc':'desc',
-            "status":this.radio2
-          }
-        }, (rsp) => {
-          _this.tableData = rsp.page_list
-          _this.totalCount = parseInt(rsp.pages.cnt);
-        })
     },
     //dialog 确认按钮
     handleConfirm(){
@@ -368,28 +275,6 @@ export default {
         });
         this.handleTabClick({label:this.activeName2})
 
-        // this.pageId = "SD1010"; // 寄快递首页
-        // ((this.$route.path == "/chooseExpress" &&
-        //     (this.pageId = "BM1010")) ||
-        //   (this.$route.path == "/expressOrder" &&
-        //     (this.pageId = "SS1010")))
-        // var _this = this;
-        // _this.$http.post(_this.url,{
-        //   "pages": {
-        //     "page_size": this.pageSize,
-        //     "page_num": this.currentPage - 1
-        //   },
-        //   "con": {
-        //     "pageId": this.pageId,
-        //     "status":this.radio2
-        //   }
-        // }, (result) => {
-        //
-        //   _this.tableData = result.page_list;
-        //   _this.totalCount = parseInt(result.pages.cnt);
-        // });
-
-        // console.log(this.$route.matched);
       })
 
     },
@@ -405,10 +290,11 @@ export default {
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
         this.promotionMessage = '已置为上线';
       }
-      this.promotionID = row.promotionId || row.id;
-      this.promotionURL = '/api/promotion/status/update';
+      console.log(row.pageExpConfId)
+      this.promotionID = row.pageExpConfId || row.id;
+      this.promotionURL = '/api/chooseorder/status/update';
       this.promotionType = 'success';
-      this.url = "/api/promotion/audit/list"; // 刷新列表 url
+      this.url = "/api/chooseorder/audit/list"; // 刷新列表 url
     },
     Operationchange() {
       this.loadingTakeOffFlag = true;
@@ -420,20 +306,20 @@ export default {
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
       this.promotionID = row.id;
-      this.promotionURL = '/api/promotion/audit/approve';
+      this.promotionURL = '/api/chooseorder/audit/approve';
       this.promotionMessage = '已通过申请';
       this.promotionType = 'success';
-      this.url = "/api/promotion/audit/list"; //  刷新列表 url
+      this.url = "/api/chooseorder/audit/list"; //  刷新列表 url
     },
     OperationApprovedFail(row) {
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "申请驳回？";
       this.myDiglogContent = "确认后，该内容将申请驳回";
       this.promotionID = row.id;
-      this.promotionURL = '/api/promotion/audit/reject';
+      this.promotionURL = '/api/chooseorder/audit/reject';
       this.promotionMessage = '申请已驳回！';
       this.promotionType = 'success';
-      this.url = "/api/promotion/audit/list"; // 默认展开 配置
+      this.url = "/api/chooseorder/audit/list"; // 默认展开 配置
     },
     OperationEffectDetail() {
       this.loadingTakeOffFlag = true;
@@ -460,11 +346,11 @@ export default {
         _this.currentPage = 1;    //跳转标签页 页码归 1
       };
       console.log(tab.label);
+      this.tabFlag =  tab.label;
       this.PageStore.commit("setTabName",tab.label);   // 记录当前标签页
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
         // 配置排序
-        _this.showSortable = "custom";
         _this.tableData = [];
         _this.showConfig = true;
         _this.showflag = true;
@@ -474,7 +360,7 @@ export default {
         // _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/promotion/audit/list"
+        _this.url = "/api/chooseorder/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": this.pageSize,
@@ -492,7 +378,6 @@ export default {
         })
       } else if (tab.label == "已上线") {
         // 配置排序
-        _this.showSortable = false;
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = false;
@@ -500,10 +385,10 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = false;
-        // _this.radio2 = 1;
+        // _this.radio2 = '';
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
-        _this.url = "/api/promotion/onlineList";
+        _this.url = "/api/chooseorder/onlineList";
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,
@@ -521,7 +406,6 @@ export default {
         })
       } else {
         // 配置排序
-        _this.showSortable = false;
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();
@@ -529,10 +413,10 @@ export default {
         _this.showflag = true;
         _this.showOperation2 = true;
         _this.showOperation3 = false;
-        // _this.radio2 = 1;
+        // _this.radio2 = '';
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/promotion/audit/list"
+        _this.url = "/api/chooseorder/audit/list";
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,
@@ -553,36 +437,6 @@ export default {
         _this.tableFalg = true;
       }, 300);
 
-    },
-    // 查看覆盖地区
-    checkArea(id) {
-      // var _this = this;
-      this.listLoading = true;
-      let URL= "/api/promotion/audit/areaConf/all";
-      if(this.activeName2 === "已上线") {
-          URL =  "/api/promotion/areaConf/all";
-      }
-      this.$http.post(URL,{id},(rsp) => {
-        console.log(rsp.provinces);
-        this.gridData = this.filterProvinces(rsp.provinces);
-        // console.log(_this.gridData);
-        this.listLoading = false;
-        this.dialogTableVisible = true
-      })
-    },
-    filterProvinces(list){
-      console.log("list %o",list);
-      var tempArr = list.slice(0);
-       for(let i =0;i<tempArr.length;i++) {
-            if(!tempArr[i].check){
-                tempArr[i].citys = tempArr[i].citys.filter(function(val){return val.check})
-            }
-            if(tempArr[i].citys.length === 0) {
-                 tempArr.splice(i,1)
-                 i--
-            }
-       }
-       return tempArr;
     },
     setNewData(){
       var _this = this;
@@ -637,6 +491,10 @@ export default {
       this.halfListLoading = true;
       this.currentPage = val;
       this.PageStore.commit("setPage",val);
+      let statusFlag = this.radio2;
+      if(this.tabFlag == '待审核'){
+        statusFlag = '';
+      }
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -644,7 +502,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": this.radio2
+          "status": statusFlag
         }
       }, (rsp) => {
         this.halfListLoading = false;
@@ -659,6 +517,28 @@ export default {
       this.$message(`当前页${val}`);
       console.log(`当前页: ${val}`);
     },
+    // 操作排序值改变
+    handleSortChange(column) {
+        console.log(column.prop)
+        console.log(column.order)
+        // 创建时间进行排序
+        var _this = this;
+        _this.$http.post(this.url, {
+          "pages": {
+            "page_size": this.pageSize,
+            "page_num": _this.currentPage - 1
+          },
+          "con": {
+            "pageId": this.pageId,
+            "sortBy":column.prop,
+            "sortType":column.order == 'ascending'?'asc':'desc',
+            "status":this.radio2
+          }
+        }, (rsp) => {
+          _this.tableData = rsp.page_list
+          _this.totalCount = parseInt(rsp.pages.cnt);
+        })
+    },
     handleClick() {
       this.$notify({
         title: '点击了查看',
@@ -670,7 +550,7 @@ export default {
       row.tabName = this.activeName2;
       var _this = this;
       row.pageId = _this.pageId
-      localEvent.set("localChooseExpress", row);
+      localEvent.set("localExpressCompany", row);
       this.$router.push({
         path: _this.$route.path + '/editData'
       });
@@ -678,7 +558,7 @@ export default {
     effectiveDetails(row) {
       var _this = this;
       row.pageId = _this.pageId
-      localEvent.set("localChooseExpress", row);
+      localEvent.set("localExpressCompany", row);
 
       this.$router.push({
         path: _this.$route.path + '/detail'
@@ -695,14 +575,10 @@ export default {
           this.showOperation = true;
           this.showOperation3 = true;
       }
-      // if(this.radio2 == 1){
-      //     this.auditStatusFlage = false;
-      // }else{
-          this.auditStatusFlage = true;
-      // }
+      this.auditStatusFlage = true;
       _this.currentPage = 1;
           this.PageStore.commit("setPage",1);
-      _this.url = "/api/promotion/audit/list"
+      _this.url = "/api/chooseorder/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": this.pageSize,
@@ -755,6 +631,13 @@ export default {
     }
     .link_button:hover {
         background-color: no;
+    }
+
+    .tagBg{
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 0 5px; 
     }
 }
 

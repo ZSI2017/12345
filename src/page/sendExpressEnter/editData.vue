@@ -53,7 +53,6 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
-
       <el-select v-if="isFromAddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
          <el-option label="http://" value="http://"></el-option>
          <el-option label="https://" value="https://"></el-option>
@@ -198,7 +197,7 @@ export default {
         }],  
         description: '',  
         sortWeight: '',
-        linkHeader:'http://',    // url的 默认头部
+        linkHeader:'',    // url的 默认头部
         linkUrl: '',        
         radio: "",  // radio 代表上下架状态的选择
         Forder: '',
@@ -282,9 +281,9 @@ export default {
       "id":httpId
     },(rsp)=>{
       console.log(rsp)
-      console.log(rsp.imageUrl)
       this.form.name = rsp.name;
       this.form.sortWeight = rsp.sortWeight;
+      this.form.linkHeader = rsp.linkUrl.split('//')[0] + '//';     
       this.form.linkUrl = rsp.linkUrl.replace('https://','').replace('http://','');
       this.form.logo[0].url = rsp.logo;
       this.form.icon[0].url = rsp.icon;  

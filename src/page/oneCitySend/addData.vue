@@ -53,7 +53,7 @@
     <el-form-item label="排序值" prop="sortWeight">
       <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-        <el-form-item label="链接" prop="linkUrl">
+    <el-form-item label="链接" prop="linkUrl">
       <el-select  v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
          <el-option label="http://" value="http://"></el-option>
          <el-option label="https://" value="https://"></el-option>

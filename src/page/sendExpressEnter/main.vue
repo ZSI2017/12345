@@ -53,7 +53,8 @@
     </el-table-column>
     <el-table-column label="链接">
       <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click" style="word-break:break-all;">
+        <el-popover ref="popover4" width="300" trigger="click">
+            <span style="word-break:break-all;">{{scope.row.linkUrl}}</span>
         </el-popover>
         <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
