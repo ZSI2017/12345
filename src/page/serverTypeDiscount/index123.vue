@@ -177,6 +177,8 @@
         <el-button @click="handleCancle">取 消</el-button>
       </div>
     </el-dialog>
+
+
     <!--待审核详情弹框-->
     <el-dialog :title="dialogDetails" :visible.sync="dialogFormVisible_details">
 
