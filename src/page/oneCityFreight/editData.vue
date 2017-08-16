@@ -1,95 +1,89 @@
 <template type="html">
 <section class="section editData-class">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="form" :model="form" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
-    <el-form-item label="入口名称" prop="name">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入入口名称"> </el-input>
+  <el-form :model="form" label-width="100px"  style="width:800px;padding-left:100px">
+    <el-form-item label="公司名称">
+      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入公司名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-    <el-form-item label="LOGO" prop="fileList2">
-      <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
-        :on-change="handleImageChange"
-        :on-preview="handlePictureCardPreview"
-        :on-remove="handleRemove"
-        :on-success='handleSuccess'
-        :on-error='handlerror'
-        :file-list="form.fileList2">
+    <el-form-item label="LOGO">
+      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="form.logo">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
-
+      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
       <el-popover ref="popover4" placement="right" trigger="click">
-        <img :src="form.fileList2[0].url">
+        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
-        <el-form-item label="角标" prop="fileList2">
-      <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
-        :on-change="handleImageChange"
-        :on-preview="handlePictureCardPreview"
-        :on-remove="handleRemove"
-        :on-success='handleSuccess'
-        :on-error='handlerror'
-        :file-list="form.fileList2">
-        <!--<i class="el-icon-plus"></i>-->
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-      </el-upload>
-      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
-
-      <el-popover ref="popover4" placement="right" trigger="click">
-        <img :src="form.fileList2[0].url">
-      </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
+    <el-form-item label="广告语">
+      <el-input v-if="isFromAddData" v-model="form.slogan" placeholder="请输入广告语"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.slogan}} </div>
     </el-form-item>
-    <el-form-item label="描述" prop="name">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入描述内容"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
+    <el-form-item label="标签">
+      <div v-if="isFromAddData">
+        <el-tag
+          :key="tag"
+          v-for="tag in dynamicTags"
+          :closable="true"
+          hit="true"
+          :close-transition="false"
+          @close="handleClose(tag)"
+          type="primary"
+          style="margin-right:10px;height:28px;line-height:28px;"
+        >
+        {{tag}}
+        </el-tag>
+        <el-input
+          class="input-new-tag"
+          v-if="inputVisible"
+          v-model="inputValue"
+          ref="saveTagInput"
+          size="small"
+          @keyup.enter.native="handleInputConfirm"
+          @blur="handleInputConfirm"
+          maxlength="8"
+        >
+        </el-input>
+        <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
+        <div style="color:#888;">最多添加两个标签，每个标签最多8个字符。</div>
+      </div>
+      <div class="detail-content" v-if="!isFromAddData">
+        <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
+      </div>   
     </el-form-item>
-    <el-form-item label="排序值" prop="Forder">
-      <el-input v-if="isFromAddData" v-model.number="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.Forder}} </div>
+    <el-form-item label="排序值" >
+      <el-input v-if="isFromAddData" v-model="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
-    <el-form-item label="链接" prop="link">
-
-      <el-select v-if="isFromAddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
-         <el-option label="http://" value="http://"></el-option>
-         <el-option label="https://" value="https://"></el-option>
-      </el-select>
-      <el-input style="float:left;width:600px" v-if="isFromAddData"  v-model="form.link" placeholder="请输入需要跳转的链接，如果调"> </el-input>
-      <!-- <el-input  v-if="isFromAddData" placeholder="请输入内容" v-model="form.link"> -->
-         <!-- <template slot="prepend">Http://</template>  -->
-         <!-- <el-select v-model="form.link" slot="prepend" placeholder="请选择">
-             <el-option label="http" value="http"></el-option>
-             <el-option label="https" value="https"></el-option>
-           </el-select> -->
-       <!-- </el-input> -->
-      <div class="detail-content" v-if="!isFromAddData"> {{form.link}} </div>
+    <el-form-item label="链接">
+      <el-input v-if="isFromAddData" v-model="form.linkUrl" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.linkUrl}} </div>
     </el-form-item>
-    <el-form-item label="有效时段" prop="date1">
-      <el-date-picker v-if="isFromAddData" v-model="form.date1" type="datetimerange" placeholder="选择时间范围">
-      </el-date-picker>
-      <div class="detail-content" v-if="!isFromAddData"><span>{{form.gmtBegin | formatDate}}</span> ---- <span>{{form.gmtEnd | formatDate}}</span></div>
-    </el-form-item>
-    <el-form-item label="覆盖地区" prop="coverArea">
+    <el-form-item label="覆盖地区">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
-      <el-button v-if="!isFromAddData"  size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
+      <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
-    <el-form-item label="当前状态"  prop="radio">
-      <el-radio-group v-if="isFromAddData" v-model="form.radio">
-        <el-radio class="radio" :label="2">上线</el-radio>
-        <el-radio class="radio" :label="1">下线</el-radio>
+    <el-form-item label="当前状态">
+      <el-radio-group v-if="isFromAddData" v-model="form.opStatus">
+        <el-radio class="radio" :label="1">上架</el-radio>
+        <el-radio class="radio" :label="2">下架</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
+    <el-form-item label="标价">
+      <el-input placeholder="请输入价格" v-if="isFromAddData" v-model="form.markPrice" style="width:200px;">
+        <template slot="append">元起</template>
+      </el-input>
+      <div class="detail-content" v-if="!isFromAddData"> {{form.markPrice}} 元起 </div>      
+    </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit('form')">提交</el-button>
+    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
   </el-form>
 
-  <!--  查看大图对话框 -->
+  <!--大图-->
   <el-dialog v-model="dialogVisible" size="tiny">
     <img width="100%" :src="dialogImageUrl" alt="">
   </el-dialog>
@@ -149,151 +143,76 @@
 <script type="text/javascript">
 import localEvent from 'src/vuex/function.js';
 import coverArea from "../chooseExpress/coverArea.vue";
-import {
-  formatDate
-} from 'src/util/date.js';
-
 export default {
   components:{
-    coverArea
+     coverArea
   },
   data() {
     return {
-
-      url: '', // 待审详情的 url
       id:'',
-      tabName:'', // 标签页 名称
+      url:'',
       localData:{}, // 上一个页面的数据
+      // 从详情页面
+      isDetail: false,
       // 即将离开的对话框
       loadingFlag: false,
       dialogVisible: false,
-      CoverData:[],
-      DialogConfigSaveFlag:false,  // 配置覆盖地区
-
       // 添加搜索框
-      // 搜索框中省名初始化
-      searchProvinces:[],
-      showProvinces:'',
-      searchContent: "",
+      state1: "",
       provinces: [],
       // 覆盖地区选择
+      CoverData:[],
       check: false,
       checkAll: [],
       checkedCities: [],
       isIndeterminate: [],
-      // cities: cityOptions,
-
       // dialogFormVisible 代表是否打开配置地区的对话框
       dialogFormVisible: false,
-
+      //标签数据
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
+      addTag:true,
       // 查看配置地区中的表格数据 和 是否显示的标志
       showHeader: false,
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy: [],
-      currentStateText: '',
-
+      currentStateText: '',   
+      dialogImageUrl:'',//logo大图存放
       form: {
-        linkHeader:'http://',    // url的 默认头部
-        // radio 代表上下架状态的选择
-        radio: "",
-        // date1 代表时间段选择的
-        date1: [],
-        name: '',
-        Forder: '',
-        link:'',
-        imageUrl:'',
-        promotionId:'',
-        gmtBegin:'',
-        gmtEnd:'',
-        pageId:'',
-        coverArea:'',
-        fileList2: [{
+        name: '',   
+        logo: [{
           name: '',
           url: ""
-        }],
+        }], 
+        slogan:'',     
+        sortWeight: '',                  
+        linkHeader:'http://',    // url的 默认头部
+        linkUrl: '',        
+        coverArea:'',
+        opStatus:1,
+        markPrice:'',
+      
       },
-     // 表单验证规则
-     rules: {
-       name: [{type: "string",
-         required: true,
-         message: '请输入正确运营图名称',
-         trigger: 'blur'
-         },
-         {  min:1,
-            max:10,
-            message:'名称长度不大于10'
-         }
-     ],
-       Forder: [
-         { required: false, message: '排序值不能为空'},
-        //  { type: 'number', message: '排序值必须为数字值'},
-         { type: 'number', min:1, max:999,message:'排序值范围1-999'}
-       ],
-       link: [{
-        //  type:'url',
-         required: true,
-         message: "请输入正确链接",
-         trigger: 'blur'
-       }],
-       date1: [{
-         required: true,
-         message: '请选择日期',
-         trigger: 'change',
-         type:'array',
-       },{
-          validator(rule,value,callback,source,options) {
-            var errors = [];
-            if(value[0] === null) {
-              errors.push(
-                new Error('请选择日期')
-              )
-            }
-            callback(errors)
-          }
-       }],
-       status: [{
-         required: true,
-         message: '请选择状态',
-         trigger: 'change'
-       }],
-       fileList2: [{
-         required: true,
-         message: '请上传图片',
-         type:'array',
-         trigger: 'on-change'
-       }],
-       coverArea: [{
-         required: true,
-         message: '请选择覆盖地区',
-       }]
-     }
-
-
-    }
-  },
-  filters: {
-    formatDate(time) {
-      var date = new Date(time);
-      return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
     }
   },
   mounted() {
-    var localData = localEvent.get("localChooseExpress");
+    var localData = localEvent.get("localOnecitySend");
     this.localData = localData;
     // console.log(localData);
     // console.log(localData.promotionId);
-    this.form.promotionId = localData.promotionId;
+    this.form.promotionId = localData.sendappId;
     this.id = localData.id;
     var _this =this;
     var httpId = '';
     if(localData.tabName == '配置'){  //配置 修改
-        _this.url = "/api/promotion/audit/get";
+        _this.url = "/api/sendapp/audit/get";
         httpId = this.id;
         console.log("配置 修改")
     }else if(!localData.tabName){  // 待审核 已生效详情
-        _this.url = "/api/promotion/get";
-        httpId = this.form.promotionId;``
+        _this.url = "/api/sendapp/get";
+        httpId = this.form.promotionId;
         console.log("待审核 已生效详情")
     }else{
       alert('错误')
@@ -305,17 +224,18 @@ export default {
       console.log(rsp)
       console.log(rsp.imageUrl)
       this.form.name = rsp.name;
-      this.form.Forder = rsp.sortWeight;
-      this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
-      this.form.fileList2[0].url = rsp.imageUrl;
-      this.form.gmtBegin = rsp.gmtBegin;
-      this.form.gmtEnd = rsp.gmtEnd;
-      this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
+      this.form.sortWeight = rsp.sortWeight;
+      this.form.slogan = rsp.slogan;      
+      this.form.linkUrl = rsp.linkUrl.replace('https://','').replace('http://','');
+      this.form.logo[0].url = rsp.logo;
+      this.form.markPrice = rsp.markPrice;
+      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+
       if (rsp.opStatus == "1") {
-        this.form.radio = 1;
+        this.form.opStatus = 1;
         this.currentStateText = "已下线"
       } else {
-        this.form.radio = 2;
+        this.form.opStatus = 2;
         this.currentStateText = "已上线"
       }
 
@@ -327,18 +247,14 @@ export default {
     });
 
 
+
   },
   created() {
-    if ( this.$route.path == "/chooseExpress/detail"
-          || this.$route.path == "/sendExpress/detail"
-          || this.$route.path == "/expressOrder/detail") {
+    if ( this.$route.path == "/oneCitySend/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
     }
-
-
-
   },
   beforeMount() {
 
@@ -350,8 +266,8 @@ export default {
 
   },
   computed: {
-    GETEDITFORM() {
-      // alert(this.$store.getters.GETEDITFORM)
+    GETEDITFORM() { 
+      alert(this.$store.getters.GETEDITFORM)
       return this.$store.getters.GETEDITFORM;
     }
   },
@@ -373,20 +289,18 @@ export default {
 
     //  点击提交
     handleSubmit(formName) {
-   this.$refs[formName].validate((valid) => {
-     if(valid) {
          var result = {
              "data":{
                  "id":this.id,
                  "pageId":this.localData.pageId,
-                 "promotionId":this.localData.promotionId,
+                 "sendappId":this.localData.sendappId,
                  "name":this.form.name,
-                 "imageUrl":this.form.fileList2[0].url,
-                 "sortWeight":this.form.Forder,
-                 "linkUrl":this.form.linkHeader+this.form.link,
-                 "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-                 "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-                 'opStatus':this.form.radio,
+                 "logo":this.form.logo[0].url,
+                 slogan:this.form.slogan,               
+                 "sortWeight":this.form.sortWeight,
+                 "linkUrl":this.form.linkHeader+this.form.linkUrl,
+                 'opStatus':this.form.opStatus,
+                 'markPrice':this.form.markPrice,
                },
              "area":{
                 "code":"000000",
@@ -397,11 +311,15 @@ export default {
          }
          console.log("result%o ",result);
          var _this = this;
-        this.$http.post("/api/promotion/audit/update",result,(result) => {
+        this.$http.post("/api/sendapp/audit/update",result,(result) => {
           _this.$store.dispatch('changeLoadingChange', true);
-                  console.log(this);
-                  this.$router.go(-1);
-                    // alert(result);
+          console.log(this);
+          console.log(result);
+          this.$router.go(-1);
+          this.$message({
+                type: 'success',
+                message: '报存成功！'
+            });          
         },(error) => {
           if(error.data.meta.code == "0017") {
               this.$message.error('"名称重复！"')
@@ -413,55 +331,14 @@ export default {
           }
 
         });
-     } else {
 
-     }
-     })
     },
     // 点击返回 对应的事件处理
     handleBackClick() {
       this.$router.go(-1);
-      // if (this.isFromAddData) {
-      //   this.loadingFlag = true;
-      // } else {
-      //     this.$router.go(-1);
-      // }
-    },
-    // 即将离开的对话框
-    // editSure() {
-    //   this.loadingFlag = false;
-    //   this.$router.app.$store.state.loadingFlag = true;
-    //   console.log(this);
-    //   this.$router.go(-1);
-    //   //  this.$router.push({ path:this.defaultActive});
-    //   //  this.$route.push({ path:this.defaultActive});
-    // },
-    handlePreview() {},
-    handleRemove() {},
-    handleSuccess(file){
-      console.log(file.result)
-      this.form.fileList2[0].url = file.result;
-    },
-    handlerror(err, file, fileList){
-      alert(err);
-      alert(file);
-      alert(fileList);
-    },
-    // 标签页选择
-    handleTabClick(tab, event) {
-      console.log("handTabClick");
-      console.log(tab.label);
-    },
-    handleQueryBlur() {
-      alert("dsfasdf");
-
     },
     // 搜索框
     querySearch(queryString, cb) {
-      // var provinces = this.provinces;
-      // var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
-      // // 调用 callback 返回建议列表的数据
-      // cb(results);
       if(queryString === '') {
         this.showProvinces = '';
       }
@@ -476,11 +353,6 @@ export default {
     },
     handleQuerySelect(items) {
          this.showProvinces = items.value
-      // console.log(items);
-      // this.gridData = this.gridDataCopy.filter(function(item) {
-      //   return item.value == items.value
-      // })
-      // console.log(this.gridData);
     },
     handleIconClick(ev) {
       this.showProvinces = ''
@@ -488,32 +360,7 @@ export default {
     },
     // 覆盖地区选择
     dialogConfig(visible) {
-      // if(this.gridData.length>0){
-      //     if(this.DialogConfigSaveFlag){
-      //         this.dialogFormVisible = true;
-      //         return;
-      //     }else {
-      //       this.gridData = this.gridDataCopy.slice(0);
-      //       console.log(this.gridDataCopy)
-      //
-      //       for (var i = 0; i < this.gridData.length; i++) {
-      //         // _this.isIndeterminate[i] = true;
-      //           this.checkedCities.splice(i, 1, []);
-      //            if(this.gridData[i].check){
-      //                 this.checkAll.splice(i, 1, true);
-      //               for(let j = 0;j<this.gridData[i].citys.length;j++) {
-      //                   this.checkedCities[i].push(this.gridData[i].citys[j].cityName)
-      //               }
-      //            }else {
-      //                console.log(this.gridData[i].check);
-      //                this.checkAll.splice(i, 1, false);
-      //            }
-      //
-      //       }
-      //       this.dialogFormVisible = true;
-      //       return;
-      //     }
-      // }
+
        this.form.coverArea = "hasClick";
        this.handleIconClick();
       if(this.gridData.length>0){
@@ -529,9 +376,9 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/promotion/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/sendapp/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
       if(this.tabName === "已上线") {
-          URL = "/api/promotion/areaConf/all";
+          URL = "/api/sendapp/areaConf/all";
       }
       _this.$http.post(URL,{id:this.id},
         (rsp) => {
@@ -546,32 +393,9 @@ export default {
             }else {
               this.initCheckBox(rsp.check,visible);
             }
-          // _this.gridDataCopy = rsp.provinces.slice(0);
-          // console.log(_this.gridDataCopy);
-          // _this.provinces = _this.gridData;
-          // 初始化 配置的多选框操作
-          // this.check = rsp.check;
-          // for (var i = 0; i < _this.gridData.length; i++) {
-          //   // _this.isIndeterminate[i] = true;
-          //     _this.checkedCities[i] = [];
-          //      if(_this.gridData[i].check){
-          //         _this.checkAll[i] = true;
-          //         for(let j = 0;j<_this.gridData[i].citys.length;j++) {
-          //             _this.checkedCities[i].push(_this.gridData[i].citys[j].cityName)
-          //         }
-          //      }else {
-          //         _this.checkAll[i] = false;
-          //      }
-          //
-          // }
-          // console.log(_this.checkAll);
-          // _this.dialogFormVisible = true;
-          // console.log(_this.gridData);
         })
     },
     initCheckBox(isAllcheck,visible){
-      // console.log(_this.gridDataCopy);
-
       this.provinces = this.gridData;
       // 初始化 配置的多选框操作
       for (var i = 0; i < this.gridData.length; i++) {
@@ -686,18 +510,42 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    handleImageChange(file,fileList){
-         this.form.fileList2 = fileList.slice(-1);
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      if(this.dynamicTags.length >= 2){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }  
     },
-
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+        this.form.tag = this.dynamicTags.join(',');
+        if(this.dynamicTags.length >= 2){
+          this.addTag = false;
+        }else{
+          this.addTag = true;
+        }
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
+    },
   }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
 .editData-class {
-    // label {
-    //     font-weight: bold;
-    // }
+    label {
+        font-weight: bold;
+    }
     .dialog-class {
         .el-dialog__body {
             padding-top: 15px !important;
