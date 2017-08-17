@@ -186,7 +186,7 @@
             <el-radio class="radio" v-model="formAdd.discount" label="有折扣">有折扣</el-radio>
             <el-radio class="radio" v-model="formAdd.discount" label="无折扣">无折扣</el-radio>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="6" style="width: 100px;">
             <el-input
               placeholder="0"
               :number="true"
@@ -581,7 +581,7 @@ export default {
       this.loadingTakeOffFlag = false;
       this.listLoading = true;
       this.$http.post(this.producttypeURL, {
-          "id": this.producttypeID,
+          "id": this.producttypeID.toString(),
       }, (rsp) => {
         this.listLoading = false;
         console.log(rsp);
@@ -759,13 +759,6 @@ export default {
           //  console.log(data);
         })
       }
-      if(this.radio2 == 3){
-          this.showOperation = false;
-          this.showOperation3 = false;
-      }else{
-          this.showOperation = true;
-          this.showOperation3 = true;
-      }
       setTimeout(() => {
         _this.listLoading = false;
         _this.tableFalg = true;
@@ -806,9 +799,6 @@ export default {
         this.dialogFlag = "新增";
         this.dialogFormVisible = true
 
-    },
-    handleClose() {
-      // alert("asdfsd");
     },
     handleChange(value) {
       console.log(value);

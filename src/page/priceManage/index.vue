@@ -108,6 +108,61 @@
     </el-pagination>
   </div>
 
+  <el-dialog title="导入运线" :visible.sync="dialogImportVisible" size="tiny" :before-close="handleImportClose">
+  <el-form  ref="importForm" :model="importForm" :rules="importRules" >
+    <el-form-item label="快递公司" prop ="expressName" :label-width="importLabelWidth">
+      <el-select  filterable label="快递公司" :loading="expressLoading" v-model="importForm.expressName" @visible-change="handExpressChange" placeholder="请选择">
+        <el-option v-for="item in expressOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="服务类型" prop="typeOfService"  :label-width="importLabelWidth">
+      <el-select  filterable label="服务类型" v-model="importForm.typeOfService" :loading="typeOfServiceLoading" @visible-change="handServiceChange" placeholder="请选择">
+        <el-option v-for="item in typeOfServiceOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="选择导入文本" prop="fileList" :inline="true"  :label-width="importLabelWidth">
+      <!-- http://192.168.12.54:8080 -->
+      <el-upload
+        class="upload-demo"
+        action="http://192.168.12.54:8080/api/freightPriceRule/upload"
+        :on-change="handleFileChange"
+        :file-list="importForm.fileList"
+        :on-remove="handleRemove"
+        :on-success='handleSuccess'
+        :on-error='handlerror'
+        >
+        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+      </el-upload>
+
+      <!-- <a href="http://192.168.12.54:8080/api/freightPriceRule/download">下载模板</a> -->
+    </el-form-item>
+
+  </el-form>
+    <el-button style="margin-left:40px" type="text"  @click="handleDownload">下载模板</el-button>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="handleImportCancel">取 消</el-button>
+    <el-button type="primary" @click="handleImportSave">确 定</el-button>
+  </div>
+</el-dialog>
+
+<!-- 导入错误提示  -->
+<!-- <el-dialog
+  title="提示"
+  :visible.sync="dialogVisible"
+  size="tiny"
+  :before-close="handleClose">
+  <span>导入文件错误，是否查看错误内容</span>
+  <a href="http://192.168.12.54:8080/api/freightPriceRule/findFile">点击下载错误内容</a>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog> -->
+
+
 <!-- 新增运线快递费  -->
   <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible"  :before-close="handleClose">
   <el-form  ref="form" :model="form" :rules="rules" :inline="true">
@@ -118,20 +173,6 @@
       </el-select>
       <div style="width:200px;" v-if="handleEditFlag">{{form.expressName}}</div>
     </el-form-item>
-    <el-form-item label="发货省" prop="sendProvince"  :label-width="formLabelWidth">
-      <el-select  v-if="!handleEditFlag" filterable label="发货省" :loading="sendProvinceLoading" @visible-change="handSendProvinceChange" v-model="form.sendProvince" placeholder="请选择">
-        <el-option v-for="item in sendProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-        <div style="width:200px;" v-if="handleEditFlag">{{form.sendProvince}}</div>
-    </el-form-item>
-    <el-form-item label="收货省" prop="recProvince"  :label-width="formLabelWidth">
-      <el-select  v-if="!handleEditFlag" filterable :loading="recProvinceLoading" @visible-change="handRecProvinceChange" label="收货省" v-model="form.recProvince" placeholder="请选择">
-        <el-option v-for="item in recProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-        <div style="width:200px;" v-if="handleEditFlag">{{form.recProvince}}</div>
-    </el-form-item>
     <el-form-item label="服务类型" prop="typeOfService"  :label-width="formLabelWidth">
       <el-select  v-if="!handleEditFlag" filterable label="服务类型" v-model="form.typeOfService" :loading="typeOfServiceLoading" @visible-change="handServiceChange" placeholder="请选择">
         <el-option v-for="item in typeOfServiceOptions" :key="item.value" :label="item.label" :value="item.value">
@@ -139,6 +180,15 @@
       </el-select>
         <div style="width:200px;" v-if="handleEditFlag">{{form.typeOfService}}</div>
     </el-form-item>
+
+    <el-form-item label="发货省" prop="sendProvince"  :label-width="formLabelWidth">
+      <el-select  v-if="!handleEditFlag" filterable label="发货省" :loading="sendProvinceLoading" @visible-change="handSendProvinceChange" v-model="form.sendProvince" placeholder="请选择">
+        <el-option v-for="item in sendProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+        <div style="width:200px;" v-if="handleEditFlag">{{form.sendProvince}}</div>
+    </el-form-item>
+
     <el-form-item label="发货市" prop="sendCity"  :label-width="formLabelWidth">
       <el-select  v-if="!handleEditFlag" filterable label="发货市" v-model="form.sendCity" :loading="sendCityLoading" @visible-change="handSendCityChange" placeholder="请选择">
         <el-option v-for="item in sendCityOptions" :key="item.value" :label="item.label" :value="item.value">
@@ -146,7 +196,16 @@
       </el-select>
         <div v-if="handleEditFlag" style="width:200px;">{{form.sendCity}}</div>
     </el-form-item>
-    <el-form-item label="收货市" prop="recCity" :label-width="formLabelWidth">
+
+    <el-form-item label="收货省 " prop="recProvince"  :label-width="formLabelWidth">
+      <el-select  v-if="!handleEditFlag" filterable :loading="recProvinceLoading" @visible-change="handRecProvinceChange" label="收货省" v-model="form.recProvince" placeholder="请选择">
+        <el-option v-for="item in recProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+        <div style="width:200px;" v-if="handleEditFlag">{{form.recProvince}}</div>
+    </el-form-item>
+
+    <el-form-item label="收货市 " prop="recCity" :label-width="formLabelWidth">
       <el-select v-if="!handleEditFlag" filterable :loading="recCityLoading" @visible-change="handrecCityChange" label="收货市" v-model="form.recCity" placeholder="请选择">
         <el-option v-for="item in recCityOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
@@ -154,22 +213,22 @@
         <div style="width:200px;" v-if="handleEditFlag">{{form.sendCity}}</div>
     </el-form-item>
     <el-form-item label="首重价格" prop="presetWeightPrice" label-width="formLabelWidth">
-      <el-input placeholder="请输入内容" v-model="form.presetWeightPrice">
+      <el-input placeholder="请输入内容" v-model.number="form.presetWeightPrice">
               <template slot="append">元</template>
       </el-input>
     </el-form-item>
     <el-form-item label="首重重量" prop="presetWeight" :label-width="formLabelWidth">
-      <el-input placeholder="请输入内容" v-model="form.presetWeight">
+      <el-input placeholder="请输入内容" v-model.number="form.presetWeight">
               <template slot="append">公斤</template>
       </el-input>
     </el-form-item>
     <el-form-item label="续重价格" prop="extraWeightPrice" :label-width="formLabelWidth">
-      <el-input placeholder="请输入内容" v-model="form.extraWeightPrice">
+      <el-input placeholder="请输入内容" v-model.number="form.extraWeightPrice">
               <template slot="append">元</template>
       </el-input>
     </el-form-item>
     <el-form-item label="续重重量" prop="extraWeightUnit" :label-width="formLabelWidth">
-      <el-input placeholder="请输入内容" v-model="form.extraWeightUnit">
+      <el-input placeholder="请输入内容" v-model.number="form.extraWeightUnit">
               <template slot="append">公斤</template>
       </el-input>
     </el-form-item>
@@ -186,12 +245,15 @@ export default {
   name: 'nonServerDistrict',
   data() {
     return {
+      dialogVisible:false,
       // 所选框 loading
-
+      currentPage: 1,
       totalCount: 1000,
       dialogFormVisible: false,
       dialogTitle:"新增运线快递费",
-      formLabelWidth:400,
+      formLabelWidth:"80px",
+      importLabelWidth:'120px',
+      dialogImportVisible:false,  //导入对话框
       id:'',  // 保存当前运线id;
       form: {
         region: ''
@@ -215,7 +277,26 @@ export default {
         value: '选项5',
         label: '北京烤鸭'
       }],
-
+      // 导入对话框
+      importForm:{
+        expressName:'',
+        typeOfService:'',
+        fileList: [],
+      },
+      importRules:{
+        expressName: [
+          { required: true, message: '公司名不能为空'},
+        ],
+        typeOfService: [
+          { required: true, message: '服务类型不能为空'},
+        ],
+        fileList: [{
+          required: true,
+          message: '请上传文件',
+          type:'array',
+          trigger: 'on-change'
+        }],
+      },
       // 新增表单验证
       form:{
          expressName:'',
@@ -250,15 +331,20 @@ export default {
        ],
        presetWeightPrice: [
          { required: true, message: '首重价格不能为空'},
+         { type: 'number', min:0, max:1000,message:'首重价格范围0-1000'}
        ],
        presetWeight: [
          { required: true, message: '首重重量不能为空'},
+         { type: 'number', min:0, max:10,message:'首重重量范围0-10'}
+
        ],
        extraWeightPrice: [
          { required: true, message: '续重价格不能为空'},
+         { type: 'number', min:0, max:1000,message:'续重价格范围0-1000'}
        ],
        extraWeightUnit: [
          { required: true, message: '续重重量不能为空'},
+          { type: 'number', min:0, max:10,message:'续重重量范围0-10'}
        ],
       },
       // 选择快递公司
@@ -312,7 +398,66 @@ export default {
       this.handleQuery();
   },
   methods: {
-    handExpressChange(visible) {
+
+  // 导入文件
+
+  // :on-change="handleFileChange"
+  // :file-list="importForm.fileList"
+  // :on-remove="handleRemove"
+  // :on-success='handleSuccess'
+  // :on-error='handlerror'
+  handleDownload(){
+    window.location.href="http://192.168.12.54:8080/api/freightPriceRule/download"
+  },
+  handlerror(err){
+    // alert(err)
+  },
+  handleSuccess(response){
+      alert(response)
+  },
+  handleFileChange(file,fileList){
+           this.importForm.fileList = fileList.slice(-1);
+  },
+  handleImportSave(){
+    this.$refs["importForm"].validate((valid) => {
+        if(valid) {
+          //
+           let data = {
+             "logMerchantId":this.importForm.expressName[1].toString(),
+             "logMerchantName":this.importForm.expressName[0],
+             "productTypeId":this.importForm.typeOfService[1].toString(),
+             "productTypeName":this.importForm.typeOfService[0]
+           }
+          this.$http.post("/api/freightPriceRule/import",data,(result)=>{
+               alert("result");
+           },(error)=>{
+              this.$refs["importForm"].resetFields();
+               if(error.data.meta.code == '0012'){
+                //  this.dialogVisible = true;
+                 this.$confirm('导入文件失败，是否下载查看失败内容?', '提示', {
+                      confirmButtonText: '确定',
+                      cancelButtonText: '取消',
+                      type: 'warning'
+                    }).then(() => {
+                       window.location.href="http://192.168.12.54:8080/api/freightPriceRule/findFile"
+                    }).catch(() => {
+                      // this.$message({
+                      //   type: 'info',
+                      //   message: '已取消删除'
+                      // });
+                    });
+               };
+           });
+     }else {
+          return false;
+     }
+    })
+  },
+  // 导入对话框 关闭提示
+  handleImportClose(){
+     this.dialogImportVisible = false;
+  },
+  handExpressChange(visible) {
       if (visible) {
         if (this.expressOptions.length > 0) {
            this.expressLoading = false;
@@ -339,10 +484,12 @@ export default {
       let logisMerchId = this.expressName[1];
       if(this.dialogFormVisible){
           logisMerchId = this.form.expressName[1];
+      } else if (this.dialogImportVisible) {
+          logisMerchId = this.importForm.expressName[1];
       }
       if (visible) {
         this.$http.post("/api/freightPriceRule/productType", {
-          "logisMerchId": logisMerchId
+          "logisMerchId": logisMerchId.toString()
         }, (result) => {
           console.log(result);
           for (let i = 0; i < result.length; i++) {
@@ -447,10 +594,11 @@ export default {
 
     },
     handleQuery() {
+
     let data = {
          "pages":{
-              "page_size":this.pageSize,
-              "page_num":this.currentPage,
+              "page_size":(this.pageSize).toString(),
+              "page_num":(this.currentPage-1).toString(),
          },
          "con":{
             "logisMerchId":this.expressName[1] ==="部"?'':this.expressName[1],
@@ -632,6 +780,11 @@ export default {
     this.$refs['form'].resetFields();
     this.dialogFormVisible= false;
   },
+  handleImportCancel(){
+    this.$refs['importForm'].resetFields();
+    this.importForm.fileList=  [],
+    this.dialogImportVisible= false;
+  },
     handleExportLine() {
       const h = this.$createElement;
       const _this = this;
@@ -641,21 +794,35 @@ export default {
           style: 'color: teal'
         }, '点击了导出运线')
       });
-      require.ensure([], () => {
-        const {
-          export_json_to_excel
-        } = require('@/util/ExportExcel');
-        const tHeader = ['快递公司', '服务类型', '发货省', '发货市', '收货省', '收货市', '首重价格', '首重重量', '续重重量', '续重价格'];
-        const filterVal = ['tableExpress', 'tableTypeOfService', 'tableSendProvince', 'tableSendCity', 'tableRecProvince', 'tableRecCity', 'tablePresetWeightPrice', 'tablePresetWeight', 'tableExtraWeight', 'tableExtraWeightPrice'];
-        const list = _this.tableData;
-        const data = _this.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, '运线快递费列表');
-      })
+      this.$confirm('确认批量导出?', '提示', {
+           confirmButtonText: '确定',
+           cancelButtonText: '取消',
+           type: 'info'
+         }).then(() => {
+            window.location.href="http://192.168.12.54:8080/api/freightPriceRule/export"
+         }).catch(() => {
+           // this.$message({
+           //   type: 'info',
+           //   message: '已取消删除'
+           // });
+         });
+
+      // require.ensure([], () => {
+      //   const {
+      //     export_json_to_excel
+      //   } = require('@/util/ExportExcel');
+      //   const tHeader = ['快递公司', '服务类型', '发货省', '发货市', '收货省', '收货市', '首重价格', '首重重量', '续重重量', '续重价格'];
+      //   const filterVal = ['tableExpress', 'tableTypeOfService', 'tableSendProvince', 'tableSendCity', 'tableRecProvince', 'tableRecCity', 'tablePresetWeightPrice', 'tablePresetWeight', 'tableExtraWeight', 'tableExtraWeightPrice'];
+      //   const list = _this.tableData;
+      //   const data = _this.formatJson(filterVal, list);
+      //   export_json_to_excel(tHeader, data, '运线快递费列表');
+      // })
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]));
     },
     handleLeadLine() {
+        this.dialogImportVisible = true;
       const h = this.$createElement;
       this.$notify({
         title: '导入运线',
