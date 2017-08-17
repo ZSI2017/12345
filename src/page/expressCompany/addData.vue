@@ -7,7 +7,8 @@
         <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
             <el-option
               v-for="item in options"
-              :key="item.value"
+              :key="item.merchantLogo"
+              :merchantLogo="item.merchantLogo"
               :label="item.merchantName"
               :value="item">
             </el-option>

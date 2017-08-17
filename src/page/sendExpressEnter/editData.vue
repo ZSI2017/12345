@@ -273,7 +273,7 @@ export default {
     }
 
     _this.$http.post(_this.url,{
-      "id":httpId
+      "id":httpId.toString()
     },(rsp)=>{
       console.log(rsp)
       this.form.name = rsp.name;
@@ -474,7 +474,7 @@ export default {
               this.dialogFormVisible = true;
               return;
           }else {
-              let localResult = localEvent.get("gridData")
+              let localResult = localEvent.get("gridDataEnter")
               this.gridData = localResult.provinces;
               console.log("12344444444444444%o",this.gridData);
               this.initCheckBox(localResult.check)
@@ -486,14 +486,14 @@ export default {
       if(this.tabName === "已上线") {
           URL = "/api/sendapp/areaConf/all";
       }
-      _this.$http.post(URL,{id:this.id},
+      _this.$http.post(URL,{id:this.id.toString()},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
              _this.searchProvinces[i]={};
              _this.searchProvinces[i].value = _this.gridData[i].provinceName;
           }
-            localEvent.set("gridData", rsp);
+            localEvent.set("gridDataEnter", rsp);
             if(visible === undefined) {
                 _this.initCheckBox(rsp.check);
             }else {
@@ -575,7 +575,7 @@ export default {
     },
     // 配置覆盖地区 保存
     handleDialogConfigSave(){
-      localEvent.set("gridData",{"provinces":this.gridData,"check":this.check,code:"000000"})
+      localEvent.set("gridDataEnter",{"provinces":this.gridData,"check":this.check,code:"000000"})
         this.dialogFormVisible = false;
         this.DialogConfigSaveFlag = true;
 
@@ -625,7 +625,7 @@ export default {
     },
 
     dialogTable() {
-      let localResult = localEvent.get("gridData")
+      let localResult = localEvent.get("gridDataEnter")
       this.CoverData = localResult.provinces;
       this.dialogTableVisible = true;
     },

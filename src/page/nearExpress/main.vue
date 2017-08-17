@@ -463,7 +463,7 @@ export default {
       if(this.activeName2 === "已上线") {
           URL =  "/api/sendapp/areaConf/all";
       }
-      this.$http.post(URL,{id},(rsp) => {
+      this.$http.post(URL,{id:id.toString()},(rsp) => {
         console.log(rsp.provinces);
         this.gridData = this.filterProvinces(rsp.provinces);
         // console.log(_this.gridData);

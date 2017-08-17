@@ -278,7 +278,7 @@ export default {
     }
 
     _this.$http.post(_this.url,{
-      "id":httpId
+      "id":httpId.toString()
     },(rsp)=>{
       console.log(rsp)
       console.log(rsp.imageUrl)
@@ -516,7 +516,7 @@ handleSubmit(formName) {
       if(this.tabName === "已上线") {
           URL = "/api/promotion/areaConf/all";
       }
-      _this.$http.post(URL,{id:this.id},
+      _this.$http.post(URL,{id:this.id.toString()},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {

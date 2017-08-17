@@ -158,7 +158,10 @@ export default {
       loadingFlag: false,
       dialogVisible: false,
       // 添加搜索框
-      state1: "",
+      // 搜索框中省名初始化
+      searchProvinces:[],
+      showProvinces:'',
+      searchContent: "",
       provinces: [],
       // 覆盖地区选择
       CoverData:[],
@@ -218,7 +221,7 @@ export default {
     }
 
     _this.$http.post(_this.url,{
-      "id":httpId
+      "id":httpId.toString()
     },(rsp)=>{
       console.log(rsp)
       this.form.name = rsp.name;
@@ -379,7 +382,7 @@ export default {
       if(this.tabName === "已上线") {
           URL = "/api/sendapp/areaConf/all";
       }
-      _this.$http.post(URL,{id:this.id},
+      _this.$http.post(URL,{id:this.id.toString()},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
