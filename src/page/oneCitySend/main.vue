@@ -41,9 +41,9 @@
     </el-table-column>
     <el-table-column prop="name" label="公司名称">
     </el-table-column>
-    <el-table-column prop="slogan" label="广告语">
+    <el-table-column prop="slogan" label="广告语" width="260">
     </el-table-column>
-    <el-table-column prop="tag" label="标签">
+    <el-table-column prop="tag" label="标签" width="160">
       <template scope="scope">
         <el-tag 
             type="primary" 

@@ -173,7 +173,7 @@ export default {
   mounted() {
     let _this = this;
     let AccessHttp = '/api/logisMerchant/getListByAccessStatus';
-    _this.$http.post(AccessHttp,{'accessStatus':1},(result) => {
+    _this.$http.post(AccessHttp,{'moduleType':2,'accessStatus':1},(result) => {
         console.log(result)
         this.options = result;
         // this.$message({

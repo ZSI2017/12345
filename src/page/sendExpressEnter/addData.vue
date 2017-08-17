@@ -43,11 +43,7 @@
       <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
-      <el-select  v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
-         <el-option label="http://" value="http://"></el-option>
-         <el-option label="https://" value="https://"></el-option>
-      </el-select>
-      <el-input style="float:left;width:600px" v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+      <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
       <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
     </el-form-item>
     <!--<el-form-item label="有效时段" prop="date1">
@@ -186,7 +182,6 @@ export default {
         icon: [],
         description: '',
         sortWeight: '',
-        linkHeader:'http://',    // url的 默认头部
         linkUrl: '',
         gmtBegin:'',
         gmtEnd:'',
@@ -268,7 +263,7 @@ export default {
                   "icon": _this.dialogImg2,
                   "description": _this.ruleForm.description,
                   "sortWeight": _this.ruleForm.sortWeight,
-                  "linkUrl": _this.ruleForm.linkHeader+_this.ruleForm.linkUrl,
+                  "linkUrl": _this.ruleForm.linkUrl,
                   "opStatus": _this.ruleForm.status
                 },
                 "area": {

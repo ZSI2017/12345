@@ -51,11 +51,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="url">
-      <el-select v-if="isFromAddData" v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
-         <el-option label="http://" value="http://"></el-option>
-         <el-option label="https://" value="https://"></el-option>
-      </el-select>
-      <el-input style="float:left;width:520px" v-if="isFromAddData"  v-model="ruleForm.url" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-if="isFromAddData"  v-model="ruleForm.url" placeholder="请输入需要跳转的链接，如果调"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.url}} </div>
     </el-form-item>
     <el-form-item label="是否最热">
@@ -113,7 +109,6 @@ export default {
         slogan: '',
         tag: '',
         sortWeight:'',
-        linkHeader:'',
         url:'',
         hotStatus: 1,
         newStatus: 1,
@@ -124,7 +119,7 @@ export default {
     }
   },
   created() {
-    if ( this.$route.path == "/chooseorder/detail") {
+    if ( this.$route.path == "/chooseExpressOrder/detail") {
       this.isFromAddData = false;
       this.disabled = false;
     } else {
@@ -178,9 +173,8 @@ export default {
       this.ruleForm.hotStatus =  Number(rsp.hotStatus);
       this.ruleForm.newStatus =  Number(rsp.newStatus);
       this.ruleForm.opStatus =  rsp.opStatus=='1'?0:1;
-      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
-      this.ruleForm.linkHeader = rsp.url.split('//')[0] + '//';     
-      this.ruleForm.url = rsp.url.replace('https://','').replace('http://','');
+      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");  
+      this.ruleForm.url = rsp.url;
       console.log(this.dynamicTags)
       console.log(rsp.tag)
       this.dialogConfig(true)
@@ -224,12 +218,12 @@ export default {
                   "hotStatus":_this.ruleForm.hotStatus,
                   "newStatus":_this.ruleForm.newStatus,
                   "opStatus":_this.ruleForm.opStatus,
-                  "url":this.ruleForm.linkHeader+this.ruleForm.url,
+                  "url":this.ruleForm.url,
                 }
               };
           _this.$http.post(_this.url,httpData,(result) => {
               _this.$store.dispatch('changeLoadingChange',true);
-              _this.$router.go(-1);
+              // _this.$router.go(-1);
               _this.listLoading = false;
              this.$message({
                   type: 'success',

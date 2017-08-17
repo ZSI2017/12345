@@ -58,11 +58,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
-      <el-select v-if="isFromAddData" v-model="form.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
-         <el-option label="http://" value="http://"></el-option>
-         <el-option label="https://" value="https://"></el-option>
-      </el-select>
-      <el-input style="float:left;width:600px" v-if="isFromAddData"  v-model="form.linkUrl" placeholder="请输入需要跳转的链接，如果调"> </el-input>
+      <el-input v-if="isFromAddData"  v-model="form.linkUrl" placeholder="请输入需要跳转的链接，如果调"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.linkUrl}} </div>
     </el-form-item>
     <el-form-item label="覆盖地区">
@@ -192,7 +188,6 @@ export default {
         }], 
         slogan:'',     
         sortWeight: '',                  
-        linkHeader:'http://',    // url的 默认头部
         linkUrl: '',        
         coverArea:'',
         opStatus:1,
@@ -226,12 +221,10 @@ export default {
       "id":httpId
     },(rsp)=>{
       console.log(rsp)
-      console.log(rsp.imageUrl)
       this.form.name = rsp.name;
       this.form.sortWeight = rsp.sortWeight;
-      this.form.slogan = rsp.slogan;      
-      this.form.linkHeader = rsp.linkUrl.split('//')[0] + '//';     
-      this.form.linkUrl = rsp.linkUrl.replace('https://','').replace('http://','');
+      this.form.slogan = rsp.slogan;       
+      this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.markPrice = rsp.markPrice;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
@@ -255,10 +248,11 @@ export default {
 
   },
   created() {
-    if ( this.$route.path == "/oneCitySend/detail") {
+    if ( this.$route.path == "/oneCityFreight/detail") {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
+      
     }
   },
   beforeMount() {
@@ -303,7 +297,7 @@ export default {
                  "logo":this.form.logo[0].url,
                  slogan:this.form.slogan,               
                  "sortWeight":this.form.sortWeight,
-                 "linkUrl":this.form.linkHeader+this.form.linkUrl,
+                 "linkUrl":this.form.linkUrl,
                  'opStatus':this.form.opStatus,
                  'markPrice':this.form.markPrice,
                },
