@@ -123,10 +123,10 @@
       </el-select>
     </el-form-item>
     <el-form-item label="选择导入文本" prop="fileList" :inline="true"  :label-width="importLabelWidth">
-      <!-- http://192.168.12.54:8080 -->
+      <!-- http://sendexmng-sit.alipay-eco.com -->
       <el-upload
         class="upload-demo"
-        action="http://192.168.12.54:8080/api/freightPriceRule/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/upload"
         :on-change="handleFileChange"
         :file-list="importForm.fileList"
         :on-remove="handleRemove"
@@ -137,7 +137,7 @@
         <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
 
-      <!-- <a href="http://192.168.12.54:8080/api/freightPriceRule/download">下载模板</a> -->
+      <!-- <a href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/download">下载模板</a> -->
     </el-form-item>
 
   </el-form>
@@ -155,7 +155,7 @@
   size="tiny"
   :before-close="handleClose">
   <span>导入文件错误，是否查看错误内容</span>
-  <a href="http://192.168.12.54:8080/api/freightPriceRule/findFile">点击下载错误内容</a>
+  <a href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/findFile">点击下载错误内容</a>
   <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -164,7 +164,7 @@
 
 
 <!-- 新增运线快递费  -->
-  <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible"  :before-close="handleClose">
+  <el-dialog :title="dialogTitle"  :visible.sync="dialogFormVisible" custom-class="dialogWidth"   size="small"  :before-close="handleClose">
   <el-form  ref="form" :model="form" :rules="rules" :inline="true">
     <el-form-item label="快递公司" prop ="expressName" :label-width="formLabelWidth">
       <el-select v-if="!handleEditFlag" filterable label="快递公司" :loading="expressLoading" v-model="form.expressName" @visible-change="handExpressChange" placeholder="请选择">
@@ -395,7 +395,8 @@ export default {
   },
   mounted(){
      // 初始化页面
-      this.handleQuery();
+     let showNull = true
+      this.handleQuery(showNull);
   },
   methods: {
 
@@ -407,13 +408,13 @@ export default {
   // :on-success='handleSuccess'
   // :on-error='handlerror'
   handleDownload(){
-    window.location.href="http://192.168.12.54:8080/api/freightPriceRule/download"
+    window.location.href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/download"
   },
   handlerror(err){
     // alert(err)
   },
   handleSuccess(response){
-      alert(response)
+      // alert(response)
   },
   handleFileChange(file,fileList){
            this.importForm.fileList = fileList.slice(-1);
@@ -429,7 +430,8 @@ export default {
              "productTypeName":this.importForm.typeOfService[0]
            }
           this.$http.post("/api/freightPriceRule/import",data,(result)=>{
-               alert("result");
+                  this.$refs["importForm"].resetFields();
+                  this.dialogImportVisible = false;
            },(error)=>{
               this.$refs["importForm"].resetFields();
                if(error.data.meta.code == '0012'){
@@ -439,7 +441,7 @@ export default {
                       cancelButtonText: '取消',
                       type: 'warning'
                     }).then(() => {
-                       window.location.href="http://192.168.12.54:8080/api/freightPriceRule/findFile"
+                       window.location.href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/findFile"
                     }).catch(() => {
                       // this.$message({
                       //   type: 'info',
@@ -593,7 +595,7 @@ export default {
       }
 
     },
-    handleQuery() {
+    handleQuery(showNull) {
 
     let data = {
          "pages":{
@@ -610,6 +612,9 @@ export default {
          }
       }
       this.$http.post('/api/freightPriceRule/list',data,(result) =>{
+              if(showNull && result.page_list.length === 0) {
+                 this.$message('未查询到内容，请重新选择！');
+              }
                 this.tableData = result.page_list;
                 this.totalCount = parseInt(result.pages.cnt);
       },(error) =>{
@@ -670,6 +675,7 @@ export default {
       },
       this.handleEditFlag = false;
       this.dialogFormVisible = true;
+      this.$refs['form'].resetFields();
     },
   handleAddSave(formName){
       // 是否为编辑运线快递费
@@ -743,7 +749,7 @@ export default {
       this.dialogTitle="编辑运线快递费",
       this.handleEditFlag = true;
       this.dialogFormVisible = true;
-      // this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields();
       console.log(scope);
       this.id = scope.id;
       this.form.expressName = scope.logMerchantName;
@@ -777,7 +783,8 @@ export default {
         this.dialogFormVisible= false;
   },
   handleCancel(){
-    this.$refs['form'].resetFields();
+    // this.$refs['form'].resetFields();
+    // alert()
     this.dialogFormVisible= false;
   },
   handleImportCancel(){
@@ -799,7 +806,7 @@ export default {
            cancelButtonText: '取消',
            type: 'info'
          }).then(() => {
-            window.location.href="http://192.168.12.54:8080/api/freightPriceRule/export"
+            window.location.href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/export"
          }).catch(() => {
            // this.$message({
            //   type: 'info',
@@ -856,6 +863,9 @@ export default {
 </script>
 
 <style lang="scss">
+.dialogWidth{
+   width:39% !important
+}
 .el-tabs .el-tabs__content {
     display: none;
 }

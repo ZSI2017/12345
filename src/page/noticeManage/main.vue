@@ -376,7 +376,7 @@ export default {
       this.loadingTakeOffFlag = false;
       this.listLoading = true;
       this.$http.post(this.noticeURL, {
-          "id": this.noticeID,
+          "id": this.noticeID.toString(),
       }, (rsp) => {
         this.listLoading = false;
         console.log(rsp);

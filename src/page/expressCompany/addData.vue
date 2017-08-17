@@ -14,6 +14,14 @@
             </el-option>
         </el-select>
       </el-col>
+      <el-select v-model="value8" filterable placeholder="请选择">
+        <el-option
+          v-for="item in options1"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="LOGO">
       <!--<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
@@ -125,7 +133,24 @@ export default {
       options: [],
       value:'',
       merchantLogo:'',
-      
+      options1: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
+      value8: '',
+
       // 对输入表单进行验证
       ruleForm: {
         merchantName:'',
@@ -150,7 +175,7 @@ export default {
         ],
         custServiceTel: [
           {required: true,message: '请输入电话号码'},
-          {required: true,type: 'number',message: '电话号码必须为数字值'},          
+          {required: true,type: 'number',message: '电话号码必须为数字值'},
         ],
         slogan:[
           {required: true,message: '请输入广告语'}
@@ -214,11 +239,11 @@ export default {
                   "logisMerchId": _this.ruleForm.isvMerchantId,
                   "slogan": _this.ruleForm.slogan,
                   "tag":_this.ruleForm.tag,
-                  "custServiceTel":_this.ruleForm.custServiceTel,                                    
-                  "sortWeight":_this.ruleForm.sortWeight,  
-                  "isManualPrice":_this.ruleForm.isManualPrice,                                  
+                  "custServiceTel":_this.ruleForm.custServiceTel,
+                  "sortWeight":_this.ruleForm.sortWeight,
+                  "isManualPrice":_this.ruleForm.isManualPrice,
                   "pricingMode":_this.ruleForm.pricingMode,
-                  "hotStatus":_this.ruleForm.hotStatus,                  
+                  "hotStatus":_this.ruleForm.hotStatus,
                   "newStatus":_this.ruleForm.newStatus,
                   "opStatus":_this.ruleForm.opStatus,
                 }
