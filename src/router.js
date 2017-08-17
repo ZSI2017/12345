@@ -76,9 +76,7 @@ import orderCancle from './page/orderCancle/index.vue'
 import blackList from './page/blackList/index.vue'
 
 // 价格管理
-import totalpages from './page/priceManage/totalpages.vue'
 import priceManage from './page/priceManage/index.vue'
-import detail from './page/priceManage/detail.vue'
 
 //开发者工具
 import lbs from './page/lbs/index.vue'

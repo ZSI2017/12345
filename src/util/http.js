@@ -10,8 +10,8 @@ Vue.use(ElementUI);
 var vue = new Vue();
 import axios from "axios";
 
-let URL = "http://sendexmng-sit.alipay-eco.com"
-// let URL = 'http://192.168.12.54:8080'
+// let URL = "http://sendexmng-sit.alipay-eco.com"
+let URL = 'http://192.168.12.54:8080'
 // let URL  = "http://sendexmng-sit.alipay-eco.com"
 
    // alert(process.env.npm_config_report)
