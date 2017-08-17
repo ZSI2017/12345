@@ -4,7 +4,7 @@
     <el-col>
       <span>快递公司:</span>
       <el-select filterable label="快递公司" :loading="expressLoading" v-model="expressName" @visible-change="handExpressChange" placeholder="请选择">
-        <el-option v-for="item in expressOptions" :key="item.value" :label="item.label" :value="item.value">
+        <el-option v-for="item in expressOptions" :disabled="item.disabled" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </el-col>
@@ -94,8 +94,8 @@
     </el-table-column>
     <el-table-column label="操作">
       <template scope="scope">
-           <el-button @click="handleClick" type="text" size="small">修改</el-button>
-           <el-button @click="handleEdit(scope.row.id)" type="text" size="small">删除</el-button>
+           <el-button @click="handleEdit(scope.row,'form')" type="text" size="small">修改</el-button>
+           <el-button @click="handleDelete(scope.row.id)" type="text" size="small">删除</el-button>
          </template>
     </el-table-column>
   </el-table>
@@ -108,17 +108,77 @@
     </el-pagination>
   </div>
 
-  <el-dialog title="新增运线快递费" :visible.sync="dialogTableVisible">
-    <el-form :model="form">
-      <el-form-item label="活动区域" :label-width="formLabelWidth">
-        <el-select v-model="form.region" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
-
-  </el-dialog>
+<!-- 新增运线快递费  -->
+  <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible"  :before-close="handleClose">
+  <el-form  ref="form" :model="form" :rules="rules" :inline="true">
+    <el-form-item label="快递公司" prop ="expressName" :label-width="formLabelWidth">
+      <el-select v-if="!handleEditFlag" filterable label="快递公司" :loading="expressLoading" v-model="form.expressName" @visible-change="handExpressChange" placeholder="请选择">
+        <el-option v-for="item in expressOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+      <div style="width:200px;" v-if="handleEditFlag">{{form.expressName}}</div>
+    </el-form-item>
+    <el-form-item label="发货省" prop="sendProvince"  :label-width="formLabelWidth">
+      <el-select  v-if="!handleEditFlag" filterable label="发货省" :loading="sendProvinceLoading" @visible-change="handSendProvinceChange" v-model="form.sendProvince" placeholder="请选择">
+        <el-option v-for="item in sendProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+        <div style="width:200px;" v-if="handleEditFlag">{{form.sendProvince}}</div>
+    </el-form-item>
+    <el-form-item label="收货省" prop="recProvince"  :label-width="formLabelWidth">
+      <el-select  v-if="!handleEditFlag" filterable :loading="recProvinceLoading" @visible-change="handRecProvinceChange" label="收货省" v-model="form.recProvince" placeholder="请选择">
+        <el-option v-for="item in recProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+        <div style="width:200px;" v-if="handleEditFlag">{{form.recProvince}}</div>
+    </el-form-item>
+    <el-form-item label="服务类型" prop="typeOfService"  :label-width="formLabelWidth">
+      <el-select  v-if="!handleEditFlag" filterable label="服务类型" v-model="form.typeOfService" :loading="typeOfServiceLoading" @visible-change="handServiceChange" placeholder="请选择">
+        <el-option v-for="item in typeOfServiceOptions" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+        <div style="width:200px;" v-if="handleEditFlag">{{form.typeOfService}}</div>
+    </el-form-item>
+    <el-form-item label="发货市" prop="sendCity"  :label-width="formLabelWidth">
+      <el-select  v-if="!handleEditFlag" filterable label="发货市" v-model="form.sendCity" :loading="sendCityLoading" @visible-change="handSendCityChange" placeholder="请选择">
+        <el-option v-for="item in sendCityOptions" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+        <div v-if="handleEditFlag" style="width:200px;">{{form.sendCity}}</div>
+    </el-form-item>
+    <el-form-item label="收货市" prop="recCity" :label-width="formLabelWidth">
+      <el-select v-if="!handleEditFlag" filterable :loading="recCityLoading" @visible-change="handrecCityChange" label="收货市" v-model="form.recCity" placeholder="请选择">
+        <el-option v-for="item in recCityOptions" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+        <div style="width:200px;" v-if="handleEditFlag">{{form.sendCity}}</div>
+    </el-form-item>
+    <el-form-item label="首重价格" prop="presetWeightPrice" label-width="formLabelWidth">
+      <el-input placeholder="请输入内容" v-model="form.presetWeightPrice">
+              <template slot="append">元</template>
+      </el-input>
+    </el-form-item>
+    <el-form-item label="首重重量" prop="presetWeight" :label-width="formLabelWidth">
+      <el-input placeholder="请输入内容" v-model="form.presetWeight">
+              <template slot="append">公斤</template>
+      </el-input>
+    </el-form-item>
+    <el-form-item label="续重价格" prop="extraWeightPrice" :label-width="formLabelWidth">
+      <el-input placeholder="请输入内容" v-model="form.extraWeightPrice">
+              <template slot="append">元</template>
+      </el-input>
+    </el-form-item>
+    <el-form-item label="续重重量" prop="extraWeightUnit" :label-width="formLabelWidth">
+      <el-input placeholder="请输入内容" v-model="form.extraWeightUnit">
+              <template slot="append">公斤</template>
+      </el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="handleCancel">取 消</el-button>
+    <el-button type="primary" @click="handleAddSave('form')">确 定</el-button>
+  </div>
+</el-dialog>
 </div>
 </template>
 <script>
@@ -129,7 +189,10 @@ export default {
       // 所选框 loading
 
       totalCount: 1000,
-      dialogTableVisible: false,
+      dialogFormVisible: false,
+      dialogTitle:"新增运线快递费",
+      formLabelWidth:400,
+      id:'',  // 保存当前运线id;
       form: {
         region: ''
       },
@@ -152,6 +215,52 @@ export default {
         value: '选项5',
         label: '北京烤鸭'
       }],
+
+      // 新增表单验证
+      form:{
+         expressName:'',
+         typeOfService:'',
+         sendProvince:'',
+         sendCity:'',
+         recProvince:'',
+         recCity:'',
+         presetWeightPrice:'',
+         presetWeight:'',
+         extraWeightPrice:'',
+         extraWeightUnit:''
+      },
+     rules:{
+       expressName: [
+         { required: true, message: '公司名不能为空'},
+       ],
+       typeOfService: [
+         { required: true, message: '服务类型不能为空'},
+       ],
+       sendProvince: [
+         { required: true, message: '发货省不能为空'},
+       ],
+       sendCity: [
+         { required: true, message: '发货市不能为空'},
+       ],
+       recProvince: [
+         { required: true, message: '收货省不能为空'},
+       ],
+       recCity: [
+         { required: true, message: '收货市不能为空'},
+       ],
+       presetWeightPrice: [
+         { required: true, message: '首重价格不能为空'},
+       ],
+       presetWeight: [
+         { required: true, message: '首重重量不能为空'},
+       ],
+       extraWeightPrice: [
+         { required: true, message: '续重价格不能为空'},
+       ],
+       extraWeightUnit: [
+         { required: true, message: '续重重量不能为空'},
+       ],
+      },
       // 选择快递公司
       expressName: '全部', // 快递公司名
       expressOptions: [], // 所有的快递公司列表
@@ -187,16 +296,16 @@ export default {
     }
   },
   created() {
-    var _this = this;
-    _this.$http.get("/rest/list6", (data) => {
-      console.log("success");
-      console.log(data);
-      _this.tableData = data.data.data;
-      _this.totalCount = data.data.data.length;
-    }, (error) => {
-      console.log("error");
-      console.log(error);
-    });
+    // var _this = this;
+    // _this.$http.get("/rest/list6", (data) => {
+    //   console.log("success");
+    //   console.log(data);
+    //   _this.tableData = data.data.data;
+    //   _this.totalCount = data.data.data.length;
+    // }, (error) => {
+    //   console.log("error");
+    //   console.log(error);
+    // });
   },
   mounted(){
      // 初始化页面
@@ -206,7 +315,7 @@ export default {
     handExpressChange(visible) {
       if (visible) {
         if (this.expressOptions.length > 0) {
-          this.expressLoading = false
+           this.expressLoading = false;
         } else {
           this.$http.post("/api/freightPriceRule/express", {}, (result) => {
             console.log(result);
@@ -214,6 +323,10 @@ export default {
               result[i].value = [result[i].name, result[i].id];
               result[i].label = result[i].name;
             }
+            result.unshift({
+               value:['全部',''],
+               label:'全部',
+            })
             this.expressOptions = result.slice(0);
             this.expressLoading = false;
           })
@@ -223,15 +336,23 @@ export default {
 
     // 选择服务类型
     handServiceChange(visible) {
+      let logisMerchId = this.expressName[1];
+      if(this.dialogFormVisible){
+          logisMerchId = this.form.expressName[1];
+      }
       if (visible) {
         this.$http.post("/api/freightPriceRule/productType", {
-          "logisMerchId": this.expressName[1]
+          "logisMerchId": logisMerchId
         }, (result) => {
           console.log(result);
           for (let i = 0; i < result.length; i++) {
             result[i].value = [result[i].name, result[i].id];
             result[i].label = result[i].name;
           }
+          result.unshift({
+             value:['全部',''],
+             label:'全部',
+          })
           this.typeOfServiceOptions = result.slice(0);
           this.typeOfServiceLoading = false;
         })
@@ -249,6 +370,10 @@ export default {
               result[i].value = [result[i].provinceName, result[i].provinceNo];
               result[i].label = result[i].provinceName;
             }
+            result.unshift({
+               value:['全部',''],
+               label:'全部',
+            })
             this.sendProvinceOptions = result.slice(0);
             this.sendProvinceLoading = false;
           })
@@ -256,17 +381,27 @@ export default {
       }
     },
     handSendCityChange(visible) {
-      this.$http.post("/api/freightPriceRule/city", {
-        "provinceName": this.sendProvince[0]
-      }, (result) => {
-        console.log(result);
-        for (let i = 0; i < result.length; i++) {
-          result[i].value = [result[i].cityName, result[i].cityNo];
-          result[i].label = result[i].cityName;
-        }
-        this.sendCityOptions = result.slice(0);
-        this.sendCityLoading = false;
-      })
+      let provinceName = this.sendProvince[0];
+      if(this.dialogFormVisible){
+          provinceName = this.form.sendProvince[0];
+      }
+      if(visible){
+        this.$http.post("/api/freightPriceRule/city", {
+          "provinceName": provinceName
+        }, (result) => {
+          console.log(result);
+          for (let i = 0; i < result.length; i++) {
+            result[i].value = [result[i].cityName, result[i].cityNo];
+            result[i].label = result[i].cityName;
+          }
+          result.unshift({
+             value:['全部',''],
+             label:'全部',
+          })
+          this.sendCityOptions = result.slice(0);
+          this.sendCityLoading = false;
+        })
+      }
     },
     handRecProvinceChange(visible) {
       if (visible) {
@@ -279,6 +414,10 @@ export default {
               result[i].value = [result[i].provinceName, result[i].provinceNo];
               result[i].label = result[i].provinceName;
             }
+            result.unshift({
+               value:['全部',''],
+               label:'全部',
+            })
             this.recProvinceOptions = result.slice(0);
             this.recProvinceLoading = false;
           })
@@ -286,15 +425,20 @@ export default {
       }
     },
     handrecCityChange(visible){
+      let provinceName = this.recProvince[0]
+      if(this.dialogFormVisible){
+          provinceName = this.form.recProvince[0]
+      }
       if (visible) {
         this.$http.post("/api/freightPriceRule/city", {
-          "provinceName": this.recProvince[0]
+          "provinceName": provinceName
         }, (result) => {
           console.log(result);
           for (let i = 0; i < result.length; i++) {
             result[i].value = [result[i].cityName, result[i].cityNo];
             result[i].label = result[i].cityName;
           }
+
           this.recCityOptions = result.slice(0);
           this.recCityLoading = false;
         })
@@ -303,13 +447,6 @@ export default {
 
     },
     handleQuery() {
-      // const h = this.$createElement;
-      // this.$notify({
-      //   title: '查询',
-      //   message: h('i', {
-      //     style: 'color: teal'
-      //   }, '点击了查询')
-      // });
     let data = {
          "pages":{
               "page_size":this.pageSize,
@@ -333,7 +470,7 @@ export default {
       })
     },
     //  删除
-    handleEdit(id){
+    handleDelete(id){
       this.$confirm('删除操作不可逆，请仔细核对', '确认删除此条运线？', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -361,15 +498,140 @@ export default {
           });
 
     },
+
     handleAddLine() {
-      const h = this.$createElement;
-      this.$notify({
-        title: '新增运线',
-        message: h('i', {
-          style: 'color: teal'
-        }, '点击了新增运线')
-      });
+      // const h = this.$createElement;
+      // this.$notify({
+      //   title: '新增运线',
+      //   message: h('i', {
+      //     style: 'color: teal'
+      //   }, '点击了新增运线')
+      // });
+      this.dialogTitle="新增运线快递费",
+      this.form={
+         expressName:'',
+         typeOfService:'',
+         sendProvince:'',
+         sendCity:'',
+         recProvince:'',
+         recCity:'',
+         presetWeightPrice:'',
+         presetWeight:'',
+         extraWeightPrice:'',
+         extraWeightUnit:''
+      },
+      this.handleEditFlag = false;
+      this.dialogFormVisible = true;
     },
+  handleAddSave(formName){
+      // 是否为编辑运线快递费
+    if(this.handleEditFlag){
+      let data = {
+         "id":this.id,
+         "presetWeight":this.form.presetWeight,
+         "presetWeightPrice":this.form.presetWeightPrice,
+         "extraWeightUnit":this.form.extraWeightUnit,
+         "extraWeightPrice":this.form.extraWeightPrice
+      }
+      this.$http.post('/api/freightPriceRule/update',data,(result)=>{
+        if(result.meta.code == "0000") {
+          this.dialogFormVisible = false;
+          this.$message({
+              type: 'success',
+              message: '修改成功'
+          });
+            this.handleQuery()
+        }
+      },(error) => {
+          // _this.listLoading = false
+          this.$message({
+              type: 'error',
+              message: error.data.meta.code+"--"+error.data.meta.msg
+          });
+      })
+    }else {
+      // 新增
+      this.$refs[formName].validate((valid) => {
+          if(valid) {
+            let data = {
+              "logMerchantId":this.form.expressName[1],
+              "productTypeId":this.form.typeOfService[1] ,
+              "frmProvinceCode":this.form.sendProvince[1],
+              "frmCityCode":this.form.sendCity[1],
+              "toProvinceCode":this.form.recProvince[1],
+              "toCityCode":this.form.recCity[1],
+              "presetWeight":this.form.presetWeight,
+              "presetWeightPrice":this.form.presetWeightPrice,
+              "extraWeightUnit":this.form.extraWeightUnit,
+              "extraWeightPrice":this.form.extraWeightPrice
+            }
+            this.$http.post('/api/freightPriceRule/save',data,(result) => {
+                 if(result.meta.code == "0000") {
+                   this.$refs['form'].resetFields();
+                   this.dialogFormVisible = false;
+                   this.$message({
+                       type: 'success',
+                       message: '保存成功'
+                   });
+                   this.handleQuery();
+                 }
+                   console.log(result)
+            },(error) => {
+                // _this.listLoading = false
+                this.$message({
+                    type: 'error',
+                    message: error.data.meta.code+"--"+error.data.meta.msg
+                });
+            })
+          } else {
+              return false;
+          }
+        })
+    }
+  },
+  //修改运线
+  handleEdit(scope,formName){
+
+      this.dialogTitle="编辑运线快递费",
+      this.handleEditFlag = true;
+      this.dialogFormVisible = true;
+      // this.$refs[formName].resetFields();
+      console.log(scope);
+      this.id = scope.id;
+      this.form.expressName = scope.logMerchantName;
+      this.form.typeOfService = scope.productName;
+      this.form.sendProvince = scope.frmProvinceName;
+      this.form.sendCity = scope.frmCityName;
+      this.form.recProvince = scope.toProvinceName;
+      this.form.recCity = scope.toCityName;
+      this.form.presetWeight = scope.presetWeight;
+      this.form.presetWeightPrice = scope.presetWeightPrice;
+      this.form.extraWeightPrice = scope.extraWeightPrice;
+      this.form.extraWeightUnit = scope.extraWeightUnit;
+
+      //
+      //      expressName:'',
+      //      typeOfService:'',
+      //      sendProvince:'',
+      //      sendCity:'',
+      //      recProvince:'',
+      //      recCity:'',
+      //      presetWeightPrice:'',
+      //      presetWeight:'',
+      //      extraWeightPrice:'',
+      //      extraWeightUnit:''
+      //   },
+
+  },
+  // 对话框关闭
+  handleClose(){
+        this.$refs['form'].resetFields();
+        this.dialogFormVisible= false;
+  },
+  handleCancel(){
+    this.$refs['form'].resetFields();
+    this.dialogFormVisible= false;
+  },
     handleExportLine() {
       const h = this.$createElement;
       const _this = this;

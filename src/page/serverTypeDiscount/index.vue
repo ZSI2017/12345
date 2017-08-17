@@ -12,18 +12,10 @@
   <el-col :span="8" style="position: absolute;top:-13px;right:0;">
      <el-form style="width:80%;float:right;">
        <el-form-item label-position="right" label-width="160px" label="快递公司">
-
-         <el-autocomplete
-            class="inline-input"
-            v-model="searchContent"
-            style=""
-            :fetch-suggestions="querySearch"
-            placeholder="请输入快递公司名"
-            icon="close"
-            :on-icon-click="handleIconClick"
-            @select="handleQuerySelect"
-            @keyup.enter.native="enterSelect"
-         ></el-autocomplete>
+         <el-select filterable label="快递公司" :loading="expressLoading" v-model="expressName"  @change="handleExpressSelect" @visible-change="handExpressChange" placeholder="请选择">
+           <el-option v-for="item in expressOptions" :key="item.value" :label="item.label" :value="item.value">
+           </el-option>
+         </el-select>
        </el-form-item>
      </el-form>
   </el-col>
@@ -65,57 +57,18 @@
     max-height="3000"
     empty-text="暂无数据"
     align="center">
-    <el-table-column prop="name" label="快递公司"  min-width="100">
+    <el-table-column prop="logisMerchantName" label="快递公司"  min-width="100">
     </el-table-column>
-    <el-table-column prop="name" min-width="100" label="服务类型">
+    <el-table-column prop="productName" min-width="100" label="服务类型">
     </el-table-column>
-    <el-table-column prop="name" label="类型码">
+    <el-table-column prop="productTypeCode" label="类型码">
     </el-table-column>
-    <el-table-column prop="name" label="描述">
+    <el-table-column prop="description" label="描述">
     </el-table-column>
-    <el-table-column prop="Forder" label="排序值">
+    <el-table-column prop="sortWeight" label="排序值">
     </el-table-column>
-    <el-table-column prop="Forder" label="结算折扣">
+    <el-table-column prop="discount" label="结算折扣">
     </el-table-column>
-    <!-- <el-table-column prop="imageUrl" label="内容">
-       <template scope="scope">
-            <img width="50px" style="cursor:pointer;" :src="scope.row.imageUrl" trigger="click" placement="right" @click="showImg(scope.row.imageUrl)">
-            <el-dialog v-model="dialogVisible" size="tiny">
-              <img width="100%" :src="bigImageUrl" alt="">
-            </el-dialog>
-        </template>
-    </el-table-column> -->
-    <!-- <el-table-column label="链接">
-      <template scope="scope">
-        <el-popover :content="scope.row.linkUrl" ref="popover4" width="300" trigger="click">
-        </el-popover>
-        <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
-      </template>
-    </el-table-column> -->
-    <!-- <el-table-column prop="address" label="覆盖地区">
-       <template scope="scope">
-         <el-button @click="checkArea(scope.row.id)" type="text" size="small">查看</el-button>
-       </template>
-    </el-table-column> -->
-    <!-- <el-table-column prop="gmtCreate" label="创建时间" width="160">
-      <template scope="scope">
-          {{scope.row.gmtCreate | formatDate}}
-      </template>
-    </el-table-column>
-    <el-table-column prop="gmtModified" label="修改时间" width="160" :sortable="showSortable">
-      <template scope="scope">
-          {{scope.row.gmtModified | formatDate}}
-      </template>
-    </el-table-column>
-    <el-table-column prop="activeTime" label="有效时段" width="220">
-      <template scope="scope">
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtBegin | formatDate}}</p>
-          <p style="padding:0;margin:0;text-align:center">至</p>
-          <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtEnd | formatDate}}</p>
-       </template>
-    </el-table-column> -->
-    <!-- <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
-    </el-table-column> -->
     <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">>
        <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下线":"待上线")))}}
@@ -179,19 +132,6 @@
   </div>
   <!--  覆盖地区 查看对话框 -->
   <cover-area :visible="dialogTableVisible" :coverGridData="gridData" @listenToCoverArea="changeVisible"></cover-area>
-  <!-- <el-dialog title="覆盖地区" :visible.sync="dialogTableVisible">
-    <el-table :data="gridData" border :show-header="showHeader" max-height="400">
-      <el-table-column property="value" label="省" width="200"></el-table-column>
-      <el-table-column property="city" label="市">
-        <template scope="scope">
-       <el-tag
-        style="margin-right:10px;margin-bottom:5px;"
-         v-for="(item,index) in scope.row.city"
-         >{{item}}</el-tag>
-     </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog> -->
 
   <!-- 置为下线 对话框  -->
 
@@ -206,52 +146,69 @@
   </el-dialog>
 
   <!--新增内容-->
-  <el-dialog title="新增" :visible.sync="dialogFormVisible">
+  <el-dialog :title="dialogFlag" :visible.sync="dialogFormVisible" size="tiny"  :before-close="handleClose">
     <el-form class='newAddedForm' :rules="rules" ref="formAdd" label-position="right" label-width="160px" :model="formAdd">
-      <el-form-item label="快递公司" required>
-        <el-select v-model="valueAdd" placeholder="请选择快递公司" style="width:100%;">
+      <el-form-item label="快递公司" prop="logisMerchantName">
+        <el-select  v-if="this.dialogFlag != '详情'" v-model="formAdd.logisMerchantName" @visible-change="handExpressChange" placeholder="请选择快递公司" style="width:100%;">
           <el-option
-            v-for="item in items"
+            v-for="item in expressOptions"
+            :disabled="item.label == '全部'"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
+
+      <div v-if="this.dialogFlag == '详情'">{{formAdd.logisMerchantName}}</div>
       </el-form-item>
-      <el-form-item label="服务类型名称" prop="serverType">
-        <el-input v-model="formAdd.serverType" placeholder="请输入服务类型"></el-input>
+      <el-form-item label="服务类型名称" prop="productName">
+        <el-input  v-if="this.dialogFlag != '详情'"  v-model="formAdd.productName" placeholder="请输入服务类型"></el-input>
+        <div v-if="this.dialogFlag == '详情'">{{formAdd.productName}}</div>
       </el-form-item>
-      <el-form-item label="类型码（接口识别）" prop="typeCode">
-        <el-input v-model="formAdd.typeCode" placeholder="请输入类型码"></el-input>
+      <el-form-item label="类型码（接口识别）" prop="productTypeCode">
+        <el-input v-if="this.dialogFlag != '详情'"  v-model="formAdd.productTypeCode" placeholder="请输入类型码"></el-input>
+          <div v-if="this.dialogFlag == '详情'">{{formAdd.productTypeCode}}</div>
       </el-form-item>
-      <el-form-item label="描述" prop="describe">
-        <el-input v-model="formAdd.describe" placeholder="请输入描述"></el-input>
+      <el-form-item label="描述" prop="description">
+        <el-input v-if="this.dialogFlag != '详情'"  v-model="formAdd.description" placeholder="请输入描述"></el-input>
+        <div v-if="this.dialogFlag == '详情'">{{formAdd.description}}</div>
       </el-form-item>
       <el-form-item label="排序值"
-        prop="sorting"
+        prop="sortWeight"
         >
-        <el-input v-model.number="formAdd.sorting" auto-complete="off" placeholder="请输入1-999，排序值越大越优先">
+        <el-input v-if="this.dialogFlag != '详情'"  v-model.number="formAdd.sortWeight" auto-complete="off" placeholder="请输入1-999，排序值越大越优先">
         </el-input>
+        <div v-if="this.dialogFlag == '详情'">{{formAdd.description}}</div>
       </el-form-item>
-      <el-form-item label="结算折扣">
-        <el-row>
+      <el-form-item label="结算折扣" prop="discountNum">
+        <el-row v-if="this.dialogFlag != '详情'" >
           <el-col :span="6" style="width: 187px; height: 42.5px;line-height:42.5px;">
             <el-radio class="radio" v-model="formAdd.discount" label="有折扣">有折扣</el-radio>
             <el-radio class="radio" v-model="formAdd.discount" label="无折扣">无折扣</el-radio>
           </el-col>
           <el-col :span="6">
-            <el-input placeholder="0" :number="true" size="large" v-model="formAdd.discountNum" :disabled=" formAdd.discount == '无折扣' "><template slot="append">折</template></el-input>
+            <el-input
+              placeholder="0"
+              :number="true"
+              size="large"
+              v-model.number="formAdd.discountNum"
+              :disabled=" formAdd.discount == '无折扣' "
+            ><template slot="append">折</template></el-input>
           </el-col>
         </el-row>
+        <div v-if="this.dialogFlag == '详情'">{{formAdd.discountNum/10}}</div>
       </el-form-item>
-      <el-form-item label="当前状态">
-          <el-radio label="上架" v-model="formAdd.status"></el-radio>
-          <el-radio label="下架" v-model="formAdd.status"></el-radio>
+      <el-form-item label="当前状态"  prop="status">
+        <el-radio-group v-if="this.dialogFlag != '详情'" v-model="formAdd.status">
+          <el-radio v-model="formAdd.status" label="2">上架</el-radio>
+          <el-radio v-model="formAdd.status" label="1">下架</el-radio>
+        </el-radio-group>
+          <div v-if="this.dialogFlag == '详情'">{{formAdd.status == 1?'下架':'下架'}}</div>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleConfirm">确 定</el-button>
-      <el-button @click="handleCancle">取 消</el-button>
+      <el-button type="primary" @click="handleAddConfirm">确 定</el-button>
+      <el-button  v-if="this.dialogFlag != '详情'" @click="handleCancle">取 消</el-button>
     </div>
   </el-dialog>
   <!--待审核详情弹框-->
@@ -263,16 +220,16 @@
             <el-input :class="grayBg" :value="form.company"></el-input>
         </el-form-item>
         <el-form-item label="服务类型名称">
-          <el-input :class="grayBg" :value="form.serverType"></el-input>
+          <el-input :class="grayBg" :value="form.productName"></el-input>
         </el-form-item>
         <el-form-item label="类型码（接口识别）">
-          <el-input :class="grayBg" :value="form.typeCode"></el-input>
+          <el-input :class="grayBg" :value="form.productTypeCode"></el-input>
         </el-form-item>
         <el-form-item label="描述">
-          <el-input :class="grayBg" :value="form.describe"></el-input>
+          <el-input :class="grayBg" :value="form.description"></el-input>
         </el-form-item>
         <el-form-item label="排序值">
-          <el-input :class="grayBg" :value="form.sorting"></el-input>
+          <el-input :class="grayBg" :value="form.sortWeight"></el-input>
         </el-form-item>
         <el-form-item label="当前状态">
             <el-radio-group v-model="radio3" v-if="diailogInputVisible">
@@ -310,8 +267,16 @@ export default {
   },
   data() {
     return {
+      expressLoading:false,   // 选择 下拉框
+      expressName:'全部',    // 选择后快递公司名
+      expressOptions:[],  // 下拉快递公司列表数据
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
+      searchStr:'',   // 筛选的快递公司
+      id:'',  // 被选中列表的id
+      logisMerchId:'',  // 当前物流机构id
+
+      dialogFormVisible:false,  // 对话框
       // 排序是否显示
       showSortable: 'custom',
       totalCount: 0, //默认数据总数
@@ -319,6 +284,8 @@ export default {
       myDiglogContent: "确认后，该内容将提交审核，通过后变为'已下线'",
       //配置中--状态、、待审核中--待审核状态
       auditState: "审核状态",
+
+      dialogFlag:'新增' ,  // 对话框的当前状态
       // 置为下线对话框
       showOperation: true,
       showOperation2: false,
@@ -346,10 +313,10 @@ export default {
       currentPage: 1,
       tableData: [],
       //dialog 确认框 变量
-      noticeID: '', // id
-      noticeURL: '', // url
-      noticeMessage: '', // message
-      noticeType: '', // message
+      producttypeID: '', // id
+      producttypeURL: '', // url
+      producttypeMessage: '', // message
+      producttypeType: '', // message
       dialogVisible:false,
       bigImageUrl:'',
 
@@ -385,37 +352,47 @@ export default {
           label: '蚵仔煎'
         }],
         formAdd:{
+          logisMerchantName:[],  // 快递公司名
           company:'',
-          serverType:'',
-          typeCode:'',
-          describe:'',
-          sorting: '',
-          discount:'',
-          discountNum:"",
-          status:''
+          productName:'',
+          productTypeCode:'',
+          description:'',
+          sortWeight: '',
+          discount:'无折扣',
+          discountNum:"0",
+          status:'1'
         },
         form: {
           company:'',
-          serverType:'',
-          typeCode:'',
-          describe:'',
-          sorting: '',
+          productName:'',
+          productTypeCode:'',
+          description:'',
+          sortWeight: '',
           discount:'',
           discountNum:"",
           status:''
         },
         rules: {
-          serverType: [
+          productName: [
             { required: true, message: '请输入服务类型', trigger: 'blur'},
             { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
           ],
-          typeCode:[
+          productTypeCode:[
             { required: true, message: '请输入接口类型码'}
           ],
-          sorting:[
-              { required: true, message: '排序值不能为空'},
-              { type: 'number', message: '排序值必须为数字值'}
-          ]
+          sortWeight:[
+             { required: true, message: '排序值不能为空'},
+            // { type: 'number', message: '排序值必须为数字值'}
+             { type: 'number', min:1, max:999,message:'排序值范围1-999'}
+          ],
+          discountNum:[
+             { type: 'number', min:0, max:10,message:'请输入正确的折扣值'}
+          ],
+          status: [{
+            required: true,
+            message: '请选择状态',
+            trigger: 'change'
+          }],
         }
     }
   },
@@ -461,6 +438,34 @@ export default {
   watch: {
   },
   methods: {
+    //下拉搜索框
+    handExpressChange(visible) {
+      if (visible) {
+        if (this.expressOptions.length > 0) {
+          this.expressLoading = false
+        } else {
+          this.$http.post("/api/logisMerchant/all", {"logis_merch_id":''}, (result) => {
+            console.log(result);
+            for (let i = 0; i < result.length; i++) {
+              result[i].value = [result[i].merchantName, result[i].id];
+              result[i].label = result[i].merchantName;
+            }
+            result.unshift({
+               value:['全部',''],
+               label:'全部',
+            })
+            this.expressOptions = result.slice(0);
+            this.expressLoading = false;
+          })
+        }
+      }
+    },
+    // 选中了快递公司后
+    handleExpressSelect(){
+      this.searchStr = this.expressName[1];
+     this.handleTabClick({label:this.activeName2},null,1)
+      // console.log(this.expressName);
+    },
     //添加内容取消事件
     handleCancle(){
       this.dialogFormVisible = false;
@@ -469,11 +474,48 @@ export default {
       this.formAdd.discount = "";
       this.formAdd.status = "";
     },
-    //添加按钮确定事件
-    handleConfirm(){
-      this.dialogFormVisible = false;
-      this.$refs['formAdd'].resetFields();
+    handleClose(){
+       this.$refs['formAdd'].resetFields();
+         this.dialogFormVisible = false;
     },
+    //添加按钮确定事件
+    handleAddConfirm(){
+      if(this.dialogFlag == "详情"){ this.dialogFormVisible = false; return;}
+      this.$refs['formAdd'].validate((valid) => {
+          if(valid) {
+            //this.formAdd.logisMerchantName,
+            let logisMerchId =this.formAdd.logisMerchantName[1];
+            let id = '';
+            let url = "/api/producttype/audit/save";
+            if(this.dialogFlag == "修改") {
+                id =  this.id;
+                logisMerchId = this.logisMerchId;;
+                url = "/api/producttype/audit/update";
+                 //  'logisMerchId':logisMerchId,
+            };
+              let data = {
+                "id":id,
+                "logisMerchId":logisMerchId,
+                'productName':this.formAdd.productName,
+                'productTypeCode':this.formAdd.productTypeCode,
+                'description':this.formAdd.description,
+                'sortWeight':this.formAdd.sortWeight,
+                "discount":this.formAdd.discountNum*10,
+                "opStatus":this.formAdd.status,
+              };
+              this.$http.post(url,{data},(result) =>{
+                   console.log(result);
+                   this.dialogFormVisible = false;
+                   this.$refs['formAdd'].resetFields();
+                   this.handleTabClick({label:this.activeName2},null,this.currentPage)
+              })
+
+          }else {
+              return false;
+          }
+
+    })
+},
 
     // 搜索框
     enterSelect(){
@@ -520,8 +562,8 @@ export default {
         var _this = this;
         _this.$http.post(this.url, {
           "pages": {
-            "page_size": this.pageSize,
-            "page_num": _this.currentPage - 1
+            "page_size": this.pageSize.toString(),
+            "page_num": (_this.currentPage - 1).toString()
           },
           "con": {
             "pageId": this.pageId,
@@ -538,39 +580,17 @@ export default {
     handleConfirm(){
       this.loadingTakeOffFlag = false;
       this.listLoading = true;
-      this.$http.post(this.noticeURL, {
-          "id": this.noticeID,
+      this.$http.post(this.producttypeURL, {
+          "id": this.producttypeID,
       }, (rsp) => {
         this.listLoading = false;
         console.log(rsp);
         this.$message({
-          message: this.noticeMessage,
-          type: this.noticeType
+          message: this.producttypeMessage,
+          type: this.producttypeType
         });
+
         this.handleTabClick({label:this.activeName2})
-
-        // this.pageId = "SD1010"; // 寄快递首页
-        // ((this.$route.path == "/chooseExpress" &&
-        //     (this.pageId = "BM1010")) ||
-        //   (this.$route.path == "/expressOrder" &&
-        //     (this.pageId = "SS1010")))
-        // var _this = this;
-        // _this.$http.post(_this.url,{
-        //   "pages": {
-        //     "page_size": this.pageSize,
-        //     "page_num": this.currentPage - 1
-        //   },
-        //   "con": {
-        //     "pageId": this.pageId,
-        //     "status":this.radio2
-        //   }
-        // }, (result) => {
-        //
-        //   _this.tableData = result.page_list;
-        //   _this.totalCount = parseInt(result.pages.cnt);
-        // });
-
-        // console.log(this.$route.matched);
       },(error) => {
            this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
            this.listLoading = false;
@@ -585,16 +605,16 @@ export default {
       if(row.status == '2'){
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
-        this.noticeMessage = '已置为下线';
+        this.producttypeMessage = '已置为下线';
       }else{
         this.myDialogTitle = "确认置为上线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
-        this.noticeMessage = '已置为上线';
+        this.producttypeMessage = '已置为上线';
       }
-      this.noticeID = row.noticeId || row.id;
-      this.noticeURL = '/api/notice/status/update';
-      this.noticeType = 'success';
-      this.url = "/api/notice/audit/list"; // 刷新列表 url
+      this.producttypeID = row.producttypeId || row.id;
+      this.producttypeURL = '/api/producttype/status/update';
+      this.producttypeType = 'success';
+      this.url = "/api/producttype/audit/list"; // 刷新列表 url
     },
     Operationchange() {
       this.loadingTakeOffFlag = true;
@@ -605,21 +625,21 @@ export default {
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
-      this.noticeID = row.id;
-      this.noticeURL = '/api/notice/audit/approve';
-      this.noticeMessage = '已通过申请';
-      this.noticeType = 'success';
-      this.url = "/api/notice/audit/list"; //  刷新列表 url
+      this.producttypeID = row.id;
+      this.producttypeURL = '/api/producttype/audit/approve';
+      this.producttypeMessage = '已通过申请';
+      this.producttypeType = 'success';
+      this.url = "/api/producttype/audit/list"; //  刷新列表 url
     },
     OperationApprovedFail(row) {
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "申请驳回？";
       this.myDiglogContent = "确认后，该内容将申请驳回";
-      this.noticeID = row.id;
-      this.noticeURL = '/api/notice/audit/reject';
-      this.noticeMessage = '申请已驳回！';
-      this.noticeType = 'success';
-      this.url = "/api/notice/audit/list"; // 默认展开 配置
+      this.producttypeID = row.id;
+      this.producttypeURL = '/api/producttype/audit/reject';
+      this.producttypeMessage = '申请已驳回！';
+      this.producttypeType = 'success';
+      this.url = "/api/producttype/audit/list"; // 默认展开 配置
     },
     OperationEffectDetail() {
       this.loadingTakeOffFlag = true;
@@ -660,15 +680,17 @@ export default {
         // _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/notice/audit/list"
+        _this.url = "/api/producttype/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
-            "page_size": this.pageSize,
-            "page_num": _this.currentPage - 1
+            "page_size": this.pageSize.toString(),
+            "page_num": (_this.currentPage - 1).toString()
           },
           "con": {
             "pageId": _this.pageId,
-            "status":this.radio2
+            "status":this.radio2,
+            "searchStr":this.searchStr
+
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
@@ -689,15 +711,16 @@ export default {
         // _this.radio2 = 1;
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
-        _this.url = "/api/notice/onlineList";
+        _this.url = "/api/producttype/onlineList";
         _this.$http.post(_this.url, {
           "pages": {
-            "page_size": _this.pageSize,
-            "page_num": _this.currentPage - 1
+            "page_size": (_this.pageSize).toString(),
+            "page_num": (_this.currentPage - 1).toString()
           },
           "con": {
             "pageId": _this.pageId,
-            "status":''
+            "status":'',
+            "searchStr":this.searchStr
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list
@@ -718,15 +741,16 @@ export default {
         // _this.radio2 = 1;
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/notice/audit/list"
+        _this.url = "/api/producttype/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
-            "page_size": _this.pageSize,
-            "page_num": _this.currentPage - 1
+            "page_size": _this.pageSize.toString(),
+            "page_num": (_this.currentPage - 1).toString()
           },
           "con": {
             "pageId": _this.pageId,
-            "status":''
+            "status":'',
+            "searchStr":this.searchStr
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
@@ -734,6 +758,13 @@ export default {
           //  console.log("success");
           //  console.log(data);
         })
+      }
+      if(this.radio2 == 3){
+          this.showOperation = false;
+          this.showOperation3 = false;
+      }else{
+          this.showOperation = true;
+          this.showOperation3 = true;
       }
       setTimeout(() => {
         _this.listLoading = false;
@@ -745,9 +776,9 @@ export default {
     checkArea(id) {
       // var _this = this;
       this.listLoading = true;
-      let URL= "/api/notice/audit/areaConf/all";
+      let URL= "/api/producttype/audit/areaConf/all";
       if(this.activeName2 === "已上线") {
-          URL =  "/api/notice/areaConf/all";
+          URL =  "/api/producttype/areaConf/all";
       }
       this.$http.post(URL,{id},(rsp) => {
         console.log(rsp.provinces);
@@ -772,15 +803,9 @@ export default {
        return tempArr;
     },
     setNewData(){
-      // dialogFormVisible = true
-      var _this = this;
-      console.log(this.pageId);
-      // alert("asdfadsf");
-      // alert();
-      localEvent.set("pageId",_this.pageId);
-      this.$router.push({
-        path: _this.$route.path + '/addData'
-      });
+        this.dialogFlag = "新增";
+        this.dialogFormVisible = true
+
     },
     handleClose() {
       // alert("asdfsd");
@@ -815,7 +840,8 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": status
+          "status": status,
+          'searchStr':this.searchStr
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
@@ -840,7 +866,8 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": status
+          "status": status,
+          'searchStr':this.searchStr
         }
       }, (rsp) => {
         this.halfListLoading = false;
@@ -862,24 +889,93 @@ export default {
         duration: 6000
       })
     },
-    handleEdit(row) {
-      row.tabName = this.activeName2;
-      var _this = this;
-      row.pageId = _this.pageId
-      localEvent.set("localChooseExpress", row);
-      this.$router.push({
-        path: _this.$route.path + '/editData'
-      });
+    handleEdit(scope) {
+      this.dialogFlag = "修改";
+      console.log(scope.status);
+      this.formAdd={
+        logisMerchantName:scope.logisMerchantName,  // 快递公司名 scope.logisMerchantName
+        company:'',
+        productName:scope.productName,
+        productTypeCode:scope.productTypeCode,
+        description:scope.description,
+        sortWeight:scope.sortWeight,
+        discount:'有折扣',
+        discountNum:scope.discount/100,
+      };
+      // alert(scope.opStatus)
+      if (scope.opStatus == "1") {
+         this.formAdd.status = "1";
+        //  this.currentStateText = "已下线"
+      } else {
+         this.formAdd.status = "2";
+        // this.currentStateText = "已上线"
+      }
+      this.id = scope.id;
+      this.logisMerchId = scope.logisMerchId;
+      this.dialogFormVisible = true;
+      // row.tabName = this.activeName2;
+      // var _this = this;
+      // row.pageId = _this.pageId
+      // localEvent.set("localChooseExpress", row);
+      // this.$router.push({
+      //   path: _this.$route.path + '/editData'
+      // });
     },
-    effectiveDetails(row) {
-      var _this = this;
-      row.pageId = _this.pageId
-      localEvent.set("localChooseExpress", row);
+    effectiveDetails(scope) {
+      this.dialogFlag = '详情';
+      // this.form.promotionId = localData.promotionId;
+      // this.id = localData.id;
+      //  let URL,Id;
+      // var httpId = '';
+      // if(this.activeName2 == '配置'){  //配置 修改
+      //     URL = "/api/producttype/audit/get";
+      //     Id = this.id;
+      //     console.log("配置 修改")
+      // }else{  // 待审核 已生效详情
+      //     URL = "/api/producttype/get";
+      //     Id = this.form.promotionId;``
+      //     console.log("待审核 已生效详情")
+      // }
+      //
+      // _this.$http.post(URL,{
+      //   "id":Id
+      // },(rsp)=>{
+      //   console.log(rsp)
 
-      this.$router.push({
-        path: _this.$route.path + '/detail'
-      });
-
+      // this.formAdd={
+      //   logisMerchantName:scope.logisMerchantName,  // 快递公司名 scope.logisMerchantName
+      //   company:'',
+      //   productName:scope.productName,
+      //   productTypeCode:scope.productTypeCode,
+      //   description:scope.description,
+      //   sortWeight:scope.sortWeight,
+      //   discount:'无折扣',
+      //   discountNum:scope.sortWeight,
+      //   status:scope.status
+      // },
+      //   console.log(rsp.imageUrl)
+      //   this.form.name = rsp.name;
+      //   this.form.Forder = rsp.sortWeight;
+      //   this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
+      //   this.form.fileList2[0].url = rsp.imageUrl;
+      //   this.form.gmtBegin = rsp.gmtBegin;
+      //   this.form.gmtEnd = rsp.gmtEnd;
+      //   this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
+      //   if (rsp.opStatus == "1") {
+      //     this.form.radio = 1;
+      //     this.currentStateText = "已下线"
+      //   } else {
+      //     this.form.radio = 2;
+      //     this.currentStateText = "已上线"
+      //   }
+      //
+      //  this.dialogConfig(true)
+      //
+      // },(error)=>{
+      //   console.log(error)
+      //   console.log('failed');
+      // });
+     this.dialogFormVisible = true;
     },
     handleRadio(){
       var _this = this;
@@ -898,7 +994,7 @@ export default {
       // }
       _this.currentPage = 1;
           this.PageStore.commit("setPage",1);
-      _this.url = "/api/notice/audit/list"
+      _this.url = "/api/producttype/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": this.pageSize,
@@ -906,7 +1002,8 @@ export default {
           },
           "con": {
             "pageId": this.pageId,
-            "status":this.radio2
+            "status":this.radio2,
+            'searchStr':this.searchStr
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list;
