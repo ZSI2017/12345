@@ -123,10 +123,10 @@
       </el-select>
     </el-form-item>
     <el-form-item label="选择导入文本" prop="fileList" :inline="true"  :label-width="importLabelWidth">
-      <!-- http://192.168.12.54:8080 -->
+      <!-- http://sendexmng-sit.alipay-eco.com -->
       <el-upload
         class="upload-demo"
-        action="http://192.168.12.54:8080/api/freightPriceRule/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/upload"
         :on-change="handleFileChange"
         :file-list="importForm.fileList"
         :on-remove="handleRemove"
@@ -137,7 +137,7 @@
         <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
 
-      <!-- <a href="http://192.168.12.54:8080/api/freightPriceRule/download">下载模板</a> -->
+      <!-- <a href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/download">下载模板</a> -->
     </el-form-item>
 
   </el-form>
@@ -155,7 +155,7 @@
   size="tiny"
   :before-close="handleClose">
   <span>导入文件错误，是否查看错误内容</span>
-  <a href="http://192.168.12.54:8080/api/freightPriceRule/findFile">点击下载错误内容</a>
+  <a href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/findFile">点击下载错误内容</a>
   <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -407,7 +407,7 @@ export default {
   // :on-success='handleSuccess'
   // :on-error='handlerror'
   handleDownload(){
-    window.location.href="http://192.168.12.54:8080/api/freightPriceRule/download"
+    window.location.href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/download"
   },
   handlerror(err){
     // alert(err)
@@ -439,7 +439,7 @@ export default {
                       cancelButtonText: '取消',
                       type: 'warning'
                     }).then(() => {
-                       window.location.href="http://192.168.12.54:8080/api/freightPriceRule/findFile"
+                       window.location.href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/findFile"
                     }).catch(() => {
                       // this.$message({
                       //   type: 'info',
@@ -799,7 +799,7 @@ export default {
            cancelButtonText: '取消',
            type: 'info'
          }).then(() => {
-            window.location.href="http://192.168.12.54:8080/api/freightPriceRule/export"
+            window.location.href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/export"
          }).catch(() => {
            // this.$message({
            //   type: 'info',
