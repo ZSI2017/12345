@@ -282,7 +282,7 @@ export default {
     handleConfirm(){
       this.loadingTakeOffFlag = false;
       this.$http.post(this.promotionURL, {
-          "id": this.promotionID,
+          "id": this.promotionID.toString(),
       }, (rsp) => {
         console.log(rsp);
         this.$message({

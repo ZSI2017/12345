@@ -378,7 +378,7 @@ export default {
       this.loadingTakeOffFlag = false;
           this.listLoading = true;
       this.$http.post(this.promotionURL, {
-          "id": this.promotionID,
+          "id": this.promotionID.toString(),
       }, (rsp) => {
         console.log(rsp);
           this.listLoading = false;

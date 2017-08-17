@@ -1,5 +1,5 @@
 <template>
-  <div class="section">
+  <div class="section main">
     <el-row>
         <el-col :span="24"><h1 class="grid-content bg-purple-dark orderTitle">订单号：{{orderNo}}</h1></el-col>
     </el-row>
@@ -18,28 +18,28 @@
         </el-collapse>
     </el-row>
     <el-collapse v-model="activeNames">
-        <el-collapse-item title="寄件人信息" name="1">
+        <el-collapse-item title="寄件人信息" name="1" class="selfCollapse">
             <el-row class="sender-table">
                 <el-col :span="24" v-for="(senderItem,index) in senderItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{senderItem.name}}：</el-col ><el-col :span="18">{{senderItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
-        <el-collapse-item title="收件人信息" name="2">
+        <el-collapse-item title="收件人信息" name="2" class="selfCollapse">
             <el-row class="sender-table">
                 <el-col :span="24" v-for="(rcvrItem,index) in rcvrItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{rcvrItem.name}}：</el-col ><el-col :span="18">{{rcvrItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
-        <el-collapse-item title="物品信息" name="3">
+        <el-collapse-item title="物品信息" name="3" class="selfCollapse">
             <el-row class="goods-table">
 
                 <el-col :span="24" v-for="(goodsItem,index) in goodsItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{goodsItem.name}}：</el-col ><el-col :span="18">{{goodsItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
-        <el-collapse-item title="揽收员信息" name="4">
+        <el-collapse-item title="揽收员信息" name="4" class="selfCollapse">
             <el-row class="courier-table">
                 <el-col :span="24" v-for="(courier,index) in couriers" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{courier.name}}：</el-col ><el-col :span="18">{{courier.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
-        <el-collapse-item title="快递费用" name="5">
+        <el-collapse-item title="快递费用" name="5" class="selfCollapse">
             <el-row class="expressPay-table">
                 <el-col :span="24" v-for="(expressPay,index) in expressPays" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{expressPay.name}}：</el-col ><el-col :span="18">{{expressPay.message}}</el-col></div></el-col>
             </el-row>
@@ -69,14 +69,17 @@
         </el-dialog>
            <!--  查看信息服务       :label-width="formLabelWidth" -->
         <el-dialog title="服务记录" :visible.sync="dialogServerVisible">
-            <el-collapse v-model="activeNames2" @change="handleChange" v-for='serverList in serverLists'>
-                <el-collapse-item :title="serverList.title" name="0">
-                    <template slot="title">
-                        <span>{{serverList.title}}</span><span style="float:right;padding-right:20px;">{{serverList.time}}</span>
-                    </template>
-                    <div>{{serverList.content || '暂无信息'}}</div>
-                </el-collapse-item>
-            </el-collapse>
+            <div style="max-height:300px; overflow-y: auto;">
+                <div v-for='serverList in serverLists'>
+                    <el-row :span="24" class="serverList serverList1">
+                        <el-col :span="6">{{serverList.time}}</el-col>
+                        <el-col :span="6">{{serverList.title || '暂无信息'}}</el-col>                
+                    </el-row>
+                    <el-row :span="24" class="serverList serverList2">
+                        <el-col :span="6">原因：{{serverList.content || '暂无数据'}}</el-col>               
+                    </el-row>
+                </div>
+            </div> 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogServerVisible = false">关 闭</el-button>
             </div>
@@ -107,6 +110,18 @@
               <el-button type="primary" @click="handleDialogOtherpaySave">确 定</el-button>
             </div>
         </el-dialog>
+         <!--  超时转快递       :label-width="formLabelWidth" -->        
+        <el-dialog
+            title="确定将该订单转为其他快递公司吗？"
+            :visible.sync="dialogTimeVisible"
+            size="tiny"
+            :before-close="handleClose">
+            <i class="el-icon-information" style="color:#f7ba2a;font-size:40px;float:left;"></i><span style="height:40px;line-height:40px;display:inline-block;float:left;padding-left:10px;">确认后该订单将由EMS上门取件，请与客户提前沟通。</span>
+            <span slot="footer" class="dialog-footer" style="display:inline-block;">
+                <el-button @click="dialogTimeVisible = false">取 消</el-button>
+                <el-button type="primary" @click="handleChangeExpressConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
 
 
 
@@ -121,7 +136,6 @@ import localEvent from 'src/vuex/function.js';
     data() {
       return {
         activeNames: ['0','1','2','3','4',"5"],
-        activeNames2: ['0'],
         orderNo:'',
         url:'',
         serverLists:'',
@@ -130,6 +144,7 @@ import localEvent from 'src/vuex/function.js';
         dialogCancelVisible:false,
         dialogOrderVisible:false,
         dialogOtherpayVisible:false,
+        dialogTimeVisible:false,
         cancelCauseArr:[],
         cancelCause:{
           region:''
@@ -269,7 +284,7 @@ import localEvent from 'src/vuex/function.js';
             }
         this.requestHttp();
     },
-     methods: {
+    methods: {
         requestHttp(){
             var _this = this;
             // var localData = localEvent.get("localorderManage");
@@ -467,33 +482,24 @@ import localEvent from 'src/vuex/function.js';
             })
         },
         handleChangeExpress(){
-            this.dialogOtherpayVisible = false;
-            this.$confirm('确认后该订单将由EMS上门取件，请与客户提前沟通。', '确定将该订单转为其他快递公司吗？', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-                }).then(() => {
-                this.$http.post("/api/order/changeExpress",{orderNo:this.orderNo},(rsp)=>{
-                        console.log(rsp)
-                        this.$message({
-                            type: 'success',
-                            message: '转快递成功!'
-                        });
-                },(error)=>{
+            this.dialogTimeVisible = true;
+        },
+        handleChangeExpressConfirm(){
+            this.$http.post("/api/order/changeExpress",{orderNo:this.orderNo},(rsp)=>{
+                    console.log(rsp)
                     this.$message({
-                        type: 'error',
-                        message: error.data.meta.code+"--"+error.data.meta.msg
+                        type: 'success',
+                        message: '转快递成功!'
                     });
+            },(error)=>{
+                this.$message({
+                    type: 'error',
+                    message: error.data.meta.code+"--"+error.data.meta.msg
                 });
-                }).catch(() => {
-                    // this.$message({
-                    //     type: 'info',
-                    //     message: '已取消删除'
-                    // });
-                });
-
-        }
-
+            });
+            this.dialogTimeVisible = false;
+            
+        }    
    }
 }
 </script>
@@ -512,7 +518,7 @@ import localEvent from 'src/vuex/function.js';
         .cell-left{
             border-top: 1px solid #333;
             text-align: left;
-            background: #e1e1e1;
+            background: #eef1f6;
             box-sizing:border-box;
             white-space:nowrap;
             text-indent: 5px;
@@ -537,7 +543,7 @@ import localEvent from 'src/vuex/function.js';
             border-left: 1px solid #333;
             border-top: 1px solid #333;
             text-align: left;
-            background: #e1e1e1;
+            background: #eef1f6;
             box-sizing:border-box;
             white-space:nowrap;
             text-indent: 5px;
@@ -562,7 +568,7 @@ import localEvent from 'src/vuex/function.js';
     @media screen and (max-width: 999px) {
         .cell-left{
             text-align: left;
-            background: #e1e1e1;
+            background: #eef1f6;
             box-sizing:border-box;
             white-space:nowrap;
         }
@@ -581,7 +587,7 @@ import localEvent from 'src/vuex/function.js';
     //    @media screen and (min-width: 901px) {
     //     .cell-left{
     //         text-align: left;
-    //         background: #e1e1e1;
+    //         background: #eef1f6;
     //         box-sizing:border-box;
     //         white-space:nowrap;
     //     }
@@ -600,6 +606,29 @@ import localEvent from 'src/vuex/function.js';
     .footer{
         padding:20px 0 20px 15px;
     }
-
+    .main .el-collapse-item__header{
+        background-color: #eaeefb;  
+        color:#5295e2;  
+    }
+    .main .serverList{
+        line-height: 48px;
+        height:48px;
+        font-size: 14px;    
+        border-left: 1px solid #eaeefb;    
+        border-right: 1px solid #eaeefb;              
+    } 
+    .main .serverList1{
+        background-color: #eaeefb;
+        color: #5295e2;
+        padding-left: 15px;
+        border-bottom: 1px solid #eaeefb;
+    } 
+    .main .serverList2{
+        background-color: #fbfdff;
+        color: #1f2d3d;
+        padding-left: 15px;  
+        border-bottom: 1px solid #eaeefb;
+              
+    } 
 
 </style>

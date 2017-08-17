@@ -266,7 +266,7 @@ export default {
     handleConfirm(){
       this.loadingTakeOffFlag = false;
       this.$http.post(this.promotionURL, {
-          "id": this.promotionID,
+          "id": this.promotionID.toString(),
       }, (rsp) => {
         console.log(rsp);
         this.$message({
@@ -303,6 +303,7 @@ export default {
       this.myDiglogContent = "确认后，该内容将修改";
     },
     OperationApproved(row) {
+      console.log(row.id)
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
