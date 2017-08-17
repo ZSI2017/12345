@@ -60,11 +60,7 @@
       <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
-      <el-select  v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
-         <el-option label="http://" value="http://"></el-option>
-         <el-option label="https://" value="https://"></el-option>
-      </el-select>
-      <el-input style="float:left;width:520px" v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
+      <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
       <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
     </el-form-item>
     <el-form-item label="是否最热">
@@ -125,7 +121,6 @@ export default {
         isvMerchantId:'',
         slogan: '',
         tag: '',
-        linkHeader:'http://',    // url的 默认头部
         linkUrl: '',
         sortWeight:'',
         hotStatus: 1,
@@ -161,7 +156,7 @@ export default {
   mounted() {
     let _this = this;
     let AccessHttp = '/api/logisMerchant/getListByAccessStatus';
-    _this.$http.post(AccessHttp,{'accessStatus':1},(result) => {
+    _this.$http.post(AccessHttp,{'moduleType':2,'accessStatus':1},(result) => {
         console.log(result)
         this.options = result;
         // this.$message({
@@ -199,14 +194,14 @@ export default {
                 "data": {
                   "pageId": _this.pageId,
                   // "businessType":_this.ruleForm.businessType,
-                  "logisMerchId": _this.ruleForm.isvMerchantId,
+                  "logisMerchId": this.ruleForm.isvMerchantId,
                   "slogan": _this.ruleForm.slogan,
                   "tag":_this.ruleForm.tag,                                 
                   "sortWeight":_this.ruleForm.sortWeight,   
                   "hotStatus":_this.ruleForm.hotStatus,                  
                   "newStatus":_this.ruleForm.newStatus,
                   "opStatus":_this.ruleForm.opStatus,
-                  "Url": _this.ruleForm.linkHeader+_this.ruleForm.linkUrl,
+                  "Url": _this.ruleForm.linkUrl,
                 }
               };
           _this.$http.post(_this.url,httpData,(result) => {

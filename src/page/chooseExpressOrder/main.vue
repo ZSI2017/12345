@@ -32,7 +32,7 @@
     align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="logisMerchantLogo" label="LOGO">
-       <template scope="scope">
+        <template scope="scope">
             <img width="50px" style="cursor:pointer;" :src="scope.row.logisMerchantLogo || ''" trigger="click" placement="right" @click="showImg(scope.row.logisMerchantLogo)">
             <el-dialog v-model="dialogVisible" size="tiny">
               <img width="100%" :src="bigImageUrl" alt="">
@@ -41,7 +41,7 @@
     </el-table-column>
     <el-table-column prop="logisMerchantName" label="公司名称">
     </el-table-column>
-    <el-table-column prop="slogan" label="广告语" width="130">
+    <el-table-column prop="slogan" label="广告语" width="260">
     </el-table-column>
     <el-table-column prop="tag" label="标签" width="160">
       <template scope="scope">
@@ -266,7 +266,7 @@ export default {
     handleConfirm(){
       this.loadingTakeOffFlag = false;
       this.$http.post(this.promotionURL, {
-          "id": this.promotionID,
+          "id": this.promotionID.toString(),
       }, (rsp) => {
         console.log(rsp);
         this.$message({
@@ -290,6 +290,7 @@ export default {
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
         this.promotionMessage = '已置为上线';
       }
+      console.log(row)
       console.log(row.pageExpConfId)
       this.promotionID = row.pageExpConfId || row.id;
       this.promotionURL = '/api/chooseorder/status/update';
@@ -302,6 +303,7 @@ export default {
       this.myDiglogContent = "确认后，该内容将修改";
     },
     OperationApproved(row) {
+      console.log(row.id)
       this.loadingTakeOffFlag = true;
       this.myDialogTitle = "通过申请？";
       this.myDiglogContent = "确认后，该内容将通过申请";
@@ -470,6 +472,10 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
       this.PageStore.commit("setPage",1);
+      let status = this.radio2;
+      if(this.activeName2 == "待审核") {
+          status = "";
+      }
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -477,7 +483,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": this.radio2
+          "status": status
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
