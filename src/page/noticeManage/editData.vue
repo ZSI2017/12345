@@ -260,7 +260,7 @@ export default {
     }
 
     _this.$http.post(_this.url,{
-      "id":httpId
+      "id":httpId.toString()
     },(rsp)=>{
       console.log(rsp)
       console.log(rsp.imageUrl)

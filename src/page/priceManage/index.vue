@@ -164,7 +164,7 @@
 
 
 <!-- 新增运线快递费  -->
-  <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible"  :before-close="handleClose">
+  <el-dialog :title="dialogTitle"  :visible.sync="dialogFormVisible" custom-class="dialogWidth"   size="small"  :before-close="handleClose">
   <el-form  ref="form" :model="form" :rules="rules" :inline="true">
     <el-form-item label="快递公司" prop ="expressName" :label-width="formLabelWidth">
       <el-select v-if="!handleEditFlag" filterable label="快递公司" :loading="expressLoading" v-model="form.expressName" @visible-change="handExpressChange" placeholder="请选择">
@@ -395,7 +395,8 @@ export default {
   },
   mounted(){
      // 初始化页面
-      this.handleQuery();
+     let showNull = true
+      this.handleQuery(showNull);
   },
   methods: {
 
@@ -429,7 +430,8 @@ export default {
              "productTypeName":this.importForm.typeOfService[0]
            }
           this.$http.post("/api/freightPriceRule/import",data,(result)=>{
-               alert("result");
+                  this.$refs["importForm"].resetFields();
+                  this.dialogImportVisible = false;
            },(error)=>{
               this.$refs["importForm"].resetFields();
                if(error.data.meta.code == '0012'){
@@ -593,7 +595,7 @@ export default {
       }
 
     },
-    handleQuery() {
+    handleQuery(showNull) {
 
     let data = {
          "pages":{
@@ -610,6 +612,9 @@ export default {
          }
       }
       this.$http.post('/api/freightPriceRule/list',data,(result) =>{
+              if(showNull && result.page_list.length === 0) {
+                 this.$message('未查询到内容，请重新选择！');
+              }
                 this.tableData = result.page_list;
                 this.totalCount = parseInt(result.pages.cnt);
       },(error) =>{
@@ -670,6 +675,7 @@ export default {
       },
       this.handleEditFlag = false;
       this.dialogFormVisible = true;
+      this.$refs['form'].resetFields();
     },
   handleAddSave(formName){
       // 是否为编辑运线快递费
@@ -743,7 +749,7 @@ export default {
       this.dialogTitle="编辑运线快递费",
       this.handleEditFlag = true;
       this.dialogFormVisible = true;
-      // this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields();
       console.log(scope);
       this.id = scope.id;
       this.form.expressName = scope.logMerchantName;
@@ -777,7 +783,8 @@ export default {
         this.dialogFormVisible= false;
   },
   handleCancel(){
-    this.$refs['form'].resetFields();
+    // this.$refs['form'].resetFields();
+    // alert()
     this.dialogFormVisible= false;
   },
   handleImportCancel(){
@@ -856,6 +863,9 @@ export default {
 </script>
 
 <style lang="scss">
+.dialogWidth{
+   width:39% !important
+}
 .el-tabs .el-tabs__content {
     display: none;
 }
