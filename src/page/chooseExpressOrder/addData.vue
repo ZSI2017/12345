@@ -113,7 +113,7 @@ export default {
       //select 快递公司选项
       options: [],
       value:'',
-      
+      merchantLogo:'',
       // 对输入表单进行验证
       ruleForm: {
         merchantName:'',
@@ -157,7 +157,16 @@ export default {
     let AccessHttp = '/api/logisMerchant/getListByAccessStatus';
     _this.$http.post(AccessHttp,{'moduleType':2,'accessStatus':1},(result) => {
         console.log(result)
-        this.options = result;
+        // this.options = result;
+        // if(options.length === 0 ){
+          for(let i =0;i<result.length;i++) {
+             this.options.push({
+                   lable:result[i].merchantName,
+                   value:[result[i].merchantLogo,result[i].merchantName,result[i].id]
+             })
+          }
+        // }
+
         // this.$message({
         //     type: 'success',
         //     message: '快递公司列表获取成功'
