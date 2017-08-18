@@ -3,21 +3,21 @@
   <el-row :span="24" type="flex" align="middle" style="margin-bottom:10px;">
     <el-col>
       <span>快递公司:</span>
-      <el-select filterable label="快递公司" :loading="expressLoading" v-model="expressName" @visible-change="handExpressChange" placeholder="请选择">
+      <el-select filterable label="快递公司" @change='handleSelect("typeOfService")' :loading="expressLoading" v-model="expressName" @visible-change="handleExpressChange" placeholder="请选择">
         <el-option v-for="item in expressOptions" :disabled="item.disabled" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </el-col>
     <el-col>
       <span>发货省:</span>
-      <el-select filterable label="发货省" :loading="sendProvinceLoading" @visible-change="handSendProvinceChange" v-model="sendProvince" placeholder="请选择">
+      <el-select filterable label="发货省" :loading="sendProvinceLoading" @visible-change="handleSendProvinceChange" @change='handleSelect("sendCity")' v-model="sendProvince" placeholder="请选择">
         <el-option v-for="item in sendProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </el-col>
     <el-col>
       <span>收货省:</span>
-      <el-select filterable :loading="recProvinceLoading" @visible-change="handRecProvinceChange" label="收货省" v-model="recProvince" placeholder="请选择">
+      <el-select filterable :loading="recProvinceLoading" @visible-change="handleRecProvinceChange" @change='handleSelect("recCity")' label="收货省" v-model="recProvince" placeholder="请选择">
         <el-option v-for="item in recProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -26,21 +26,21 @@
   <el-row :span="24" type="flex" align="middle" style="margin-bottom:10px;">
     <el-col>
       <span>服务类型:</span>
-      <el-select filterable label="服务类型" v-model="typeOfService" :loading="typeOfServiceLoading" @visible-change="handServiceChange" placeholder="请选择">
+      <el-select filterable label="服务类型" v-model="typeOfService" :loading="typeOfServiceLoading" @visible-change="handleServiceChange" placeholder="请选择">
         <el-option v-for="item in typeOfServiceOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </el-col>
     <el-col>
       <span>发货市:</span>
-      <el-select filterable label="发货市" v-model="sendCity" :loading="sendCityLoading" @visible-change="handSendCityChange" placeholder="请选择">
+      <el-select filterable label="发货市" v-model="sendCity" :loading="sendCityLoading" @visible-change="handleSendCityChange" placeholder="请选择">
         <el-option v-for="item in sendCityOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </el-col>
     <el-col>
       <span>收货市:</span>
-      <el-select filterable :loading="recCityLoading" @visible-change="handrecCityChange" label="收货市" v-model="recCity" placeholder="请选择">
+      <el-select filterable :loading="recCityLoading" @visible-change="handlerecCityChange" label="收货市" v-model="recCity" placeholder="请选择">
         <el-option v-for="item in recCityOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -111,13 +111,13 @@
   <el-dialog title="导入运线" :visible.sync="dialogImportVisible" size="tiny" :before-close="handleImportClose">
   <el-form  ref="importForm" :model="importForm" :rules="importRules" >
     <el-form-item label="快递公司" prop ="expressName" :label-width="importLabelWidth">
-      <el-select  filterable label="快递公司" :loading="expressLoading" v-model="importForm.expressName" @visible-change="handExpressChange" placeholder="请选择">
+      <el-select  filterable label="快递公司" :loading="expressLoading" v-model="importForm.expressName" @visible-change="handleExpressChange" placeholder="请选择">
         <el-option v-for="item in expressOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="服务类型" prop="typeOfService"  :label-width="importLabelWidth">
-      <el-select  filterable label="服务类型" v-model="importForm.typeOfService" :loading="typeOfServiceLoading" @visible-change="handServiceChange" placeholder="请选择">
+      <el-select  filterable label="服务类型" v-model="importForm.typeOfService" :loading="typeOfServiceLoading" @visible-change="handleServiceChange" placeholder="请选择">
         <el-option v-for="item in typeOfServiceOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -167,47 +167,47 @@
   <el-dialog :title="dialogTitle"  :visible.sync="dialogFormVisible" custom-class="dialogWidth"   size="small"  :before-close="handleClose">
   <el-form  ref="form" :model="form" :rules="rules" :inline="true">
     <el-form-item label="快递公司" prop ="expressName" :label-width="formLabelWidth">
-      <el-select v-if="!handleEditFlag" filterable label="快递公司" :loading="expressLoading" v-model="form.expressName" @visible-change="handExpressChange" placeholder="请选择">
+      <el-select v-if="!handleEditFlag" filterable label="快递公司" :loading="expressLoading" v-model="form.expressName" @visible-change="handleExpressChange"  @change ="handleAddSelect('typeOfService')" placeholder="请选择">
         <el-option v-for="item in expressOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
       <div style="width:200px;" v-if="handleEditFlag">{{form.expressName}}</div>
     </el-form-item>
     <el-form-item label="服务类型" prop="typeOfService"  :label-width="formLabelWidth">
-      <el-select  v-if="!handleEditFlag" filterable label="服务类型" v-model="form.typeOfService" :loading="typeOfServiceLoading" @visible-change="handServiceChange" placeholder="请选择">
-        <el-option v-for="item in typeOfServiceOptions" :key="item.value" :label="item.label" :value="item.value">
+      <el-select  v-if="!handleEditFlag" filterable label="服务类型" v-model="form.typeOfService" :loading="typeOfServiceLoading" @visible-change="handleServiceChange" placeholder="请选择">
+        <el-option v-for="item in typeOfServiceOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
         <div style="width:200px;" v-if="handleEditFlag">{{form.typeOfService}}</div>
     </el-form-item>
 
     <el-form-item label="发货省" prop="sendProvince"  :label-width="formLabelWidth">
-      <el-select  v-if="!handleEditFlag" filterable label="发货省" :loading="sendProvinceLoading" @visible-change="handSendProvinceChange" v-model="form.sendProvince" placeholder="请选择">
-        <el-option v-for="item in sendProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
+      <el-select  v-if="!handleEditFlag" filterable label="发货省" :loading="sendProvinceLoading" @visible-change="handleSendProvinceChange"   @change ="handleAddSelect('sendCity')" v-model="form.sendProvince" placeholder="请选择">
+        <el-option v-for="item in sendProvinceOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
         <div style="width:200px;" v-if="handleEditFlag">{{form.sendProvince}}</div>
     </el-form-item>
 
     <el-form-item label="发货市" prop="sendCity"  :label-width="formLabelWidth">
-      <el-select  v-if="!handleEditFlag" filterable label="发货市" v-model="form.sendCity" :loading="sendCityLoading" @visible-change="handSendCityChange" placeholder="请选择">
-        <el-option v-for="item in sendCityOptions" :key="item.value" :label="item.label" :value="item.value">
+      <el-select  v-if="!handleEditFlag" filterable label="发货市" v-model="form.sendCity" :loading="sendCityLoading" @visible-change="handleSendCityChange" placeholder="请选择">
+        <el-option v-for="item in sendCityOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
         <div v-if="handleEditFlag" style="width:200px;">{{form.sendCity}}</div>
     </el-form-item>
 
     <el-form-item label="收货省 " prop="recProvince"  :label-width="formLabelWidth">
-      <el-select  v-if="!handleEditFlag" filterable :loading="recProvinceLoading" @visible-change="handRecProvinceChange" label="收货省" v-model="form.recProvince" placeholder="请选择">
-        <el-option v-for="item in recProvinceOptions" :key="item.value" :label="item.label" :value="item.value">
+      <el-select  v-if="!handleEditFlag" filterable :loading="recProvinceLoading" @visible-change="handleRecProvinceChange"   @change ="handleAddSelect('recCity')" label="收货省" v-model="form.recProvince" placeholder="请选择">
+        <el-option v-for="item in recProvinceOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
         <div style="width:200px;" v-if="handleEditFlag">{{form.recProvince}}</div>
     </el-form-item>
 
     <el-form-item label="收货市 " prop="recCity" :label-width="formLabelWidth">
-      <el-select v-if="!handleEditFlag" filterable :loading="recCityLoading" @visible-change="handrecCityChange" label="收货市" v-model="form.recCity" placeholder="请选择">
-        <el-option v-for="item in recCityOptions" :key="item.value" :label="item.label" :value="item.value">
+      <el-select v-if="!handleEditFlag" filterable :loading="recCityLoading" @visible-change="handlerecCityChange" label="收货市" v-model="form.recCity" placeholder="请选择">
+        <el-option v-for="item in recCityOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
         <div style="width:200px;" v-if="handleEditFlag">{{form.sendCity}}</div>
@@ -459,7 +459,7 @@ export default {
   handleImportClose(){
      this.dialogImportVisible = false;
   },
-  handExpressChange(visible) {
+  handleExpressChange(visible) {
       if (visible) {
         if (this.expressOptions.length > 0) {
            this.expressLoading = false;
@@ -482,7 +482,7 @@ export default {
     },
 
     // 选择服务类型
-    handServiceChange(visible) {
+    handleServiceChange(visible) {
       let logisMerchId = this.expressName[1];
       if(this.dialogFormVisible){
           logisMerchId = this.form.expressName[1];
@@ -508,7 +508,7 @@ export default {
 
       }
     },
-    handSendProvinceChange(visible) {
+    handleSendProvinceChange(visible) {
       if (visible) {
         if (this.sendProvinceOptions.length > 0) {
           this.sendProvinceLoading = false
@@ -529,7 +529,7 @@ export default {
         }
       }
     },
-    handSendCityChange(visible) {
+    handleSendCityChange(visible) {
       let provinceName = this.sendProvince[0];
       if(this.dialogFormVisible){
           provinceName = this.form.sendProvince[0];
@@ -552,7 +552,7 @@ export default {
         })
       }
     },
-    handRecProvinceChange(visible) {
+    handleRecProvinceChange(visible) {
       if (visible) {
         if (this.recProvinceOptions.length > 0) {
           this.recProvinceLoading = false
@@ -573,7 +573,7 @@ export default {
         }
       }
     },
-    handrecCityChange(visible){
+    handlerecCityChange(visible){
       let provinceName = this.recProvince[0]
       if(this.dialogFormVisible){
           provinceName = this.form.recProvince[0]
@@ -587,13 +587,35 @@ export default {
             result[i].value = [result[i].cityName, result[i].cityNo];
             result[i].label = result[i].cityName;
           }
-
+          result.unshift({
+             value:['全部',''],
+             label:'全部',
+          })
           this.recCityOptions = result.slice(0);
           this.recCityLoading = false;
         })
 
       }
 
+    },
+    handleSelect(type){
+      if(type === "sendCity") {
+        this.sendCity = "全部";
+      }else if( type === "recCity") {
+          this.recCity = "全部"
+      }else if( type = 'typeOfService') {
+           this.typeOfService = '全部'
+      }
+      // alert(city)
+    },
+    handleAddSelect(type){
+      if(type === "typeOfService") {
+          this.form.typeOfService = '';
+      }else if(type === 'sendCity') {
+          this.form.sendCity = '';
+      }else if(type === 'recCity') {
+          this.form.recCity = '';
+      }
     },
     handleQuery(showNull) {
 

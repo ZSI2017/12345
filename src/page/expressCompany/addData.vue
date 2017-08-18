@@ -7,10 +7,10 @@
         <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
             <el-option
               v-for="item in options"
-              :key="item"
-              :merchantLogo="item.merchantLogo"
-              :label="item.merchantName"
-              :value="item">
+              :key="item.value"
+              :merchantLogo="item.value[1]"
+              :label="item.lable"
+              :value="item.value">
             </el-option>
         </el-select>
       </el-col>
@@ -174,7 +174,16 @@ export default {
     let AccessHttp = '/api/logisMerchant/getListByAccessStatus';
     _this.$http.post(AccessHttp,{'moduleType':2,'accessStatus':1},(result) => {
         console.log(result)
-        this.options = result;
+        // this.options = result;
+        // if(options.length === 0 ){
+          for(let i =0;i<result.length;i++) {
+             this.options.push({
+                   lable:result[i].merchantName,
+                   value:[result[i].merchantLogo,result[i].merchantName,result[i].id]
+             })
+          }
+        // }
+
         // this.$message({
         //     type: 'success',
         //     message: '快递公司列表获取成功'
@@ -284,11 +293,9 @@ export default {
     },
     handleMerchant(){
       console.log(this.value)
-      console.log(this.value.id)
-      console.log(this.merchantLogo)
-      this.merchantLogo = this.value.merchantLogo;
-      this.ruleForm.merchantName = this.value.merchantName;
-      this.ruleForm.isvMerchantId = this.value.id;
+      this.merchantLogo = this.value[0];
+      this.ruleForm.merchantName = this.value[1];
+      this.ruleForm.isvMerchantId = this.value[2];
     },
     handlePreview(file) {
       this.dialogVisible = true;

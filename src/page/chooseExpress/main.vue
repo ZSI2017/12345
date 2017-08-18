@@ -496,6 +496,10 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = true;
+        if(this.radio2 == 3){
+            this.showOperation = false;
+            this.showOperation3 = false;
+        }
         // _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;

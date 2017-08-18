@@ -26,7 +26,9 @@ for(var i =0;i<60;i++){
          "address":Mock.Random.county(true).replace(/' '/g,''),
          "reviewState":"已完成",
          "content":Mock.Random.ctitle(),
-         "ordernumber":Mock.Random.natural(10000000000,19999999999)
+         "ordernumber":Mock.Random.natural(10000000000,19999999999),
+         "merchantName":Mock.Random.ctitle(),
+         "merchantLogo":Mock.Random.name()
        })
     )
 }

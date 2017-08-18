@@ -7,9 +7,10 @@
         <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
             <el-option
               v-for="item in options"
-              :key="item"
-              :label="item.merchantName"
-              :value="item">
+              :key="item.value"
+              :merchantLogo="item.value[1]"
+              :label="item.lable"
+              :value="item.value">
             </el-option>
         </el-select>
       </el-col>
@@ -264,9 +265,9 @@ export default {
     },
     handleMerchant(){
       console.log(this.value)
-      this.merchantLogo = this.value.merchantLogo;
-      this.ruleForm.merchantName = this.value.merchantName;
-      this.ruleForm.isvMerchantId = this.value.id;
+      this.merchantLogo = this.value[0];
+      this.ruleForm.merchantName = this.value[1];
+      this.ruleForm.isvMerchantId = this.value[2];
     },
     handlePreview(file) {
       this.dialogVisible = true;

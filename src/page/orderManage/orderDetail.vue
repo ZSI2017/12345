@@ -44,6 +44,11 @@
                 <el-col :span="24" v-for="(expressPay,index) in expressPays" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{expressPay.name}}：</el-col ><el-col :span="18">{{expressPay.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
+        <el-collapse-item title="支付详情" name="6" class="selfCollapse" v-if="payDetailFlag">
+            <el-row class="payDetail-table">
+                <el-col :span="24" v-for="(payDetail,index) in payDetails" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{payDetail.name}}：</el-col ><el-col :span="18">{{payDetail.message}}</el-col></div></el-col>
+            </el-row>
+        </el-collapse-item>
         <el-row class="footer">
             <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
             <el-button class="complateInfo" @click="handleShowIfo" type="primary">{{showAllIfo}}</el-button>
@@ -135,7 +140,7 @@ import localEvent from 'src/vuex/function.js';
   export default {
     data() {
       return {
-        activeNames: ['0','1','2','3','4',"5"],
+        activeNames: ['0','1','2','3','4',"5","6"],
         orderNo:'',
         url:'',
         serverLists:'',
@@ -146,6 +151,7 @@ import localEvent from 'src/vuex/function.js';
         dialogOtherpayVisible:false,
         dialogTimeVisible:false,
         cancelCauseArr:[],
+        payDetailFlag:false, //支付详情显示
         cancelCause:{
           region:''
         },
@@ -270,6 +276,18 @@ import localEvent from 'src/vuex/function.js';
             name: "实付费用",
             message: '',
         }],
+        payDetails:[{
+            name: "支付交易号",
+            message: '',
+        },
+        {
+            name: "支付完成时间",
+            message: "",
+        },
+        {
+            name: "实际支付金额",
+            message: "",
+        }],
         requestData:{},
       }
 
@@ -313,6 +331,11 @@ import localEvent from 'src/vuex/function.js';
                 }else{
                     this.OtherPayFlag = false;
                 }
+                if(rsp.orderStatus == '3'){
+                    this.payDetailFlag = true;
+                }else{
+                    this.payDetailFlag = false;                    
+                }
                 //基本信息
                 this.items[0].message = rsp.expName || '暂无';
                 this.items[1].message = rsp.actCarrierName || '暂无';
@@ -347,6 +370,11 @@ import localEvent from 'src/vuex/function.js';
                 this.expressPays[1].message = rsp.estimatePrice || '暂无';
                 this.expressPays[2].message = rsp.orderAmount || '暂无';
                 this.expressPays[3].message = rsp.receiptAmount || '暂无';
+
+                //支付详情
+                this.payDetails[0].message = rsp.tradeNo || '暂无';                
+                this.payDetails[1].message = rsp.gmtPayment || '暂无';
+                this.payDetails[2].message = rsp.receiptAmount || '暂无';
 
             },(error)=>{
                 console.log('failed');
