@@ -233,7 +233,16 @@ export default {
           message: '请上传图片',
           type:'array',
           trigger: 'on-change'
-        }],
+        }, {validator(rule,value,callback,source,options) {
+                  var errors = [];
+                     if(value.length === 0) {
+                        errors.push(
+                         new Error('请上传图片')
+                       )
+                     }
+                     callback(errors)
+                   }
+          }],
         coverArea: [{
           required: true,
           message: '请选择覆盖地区',
@@ -347,28 +356,34 @@ export default {
       })
     },
     // 点击返回 对应的事件处理
-    handleBackClick() {
+  handleBackClick() {
         this.$router.go(-1);
       // this.loadingFlag = true;
-    },
+  },
   // 对图片操作的控制
   handleImageChange(file,fileList){
+       console.log(this.ruleForm.imageList);
        this.ruleForm.imageList = fileList.slice(-1);
   },
-    handlePreview(file) {
+  handlePreview(file) {
       this.dialogVisible = true;
       console.log(file.response)
-    },
-    handleSuccess(file){
+  },
+  handleSuccess(file){
       console.log(file.result)
       this.ruleForm.fileList = file.result;
     },
-    handlerror(err, file, fileList){
+  handlerror(err, file, fileList){
       alert(err);
       alert(file);
       alert(fileList);
     },
-    handleRemove() {},
+  handleRemove(file,fileList) {
+      //  console.log(fileList);
+      //  console.log(file);
+          this.ruleForm.fileList = fileList;
+      //  console.log(this.ruleForm.imageList);
+    },
 
     // 标签页选择
     handleTabClick(tab, event) {
