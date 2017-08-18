@@ -357,9 +357,11 @@ export default {
     //dialog 确认按钮
     handleConfirm(){
       this.loadingTakeOffFlag = false;
+      this.listLoading = true;
       this.$http.post(this.promotionURL, {
           "id": this.promotionID.toString(),
       }, (rsp) => {
+        this.listLoading = false;
         console.log(rsp);
         this.$message({
           message: this.promotionMessage,
@@ -367,6 +369,9 @@ export default {
         });
         this.handleTabClick({label:this.activeName2})
 
+      },(error)=>{
+        console.log(error)
+        this.listLoading = false;
       })
 
     },
