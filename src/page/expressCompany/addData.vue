@@ -10,7 +10,7 @@
               :key="item.merchantLogo"
               :merchantLogo="item.merchantLogo"
               :label="item.merchantName"
-              :value="item">
+              :value="item.merchantName">
             </el-option>
         </el-select>
       </el-col>
