@@ -357,9 +357,11 @@ export default {
     //dialog 确认按钮
     handleConfirm(){
       this.loadingTakeOffFlag = false;
+      this.listLoading = true;
       this.$http.post(this.promotionURL, {
           "id": this.promotionID.toString(),
       }, (rsp) => {
+        this.listLoading = false;
         console.log(rsp);
         this.$message({
           message: this.promotionMessage,
@@ -367,6 +369,9 @@ export default {
         });
         this.handleTabClick({label:this.activeName2})
 
+      },(error)=>{
+        console.log(error)
+        this.listLoading = false;
       })
 
     },
@@ -540,7 +545,7 @@ export default {
       if(this.activeName2 === "已上线") {
           URL =  "/api/sendapp/areaConf/all";
       }
-      this.$http.post(URL,{id},(rsp) => {
+      this.$http.post(URL,{id:id.toString()},(rsp) => {
         console.log(rsp.provinces);
         this.gridData = this.filterProvinces(rsp.provinces);
         // console.log(_this.gridData);

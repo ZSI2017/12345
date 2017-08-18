@@ -30,7 +30,6 @@
         </el-collapse-item>
         <el-collapse-item title="物品信息" name="3" class="selfCollapse">
             <el-row class="goods-table">
-
                 <el-col :span="24" v-for="(goodsItem,index) in goodsItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{goodsItem.name}}：</el-col ><el-col :span="18">{{goodsItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
@@ -42,6 +41,11 @@
         <el-collapse-item title="快递费用" name="5" class="selfCollapse">
             <el-row class="expressPay-table">
                 <el-col :span="24" v-for="(expressPay,index) in expressPays" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{expressPay.name}}：</el-col ><el-col :span="18">{{expressPay.message}}</el-col></div></el-col>
+            </el-row>
+        </el-collapse-item>
+        <el-collapse-item title="支付详情" name="6" class="selfCollapse" v-if="payDetailFlag">
+            <el-row class="payDetail-table">
+                <el-col :span="24" v-for="(payDetail,index) in payDetails" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{payDetail.name}}：</el-col ><el-col :span="18">{{payDetail.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
         <el-row class="footer">
@@ -135,7 +139,7 @@ import localEvent from 'src/vuex/function.js';
   export default {
     data() {
       return {
-        activeNames: ['0','1','2','3','4',"5"],
+        activeNames: ['0','1','2','3','4',"5","6"],
         orderNo:'',
         url:'',
         serverLists:'',
@@ -146,6 +150,7 @@ import localEvent from 'src/vuex/function.js';
         dialogOtherpayVisible:false,
         dialogTimeVisible:false,
         cancelCauseArr:[],
+        payDetailFlag:false, //支付详情显示
         cancelCause:{
           region:''
         },
@@ -256,7 +261,7 @@ import localEvent from 'src/vuex/function.js';
         }],
         expressPays:[{
             name: "支付方式",
-            message: '支付宝在线支付',
+            message: '',
         },
         {
             name: "预计费用",
@@ -269,6 +274,18 @@ import localEvent from 'src/vuex/function.js';
         {
             name: "实付费用",
             message: '',
+        }],
+        payDetails:[{
+            name: "支付交易号",
+            message: '',
+        },
+        {
+            name: "支付完成时间",
+            message: "",
+        },
+        {
+            name: "实际支付金额",
+            message: "",
         }],
         requestData:{},
       }
@@ -293,26 +310,31 @@ import localEvent from 'src/vuex/function.js';
             _this.url = "/api/order/details"; // 默认展开
             _this.$http.post(this.url,this.requestData,(rsp)=>{
                 console.log(rsp);
-                // if(rsp.orderStatus == "2"){
-                //     this.cancleOrderFlag = true;
-                // }else{
-                //     this.cancleOrderFlag = false;
-                // }
-                // if(rsp.payStatus == '1' && rsp.orderStatus != '0'){
-                //     this.InvaliOrderFlag = true;
-                // }else{
-                //     this.InvaliOrderFlag = false;
-                // }
-                // if(rsp.orderStatus == '1'){
-                //     this.ChangeExpressFlag = true;
-                // }else{
-                //     this.ChangeExpressFlag = false;
-                // }
-                // if(rsp.orderStatus == '3' && rsp.payStatus == '1'){
-                //     this.OtherPayFlag = true;
-                // }else{
-                //     this.OtherPayFlag = false;
-                // }
+                if(rsp.orderStatus == "2" || rsp.orderStatus == "1"){
+                    this.cancleOrderFlag = true;
+                }else{
+                    this.cancleOrderFlag = false;
+                }
+                if(rsp.payStatus == '1' || rsp.orderStatus == '3'){
+                    this.InvaliOrderFlag = true;
+                }else{
+                    this.InvaliOrderFlag = false;
+                }
+                if(rsp.orderStatus == '1'){
+                    this.ChangeExpressFlag = true;
+                }else{
+                    this.ChangeExpressFlag = false;
+                }
+                if(rsp.gmtBill  == '暂无' || rsp.payStatus == '1'){
+                    this.OtherPayFlag = true;
+                }else{
+                    this.OtherPayFlag = false;
+                }
+                if(rsp.payStatus == '3'){
+                    this.payDetailFlag = true;
+                }else{
+                    this.payDetailFlag = false;                    
+                }
                 //基本信息
                 this.items[0].message = rsp.expName || '暂无';
                 this.items[1].message = rsp.actCarrierName || '暂无';
@@ -323,7 +345,7 @@ import localEvent from 'src/vuex/function.js';
                 this.items[6].message = rsp.gmtAccept || '暂无';
                 this.items[7].message = rsp.gmtBill || '暂无';
                 this.items[8].message = rsp.outOrderNo || '暂无';
-                this.items[9].message = rsp.expNameOld? '是':'否';//是否转运快递
+                this.items[9].message = rsp.expNameOld? rsp.expNameOld+'转EMS':'否';//是否转运快递
                 this.items[10].message = rsp.gmtBill || '暂无';
                 this.items[11].message = rsp.strOrderStatus || '暂无';
                 //寄件人信息
@@ -343,9 +365,15 @@ import localEvent from 'src/vuex/function.js';
                 this.couriers[0].message = rsp.acppeter || "暂无";
                 this.couriers[1].message = rsp.acppetermobile || "暂无";
                 //快递费用
+                this.expressPays[0].message = rsp.payStatus=="5"? "其他" : '支付宝在线支付';                
                 this.expressPays[1].message = rsp.estimatePrice || '暂无';
                 this.expressPays[2].message = rsp.orderAmount || '暂无';
                 this.expressPays[3].message = rsp.receiptAmount || '暂无';
+
+                //支付详情
+                this.payDetails[0].message = rsp.tradeNo || '暂无';                
+                this.payDetails[1].message = rsp.gmtPayment || '暂无';
+                this.payDetails[2].message = rsp.receiptAmount || '暂无';
 
             },(error)=>{
                 console.log('failed');
@@ -584,6 +612,12 @@ import localEvent from 'src/vuex/function.js';
             border-bottom: 0;
         }
     }
+    .basic-table .el-col:last-child .cell-right{
+            color:red;
+        }
+    .selfCollapse .goods-table div:nth-child(2) div .el-col-18{
+            color:red;            
+    }    
     //    @media screen and (min-width: 901px) {
     //     .cell-left{
     //         text-align: left;

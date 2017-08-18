@@ -240,7 +240,7 @@ export default {
   computed: {
       Authority() {
         // this.activeName2 = this.$store.getters.getAuthority== "审核"?"已上线":'配置';
-
+      //  return "开发者"
         return this.$store.getters.getAuthority;
       }
       // table2:function(){
@@ -496,6 +496,10 @@ export default {
         _this.showOperation = true;
         _this.showOperation2 = false;
         _this.showOperation3 = true;
+        if(this.radio2 == 3){
+            this.showOperation = false;
+            this.showOperation3 = false;
+        }
         // _this.radio2 = 1;
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
@@ -587,7 +591,7 @@ export default {
       if(this.activeName2 === "已上线") {
           URL =  "/api/promotion/areaConf/all";
       }
-      this.$http.post(URL,{id},(rsp) => {
+      this.$http.post(URL,{id:id.toString()},(rsp) => {
         console.log(rsp.provinces);
         this.gridData = this.filterProvinces(rsp.provinces);
         // console.log(_this.gridData);

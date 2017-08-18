@@ -168,7 +168,7 @@ export default {
     }
     //快递公司接口数据
     _this.$http.post('/api/logisMerchant/get',{
-      "id":this.ruleForm.logisMerchId
+      "id":this.ruleForm.logisMerchId.toString()
     },(rsp)=>{
       console.log(rsp)
       this.merchantLogo = rsp.merchantLogo;
@@ -179,7 +179,7 @@ export default {
     });
     //其余数据接口
     _this.$http.post(httpUrl,{
-      "id":httpId
+      "id":httpId.toString()
     },(rsp)=>{
       console.log(rsp)
 

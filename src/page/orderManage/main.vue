@@ -4,7 +4,7 @@
     <el-row>
       <el-col :span="6" class="import-font">关键字：</el-col>
       <el-col :span="10">
-          <el-input :span="10"  v-model="keyword" type="number" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
+          <el-input :span="10" :type="number" v-model="keyword" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
         <el-button type="primary" @click="loadData" style="width:100px;">搜 索</el-button>
@@ -81,6 +81,7 @@ import localEvent from 'src/vuex/function.js';
 export default {
   data() {
     return {
+      number:'number',
       pageSize: 5,
       currentPage: 1,
       //输入框关键字
@@ -257,6 +258,11 @@ export default {
     },
     handleRadio(){
       this.type = this.radio.toString()
+      if(this.radio == 3){
+        this.number = '';
+      }else{
+        this.number = 'number';
+      }
     }
   }
 }
@@ -279,15 +285,10 @@ export default {
 .import-search{
   margin-left: 20px;
 }
-
-  /*// 去掉input[type=number]默认的加减号*/
-  input[type=‘number‘] {
-      -moz-appearance:textfield;
-  }
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button{
+      -webkit-appearance: none !important;
+      margin: 0; 
   }
 
 </style>

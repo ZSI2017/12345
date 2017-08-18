@@ -56,12 +56,23 @@
       <el-button v-else class="button-new-tag" size="small" @click="showInput" v-show="addTag">+ 添加</el-button>
       <div style="color:#888;">最多添加两个标签，每个标签最多8个字符。</div>
     </el-form-item>
+    <el-form-item label="客服电话" prop="custServiceTel">
+      <el-input v-model.number="ruleForm.custServiceTel" placeholder="请输入客服电话"> </el-input>
+    </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
       <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <el-form-item label="链接" prop="linkUrl">
-      <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
-      <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
+    <el-form-item label="是否由系统发起支付">
+      <el-radio-group v-model="ruleForm.isManualPrice">
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="是否允许议价">
+      <el-radio-group v-model="ruleForm.pricingMode">
+        <el-radio class="radio" :label="0">是</el-radio>
+        <el-radio class="radio" :label="1">否</el-radio>
+      </el-radio-group>
     </el-form-item>
     <el-form-item label="是否最热">
       <el-radio-group v-model="ruleForm.hotStatus">
@@ -104,7 +115,7 @@ export default {
       listLoading: false,//loading框
       //标签添加控制
       addTag: true,
-      url:'/api/chooseorder/audit/save',
+      url:'/api/expresscompany/audit/save',
       //标签数据
       dynamicTags: [],
       inputVisible: false,
@@ -120,8 +131,10 @@ export default {
         isvMerchantId:'',
         slogan: '',
         tag: '',
-        linkUrl: '',
+        custServiceTel:'',
         sortWeight:'',
+        isManualPrice: 1,
+        pricingMode:1,
         hotStatus: 1,
         newStatus: 1,
         opStatus:1
@@ -133,6 +146,10 @@ export default {
         sortWeight: [
           { required: true, message: '排序值不能为空'},
           { required: true,type: 'number', min:1, max:999,message:'排序值范围1-999'}
+        ],
+        custServiceTel: [
+          {required: true,message: '请输入电话号码'},
+          {required: true,type: 'number',message: '电话号码必须为数字值'},
         ],
         slogan:[
           {required: true,message: '请输入广告语'}
@@ -202,14 +219,16 @@ export default {
                 "data": {
                   "pageId": _this.pageId,
                   // "businessType":_this.ruleForm.businessType,
-                  "logisMerchId": this.ruleForm.isvMerchantId,
+                  "logisMerchId": _this.ruleForm.isvMerchantId,
                   "slogan": _this.ruleForm.slogan,
-                  "tag":_this.ruleForm.tag,                                 
-                  "sortWeight":_this.ruleForm.sortWeight,   
-                  "hotStatus":_this.ruleForm.hotStatus,                  
+                  "tag":_this.ruleForm.tag,
+                  "custServiceTel":_this.ruleForm.custServiceTel,
+                  "sortWeight":_this.ruleForm.sortWeight,
+                  "isManualPrice":_this.ruleForm.isManualPrice,
+                  "pricingMode":_this.ruleForm.pricingMode,
+                  "hotStatus":_this.ruleForm.hotStatus,
                   "newStatus":_this.ruleForm.newStatus,
                   "opStatus":_this.ruleForm.opStatus,
-                  "Url": _this.ruleForm.linkUrl,
                 }
               };
           _this.$http.post(_this.url,httpData,(result) => {
