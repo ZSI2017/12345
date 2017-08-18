@@ -400,6 +400,7 @@ export default {
       Authority() {
         // this.activeName2 = this.$store.getters.getAuthority== "审核"?"已上线":'配置';
         return this.$store.getters.getAuthority;
+        // return "开发者"
       }
       // table2:function(){
       //     return this.tableData[0]
@@ -911,6 +912,8 @@ export default {
       //   path: _this.$route.path + '/editData'
       // });
     },
+
+
     effectiveDetails(scope) {
       this.dialogFlag = '详情';
       // this.form.promotionId = localData.promotionId;

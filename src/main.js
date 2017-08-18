@@ -161,7 +161,7 @@ if(store.getters.getisAuthority)  {
  } else {
      store.dispatch('setAuthority',"开发者");
  }
-
+    store.dispatch('setAuthority',"开发者");
 
 
       // 这里是对于 登录时的 状态验证
@@ -188,7 +188,7 @@ if(store.getters.getisAuthority)  {
           ||(from.path == "/oneCitySend/addData")
           ||(from.path == '/expressCompany/addData')
           ||(from.path == "/chooseExpressOrder/addData")
-          ||(from.path == "/dev/logismerchant/addData")          
+          ||(from.path == "/dev/logismerchant/addData")
           ||(from.path == "/promotion/sendExpress/editData")
           ||(from.path == "/promotion/chooseExpress/editData")
           ||(from.path == "/promotion/expressOrder/editData")

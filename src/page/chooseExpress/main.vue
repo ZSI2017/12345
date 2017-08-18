@@ -240,7 +240,7 @@ export default {
   computed: {
       Authority() {
         // this.activeName2 = this.$store.getters.getAuthority== "审核"?"已上线":'配置';
-
+      //  return "开发者"
         return this.$store.getters.getAuthority;
       }
       // table2:function(){
