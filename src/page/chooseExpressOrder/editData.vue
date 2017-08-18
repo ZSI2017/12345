@@ -165,7 +165,7 @@ export default {
     });
     //其余数据接口
     _this.$http.post(httpUrl,{
-      "id":httpId
+      "id":httpId.toString()
     },(rsp)=>{
       console.log(rsp)
       this.ruleForm.slogan = rsp.slogan;
