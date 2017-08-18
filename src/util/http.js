@@ -210,12 +210,13 @@ export default {
             proxy:{ }     //  defines the hostname and port of the proxy server
        }).then(
            (response) => {
-               console.log("success");
+                console.log("success");
                   console.log(response);
                 mySuccessFn(response,successfn,errorfn);
            }
        ).catch(
            (error) => {
+                    $('.el-loading-mask').css("display",'none');
                     if(error.response) {
                       //  发出了请求，服务端返回了 状态码 2xx
                       console.log("%cresponse error %o","color:red;font-size:16px;",error.response)
