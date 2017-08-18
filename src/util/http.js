@@ -246,7 +246,7 @@ export default {
         axios({
               url:url,
               method:'get',
-              baseURL:URL,
+              // baseURL:URL,
               timeout: 10000,
               params: data,
               headers: {
