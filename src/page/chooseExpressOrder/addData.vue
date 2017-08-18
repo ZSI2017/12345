@@ -8,8 +8,9 @@
             <el-option
               v-for="item in options"
               :key="item.value"
-              :label="item.merchantName"
-              :value="item">
+              :merchantLogo="item.value[1]"
+              :label="item.lable"
+              :value="item.value">
             </el-option>
         </el-select>
       </el-col>
@@ -112,7 +113,6 @@ export default {
       //select 快递公司选项
       options: [],
       value:'',
-      merchantLogo:'',
       
       // 对输入表单进行验证
       ruleForm: {
@@ -264,9 +264,10 @@ export default {
       this.inputValue = '';
     },
     handleMerchant(){
-      this.merchantLogo = this.value.merchantLogo;
-      this.ruleForm.merchantName = this.value.merchantName;
-      this.ruleForm.isvMerchantId = this.value.id;
+      console.log(this.value)
+      this.merchantLogo = this.value[0];
+      this.ruleForm.merchantName = this.value[1];
+      this.ruleForm.isvMerchantId = this.value[2];
     },
     handlePreview(file) {
       this.dialogVisible = true;
