@@ -10,7 +10,7 @@
               :key="item.merchantLogo"
               :merchantLogo="item.merchantLogo"
               :label="item.merchantName"
-              :value="item.merchantName">
+              :value="[item.merchantLogo,item.merchantName,item.id]">
             </el-option>
         </el-select>
       </el-col>
@@ -309,9 +309,9 @@ export default {
       this.inputValue = '';
     },
     handleMerchant(){
-      this.merchantLogo = this.value.merchantLogo;
-      this.ruleForm.merchantName = this.value.merchantName;
-      this.ruleForm.isvMerchantId = this.value.id;
+      this.merchantLogo = this.value[0];
+      this.ruleForm.merchantName = this.value[1];
+      this.ruleForm.isvMerchantId = this.value[2];
     },
     handlePreview(file) {
       this.dialogVisible = true;
