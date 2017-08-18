@@ -27,13 +27,8 @@ for(var i =0;i<60;i++){
          "reviewState":"已完成",
          "content":Mock.Random.ctitle(),
          "ordernumber":Mock.Random.natural(10000000000,19999999999),
-<<<<<<< HEAD
          "merchantName":Mock.Random.name(),
          "merchantLogo":Mock.Random.datetime()
-=======
-         "merchantName":Mock.Random.ctitle(),
-         "merchantLogo":Mock.Random.name()
->>>>>>> 3e289865fe071a3c808cfdfba0b65d43011c10df
        })
     )
 }
