@@ -340,7 +340,7 @@ export default {
                  "content":this.form.content,
                  "title":this.form.title,
                  "gmtBegin": formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
-                 "gmtEnd":formatDate(this.form.date1[0], 'yyyy-MM-dd hh:mm:ss'),
+                 "gmtEnd":formatDate(this.form.date1[1], 'yyyy-MM-dd hh:mm:ss'),
                  'opStatus':this.form.radio,
                },
              "area":{
@@ -493,7 +493,7 @@ export default {
       if(this.tabName === "已上线") {
           URL = "/api/notice/areaConf/all";
       }
-      _this.$http.post(URL,{id:this.id},
+      _this.$http.post(URL,{id:this.id.toString()},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
