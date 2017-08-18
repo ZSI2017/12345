@@ -30,7 +30,6 @@
         </el-collapse-item>
         <el-collapse-item title="物品信息" name="3" class="selfCollapse">
             <el-row class="goods-table">
-
                 <el-col :span="24" v-for="(goodsItem,index) in goodsItems" :key="index"><div class="grid-content bg-purple"><el-col :span="3">{{goodsItem.name}}：</el-col ><el-col :span="18">{{goodsItem.message}}</el-col></div></el-col>
             </el-row>
         </el-collapse-item>
@@ -331,7 +330,7 @@ import localEvent from 'src/vuex/function.js';
                 }else{
                     this.OtherPayFlag = false;
                 }
-                if(rsp.orderStatus == '3'){
+                if(rsp.payStatus == '3'){
                     this.payDetailFlag = true;
                 }else{
                     this.payDetailFlag = false;                    
@@ -613,6 +612,12 @@ import localEvent from 'src/vuex/function.js';
             border-bottom: 0;
         }
     }
+    .basic-table .el-col:last-child .cell-right{
+            color:red;
+        }
+    .selfCollapse .goods-table div:nth-child(2) div .el-col-18{
+            color:red;            
+    }    
     //    @media screen and (min-width: 901px) {
     //     .cell-left{
     //         text-align: left;

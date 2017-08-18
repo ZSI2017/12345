@@ -8,7 +8,7 @@
       </el-col>   
       <el-col :span="2" class="status-font">手机号：</el-col>      
       <el-col :span="10">
-          <el-input :span="10" v-model="input" size="large" placeholder="请输入用户手机号码"></el-input>
+          <el-input :span="10" v-model="keyword" size="large" placeholder="请输入用户手机号码"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
         <el-button type="primary" size="large">查 询</el-button>
@@ -70,6 +70,7 @@ import localEvent from 'src/vuex/function.js';
   export default {
     data() {
       return {
+        keyword:"",
         num1: "",
         tableFalg: true,
         tableData: [],
@@ -88,16 +89,18 @@ import localEvent from 'src/vuex/function.js';
     },
     created() {
       console.log("$router: " + this.$route.path);
-      let url = "/rest/list2";
+      let url = "/api/epuser/findByMobile";
       var _this = this;
-      _this.$http.get(url, (data) => {
-        console.log("success");
-        console.log(data);
-        _this.tableData = data.data.data
-      }, (error) => {
-        console.log("error");
-        console.log(error);
-      });
+      _this.$http.post(url,{'keyword':this.keyword},(result) => {
+        console.log(result)
+
+        _this.tableData = data.data.data        
+    },(error) => {
+        this.$message({
+            type: 'error',
+            message: error.data.meta.code+"--"+error.data.meta.msg
+        });
+    });
 
       console.log(this.$route.matched);
     },
