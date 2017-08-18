@@ -7,7 +7,7 @@
         <el-select v-model="value" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
             <el-option
               v-for="item in options"
-              :key="item.value"
+              :key="item"
               :label="item.merchantName"
               :value="item">
             </el-option>
@@ -112,7 +112,6 @@ export default {
       //select 快递公司选项
       options: [],
       value:'',
-      merchantLogo:'',
       
       // 对输入表单进行验证
       ruleForm: {
@@ -264,6 +263,7 @@ export default {
       this.inputValue = '';
     },
     handleMerchant(){
+      console.log(this.value)
       this.merchantLogo = this.value.merchantLogo;
       this.ruleForm.merchantName = this.value.merchantName;
       this.ruleForm.isvMerchantId = this.value.id;
