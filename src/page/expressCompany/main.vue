@@ -45,10 +45,10 @@
     </el-table-column>
     <el-table-column prop="tag" label="标签" width="160">
       <template scope="scope">
-        <el-tag 
-            type="primary" 
-            style="margin:2px;height:24px;line-height:24px;" 
-            close-transition='true' 
+        <el-tag
+            type="primary"
+            style="margin:2px;height:24px;line-height:24px;"
+            close-transition='true'
             hit='true'
             :key="tag"
             v-for="tag in scope.row.tag.split(',',(scope.row.tag.split(',').length)-1)"
@@ -208,7 +208,7 @@ export default {
   },
   computed: {
       Authority() {
-
+          //  return "开发者"
         return this.$store.getters.getAuthority;
       }
 
@@ -636,7 +636,7 @@ export default {
       background-color: #f1f1f1;
       border: 1px solid #ddd;
       border-radius: 5px;
-      padding: 0 5px; 
+      padding: 0 5px;
     }
 }
 

@@ -114,54 +114,54 @@ function filterMenu(result) {
        //  隐藏 或者显示 导航菜单 服务类型及折扣改管理
        //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")  &&Cookie.get("SMJSESSIONID")
       // Cookie.delete("express1");
-if(store.getters.getisAuthority)  {
-   if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
-
-             console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
-             localEvent.get("ACL");
-             console.log(localEvent.get("ACL") == '');
-           if(localEvent.get("ACL") !== '') {
-                 let result = localEvent.get("ACL");
-                 filterMenu(result);
-                    // window.location.reload();
-           }else {
-             http.post('/api/user/info/get',{},(result)=>{
-                      if(result.error ==  "ACL_NO_PRIVILEGE"){
-                         window.location.href =  result.redrect;
-                      }
-                      console.log("+++++++++++++++++");
-                      console.log(result);
-                      localEvent.set('ACL',result);
-                      filterMenu(result);
-                        // router.go(0)
-                 });
-           }
-          //  if(to.fullPath == "/login") {
-          //      next({
-          //             path:"/home",
-          //         });
-          //  };
-       // 跳转到登录页面
-
-   } else if(to.fullPath == "/login") {
-      store.dispatch('setLoginOutFlag',false);
-       localEvent.clear("ACL");
-      //  Cookie.delete("ECOACLJSESSIONID");
-      //  Cookie.delete("SMJSESSIONID");
-      //  Cookie.delete("ctoken");
-   } else {
-       store.dispatch('changeNextRouter',to.fullPath);
-      //  alert(from.fullPath);
-         console.log(to)
-       next({
-              path:"/login",
-          });
-      // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
-   }
- } else {
-     store.dispatch('setAuthority',"开发者");
- }
-
+// if(store.getters.getisAuthority)  {
+//    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
+//
+//              console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
+//              localEvent.get("ACL");
+//              console.log(localEvent.get("ACL") == '');
+//            if(localEvent.get("ACL") !== '') {
+//                  let result = localEvent.get("ACL");
+//                  filterMenu(result);
+//                     // window.location.reload();
+//            }else {
+//              http.post('/api/user/info/get',{},(result)=>{
+//                       if(result.error ==  "ACL_NO_PRIVILEGE"){
+//                          window.location.href =  result.redrect;
+//                       }
+//                       console.log("+++++++++++++++++");
+//                       console.log(result);
+//                       localEvent.set('ACL',result);
+//                       filterMenu(result);
+//                         // router.go(0)
+//                  });
+//            }
+//           //  if(to.fullPath == "/login") {
+//           //      next({
+//           //             path:"/home",
+//           //         });
+//           //  };
+//        // 跳转到登录页面
+//
+//    } else if(to.fullPath == "/login") {
+//       store.dispatch('setLoginOutFlag',false);
+//        localEvent.clear("ACL");
+//       //  Cookie.delete("ECOACLJSESSIONID");
+//       //  Cookie.delete("SMJSESSIONID");
+//       //  Cookie.delete("ctoken");
+//    } else {
+//        store.dispatch('changeNextRouter',to.fullPath);
+//       //  alert(from.fullPath);
+//          console.log(to)
+//        next({
+//               path:"/login",
+//           });
+//       // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
+//    }
+//  } else {
+//      store.dispatch('setAuthority',"开发者");
+//  }
+    store.dispatch('setAuthority',"开发者");
 
 
       // 这里是对于 登录时的 状态验证
@@ -188,7 +188,7 @@ if(store.getters.getisAuthority)  {
           ||(from.path == "/oneCitySend/addData")
           ||(from.path == '/expressCompany/addData')
           ||(from.path == "/chooseExpressOrder/addData")
-          ||(from.path == "/dev/logismerchant/addData")          
+          ||(from.path == "/dev/logismerchant/addData")
           ||(from.path == "/promotion/sendExpress/editData")
           ||(from.path == "/promotion/chooseExpress/editData")
           ||(from.path == "/promotion/expressOrder/editData")
