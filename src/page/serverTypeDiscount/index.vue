@@ -178,7 +178,7 @@
         >
         <el-input v-if="this.dialogFlag != '详情'"  v-model.number="formAdd.sortWeight" auto-complete="off" placeholder="请输入1-999，排序值越大越优先">
         </el-input>
-        <div v-if="this.dialogFlag == '详情'">{{formAdd.description}}</div>
+        <div v-if="this.dialogFlag == '详情'">{{formAdd.sortWeight}}</div>
       </el-form-item>
       <el-form-item label="结算折扣" prop="discountNum">
         <el-row v-if="this.dialogFlag != '详情'" >
@@ -196,14 +196,14 @@
             ><template slot="append">折</template></el-input>
           </el-col>
         </el-row>
-        <div v-if="this.dialogFlag == '详情'">{{formAdd.discountNum/10}}</div>
+        <div v-if="this.dialogFlag == '详情'">{{formAdd.discountNum/100}}</div>
       </el-form-item>
       <el-form-item label="当前状态"  prop="status">
         <el-radio-group v-if="this.dialogFlag != '详情'" v-model="formAdd.status">
           <el-radio v-model="formAdd.status" label="2">上架</el-radio>
           <el-radio v-model="formAdd.status" label="1">下架</el-radio>
         </el-radio-group>
-          <div v-if="this.dialogFlag == '详情'">{{formAdd.status == 1?'下架':'下架'}}</div>
+          <div v-if="this.dialogFlag == '详情'">{{formAdd.status == 1?'下架':'上架'}}</div>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -931,18 +931,19 @@ export default {
       //   "id":Id
       // },(rsp)=>{
       //   console.log(rsp)
-
-      // this.formAdd={
-      //   logisMerchantName:scope.logisMerchantName,  // 快递公司名 scope.logisMerchantName
-      //   company:'',
-      //   productName:scope.productName,
-      //   productTypeCode:scope.productTypeCode,
-      //   description:scope.description,
-      //   sortWeight:scope.sortWeight,
-      //   discount:'无折扣',
-      //   discountNum:scope.sortWeight,
-      //   status:scope.status
-      // },
+      // alert(scope.opStatus.toString())
+      // alert(scope.status.toString());
+      this.formAdd={
+        logisMerchantName:scope.logisMerchantName,  // 快递公司名 scope.logisMerchantName
+        company:'',
+        productName:scope.productName,
+        productTypeCode:scope.productTypeCode,
+        description:scope.description,
+        sortWeight:scope.sortWeight,
+        discount:'无折扣',
+        discountNum:scope.discount,
+        status:scope.status.toString()
+      },
       //   console.log(rsp.imageUrl)
       //   this.form.name = rsp.name;
       //   this.form.Forder = rsp.sortWeight;
