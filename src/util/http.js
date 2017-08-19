@@ -227,7 +227,7 @@ export default {
                             // loginTime();
                         }
                     } else if(error.request) {
-                        vue.$message.error('request error');
+                        vue.$message.error('接口异常');
                       if(error.request.status === 0){
                                 //  loginTime();
                             // vue.$message.error('登录超时');

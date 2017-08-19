@@ -212,7 +212,7 @@
       </el-select>
         <div style="width:200px;" v-if="handleEditFlag">{{form.sendCity}}</div>
     </el-form-item>
-    <el-form-item label="首重价格" prop="presetWeightPrice" label-width="formLabelWidth">
+    <el-form-item label="首重价格" prop="presetWeightPrice" :label-width="formLabelWidth">
       <el-input placeholder="请输入内容" v-model.number="form.presetWeightPrice">
               <template slot="append">元</template>
       </el-input>
@@ -251,7 +251,7 @@ export default {
       totalCount: 1000,
       dialogFormVisible: false,
       dialogTitle:"新增运线快递费",
-      formLabelWidth:"80px",
+      formLabelWidth:"100px",
       importLabelWidth:'120px',
       dialogImportVisible:false,  //导入对话框
       id:'',  // 保存当前运线id;
@@ -331,20 +331,24 @@ export default {
        ],
        presetWeightPrice: [
          { required: true, message: '首重价格不能为空'},
-         { type: 'number', min:0, max:1000,message:'首重价格范围0-1000'}
+         { type: 'number', min:0, max:1000,message:'首重价格范围0-1000'},
+         { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/,message:'最多两位小数'}
        ],
        presetWeight: [
          { required: true, message: '首重重量不能为空'},
-         { type: 'number', min:0, max:10,message:'首重重量范围0-10'}
+         { type: 'number', min:0, max:10,message:'首重重量范围0-10'},
+         { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/,message:'最多两位小数'}
 
        ],
        extraWeightPrice: [
          { required: true, message: '续重价格不能为空'},
-         { type: 'number', min:0, max:1000,message:'续重价格范围0-1000'}
+         { type: 'number', min:0, max:1000,message:'续重价格范围0-1000'},
+         { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/,message:'最多两位小数'}
        ],
        extraWeightUnit: [
          { required: true, message: '续重重量不能为空'},
-          { type: 'number', min:0, max:10,message:'续重重量范围0-10'}
+          { type: 'number', min:0, max:10,message:'续重重量范围0-10'},
+          { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/,message:'最多两位小数'}
        ],
       },
       // 选择快递公司

@@ -148,19 +148,7 @@ export default {
             isCheckServer: false,
             fullscreenLoading: false,
             // searchCompanyName:[],
-            searchCompanyName: [{
-                value: '黄金糕',
-                label: '黄金糕'
-              }, {
-                value: '双皮奶',
-                label: '双皮奶'
-              }, {
-                value: '蚵仔煎',
-                label: '蚵仔煎'
-              }, {
-                value: '蚵仔煎123',
-                label: '蚵仔煎'
-              }]
+            searchCompanyName: []
         }
     },
     methods: {
