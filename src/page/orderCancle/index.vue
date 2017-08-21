@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="24" class="status-font">当前状态：
         当日用户取消 ≥          
-        <el-input-number v-if="!showNumber" v-model="num1" @change="handleChange" :min="1" :max="10"></el-input-number>
+        <el-input-number v-if="!showNumber" v-model="num1" @change="handleChange" :min="1" :max="100"></el-input-number>
         <span v-if="showNumber" style="color:red;font-size:26px;">{{ num1 }}</span>
         单，将被列为黑名单   
       </el-col>
@@ -35,11 +35,11 @@ import localEvent from 'src/vuex/function.js';
     // }else{
     //     this.num1 = localData;        
     // }
-    let cancleUrl = "/commonConf/getCancelFreq";
+    let cancleUrl = "/api/commonConf/getCancelFreq";
     var _this = this;
     _this.$http.post(cancleUrl,{},(result) => {
         console.log(result)
-          
+        this.num1 = result;  
     },(error) => {
         this.$message({
             type: 'error',
@@ -59,11 +59,12 @@ import localEvent from 'src/vuex/function.js';
       handleCtrl(){
         this.showNumber = true;
         // localEvent.set("blacklistTimes",this.num1);
-        let cancleUrl = "/epcommonConf/updateCancelFreq";
+        let ctrlUrl = "/api/commonConf/updateCancelFreq";
           var _this = this;
-          _this.$http.post(cancleUrl,{'cancelFreq':this.num1},(result) => {
+          _this.$http.post(ctrlUrl,{'cancelFreq':this.num1.toString()},(result) => {
               console.log(result)
-                
+              // this.num1 = result;  
+
           },(error) => {
               this.$message({
                   type: 'error',

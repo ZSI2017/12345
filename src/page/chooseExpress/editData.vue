@@ -300,7 +300,7 @@ export default {
           this.form.opStatus = 1;
           this.currentStateText = "已下线"
         } else {
-          this.form.opStatus = 0;
+          this.form.opStatus = 2;
           this.currentStateText = "已上线"
         }     
       } else {
@@ -308,7 +308,7 @@ export default {
           this.form.opStatus = 1;
           this.currentStateText = "已下线"
         } else {
-          this.form.opStatus = 0;
+          this.form.opStatus = 2;
           this.currentStateText = "已上线"
         }
       }
