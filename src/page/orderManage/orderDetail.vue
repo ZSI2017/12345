@@ -616,7 +616,8 @@ import localEvent from 'src/vuex/function.js';
             color:red;
         }
     .selfCollapse .goods-table div:nth-child(2) div .el-col-18{
-            color:red;            
+            color:red;    
+            overflow: hidden;        
     }    
     //    @media screen and (min-width: 901px) {
     //     .cell-left{

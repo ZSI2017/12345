@@ -10,7 +10,7 @@
   </el-alert>
   <el-form ref="ruleForm" label-width="240px"  style="width:800px;padding-left:100px">
     <el-form-item label='物流机构编码'>
-      <el-input v-model="ruleForm.merchantCode" type='number' placeholder="请输入物流机构编码"> </el-input>
+      <el-input v-model="ruleForm.merchantCode" placeholder="请输入物流机构编码"> </el-input>
     </el-form-item>
     <el-form-item label="机构名称">
       <el-input v-model="ruleForm.merchantName" placeholder="请输入机构名称"> </el-input>
@@ -535,13 +535,13 @@ label {
     }
 }
 /*// 去掉input[type=number]默认的加减号*/
-input[type=‘number‘] {
-    -moz-appearance:textfield;
-}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
--webkit-appearance: none;
-margin: 0;
-}
+// input[type=‘number‘] {
+//     -moz-appearance:textfield;
+// }
+// input[type=number]::-webkit-inner-spin-button,
+// input[type=number]::-webkit-outer-spin-button {
+// -webkit-appearance: none;
+// margin: 0;
+// }
 
 </style>
