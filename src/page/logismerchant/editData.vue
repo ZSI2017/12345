@@ -336,7 +336,7 @@ export default {
     console.log(this.localDeleteId)
     var _this = this;
     var httpUrl = '/api/logisMerchant/get'
-    _this.$http.post(httpUrl,{id:this.localDeleteId},(result) => {
+    _this.$http.post(httpUrl,{id:this.localDeleteId.toString()},(result) => {
         console.log(result)
         console.log(result.merchantLogo)
         _this.$store.dispatch('changeLoadingChange',true);

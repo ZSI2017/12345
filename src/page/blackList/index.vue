@@ -11,7 +11,7 @@
           <el-input :span="10" v-model="keyword" size="large" placeholder="请输入用户手机号码"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
-        <el-button type="primary" size="large">查 询</el-button>
+        <el-button type="primary" @click='handleSearch' size="large">查 询</el-button>
       </el-col>   
     </el-row>
 
@@ -88,23 +88,26 @@ import localEvent from 'src/vuex/function.js';
       this.num1 = localData;
     },
     created() {
-      console.log("$router: " + this.$route.path);
-      let url = "/api/epuser/findByMobile";
-      var _this = this;
-      _this.$http.post(url,{'keyword':this.keyword},(result) => {
-        console.log(result)
-
-        _this.tableData = data.data.data        
-    },(error) => {
-        this.$message({
-            type: 'error',
-            message: error.data.meta.code+"--"+error.data.meta.msg
-        });
-    });
-
-      console.log(this.$route.matched);
+      
     },
     methods: {
+      handleSearch(){
+          console.log("$router: " + this.$route.path);
+          let url = "/api/epuser/findByMobile";
+          var _this = this;
+          _this.$http.post(url,{'keyword':this.keyword},(result) => {
+            console.log(result)
+
+            _this.tableData = data.data.data        
+        },(error) => {
+            this.$message({
+                type: 'error',
+                message: error.data.meta.code+"--"+error.data.meta.msg
+            });
+        });
+
+          console.log(this.$route.matched);
+      },
       handleEdit(row) {
         console.log(row);   
         this.dialogTableVisible = true;  

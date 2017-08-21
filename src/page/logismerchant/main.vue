@@ -153,7 +153,7 @@ export default {
             var _this = this;
             var deleteUrl = '/api/logisMerchant/del';
             _this.$http.post(deleteUrl,{
-            "id": row.id
+            "id": row.id.toString()
             },(rsp)=>{
                 // _this.listLoading = false;
                 console.log(rsp)
