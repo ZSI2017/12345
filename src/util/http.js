@@ -10,18 +10,18 @@ Vue.use(ElementUI);
 var vue = new Vue();
 import axios from "axios";
 
-// let URL = "http://sendexmng-sit.alipay-eco.com"
-let URL = 'http://192.168.12.54:8080'
+let URL = "http://sendexmng-sit.alipay-eco.com"
+// let URL = 'http://192.168.12.54:8080'
 // let URL  = "http://sendexmng-sit.alipay-eco.com"
 
    // alert(process.env.npm_config_report)
-// if(process.env.NODE_ENV === "development"){
-     // 开发环境下调用
+if(process.env.NODE_ENV === "development"){
+    //  开发环境下调用
     // URL = 'http://192.168.12.54:8080'
-//     URL  = "http://sendexmng-sit.alipay-eco.com";
-// }else {
-//     URL = "http://sendexmng-sit.alipay-eco.com"
-// }
+    // URL  = "http://sendexmng-sit.alipay-eco.com";
+}else {
+    URL = "http://sendexmng-sit.alipay-eco.com"
+}
 
 // add request interceptor
 axios.interceptors.request.use(function(config) {
@@ -135,7 +135,7 @@ function checkErrorCode(response) {
         // console.log("mySuccessFn %o",response);
        if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
           //  console.log(successfn(response.data.result))
-          console.log(response);
+           console.log(response);
            successfn(response.data.result||response.data);
        }else {
            $('.el-loading-mask').css("display",'none');
@@ -198,7 +198,7 @@ export default {
             }],
             // withCredentials: false,   //  默认false
             data:data,
-            // timeout:10000,
+            timeout:60*10*1000,
             responseType:'json',  // default
             // contentType: "application/json; charset=utf-8",
             xsrfCookieName:'XSRF-TOKEN',      // default
@@ -227,7 +227,7 @@ export default {
                             // loginTime();
                         }
                     } else if(error.request) {
-                        vue.$message.error('request error');
+                        vue.$message.error('接口异常');
                       if(error.request.status === 0){
                                 //  loginTime();
                             // vue.$message.error('登录超时');
@@ -251,7 +251,7 @@ export default {
         axios({
               url:url,
               method:'get',
-              baseURL:URL,
+              // baseURL:URL,
               timeout: 10000,
               params: data,
               headers: {

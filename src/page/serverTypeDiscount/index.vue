@@ -158,7 +158,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-
       <div v-if="this.dialogFlag == '详情'">{{formAdd.logisMerchantName}}</div>
       </el-form-item>
       <el-form-item label="服务类型名称" prop="productName">
@@ -323,34 +322,7 @@ export default {
       // 快递公司名
       companyName:'',
       searchContent:'',
-      searchCompanyName: [{
-          value: '黄金糕',
-          label: '黄金糕'
-        }, {
-          value: '双皮奶',
-          label: '双皮奶'
-        }, {
-          value: '蚵仔煎',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎123',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎23',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎33',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎44',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎55',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎77',
-          label: '蚵仔煎'
-        }],
+      searchCompanyName: [],
         formAdd:{
           logisMerchantName:[],  // 快递公司名
           company:'',
@@ -386,7 +358,8 @@ export default {
              { type: 'number', min:1, max:999,message:'排序值范围1-999'}
           ],
           discountNum:[
-             { type: 'number', min:0, max:10,message:'请输入正确的折扣值'}
+             { type: 'number', min:0, max:9.9,message:'请输入正确的折扣值'},
+             { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1}|[1-9][0-9]*\.\d{1})))$/,message:'最多1位小数'}
           ],
           status: [{
             required: true,
@@ -501,7 +474,7 @@ export default {
                 'productTypeCode':this.formAdd.productTypeCode,
                 'description':this.formAdd.description,
                 'sortWeight':this.formAdd.sortWeight,
-                "discount":this.formAdd.discountNum*10,
+                "discount":this.formAdd.discount == "无折扣"?100:this.formAdd.discountNum*10,
                 "opStatus":this.formAdd.status,
               };
               this.$http.post(url,{data},(result) =>{

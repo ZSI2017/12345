@@ -251,6 +251,9 @@ export default {
   deactivated(){
 
   },
+  mounted(){
+
+  },
   created() {
     // alert(this.Authority)
 
