@@ -172,12 +172,16 @@ export default {
       this.ruleForm.sortWeight = rsp.sortWeight;
       this.ruleForm.hotStatus =  Number(rsp.hotStatus);
       this.ruleForm.newStatus =  Number(rsp.newStatus);
-      this.ruleForm.opStatus =  rsp.opStatus=='1'?0:1;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       this.ruleForm.url = rsp.url;
       console.log(this.dynamicTags)
       console.log(rsp.tag)
-      this.dialogConfig(true)
+      // this.dialogConfig(true)
+      if ( this.$route.path == "/chooseExpressOrder/detail") {
+        this.ruleForm.opStatus =  rsp.status=='1'?1:0;
+      } else {
+        this.ruleForm.opStatus =  rsp.opStatus=='1'?1:0;
+      }
 
     },(error)=>{
       console.log(error)
@@ -223,7 +227,7 @@ export default {
               };
           _this.$http.post(_this.url,httpData,(result) => {
               _this.$store.dispatch('changeLoadingChange',true);
-              // _this.$router.go(-1);
+              _this.$router.go(-1);
               _this.listLoading = false;
              this.$message({
                   type: 'success',

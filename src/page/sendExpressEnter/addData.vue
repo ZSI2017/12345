@@ -199,13 +199,15 @@ export default {
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         linkUrl: [
-          {required: true,message: "请输入正确链接",trigger: 'blur'}
+          {required: true,message: "请输入正确链接",trigger: 'blur'},
+           {min:1, max:200,message:'链接长度不大于200'}                    
         ],
         logo: [
           {required: true,message: '请上传图片',type:'array',trigger: 'on-change'}
         ],
         description: [
-          {required: true,message: '请输入描述',type:'string',trigger: 'blur'}
+          {required: true,message: '请输入描述',type:'string',trigger: 'blur'},
+           {min:1, max:20,message:'描述长度不大于20'}          
         ],
         coverArea: [{
           required: true,

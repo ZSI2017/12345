@@ -56,7 +56,7 @@
         </el-tag>
       </template>
     </el-table-column>
-    <el-table-column label="链接">
+    <el-table-column label="链接" width="90">
       <template scope="scope">
         <el-popover class="popover" ref="popover4" width="300" trigger="click" >
           <span style="word-break:break-all;">{{scope.row.url}}</span>

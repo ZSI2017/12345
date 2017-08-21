@@ -203,14 +203,10 @@ export default {
            { type: 'integer', message: '排序值必须为整数'},
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
-        linkUrl: [{
-          // type:'url',
-          required: false,
-          message: "请输入正确链接",
-          trigger: 'blur'
-        },
-        {min:1, max:200,message:'链接最大长度200'}
-      ],
+        linkUrl: [
+          {required: false,message: "请输入正确链接",trigger: 'blur'},
+          {min:1, max:200,message:'链接长度不大于200'}
+        ],
         date1: [{
           required: true,
           message: '请选择日期',

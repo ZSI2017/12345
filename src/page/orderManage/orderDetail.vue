@@ -51,7 +51,7 @@
         <el-row class="footer">
             <el-button class="return" type="primary" @click="$router.go(-1)">返回</el-button>
             <el-button class="complateInfo" @click="handleShowIfo" type="primary">{{showAllIfo}}</el-button>
-            <el-button class="serverRecord" @click="handleShowServer" type="primary">查看信息服务</el-button>
+            <el-button class="serverRecord" @click="handleShowServer" type="primary">查看服务记录</el-button>
             <el-button :plain="true" v-if="cancleOrderFlag" class="complateInfo" @click="handleCancleOrder" type="danger">取消订单</el-button>
             <el-button :plain="true" v-if="InvaliOrderFlag" class="serverRecord" @click="handleInvalidorder" type="danger">作废订单</el-button>
             <el-button :plain="true" v-if="OtherPayFlag" class="serverRecord" @click="handleOtherPay" type="danger">标记其他支付渠道</el-button>
@@ -73,16 +73,19 @@
         </el-dialog>
            <!--  查看信息服务       :label-width="formLabelWidth" -->
         <el-dialog title="服务记录" :visible.sync="dialogServerVisible">
-            <div style="max-height:300px; overflow-y: auto;">
+            <div style="max-height:300px; overflow-y: auto;" v-if="serverShow">
                 <div v-for='serverList in serverLists'>
                     <el-row :span="24" class="serverList serverList1">
                         <el-col :span="6">{{serverList.time}}</el-col>
                         <el-col :span="6">{{serverList.title || '暂无信息'}}</el-col>                
                     </el-row>
                     <el-row :span="24" class="serverList serverList2">
-                        <el-col :span="6">原因：{{serverList.content || '暂无数据'}}</el-col>               
+                        <el-col :span="24">原因：{{serverList.content || '暂无数据'}}</el-col>               
                     </el-row>
                 </div>
+            </div> 
+            <div style="max-height:300px; overflow-y: auto;" v-if="serverShow == false" >
+                    暂无服务信息！
             </div> 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogServerVisible = false">关 闭</el-button>
@@ -151,6 +154,7 @@ import localEvent from 'src/vuex/function.js';
         dialogTimeVisible:false,
         cancelCauseArr:[],
         payDetailFlag:false, //支付详情显示
+        serverShow:true,
         cancelCause:{
           region:''
         },
@@ -308,28 +312,30 @@ import localEvent from 'src/vuex/function.js';
             // console.log(localData);
             // this.orderNo = localData;
             _this.url = "/api/order/details"; // 默认展开
-            _this.$http.post(this.url,this.requestData,(rsp)=>{
+            _this.$http.post(_this.url,this.requestData,(rsp)=>{
                 console.log(rsp);
                 if(rsp.orderStatus == "2" || rsp.orderStatus == "1"){
                     this.cancleOrderFlag = true;
                 }else{
                     this.cancleOrderFlag = false;
                 }
-                if(rsp.payStatus == '1' || rsp.orderStatus == '3'){
+                if(rsp.payStatus == '1' && rsp.orderStatus == '3'){
                     this.InvaliOrderFlag = true;
+                    this.OtherPayFlag = true;
                 }else{
                     this.InvaliOrderFlag = false;
+                    this.OtherPayFlag = false;                    
                 }
                 if(rsp.orderStatus == '1'){
                     this.ChangeExpressFlag = true;
                 }else{
                     this.ChangeExpressFlag = false;
                 }
-                if(rsp.gmtBill  == '暂无' || rsp.payStatus == '1'){
-                    this.OtherPayFlag = true;
-                }else{
-                    this.OtherPayFlag = false;
-                }
+                // if(rsp.gmtBill  == '暂无' || rsp.payStatus == '1'){
+                //     this.OtherPayFlag = true;
+                // }else{
+                //     this.OtherPayFlag = false;
+                // }
                 if(rsp.payStatus == '3'){
                     this.payDetailFlag = true;
                 }else{
@@ -408,7 +414,12 @@ import localEvent from 'src/vuex/function.js';
                 (rsp)=>{
                     console.log(rsp)
                     this.serverLists = rsp;
-
+                    console.log(rsp.length)
+                    if(rsp.length <= 0 ){
+                        this.serverShow = false;
+                    }else{
+                        this.serverShow = true;                        
+                    }
                 },(error)=>{
                     this.$message({
                         type: 'error',
@@ -432,7 +443,7 @@ import localEvent from 'src/vuex/function.js';
                               confirmButtonText: '确定',
                               cancelButtonText: '取消',
                               type: 'warning'
-                      }).then(() => {
+                    }).then(() => {
                         this.$http.post("/api/order/cancelConfirm",{"cause":this.cancelCause.region,orderNo:this.orderNo},(rsp)=>{
                             this.cancelCauseArr = rsp;
                                 console.log(rsp)
@@ -440,6 +451,7 @@ import localEvent from 'src/vuex/function.js';
                                     type: 'success',
                                     message: '取消成功!'
                                 });
+                                this.requestHttp();
                                 // this.cancelFlag = false;
                         },(error)=>{
                             this.$message({
@@ -447,12 +459,12 @@ import localEvent from 'src/vuex/function.js';
                                 message: error.data.meta.code+"--"+error.data.meta.msg
                             });
                         });
-                        }).catch(() => {
+                    }).catch(() => {
                         this.$message({
                             type: 'info',
                             message: '已取消删除'
                         });
-                        });
+                    });
         },
         handleOtherPay(){
             this.dialogOtherpayVisible = true;
@@ -466,6 +478,7 @@ import localEvent from 'src/vuex/function.js';
                     message: '标记成功!'
                 });
                 this.dialogOtherpayVisible = false;
+                this.requestHttp();                
             },(error)=>{
                 if(error.data.meta.code == '0011'){
                     this.$message({
@@ -493,6 +506,7 @@ import localEvent from 'src/vuex/function.js';
                     type: 'success',
                     message: '作废成功!'
                 });
+                this.requestHttp();                
                 this.dialogOrderVisible = false;
             },(error)=>{
                 if(error.data.meta.code == '0011'){
@@ -519,6 +533,7 @@ import localEvent from 'src/vuex/function.js';
                         type: 'success',
                         message: '转快递成功!'
                     });
+                    this.requestHttp();                    
             },(error)=>{
                 this.$message({
                     type: 'error',
@@ -614,9 +629,10 @@ import localEvent from 'src/vuex/function.js';
     }
     .basic-table .el-col:last-child .cell-right{
             color:red;
+            overflow: hidden;   
         }
     .selfCollapse .goods-table div:nth-child(2) div .el-col-18{
-            color:red;            
+            color:red;         
     }    
     //    @media screen and (min-width: 901px) {
     //     .cell-left{
@@ -646,21 +662,20 @@ import localEvent from 'src/vuex/function.js';
     }
     .main .serverList{
         line-height: 48px;
-        height:48px;
         font-size: 14px;    
         border-left: 1px solid #eaeefb;    
-        border-right: 1px solid #eaeefb;              
+        border-right: 1px solid #eaeefb;       
+        padding-left: 15px;
+        padding-right: 15px;               
     } 
     .main .serverList1{
         background-color: #eaeefb;
         color: #5295e2;
-        padding-left: 15px;
         border-bottom: 1px solid #eaeefb;
     } 
     .main .serverList2{
         background-color: #fbfdff;
         color: #1f2d3d;
-        padding-left: 15px;  
         border-bottom: 1px solid #eaeefb;
               
     } 

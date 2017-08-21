@@ -141,7 +141,8 @@ export default {
       },
       rules: {
         merchantName: [
-          {required: true,message: '请选择公司名称',trigger: 'change'}
+          {required: true,message: '请选择公司名称',trigger: 'change'},
+          {min:1, max:10,message:'名称长度不大于10'}                    
         ],
         sortWeight: [
           { required: true, message: '排序值不能为空'},
@@ -152,7 +153,8 @@ export default {
           {required: true,type: 'number',message: '电话号码必须为数字值'},
         ],
         slogan:[
-          {required: true,message: '请输入广告语'}
+          {required: true,message: '请输入广告语'},
+          {min:1, max:20,message:'广告语长度不大于200'}                    
         ],
         // tag:[
         //   {required: true,message: '请输入标签',type: 'string',trigger: 'blur'},

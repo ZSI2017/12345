@@ -68,8 +68,8 @@
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-if="isFromAddData" v-model="form.opStatus">
-        <el-radio class="radio" :label="1">上架</el-radio>
-        <el-radio class="radio" :label="2">下架</el-radio>
+        <el-radio class="radio" :label="0">上架</el-radio>
+        <el-radio class="radio" :label="1">下架</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
@@ -193,7 +193,7 @@ export default {
         sortWeight: '',
         linkUrl: '',
         coverArea:'',
-        opStatus:1,
+        opStatus:'',
         markPrice:'',
 
       },
@@ -232,12 +232,22 @@ export default {
       this.form.markPrice = rsp.markPrice;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
 
-      if (rsp.opStatus == "1") {
-        this.form.opStatus = 1;
-        this.currentStateText = "已下线"
+      if ( this.$route.path == "/oneCityFreight/detail") {
+        if (rsp.status == "1") {
+          this.form.opStatus = 1;
+          this.currentStateText = "已下线"
+        } else {
+          this.form.opStatus = 0;
+          this.currentStateText = "已上线"
+        }     
       } else {
-        this.form.opStatus = 2;
-        this.currentStateText = "已上线"
+        if (rsp.opStatus == "1") {
+          this.form.opStatus = 1;
+          this.currentStateText = "已下线"
+        } else {
+          this.form.opStatus = 0;
+          this.currentStateText = "已上线"
+        }
       }
 
      this.dialogConfig(true)
@@ -378,9 +388,14 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/sendapp/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
-      if(this.tabName === "已上线") {
-          URL = "/api/sendapp/areaConf/all";
+      this.listLoading = true;
+      var URL = "/api/sendapp/areaConf/all";   // 默认是 已上线 中的覆盖地区
+      let id = this.form.noticeId;
+      // alert(id)
+      // alert(this.form.noticeId)
+      if(this.localData.tabName === "配置") {
+          URL = "/api/sendapp/audit/areaConf/all";
+          id = this.id;
       }
       _this.$http.post(URL,{id:this.id.toString()},
         (rsp) => {

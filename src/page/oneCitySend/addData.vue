@@ -151,6 +151,7 @@ export default {
     return {
       pageId:'',
       state1: "",
+      dialogVisible:false,
       // 添加搜索框
       searchContent: "",
       provinces: [],
@@ -196,7 +197,8 @@ export default {
           {required: true,message: '请上传图片',type:'array',trigger: 'on-change'}
         ],
         slogan:[
-          {type: 'string',required: true,message: '请输入广告语',trigger: 'blur'}
+          {type: 'string',required: true,message: '请输入广告语',trigger: 'blur'},
+          {min:1, max:20,message:'广告语长度不大于20'}                    
         ],
         sortWeight: [
           { required: true, message: '排序值不能为空'},
@@ -204,7 +206,8 @@ export default {
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         linkUrl: [
-          {required: true,message: "请输入正确链接",trigger: 'blur'}
+          {required: true,message: "请输入正确链接",trigger: 'blur'},
+          {min:1, max:200,message:'链接长度不大于200'}                    
         ],
         opStatus: [
           {required: true,message: '请选择状态',trigger: 'change'}

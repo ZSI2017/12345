@@ -286,18 +286,34 @@ export default {
       console.log(rsp.imageUrl)
       this.form.name = rsp.name;
       this.form.Forder = rsp.sortWeight;
+      console.log(rsp.linkUrl.indexOf('//'))
+      if(rsp.linkUrl.indexOf('//') > -1){
+          this.form.linkHeader = rsp.linkUrl.split('//')[0] + '//';          
+      }
       this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
       this.form.fileList2[0].url = rsp.imageUrl;
       this.form.fileList2[0].name = rsp.imageUrl;
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
       this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
-      if (rsp.opStatus == "1") {
-        this.form.radio = 1;
-        this.currentStateText = "已下线"
+      if ( this.$route.path == "/promotion/chooseExpress/detail"
+          || this.$route.path == "/promotion/sendExpress/detail"
+          || this.$route.path == "/promotion/expressOrder/detail") {
+        if (rsp.status == "1") {
+          this.form.opStatus = 1;
+          this.currentStateText = "已下线"
+        } else {
+          this.form.opStatus = 0;
+          this.currentStateText = "已上线"
+        }     
       } else {
-        this.form.radio = 2;
-        this.currentStateText = "已上线"
+        if (rsp.opStatus == "1") {
+          this.form.opStatus = 1;
+          this.currentStateText = "已下线"
+        } else {
+          this.form.opStatus = 0;
+          this.currentStateText = "已上线"
+        }
       }
      this.dialogConfig(true)
 
