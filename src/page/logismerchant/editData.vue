@@ -16,7 +16,15 @@
       <el-input v-model="ruleForm.merchantName" placeholder="请输入机构名称"> </el-input>
     </el-form-item>
     <el-form-item label="物流机构类型">
-      <el-input v-model="ruleForm.merchantType" placeholder="请输入物流机构类型"> </el-input>
+      <!--<el-input v-model="ruleForm.merchantType" placeholder="请输入物流机构类型"> </el-input>-->
+      <el-select v-model="ruleForm.merchantType" @change="handleAccessType" placeholder="请选择物流机构类型" style="width:100%;">
+            <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+            </el-option>
+        </el-select>
     </el-form-item>
     <el-form-item label="物流机构LOGO的URL">
         <!--<el-input v-model="ruleForm.merchantLogo" placeholder="请输入物流机构LOGO的URL"> </el-input>      -->
@@ -288,6 +296,16 @@ export default {
         gmtCreate:'',
         gmtModified:''
       },
+      options:[{
+          value: '1',
+          label: '物流公司'
+        }, {
+          value: '0',
+          label: 'ISV'
+        }, {
+          value: '3',
+          label: '物流平台'
+        }],
         //授权状态
        options1: [{
           value: '1',

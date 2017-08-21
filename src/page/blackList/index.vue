@@ -17,26 +17,23 @@
 
     <!-- 表格  -->
     <el-table
-        v-if="tableFalg"
         class="mainTable"
-        v-loading.body.lock="halfListLoading"
+        style="width: 100%;margin-top:10px;"    
         :data="tableData"
-        style="width: 100%;margin-top:10px;"
-        max-height="450"
-        empty-text="暂无数据"
+        stripe v-loading.body="listLoading"
+        lement-loading-text="拼命加载中"
+        max-height="3000"
     >
-        <el-table-column prop="operationsMapName" label="姓名" align="center">
+        <el-table-column prop="alipayUserName" label="姓名" align="center">
         </el-table-column>
-        <el-table-column prop="ordernumber" label="手机号" align="center">
+        <el-table-column prop="alipayUserMoblie" label="手机号" align="center">
         </el-table-column>
-        <el-table-column prop="Forder" label="拉黑次数" class-name="blangListRed" align="center">
+        <el-table-column prop="blackCnt" label="拉黑次数" class-name="blangListRed" align="center">
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
             <div>
                 <el-button @click="loadingTakeOffFlag = true" type="text" size="small">解除黑名单</el-button>
-                <el-button @click="handleEdit(scope.row)" type="text" size="small">查看相关订单</el-button>
-                <el-button type="text" plain @click="showAllIfo" size="small">查看完整信息</el-button>
             </div>
           </template>
         </el-table-column>
@@ -49,15 +46,8 @@
       <span style="padding-left:44px;">确认后，将恢复用户的下单功能</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
-        <el-button type="primary" @click="loadingTakeOffFlag = false">确 定</el-button>
+        <el-button type="primary" @click="handleConfirm">确 定</el-button>
       </span>
-    </el-dialog>
-    <!--相关订单对话框-->
-    <el-dialog title="相关订单" :visible.sync="dialogTableVisible" @close="handleClose">
-      <el-table :data="gridData">
-        <el-table-column property="ordernumber" label="订单号"></el-table-column>
-        <el-table-column property="createTime" label="取消时间"></el-table-column>
-      </el-table>
     </el-dialog>
 
   </div>
@@ -72,7 +62,6 @@ import localEvent from 'src/vuex/function.js';
       return {
         keyword:"",
         num1: "",
-        tableFalg: true,
         tableData: [],
         loadingTakeOffFlag: false,
         halfListLoading:false,
@@ -80,12 +69,26 @@ import localEvent from 'src/vuex/function.js';
         dialogTableVisible: false,
         gridData: [],
         orderNumber:"",
-        cancleTime:""
+        cancleTime:"",
+        alipayUserId:''//Uid
       }
     },
      mounted() {
-      var localData = localEvent.get("blacklistTimes");
-      this.num1 = localData;
+      // var localData = localEvent.get("blacklistTimes");
+      // this.num1 = localData;
+
+      let cancleUrl = "/commonConf/getCancelFreq";
+      var _this = this;
+      _this.$http.post(cancleUrl,{},(result) => {
+          console.log(result)
+           
+      },(error) => {
+          this.$message({
+              type: 'error',
+              message: error.data.meta.code+"--"+error.data.meta.msg
+          });
+      });
+
     },
     created() {
       
@@ -95,39 +98,40 @@ import localEvent from 'src/vuex/function.js';
           console.log("$router: " + this.$route.path);
           let url = "/api/epuser/findByMobile";
           var _this = this;
-          _this.$http.post(url,{'keyword':this.keyword},(result) => {
-            console.log(result)
+          _this.$http.post(url,{'mobile':this.keyword},(result) => {
+              console.log(result)
+              let resultSpace = [];
+              resultSpace.push(result);
+              this.alipayUserId = result.alipayUserId;
+              _this.tableData = resultSpace.splice(0,1);   
+          },(error) => {
+              this.$message({
+                  type: 'error',
+                  message: error.data.meta.code+"--"+error.data.meta.msg
+              });
+          });
 
-            _this.tableData = data.data.data        
-        },(error) => {
-            this.$message({
-                type: 'error',
-                message: error.data.meta.code+"--"+error.data.meta.msg
-            });
-        });
-
-          console.log(this.$route.matched);
       },
-      handleEdit(row) {
-        console.log(row);   
-        this.dialogTableVisible = true;  
-        this.gridData.push(row);    
-        console.log(this.gridData)  
-        console.log(this.tableData)  
-        // this.orderNumber = row.ordernumber;
-        // this.cancleTime = row.createTime;
-        
+      handleConfirm(){
+          let url = "/api/epuser/unban";
+          var _this = this;
+          _this.$http.post(url,{'alipayUid':this.alipayUserId},(result) => {
+              console.log(result)
+              this.$message({
+                  type: 'succes',
+                  message: '解除黑名单成功！'
+              });
+          },(error) => {
+              this.$message({
+                  type: 'error',
+                  message: error.data.meta.code+"--"+error.data.meta.msg
+              });
+          });
       },
       handleClose(){
         this.gridData = [];
-      },
-      showAllIfo(){
-        this.$notify({
-          title: '查看完整信息',
-          message: '点击了查看完整信息',
-          type: 'success'
-        });
       }
+
     }
   }    
 </script>

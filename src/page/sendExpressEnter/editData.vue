@@ -282,12 +282,22 @@ export default {
       this.form.logo[0].url = rsp.logo;
       this.form.icon[0].url = rsp.icon;  
       this.form.description = rsp.description;
-      if (rsp.opStatus == "1") {
-        this.form.radio = 1;
-        this.currentStateText = "已下线"
+      if ( this.$route.path == "/sendExpressEnter/detail") {
+        if (rsp.status == "1") {
+          this.form.opStatus = 1;
+          this.currentStateText = "已下线"
+        } else {
+          this.form.opStatus = 0;
+          this.currentStateText = "已上线"
+        }     
       } else {
-        this.form.radio = 2;
-        this.currentStateText = "已上线"
+        if (rsp.opStatus == "1") {
+          this.form.opStatus = 1;
+          this.currentStateText = "已下线"
+        } else {
+          this.form.opStatus = 0;
+          this.currentStateText = "已上线"
+        }
       }
 
      this.dialogConfig(true)
@@ -482,9 +492,14 @@ export default {
           }
       }
       var _this = this;
-      var URL = "/api/sendapp/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
-      if(this.tabName === "已上线") {
-          URL = "/api/sendapp/areaConf/all";
+      this.listLoading = true;
+      var URL = "/api/sendapp/areaConf/all";   // 默认是 已上线 中的覆盖地区
+      let id = this.form.noticeId;
+      // alert(id)
+      // alert(this.form.noticeId)
+      if(this.localData.tabName === "配置") {
+          URL = "/api/sendapp/audit/areaConf/all";
+          id = this.id;
       }
       _this.$http.post(URL,{id:this.id.toString()},
         (rsp) => {

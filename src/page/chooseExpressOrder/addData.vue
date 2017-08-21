@@ -135,7 +135,8 @@ export default {
           { required: true,type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         slogan:[
-          {required: true,message: '请输入广告语'}
+          {required: true,message: '请输入广告语'},
+          {min:1, max:20,message:'广告语长度不大于20'}                    
         ],
         // tag:[
         //   {required: true,message: '请输入标签',type: 'string',trigger: 'blur'},

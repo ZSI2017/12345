@@ -29,12 +29,25 @@ import localEvent from 'src/vuex/function.js';
       }
     },
     mounted() {
-    var localData = localEvent.get("blacklistTimes");
-    if(localData == ""){
-        this.num1 = 5;
-    }else{
-        this.num1 = localData;        
-    }
+    // var localData = localEvent.get("blacklistTimes");
+    // if(localData == ""){
+    //     this.num1 = 5;
+    // }else{
+    //     this.num1 = localData;        
+    // }
+    let cancleUrl = "/commonConf/getCancelFreq";
+    var _this = this;
+    _this.$http.post(cancleUrl,{},(result) => {
+        console.log(result)
+          
+    },(error) => {
+        this.$message({
+            type: 'error',
+            message: error.data.meta.code+"--"+error.data.meta.msg
+        });
+    });
+
+
   },
     methods: {
       handleChange(value) {
@@ -45,7 +58,18 @@ import localEvent from 'src/vuex/function.js';
       },
       handleCtrl(){
         this.showNumber = true;
-        localEvent.set("blacklistTimes",this.num1);
+        // localEvent.set("blacklistTimes",this.num1);
+        let cancleUrl = "/epcommonConf/updateCancelFreq";
+          var _this = this;
+          _this.$http.post(cancleUrl,{'cancelFreq':this.num1},(result) => {
+              console.log(result)
+                
+          },(error) => {
+              this.$message({
+                  type: 'error',
+                  message: error.data.meta.code+"--"+error.data.meta.msg
+              });
+          });
       },
       handleCancle(){
         this.showNumber = true;

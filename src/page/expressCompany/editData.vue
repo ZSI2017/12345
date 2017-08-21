@@ -190,12 +190,15 @@ export default {
       this.ruleForm.hotStatus =  Number(rsp.hotStatus);
       this.ruleForm.newStatus =  Number(rsp.newStatus);
       this.ruleForm.pricingMode =  Number(rsp.pricingMode);
-      this.ruleForm.opStatus =  rsp.opStatus=='1'?0:1;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       console.log(this.dynamicTags)
       console.log(rsp.tag)
-      this.dialogConfig(true)
-
+      // this.dialogConfig(true)
+      if ( this.$route.path == "/chooseExpressOrder/detail") {
+          this.ruleForm.opStatus =  rsp.status=='1'?1:0;        
+      } else {
+          this.ruleForm.opStatus =  rsp.opStatus=='1'?1:0;
+      }
     },(error)=>{
       console.log(error)
       console.log('failed');
