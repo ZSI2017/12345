@@ -8,7 +8,7 @@
       </el-col>   
       <el-col :span="2" class="status-font">手机号：</el-col>      
       <el-col :span="10">
-          <el-input :span="10" v-model="keyword" size="large" placeholder="请输入用户手机号码"></el-input>
+          <el-input :span="10" v-model="keyword" type="number"  @keyup.enter.native="handleSearch" size="large" placeholder="请输入用户手机号码"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
         <el-button type="primary" @click='handleSearch' size="large">查 询</el-button>
@@ -28,7 +28,12 @@
         </el-table-column>
         <el-table-column prop="alipayUserMoblie" label="手机号" align="center">
         </el-table-column>
-        <el-table-column prop="blackCnt" label="拉黑次数" class-name="blangListRed" align="center">
+        <el-table-column prop="blackCnt" label="拉黑次数" align="center">
+          <template scope="scope">
+            <div style="color:red;">
+                {{scope.row.blackCnt}}
+            </div>
+          </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
@@ -54,8 +59,6 @@
 
 </template>
 <script>
-import store from 'src/vuex/store.js'
-import localEvent from 'src/vuex/function.js';
 
   export default {
     data() {
@@ -64,23 +67,15 @@ import localEvent from 'src/vuex/function.js';
         num1: "",
         tableData: [],
         loadingTakeOffFlag: false,
-        halfListLoading:false,
-        // 相关订单对话框
-        dialogTableVisible: false,
-        gridData: [],
-        orderNumber:"",
-        cancleTime:"",
         alipayUserId:''//Uid
       }
     },
      mounted() {
-      // var localData = localEvent.get("blacklistTimes");
-      // this.num1 = localData;
-
-      let cancleUrl = "/commonConf/getCancelFreq";
+      let cancleUrl = "/api/commonConf/getCancelFreq";
       var _this = this;
       _this.$http.post(cancleUrl,{},(result) => {
           console.log(result)
+          this.num1 = result;
            
       },(error) => {
           this.$message({
@@ -100,12 +95,19 @@ import localEvent from 'src/vuex/function.js';
           var _this = this;
           _this.$http.post(url,{'mobile':this.keyword},(result) => {
               console.log(result)
+              if(result.result === null){
+                  _this.$message({
+                      type: 'warning',
+                      message: '该数据没有查询到内容！'
+                  });
+                  return;
+              }
               let resultSpace = [];
               resultSpace.push(result);
-              this.alipayUserId = result.alipayUserId;
+              _this.alipayUserId = result.alipayUserId;
               _this.tableData = resultSpace.splice(0,1);   
           },(error) => {
-              this.$message({
+              _this.$message({
                   type: 'error',
                   message: error.data.meta.code+"--"+error.data.meta.msg
               });
@@ -113,23 +115,21 @@ import localEvent from 'src/vuex/function.js';
 
       },
       handleConfirm(){
-          let url = "/api/epuser/unban";
+          let confirmUrl = "/api/epuser/unban";
           var _this = this;
-          _this.$http.post(url,{'alipayUid':this.alipayUserId},(result) => {
+          _this.$http.post(confirmUrl,{'alipayUid':this.alipayUserId,"mobile":this.keyword},(result) => {
               console.log(result)
-              this.$message({
-                  type: 'succes',
+              _this.$message({
+                  type: 'success',
                   message: '解除黑名单成功！'
               });
+              _this.loadingTakeOffFlag = false;
           },(error) => {
-              this.$message({
+              _this.$message({
                   type: 'error',
                   message: error.data.meta.code+"--"+error.data.meta.msg
               });
           });
-      },
-      handleClose(){
-        this.gridData = [];
       }
 
     }
@@ -152,7 +152,15 @@ import localEvent from 'src/vuex/function.js';
     .blangListRed{
       color:red;
     }
-}
+    input[type=number] {  
+    -moz-appearance:textfield;  
+    }  
+    input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button{
+          -webkit-appearance: none !important;
+          margin: 0; 
+      }
+  }
 
 
 </style>
