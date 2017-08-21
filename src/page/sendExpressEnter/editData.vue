@@ -14,7 +14,8 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
-        :file-list="form.logo">
+        :file-list="form.logo"
+        list-type="picture">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
@@ -33,6 +34,7 @@
         :on-remove="handleRemove2"
         :on-success='handleSuccess2'
         :on-error='handlerror2'
+        list-type="picture"
         :file-list="form.icon">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -281,6 +283,8 @@ export default {
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.icon[0].url = rsp.icon;
+      this.form.logo[0].name = rsp.logo;
+      this.form.icon[0].name = rsp.icon;      
       this.form.description = rsp.description;
       if ( this.$route.path == "/sendExpressEnter/detail") {
         if (rsp.status == "1") {

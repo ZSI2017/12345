@@ -7,7 +7,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="LOGO">
-      <el-upload v-if="isFromAddData" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="form.logo">
+      <el-upload v-if="isFromAddData" list-type="picture" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="form.logo">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
@@ -231,6 +231,7 @@ export default {
       this.form.slogan = rsp.slogan;
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
+      this.form.logo[0].name = rsp.logo;      
       this.form.markPrice = rsp.markPrice;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
 

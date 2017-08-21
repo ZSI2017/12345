@@ -64,6 +64,10 @@ import localEvent from 'src/vuex/function.js';
           _this.$http.post(ctrlUrl,{'cancelFreq':this.num1.toString()},(result) => {
               console.log(result)
               // this.num1 = result;  
+              this.$message({
+                  type: 'success',
+                  message: "订单取消频次报存成功！"
+              });
 
           },(error) => {
               this.$message({

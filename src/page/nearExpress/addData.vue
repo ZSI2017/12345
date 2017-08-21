@@ -15,6 +15,7 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
+        list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">文件类型限：jpg,png,尺寸40*40, 请保持5kb以内</div>
