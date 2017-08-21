@@ -1,18 +1,5 @@
 <template>
 <div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
-
-      <el-select v-model="value123" value-key="items" filterable placeholder="请选择公司名称" style="width:100%;" @change="handleMerchant">
-          <el-option
-            v-for="item in options123"
-            :key="item.value"
-            :merchantLogo="item.merchantLogo"
-            :label="item.merchantName"
-
-            :value="item">
-          </el-option>
-      </el-select>
-
-
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
@@ -205,8 +192,6 @@ export default {
   },
   data() {
     return {
-      value123:'',
-      options123:[],
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
       // 排序是否显示
@@ -267,11 +252,7 @@ export default {
 
   },
   mounted(){
-     this.$http.get('rest/list2',{},(result) =>{
-         this.options123 = result.data.data;
-         console.log("texttext123456787654321");
-          console.log(this.options123);
-     })
+
   },
   created() {
     // alert(this.Authority)
@@ -362,11 +343,6 @@ export default {
   //   }
   },
   methods: {
-    handleMerchant(item){
-        console.log(this.value123);
-        console.log(item);
-
-    },
     //点击图片显示大图
     showImg(row){
       this.dialogVisible = true;

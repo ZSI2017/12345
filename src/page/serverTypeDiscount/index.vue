@@ -158,7 +158,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-
       <div v-if="this.dialogFlag == '详情'">{{formAdd.logisMerchantName}}</div>
       </el-form-item>
       <el-form-item label="服务类型名称" prop="productName">
@@ -323,34 +322,7 @@ export default {
       // 快递公司名
       companyName:'',
       searchContent:'',
-      searchCompanyName: [{
-          value: '黄金糕',
-          label: '黄金糕'
-        }, {
-          value: '双皮奶',
-          label: '双皮奶'
-        }, {
-          value: '蚵仔煎',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎123',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎23',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎33',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎44',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎55',
-          label: '蚵仔煎'
-        }, {
-          value: '蚵仔煎77',
-          label: '蚵仔煎'
-        }],
+      searchCompanyName: [],
         formAdd:{
           logisMerchantName:[],  // 快递公司名
           company:'',
