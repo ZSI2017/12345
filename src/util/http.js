@@ -138,6 +138,7 @@ function checkErrorCode(response) {
           console.log(response);
            successfn(response.data.result||response.data);
        }else {
+           $('.el-loading-mask').css("display",'none');
             if(typeof errorfn === "undefined") {
                 checkErrorCode(response);
             } else {
@@ -218,13 +219,15 @@ export default {
            (error) => {
                     $('.el-loading-mask').css("display",'none');
                     if(error.response) {
+                      vue.$message.error('response');
                       //  发出了请求，服务端返回了 状态码 2xx
                       console.log("%cresponse error %o","color:red;font-size:16px;",error.response)
                       if(error.response.status === 0){
-                            // vue.$message.error('登录超时');
+
                             // loginTime();
                         }
                     } else if(error.request) {
+                        vue.$message.error('request error');
                       if(error.request.status === 0){
                                 //  loginTime();
                             // vue.$message.error('登录超时');
@@ -235,6 +238,7 @@ export default {
                         //   在node.js 中 就是 http.ClientRequest 实例；
                            console.log("%crequest error %o","color:red;font-size:16px;",error.request);
                       } else {
+                          vue.$message.error('else');
                         //   vue.$message.error('接口调用失败2222');
                           console.log("Error",error.message);
                       }
