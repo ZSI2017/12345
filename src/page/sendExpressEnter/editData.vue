@@ -147,13 +147,13 @@ export default {
     return {
 
       url: '', // 待审详情的 url
-      id:'',      
+      id:'',
       tabName:'', // 标签页 名称
       localData:{}, // 上一个页面的数据
       // 即将离开的对话框
       loadingFlag: false,
       dialogVisible: false,
-      dialogVisible2: false,      
+      dialogVisible2: false,
       CoverData:[],
       DialogConfigSaveFlag:false,  // 配置覆盖地区
       dialogImageUrl:'',//logo大图存放
@@ -182,7 +182,7 @@ export default {
       currentStateText: '',
 
       form: {
-        name: '',   
+        name: '',
         logo: [{
           name: '',
           url: ""
@@ -190,17 +190,17 @@ export default {
         icon: [{
           name: '',
           url: ""
-        }],  
-        description: '',  
+        }],
+        description: '',
         sortWeight: '',
-        linkUrl: '',        
+        linkUrl: '',
         radio: "",  // radio 代表上下架状态的选择
         Forder: '',
         // promotionId:'',
         gmtBegin:'',
         gmtEnd:'',
         coverArea:'',
-        
+
       },
      // 表单验证规则
      rules: {
@@ -277,10 +277,10 @@ export default {
     },(rsp)=>{
       console.log(rsp)
       this.form.name = rsp.name;
-      this.form.sortWeight = rsp.sortWeight;  
+      this.form.sortWeight = rsp.sortWeight;
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
-      this.form.icon[0].url = rsp.icon;  
+      this.form.icon[0].url = rsp.icon;
       this.form.description = rsp.description;
       if (rsp.opStatus == "1") {
         this.form.radio = 1;
@@ -349,7 +349,7 @@ export default {
                  "sendappId":this.localData.sendappId,
                  "name":this.form.name,
                  "logo":this.form.logo[0].url,
-                 "icon":this.form.icon[0].url,                 
+                 "icon":this.form.icon[0].url,
                  "sortWeight":this.form.sortWeight,
                  "linkUrl":this.form.linkUrl,
                  'opStatus':this.form.radio,
@@ -561,8 +561,10 @@ export default {
       for (var m = 0; m < allCount; m++) {
           this.isIndeterminate.splice(m, 1, !event.target.checked)
           this.checkAll.splice(m, 1, event.target.checked);
+              this.gridData[m].check = event.target.checked;
           let CityAllCity = [];
           for(let i =0;i<this.gridData[m].citys.length;i++) {
+                this.gridData[m].citys[i].check = event.target.checked;
              CityAllCity.push(this.gridData[m].citys[i].cityName)
           };
           this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity: [])

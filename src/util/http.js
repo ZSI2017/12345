@@ -198,7 +198,7 @@ export default {
             }],
             // withCredentials: false,   //  默认false
             data:data,
-            timeout:60*10*1000,
+            timeout:60*20*1000,
             responseType:'json',  // default
             // contentType: "application/json; charset=utf-8",
             xsrfCookieName:'XSRF-TOKEN',      // default
@@ -238,7 +238,8 @@ export default {
                         //   在node.js 中 就是 http.ClientRequest 实例；
                            console.log("%crequest error %o","color:red;font-size:16px;",error.request);
                       } else {
-                          vue.$message.error('else');
+                          $('.el-loading-mask').css("display",'none');
+                          // vue.$message.error('else');
                         //   vue.$message.error('接口调用失败2222');
                           console.log("Error",error.message);
                       }

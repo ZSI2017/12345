@@ -15,6 +15,7 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
+        list-type="picture"
         :file-list="form.fileList2">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -27,7 +28,7 @@
       <el-button v-if="!isFromaddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
     <el-form-item label="排序值" prop="Forder">
-      <el-input v-if="isFromaddData" v-model.number="form.Forder" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromaddData" v-model.number="form.Forder"  type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromaddData"> {{form.Forder}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="link">
@@ -205,7 +206,7 @@ export default {
      ],
        Forder: [
          { required: true, message: '排序值不能为空'},
-        //  { type: 'number', message: '排序值必须为数字值'},
+         { type: 'number', message: '排序值必须为数字值'},
          { type: 'number', min:1, max:999,message:'排序值范围1-999'}
        ],
        link: [{
@@ -265,13 +266,14 @@ export default {
     this.id = localData.id;
     var _this =this;
     var httpId = '';
+    // alert(localData.tabName)
     if(localData.tabName == '配置'){  //配置 修改
         _this.url = "/api/promotion/audit/get";
         httpId = this.id;
         console.log("配置 修改")
     }else if(!localData.tabName){  // 待审核 已生效详情
         _this.url = "/api/promotion/get";
-        httpId = this.form.promotionId;``
+        httpId = this.form.promotionId;
         console.log("待审核 已生效详情")
     }else{
       alert('错误')
@@ -286,6 +288,7 @@ export default {
       this.form.Forder = rsp.sortWeight;
       this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
       this.form.fileList2[0].url = rsp.imageUrl;
+      this.form.fileList2[0].name = rsp.imageUrl;
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
       this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
@@ -296,7 +299,6 @@ export default {
         this.form.radio = 2;
         this.currentStateText = "已上线"
       }
-
      this.dialogConfig(true)
 
     },(error)=>{
@@ -512,11 +514,13 @@ handleSubmit(formName) {
       }
       var _this = this;
         this.listLoading = true;
-      var URL = "/api/promotion/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
-      if(this.tabName === "已上线") {
-          URL = "/api/promotion/areaConf/all";
+      var URL = "/api/promotion/areaConf/all";  // 默认是 配置 中的覆盖地区
+      let id = this.form.promotionId;
+      if(this.localData.tabName === "配置") {
+          URL = "/api/promotion/audit/areaConf/all";
+          id = this.id
       }
-      _this.$http.post(URL,{id:this.id.toString()},
+      _this.$http.post(URL,{id:id.toString()},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
@@ -597,8 +601,10 @@ handleSubmit(formName) {
       for (var m = 0; m < allCount; m++) {
           this.isIndeterminate.splice(m, 1, !event.target.checked)
           this.checkAll.splice(m, 1, event.target.checked);
+          this.gridData[m].check = event.target.checked;
           let CityAllCity = [];
           for(let i =0;i<this.gridData[m].citys.length;i++) {
+            this.gridData[m].citys[i].check = event.target.checked;
              CityAllCity.push(this.gridData[m].citys[i].cityName)
           };
           this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity: [])
@@ -678,6 +684,7 @@ handleSubmit(formName) {
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
+      alert('adfasd')
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },

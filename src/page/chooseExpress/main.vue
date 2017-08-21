@@ -164,7 +164,7 @@
 
   <!-- 置为下线 对话框  -->
 
-  <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
+  <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny" custom-class="dialogWidth">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
     <span style="padding-left:44px;">{{myDiglogContent}}</span>
@@ -760,6 +760,9 @@ export default {
 }
 </script>
 <style lang="scss">
+.dialogWidth{
+   width:22% !important
+}
 .el-tabs .el-tabs__content {
     display: none;
 }

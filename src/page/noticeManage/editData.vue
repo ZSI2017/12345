@@ -248,10 +248,13 @@ export default {
     this.id = localData.id;
     var _this =this;
     var httpId = '';
+    let status = ""
     if(localData.tabName == '配置'){  //配置 修改
         _this.url = "/api/notice/audit/get";
+        status = 'opStatus';
         httpId = this.id;
     }else if(!localData.tabName){  // 待审核 已生效详情
+        status = 'status';
         _this.url = "/api/notice/get";
         httpId = this.form.noticeId;``
         console.log("待审核 已生效详情")
@@ -269,7 +272,7 @@ export default {
       this.form.gmtEnd = rsp.gmtEnd;
       this.form.content = rsp.content;
       this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
-      if (rsp.opStatus == "1") {
+      if (rsp[status] == "1") {
         this.form.radio = 1;
         this.currentStateText = "已下线"
       } else {
@@ -489,11 +492,16 @@ export default {
 
       var _this = this;
       this.listLoading = true;
-      var URL = "/api/notice/audit/areaConf/all";   // 默认是 配置 中的覆盖地区
-      if(this.tabName === "已上线") {
-          URL = "/api/notice/areaConf/all";
+      var URL = "/api/notice/areaConf/all";   // 默认是 已上线 中的覆盖地区
+      let id = this.form.noticeId;
+      // alert(id)
+      // alert(this.form.noticeId)
+      if(this.localData.tabName === "配置") {
+          URL = "/api/notice/audit/areaConf/all";
+          id = this.id;
       }
-      _this.$http.post(URL,{id:this.id.toString()},
+      // alert(id)
+      _this.$http.post(URL,{id:id.toString()},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
@@ -572,8 +580,10 @@ export default {
       for (var m = 0; m < allCount; m++) {
           this.isIndeterminate.splice(m, 1, !event.target.checked)
           this.checkAll.splice(m, 1, event.target.checked);
+          this.gridData[m].check = event.target.checked;
           let CityAllCity = [];
           for(let i =0;i<this.gridData[m].citys.length;i++) {
+                this.gridData[m].citys[i].check = event.target.checked;
              CityAllCity.push(this.gridData[m].citys[i].cityName)
           };
           this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity: [])
