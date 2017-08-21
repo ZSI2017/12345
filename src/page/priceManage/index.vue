@@ -638,6 +638,7 @@ export default {
          }
       }
       this.$http.post('/api/freightPriceRule/list',data,(result) =>{
+             //  alert(result.page_list.length)
               if(showNull && result.page_list.length === 0) {
                  this.$message('未查询到内容，请重新选择！');
               }
