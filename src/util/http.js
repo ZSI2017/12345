@@ -198,7 +198,7 @@ export default {
             }],
             // withCredentials: false,   //  默认false
             data:data,
-            // timeout:10000,
+            timeout:60*10*1000,
             responseType:'json',  // default
             // contentType: "application/json; charset=utf-8",
             xsrfCookieName:'XSRF-TOKEN',      // default
