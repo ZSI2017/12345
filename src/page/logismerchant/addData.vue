@@ -306,61 +306,61 @@ export default {
         ],
         payeePid: [
           {required: true, message: '请输入收款人支付宝PID'},
-          {required: true, message:'请输入数字',type: "number"}                       
+          {required: true, message:'请输入数字',type: "number"}
         ],
         payeeAccount: [
-          { required: true, message: '请输入收款人支付宝账号',type:"string"}                 
+          { required: true, message: '请输入收款人支付宝账号',type:"string"}
         ],
         contactName: [
           { required: true, message: '请输入机构联系人姓名', trigger: 'blur',type:"string"}
         ],
         contactMobile: [
           { required: true, message: '请输入机构联系人手机号码'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         businessLicenceCode: [
           { required: true, message: '请输入营业执照代码',},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         businessLicencePic: [
           { required: true, message: '请输入营业执照照片URL', trigger: 'blur',type:"string"}
         ],
         logisLicenceCode: [
           { required: true, message: '请输入物流行业许可证代码'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         logisLicencePic: [
           { required: true, message: '请输入物流行业许可证照片的URL', trigger: 'blur',type:"string"}
         ],
         provinceCode: [
           { required: true, message: '请输入省代码'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         cityCode: [
           { required: true, message: '请输入市代码'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         districtCode: [
           { required: true, message: '请输入区县代码'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         address: [
           { required: true, message: '请输入详细地址', trigger: 'blur',type:"string"}
         ],
         zip: [
           { required: true, message: '请输入邮编'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         email: [
           { required: true, message: '请输入Email', trigger: 'blur',type:"string"}
         ],
         merchantTel: [
           { required: true, message: '请输入机构联系电话'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         isvMerchantId: [
           { required: true, message: '请输入ISVID'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         outSysName: [
           { required: true, message: '请输入外部ISV系统名', trigger: 'blur',type:"string"}
@@ -382,18 +382,18 @@ export default {
         ],
         serviceTimeInterval: [
           { required: true, message: '请输入服务时间段间隔'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         alipayAuthStatus: [
           { required: true, message: '请选择授权状态', trigger: 'change' }
         ],
         alipayPid: [
           { required: true, message: '请输入授权商户PID'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         alipayAppid: [
           { required: true, message: '请输入授权商户APPID'},
-          {required: true, message:'请输入数字',type: "number"} 
+          {required: true, message:'请输入数字',type: "number"}
         ],
         alipayAuthToken: [
           { type: 'string', required: true, message: '请输入商户授权令牌', trigger: 'blur' }
@@ -517,7 +517,7 @@ export default {
             }
           };
           this.$http.post(this.url,httpData,(result) => {
-              _this.$store.dispatch('changeLoadingChange',true);
+              this.$store.dispatch('changeLoadingChange',true);
               this.$message({
                   type: 'success',
                   message: '提交成功'
@@ -542,7 +542,7 @@ export default {
           return false;
         }
       })
-      
+
 
     },
     // 点击返回 对应的事件处理

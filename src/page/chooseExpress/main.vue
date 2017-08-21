@@ -423,11 +423,11 @@ export default {
       if(row.status == '2'){
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
-        this.promotionMessage = '已置为下线';
+        this.promotionMessage = '已置为下线待审核';
       }else{
         this.myDialogTitle = "确认置为上线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
-        this.promotionMessage = '已置为上线';
+        this.promotionMessage = '已置为上线待审核';
       }
       this.promotionID = row.promotionId || row.id;
       this.promotionURL = '/api/promotion/status/update';
