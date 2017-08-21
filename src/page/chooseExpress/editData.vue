@@ -21,7 +21,6 @@
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
       <img v-if="!isFromaddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
-
       <el-popover ref="popover4" placement="right" trigger="click">
         <img :src="form.fileList2[0].url">
       </el-popover>
@@ -288,30 +287,36 @@ export default {
       this.form.Forder = rsp.sortWeight;
       console.log(rsp.linkUrl.indexOf('//'))
       if(rsp.linkUrl.indexOf('//') > -1){
-          this.form.linkHeader = rsp.linkUrl.split('//')[0] + '//';          
+          this.form.linkHeader = rsp.linkUrl.split('//')[0] + '//';
       }
-      this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
+      if(this.isFromaddData){
+        this.form.link = rsp.linkUrl.replace('https://','').replace('http://','');
+      }else {
+          this.form.link = rsp.linkUrl;
+      }
+
       this.form.fileList2[0].url = rsp.imageUrl;
-      this.form.fileList2[0].name = rsp.imageUrl;
+      this.form.fileList2[0].name = '点击查看大图';
       this.form.gmtBegin = rsp.gmtBegin;
       this.form.gmtEnd = rsp.gmtEnd;
       this.form.date1 = [new Date(this.form.gmtBegin), new Date(this.form.gmtEnd)];
       if ( this.$route.path == "/promotion/chooseExpress/detail"
           || this.$route.path == "/promotion/sendExpress/detail"
           || this.$route.path == "/promotion/expressOrder/detail") {
+
         if (rsp.status == "1") {
-          this.form.opStatus = 1;
+          this.form.radio = 1;
           this.currentStateText = "已下线"
         } else {
-          this.form.opStatus = 0;
+          this.form.radio = 2;
           this.currentStateText = "已上线"
-        }     
+        }
       } else {
         if (rsp.opStatus == "1") {
-          this.form.opStatus = 1;
+          this.form.radio = 1;
           this.currentStateText = "已下线"
         } else {
-          this.form.opStatus = 0;
+          this.form.radio = 2;
           this.currentStateText = "已上线"
         }
       }
@@ -442,9 +447,9 @@ handleSubmit(formName) {
       this.form.fileList2[0].url = file.result;
     },
     handlerror(err, file, fileList){
-      alert(err);
-      alert(file);
-      alert(fileList);
+      // alert(err);
+      // alert(file);
+      // alert(fileList);
     },
     // 标签页选择
     handleTabClick(tab, event) {
@@ -700,7 +705,7 @@ handleSubmit(formName) {
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
-      alert('adfasd')
+      // alert('adfasd')
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },

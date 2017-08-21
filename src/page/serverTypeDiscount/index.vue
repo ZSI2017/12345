@@ -182,8 +182,10 @@
       <el-form-item label="结算折扣" prop="discountNum">
         <el-row v-if="this.dialogFlag != '详情'" >
           <el-col :span="6" style="width: 187px; height: 42.5px;line-height:42.5px;">
-            <el-radio class="radio" v-model="formAdd.discount" label="有折扣">有折扣</el-radio>
-            <el-radio class="radio" v-model="formAdd.discount" label="无折扣">无折扣</el-radio>
+            <el-radio-group   v-model="formAdd.discount">
+                <el-radio class="radio" label="有折扣">有折扣</el-radio>
+                <el-radio class="radio"  label="无折扣">无折扣</el-radio>
+            </el-radio-group>
           </el-col>
           <el-col :span="6" style="width: 100px;">
             <el-input
@@ -199,10 +201,10 @@
       </el-form-item>
       <el-form-item label="当前状态"  prop="status">
         <el-radio-group v-if="this.dialogFlag != '详情'" v-model="formAdd.status">
-          <el-radio v-model="formAdd.status" label="2">上架</el-radio>
-          <el-radio v-model="formAdd.status" label="1">下架</el-radio>
+          <el-radio class="radio" label="2">上线</el-radio>
+          <el-radio class="radio" label="1">下线</el-radio>
         </el-radio-group>
-          <div v-if="this.dialogFlag == '详情'">{{formAdd.status == 1?'下架':'上架'}}</div>
+          <div v-if="this.dialogFlag == '详情'">{{formAdd.status == 1?'下线':'上线'}}</div>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -297,15 +299,6 @@ export default {
           discount:'无折扣',
           discountNum:"0",
           status:'1'
-        },
-        form: {
-          productName:'',
-          productTypeCode:'',
-          description:'',
-          sortWeight: '',
-          discount:'',
-          discountNum:"",
-          status:''
         },
         rules: {
           productName: [
@@ -735,7 +728,17 @@ export default {
     },
     setNewData(){
         this.dialogFlag = "新增";
-        this.dialogFormVisible = true
+        this.formAdd={
+          logisMerchantName:'',  // 快递公司名 scope.logisMerchantName
+          company:'',
+          productName:'',
+          productTypeCode:'',
+          description:'',
+          sortWeight:'',
+          discount:'无折扣',
+          discountNum:0
+        };
+        this.dialogFormVisible = true;
         if(this.$refs['formAdd']) {
            this.$refs['formAdd'].resetFields();
         }
@@ -833,7 +836,7 @@ export default {
         description:scope.description,
         sortWeight:scope.sortWeight,
         discount:scope.discount == "100"?'无折扣':'有折扣',
-        discountNum:scope.discount == "100"?'0':scope.discount/10 ,
+        discountNum:scope.discount == "100"?0:Number(scope.discount/10),
       };
       // alert(scope.opStatus)
       if (scope.opStatus == "1") {

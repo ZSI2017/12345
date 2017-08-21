@@ -1,5 +1,5 @@
 <template type="html">
-<el-dialog class="dialogNoServer" title="非覆盖地区" :visible.sync="visible" @close="dialogClose">
+<el-dialog class="dialogNoServer" title="非覆盖地区" :visible.sync="visible" @close="dialogClose"  v-loading.body.fullscreen.lock="fullscreenLoading">
   <el-row :span="24" style="border:1px solid #d1dbe5;border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.12),0 0 6px rgba(0,0,0,.04);">
     <el-col :span="8">
       <li class="commonli-class li-title">省份</li>
@@ -57,6 +57,7 @@ export default {
   },
   data() {
     return {
+      fullscreenLoading:false,
       activeClass: 'activeClass',
       commonliClass: 'commonli-class',
       li0: '-1',
@@ -318,14 +319,17 @@ export default {
     },
     handleSave() {
         this.visible = false;
+        this.fullscreenLoading = true;
         let url = "/api/noService/update"
         console.log(this.checkedData);
         this.$http.post(url,{"noService":{noProvinces:this.checkedData},"data":{"logisMerchId":this.logisMerchId}},(result) =>{
+              this.fullscreenLoading = false;
         this.$message({
               message: '保存成功',
               type: 'success'
             });
         },(error) => {
+            this.fullscreenLoading = false;
              this.$message({
                 message:'保存失败',
                 type:'warning'
