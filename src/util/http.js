@@ -135,7 +135,7 @@ function checkErrorCode(response) {
         // console.log("mySuccessFn %o",response);
        if( typeof response.data.meta !== "undefined" && (response.data.meta.code == "0000" || response.data.meta.success)) {
           //  console.log(successfn(response.data.result))
-          console.log(response);
+           console.log(response);
            successfn(response.data.result||response.data);
        }else {
            $('.el-loading-mask').css("display",'none');
