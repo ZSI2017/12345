@@ -7,9 +7,10 @@
     </el-form-item>
     <el-form-item label="运营图" prop="imageList">
       <!--      action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"  -->
+      <!-- action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload" -->
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+        action="https://jsonplaceholder.typicode.com/posts/"
         :on-change="handleImageChange"
         :file-list="ruleForm.imageList"
         :on-preview="handlePreview"
@@ -233,16 +234,7 @@ export default {
           message: '请上传图片',
           type:'array',
           trigger: 'on-change'
-        }, {validator(rule,value,callback,source,options) {
-                  var errors = [];
-                     if(value.length === 0) {
-                        errors.push(
-                         new Error('请上传图片')
-                       )
-                     }
-                     callback(errors)
-                   }
-          }],
+        }],
         coverArea: [{
           required: true,
           message: '请选择覆盖地区',
@@ -374,15 +366,10 @@ export default {
       this.ruleForm.fileList = file.result;
     },
   handlerror(err, file, fileList){
-      alert(err);
-      alert(file);
-      alert(fileList);
+    console.log(err + file+ fileList);
     },
   handleRemove(file,fileList) {
-      //  console.log(fileList);
-      //  console.log(file);
-          this.ruleForm.fileList = fileList;
-      //  console.log(this.ruleForm.imageList);
+          this.ruleForm.imageList = fileList;
     },
 
     // 标签页选择

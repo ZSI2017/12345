@@ -9,26 +9,26 @@ var  Mock =require("mockjs");
 
 var tableDate = [];
 
-for(var i =0;i<60;i++){
+for(var i =0;i<6;i++){
     tableDate.push(
        Mock.mock({
-         "currentState":"已上架",
-         "Forder":Mock.Random.natural(0, 1000),
-         "link":Mock.Random.url('http') + Mock.Random.paragraph(),
-         "operationsMapName":Mock.Random.name(),
-         "date":Mock.Random.datetime(),
-         "createTime":Mock.Random.datetime(),
-         "modifyTime":Mock.Random.datetime(),
-         "activeTime":Mock.Random.datetime() +" \n 至 \n "+Mock.Random.datetime(),
-         "activeTime1":Mock.Random.datetime(),
-         "activeTime2":Mock.Random.datetime(),
-         "name":Mock.Random.name(),
-         "address":Mock.Random.county(true).replace(/' '/g,''),
-         "reviewState":"已完成",
-         "content":Mock.Random.ctitle(),
-         "ordernumber":Mock.Random.natural(10000000000,19999999999),
-         "merchantName":Mock.Random.ctitle(),
-         "merchantLogo":Mock.Random.name()
+        //  "currentState":"已上架",
+        //  "Forder":Mock.Random.natural(0, 1000),
+        //  "link":Mock.Random.url('http') + Mock.Random.paragraph(),
+        //  "operationsMapName":Mock.Random.name(),
+        //  "date":Mock.Random.datetime(),
+        //  "createTime":Mock.Random.datetime(),
+        //  "modifyTime":Mock.Random.datetime(),
+        //  "activeTime":Mock.Random.datetime() +" \n 至 \n "+Mock.Random.datetime(),
+        //  "activeTime1":Mock.Random.datetime(),
+        //  "activeTime2":Mock.Random.datetime(),
+        //  "name":Mock.Random.name(),
+        //  "address":Mock.Random.county(true).replace(/' '/g,''),
+        //  "reviewState":"已完成",
+        //  "content":Mock.Random.ctitle(),
+        //  "ordernumber":Mock.Random.natural(10000000000,19999999999),
+         "merchantName":Mock.Random.name(),
+         "merchantLogo":Mock.Random.datetime()
        })
     )
 }
