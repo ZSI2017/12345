@@ -45,10 +45,10 @@
     </el-table-column>
     <el-table-column prop="tag" label="标签" width="160">
       <template scope="scope">
-        <el-tag 
-            type="primary" 
-            style="margin:2px;height:24px;line-height:24px;" 
-            close-transition='true' 
+        <el-tag
+            type="primary"
+            style="margin:2px;height:24px;line-height:24px;"
+            close-transition='true'
             hit='true'
             :key="tag"
             v-for="tag in scope.row.tag.split(',',(scope.row.tag.split(',').length)-1)"
@@ -151,7 +151,7 @@
 
   <!-- 置为下线 对话框  -->
 
-  <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
+  <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny"  custom-class="dialogWidth">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
     <span style="padding-left:44px;">{{myDiglogContent}}</span>
@@ -265,12 +265,12 @@ export default {
     //dialog 确认按钮
     handleConfirm(){
       this.loadingTakeOffFlag = false;
-      this.listLoading = true;      
+      this.listLoading = true;
       this.$http.post(this.promotionURL, {
           "id": this.promotionID.toString(),
       }, (rsp) => {
         console.log(rsp);
-        this.listLoading = false;        
+        this.listLoading = false;
         this.$message({
           message: this.promotionMessage,
           type: this.promotionType
@@ -289,11 +289,11 @@ export default {
       if(row.status == '2'){
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
-        this.promotionMessage = '已置为下线';
+        this.promotionMessage = '已置为下线待审核';
       }else{
         this.myDialogTitle = "确认置为上线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
-        this.promotionMessage = '已置为上线';
+        this.promotionMessage = '已置为上线待审核';
       }
       console.log(row)
       console.log(row.pageExpConfId)
@@ -648,7 +648,7 @@ export default {
       background-color: #f1f1f1;
       border: 1px solid #ddd;
       border-radius: 5px;
-      padding: 0 5px; 
+      padding: 0 5px;
     }
 }
 

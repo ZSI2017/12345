@@ -51,7 +51,7 @@
       </div>
       <div class="detail-content" v-if="!isFromAddData">
         <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
-      </div>   
+      </div>
     </el-form-item>
     <el-form-item label="排序值" >
       <el-input v-if="isFromAddData" v-model="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
@@ -77,7 +77,7 @@
       <el-input placeholder="请输入价格" v-if="isFromAddData" v-model="form.markPrice" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
-      <div class="detail-content" v-if="!isFromAddData"> {{form.markPrice}} 元起 </div>      
+      <div class="detail-content" v-if="!isFromAddData"> {{form.markPrice}} 元起 </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
     <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
@@ -181,21 +181,21 @@ export default {
       dialogTableVisible: false,
       gridData: [],
       gridDataCopy: [],
-      currentStateText: '',   
+      currentStateText: '',
       dialogImageUrl:'',//logo大图存放
       form: {
-        name: '',   
+        name: '',
         logo: [{
           name: '',
           url: ""
-        }], 
-        slogan:'',     
-        sortWeight: '',                  
-        linkUrl: '',        
+        }],
+        slogan:'',
+        sortWeight: '',
+        linkUrl: '',
         coverArea:'',
         opStatus:'',
         markPrice:'',
-      
+
       },
     }
   },
@@ -226,7 +226,7 @@ export default {
       console.log(rsp)
       this.form.name = rsp.name;
       this.form.sortWeight = rsp.sortWeight;
-      this.form.slogan = rsp.slogan;       
+      this.form.slogan = rsp.slogan;
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.markPrice = rsp.markPrice;
@@ -265,7 +265,7 @@ export default {
       this.isFromAddData = false;
     } else {
       this.isFromAddData = true;
-      
+
     }
   },
   beforeMount() {
@@ -278,7 +278,7 @@ export default {
 
   },
   computed: {
-    GETEDITFORM() { 
+    GETEDITFORM() {
       alert(this.$store.getters.GETEDITFORM)
       return this.$store.getters.GETEDITFORM;
     }
@@ -308,7 +308,7 @@ export default {
                  "sendappId":this.localData.sendappId,
                  "name":this.form.name,
                  "logo":this.form.logo[0].url,
-                 slogan:this.form.slogan,               
+                 slogan:this.form.slogan,
                  "sortWeight":this.form.sortWeight,
                  "linkUrl":this.form.linkUrl,
                  'opStatus':this.form.opStatus,
@@ -331,7 +331,7 @@ export default {
           this.$message({
                 type: 'success',
                 message: '报存成功！'
-            });          
+            });
         },(error) => {
           if(error.data.meta.code == "0017") {
               this.$message.error('"名称重复！"')
@@ -449,8 +449,10 @@ export default {
       for (var m = 0; m < allCount; m++) {
           this.isIndeterminate.splice(m, 1, !event.target.checked)
           this.checkAll.splice(m, 1, event.target.checked);
+          this.gridData[m].check = event.target.checked;
           let CityAllCity = [];
           for(let i =0;i<this.gridData[m].citys.length;i++) {
+            this.gridData[m].citys[i].check = event.target.checked;
              CityAllCity.push(this.gridData[m].citys[i].cityName)
           };
           this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity: [])
@@ -533,7 +535,7 @@ export default {
         this.addTag = false;
       }else{
         this.addTag = true;
-      }  
+      }
     },
     showInput() {
       this.inputVisible = true;

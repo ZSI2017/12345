@@ -135,7 +135,7 @@
 
   <!-- 置为下线 对话框  -->
 
-  <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
+  <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny"  custom-class="dialogWidth">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
     <span style="padding-left:44px;">{{myDiglogContent}}</span>
@@ -165,7 +165,7 @@
         <div v-if="this.dialogFlag == '详情'">{{formAdd.productName}}</div>
       </el-form-item>
       <el-form-item label="类型码（接口识别）" prop="productTypeCode">
-        <el-input v-if="this.dialogFlag != '详情'"  v-model="formAdd.productTypeCode" placeholder="请输入类型码"></el-input>
+        <el-input v-if="this.dialogFlag != '详情'"  v-model="formAdd.productTypeCode"  placeholder="请输入类型码"></el-input>
           <div v-if="this.dialogFlag == '详情'">{{formAdd.productTypeCode}}</div>
       </el-form-item>
       <el-form-item label="描述" prop="description">
@@ -175,7 +175,7 @@
       <el-form-item label="排序值"
         prop="sortWeight"
         >
-        <el-input v-if="this.dialogFlag != '详情'"  v-model.number="formAdd.sortWeight" auto-complete="off" placeholder="请输入1-999，排序值越大越优先">
+        <el-input v-if="this.dialogFlag != '详情'"  v-model.number="formAdd.sortWeight" type="number" auto-complete="off" placeholder="请输入1-999，排序值越大越优先">
         </el-input>
         <div v-if="this.dialogFlag == '详情'">{{formAdd.sortWeight}}</div>
       </el-form-item>
@@ -195,7 +195,7 @@
             ><template slot="append">折</template></el-input>
           </el-col>
         </el-row>
-        <div v-if="this.dialogFlag == '详情'">{{formAdd.discountNum/100}}</div>
+        <div v-if="this.dialogFlag == '详情'">{{formAdd.discountNum == "100"?"无折扣":formAdd.discountNum/100+"折"}}</div>
       </el-form-item>
       <el-form-item label="当前状态"  prop="status">
         <el-radio-group v-if="this.dialogFlag != '详情'" v-model="formAdd.status">
@@ -211,41 +211,6 @@
     </div>
   </el-dialog>
   <!--待审核详情弹框-->
-  <el-dialog :title="dialogDetails" :visible.sync="dialogFormVisible_details">
-
-      <el-form class='newAddedForm' label-position="right" label-width="160px" :model="form" style="position: relative;">
-        <div class="mark" v-if="showMarkVisible"></div>
-        <el-form-item label="快递公司">
-            <el-input :class="grayBg" :value="form.company"></el-input>
-        </el-form-item>
-        <el-form-item label="服务类型名称">
-          <el-input :class="grayBg" :value="form.productName"></el-input>
-        </el-form-item>
-        <el-form-item label="类型码（接口识别）">
-          <el-input :class="grayBg" :value="form.productTypeCode"></el-input>
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input :class="grayBg" :value="form.description"></el-input>
-        </el-form-item>
-        <el-form-item label="排序值">
-          <el-input :class="grayBg" :value="form.sortWeight"></el-input>
-        </el-form-item>
-        <el-form-item label="当前状态">
-            <el-radio-group v-model="radio3" v-if="diailogInputVisible">
-              <el-radio :label="1">上架</el-radio>
-              <el-radio :label="2">下架</el-radio>
-            </el-radio-group>
-            <div v-if="!diailogInputVisible">{{ currentStatus }}</div>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer" v-if="showMarkVisible">
-        <el-button type="primary" @click="dialogFormVisible_details = false">关 闭</el-button>
-      </div>
-      <div slot="footer" class="dialog-footer" v-if="!showMarkVisible">
-        <el-button type="primary" @click="dialogFormVisible_details = false">保 存</el-button>
-        <el-button @click="dialogFormVisible_details = false">取 消</el-button>
-      </div>
-  </el-dialog>
 
 
 
@@ -325,7 +290,6 @@ export default {
       searchCompanyName: [],
         formAdd:{
           logisMerchantName:[],  // 快递公司名
-          company:'',
           productName:'',
           productTypeCode:'',
           description:'',
@@ -335,7 +299,6 @@ export default {
           status:'1'
         },
         form: {
-          company:'',
           productName:'',
           productTypeCode:'',
           description:'',
@@ -349,11 +312,12 @@ export default {
             { required: true, message: '请输入服务类型', trigger: 'blur'},
             { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
           ],
-          productTypeCode:[
-            { required: true, message: '请输入接口类型码'}
+          description:[
+              {min:1, max:20,message:'描述最大长度20'}
           ],
           sortWeight:[
              { required: true, message: '排序值不能为空'},
+             { type: 'integer', message: '排序值必须为整数'},
             // { type: 'number', message: '排序值必须为数字值'}
              { type: 'number', min:1, max:999,message:'排序值范围1-999'}
           ],
@@ -579,11 +543,11 @@ export default {
       if(row.status == '2'){
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
-        this.producttypeMessage = '已置为下线';
+        this.producttypeMessage = '已置为下线待审核';
       }else{
         this.myDialogTitle = "确认置为上线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
-        this.producttypeMessage = '已置为上线';
+        this.producttypeMessage = '已置为上线待审核';
       }
       this.producttypeID = row.producttypeId || row.id;
       this.producttypeURL = '/api/producttype/status/update';
@@ -772,6 +736,9 @@ export default {
     setNewData(){
         this.dialogFlag = "新增";
         this.dialogFormVisible = true
+        if(this.$refs['formAdd']) {
+           this.$refs['formAdd'].resetFields();
+        }
 
     },
     handleChange(value) {
@@ -854,8 +821,10 @@ export default {
       })
     },
     handleEdit(scope) {
+      if( this.$refs['formAdd']){
+        this.$refs['formAdd'].resetFields();
+      }
       this.dialogFlag = "修改";
-      console.log(scope.status);
       this.formAdd={
         logisMerchantName:scope.logisMerchantName,  // 快递公司名 scope.logisMerchantName
         company:'',
@@ -863,8 +832,8 @@ export default {
         productTypeCode:scope.productTypeCode,
         description:scope.description,
         sortWeight:scope.sortWeight,
-        discount:'有折扣',
-        discountNum:scope.discount/100,
+        discount:scope.discount == "100"?'无折扣':'有折扣',
+        discountNum:scope.discount == "100"?'0':scope.discount/10 ,
       };
       // alert(scope.opStatus)
       if (scope.opStatus == "1") {
@@ -898,28 +867,38 @@ export default {
       //     Id = this.id;
       //     console.log("配置 修改")
       // }else{  // 待审核 已生效详情
-      //     URL = "/api/producttype/get";
+
       //     Id = this.form.promotionId;``
       //     console.log("待审核 已生效详情")
       // }
       //
-      // _this.$http.post(URL,{
-      //   "id":Id
-      // },(rsp)=>{
-      //   console.log(rsp)
+
+
+      let  URL = "/api/producttype/get";
+      this.$http.post(URL,{
+        "id":scope.id.toString()
+      },(result)=>{
+        // console.log(result);
+        this.formAdd={
+          logisMerchantName:result.logisMerchantName||scope.logisMerchantName,  // 快递公司名 scope.logisMerchantName
+          productName:result.productName,
+          productTypeCode:result.productTypeCode,
+          description:result.description,
+          sortWeight:result.sortWeight,
+          discount:'无折扣',
+          discountNum:result.discount,
+          status:result.status.toString()
+        }
+      })
+
+      this.$http.post('/api/logisMerchant/get',{
+          'id':scope.logisMerchId.toString()
+      },(result) => {
+         this.formAdd.logisMerchantName =  result.merchantName;
+      })
       // alert(scope.opStatus.toString())
       // alert(scope.status.toString());
-      this.formAdd={
-        logisMerchantName:scope.logisMerchantName,  // 快递公司名 scope.logisMerchantName
-        company:'',
-        productName:scope.productName,
-        productTypeCode:scope.productTypeCode,
-        description:scope.description,
-        sortWeight:scope.sortWeight,
-        discount:'无折扣',
-        discountNum:scope.discount,
-        status:scope.status.toString()
-      },
+
       //   console.log(rsp.imageUrl)
       //   this.form.name = rsp.name;
       //   this.form.Forder = rsp.sortWeight;

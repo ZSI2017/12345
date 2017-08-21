@@ -57,7 +57,7 @@
       <div style="color:#888;">最多添加两个标签，每个标签最多8个字符。</div>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
-      <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model.number="ruleForm.sortWeight"  type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
       <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
@@ -205,9 +205,9 @@ export default {
                   // "businessType":_this.ruleForm.businessType,
                   "logisMerchId": this.ruleForm.isvMerchantId,
                   "slogan": _this.ruleForm.slogan,
-                  "tag":_this.ruleForm.tag,                                 
-                  "sortWeight":_this.ruleForm.sortWeight,   
-                  "hotStatus":_this.ruleForm.hotStatus,                  
+                  "tag":_this.ruleForm.tag,
+                  "sortWeight":_this.ruleForm.sortWeight,
+                  "hotStatus":_this.ruleForm.hotStatus,
                   "newStatus":_this.ruleForm.newStatus,
                   "opStatus":_this.ruleForm.opStatus,
                   "Url": _this.ruleForm.linkUrl,

@@ -60,7 +60,7 @@
       <el-input v-model.number="ruleForm.custServiceTel" placeholder="请输入客服电话"> </el-input>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
-      <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model.number="ruleForm.sortWeight"  type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="是否由系统发起支付">
       <el-radio-group v-model="ruleForm.isManualPrice">

@@ -51,7 +51,7 @@
       <div style="color:#888;">最多添加两个标签，每个标签最多8个字符。</div>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
-      <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model.number="ruleForm.sortWeight"  type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
       <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
@@ -67,7 +67,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="标价" prop="markPrice">
-      <el-input placeholder="请输入价格" v-model.number="ruleForm.markPrice" style="width:200px;">
+      <el-input placeholder="请输入价格" v-model.number="ruleForm.markPrice"   type="number" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
     </el-form-item>
@@ -257,10 +257,10 @@ export default {
                 "data": {
                   "pageId": _this.pageId,
                   "name": _this.ruleForm.name,
-                  "logo":_this.dialogImg,                                                      
+                  "logo":_this.dialogImg,
                   "slogan": _this.ruleForm.slogan,
                   "tag":_this.ruleForm.tag,
-                  "sortWeight":_this.ruleForm.sortWeight,  
+                  "sortWeight":_this.ruleForm.sortWeight,
                   "linkUrl": _this.ruleForm.linkUrl,
                   "opStatus": _this.ruleForm.opStatus,
                   "markPrice": _this.ruleForm.markPrice,
@@ -436,8 +436,10 @@ export default {
       for (var m = 0; m < allCount; m++) {
         this.isIndeterminate.splice(m, 1, !event.target.checked)
         this.checkAll.splice(m, 1, event.target.checked);
+            this.gridData[m].check = event.target.checked;
         let CityAllCity = [];
         for(let i =0;i<this.gridData[m].citys.length;i++) {
+                this.gridData[m].citys[i].check = event.target.checked;
            CityAllCity.push(this.gridData[m].citys[i].cityName)
         };
         this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity : [])

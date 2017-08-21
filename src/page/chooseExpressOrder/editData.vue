@@ -44,10 +44,10 @@
       </div>
       <div class="detail-content" v-if="!isFromAddData">
         <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
-      </div>   
+      </div>
     </el-form-item>
     <el-form-item label="排序值">
-      <el-input v-model.number="ruleForm.sortWeight" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model.number="ruleForm.sortWeight"  type="number" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="url">
@@ -130,7 +130,7 @@ export default {
   beforeMount() {
 
   },
-  mounted() {    
+  mounted() {
     let localData = localEvent.get("localExpressCompany");
     console.log(localData);
     // console.log(localData.promotionId);
@@ -172,13 +172,13 @@ export default {
       this.ruleForm.sortWeight = rsp.sortWeight;
       this.ruleForm.hotStatus =  Number(rsp.hotStatus);
       this.ruleForm.newStatus =  Number(rsp.newStatus);
-      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");  
+      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       this.ruleForm.url = rsp.url;
       console.log(this.dynamicTags)
       console.log(rsp.tag)
       // this.dialogConfig(true)
       if ( this.$route.path == "/chooseExpressOrder/detail") {
-        this.ruleForm.opStatus =  rsp.status=='1'?1:0;        
+        this.ruleForm.opStatus =  rsp.status=='1'?1:0;
       } else {
         this.ruleForm.opStatus =  rsp.opStatus=='1'?1:0;
       }
@@ -234,7 +234,7 @@ export default {
                   message: "保存成功！"
               });
           },(error) => {
-              _this.listLoading = false;            
+              _this.listLoading = false;
               this.$message({
                   type: 'error',
                   message: error.data.meta.code+"--"+error.data.meta.msg

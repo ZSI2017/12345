@@ -40,7 +40,7 @@
       <el-input v-model.trim="ruleForm.description" placeholder="请输入描述内容"> </el-input>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
-      <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model.number="ruleForm.sortWeight"  type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
       <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
@@ -151,7 +151,7 @@ export default {
       // 展示警告信息
       showAlert:false,
       dialogVisible:false,
-      dialogVisible2:false,      
+      dialogVisible2:false,
       // 添加搜索框
       searchContent: "",
       provinces: [],

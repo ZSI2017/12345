@@ -44,14 +44,14 @@
       </div>
       <div class="detail-content" v-if="!isFromAddData">
         <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
-      </div>   
+      </div>
     </el-form-item>
     <el-form-item label="客服电话">
       <el-input v-model.number="ruleForm.custServiceTel" v-if="isFromAddData" placeholder="请输入客服电话"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.custServiceTel}} </div>
     </el-form-item>
     <el-form-item label="排序值">
-      <el-input v-model.number="ruleForm.sortWeight" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model.number="ruleForm.sortWeight"  type="number" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="是否由系统发起支付">
@@ -144,7 +144,7 @@ export default {
   beforeMount() {
 
   },
-  mounted() {    
+  mounted() {
     let localData = localEvent.get("localExpressCompany");
     console.log(localData);
     // console.log(localData.promotionId);
@@ -252,7 +252,7 @@ export default {
                   message: "保存成功！"
               });
           },(error) => {
-              _this.listLoading = false;            
+              _this.listLoading = false;
               this.$message({
                   type: 'error',
                   message: error.data.meta.code+"--"+error.data.meta.msg

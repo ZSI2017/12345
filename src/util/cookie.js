@@ -40,6 +40,5 @@ export default {
                      document.cookie = cookie_name + "='adfsd'; expires=" + date.toUTCString()+ ";path=/;domain=" + domain+';';
                   }
                }
-
               //    store
            }

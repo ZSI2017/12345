@@ -165,7 +165,7 @@
 
   <!-- 置为下线 对话框  -->
 
-  <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny">
+  <el-dialog title="提示" :visible.sync="loadingTakeOffFlag" size="tiny"  custom-class="dialogWidth">
     <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
     <p style="font-weight:bold;padding-left:44px;">{{myDialogTitle}}</p>
     <span style="padding-left:44px;">{{myDiglogContent}}</span>
@@ -425,11 +425,11 @@ export default {
       if(row.status == '2'){
         this.myDialogTitle = "确认置为下线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已下线'";
-        this.noticeMessage = '已置为下线';
+        this.noticeMessage = '已置为下线待审核';
       }else{
         this.myDialogTitle = "确认置为上线？";
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
-        this.noticeMessage = '已置为上线';
+        this.noticeMessage = '已置为上线待审核';
       }
       this.noticeID = row.noticeId || row.id;
       this.noticeURL = '/api/notice/status/update';

@@ -164,7 +164,7 @@
 
 
 <!-- 新增运线快递费  -->
-  <el-dialog :title="dialogTitle"  :visible.sync="dialogFormVisible" custom-class="dialogWidth"   size="small"  :before-close="handleClose">
+  <el-dialog :title="dialogTitle"  :visible.sync="dialogFormVisible" custom-class="dialogWidthPrice"   size="small"  :before-close="handleClose">
   <el-form  ref="form" :model="form" :rules="rules" :inline="true">
     <el-form-item label="快递公司" prop ="expressName" :label-width="formLabelWidth">
       <el-select v-if="!handleEditFlag" filterable label="快递公司" :loading="expressLoading" v-model="form.expressName" @visible-change="handleExpressChange"  @change ="handleAddSelect('typeOfService')" placeholder="请选择">
@@ -213,22 +213,22 @@
         <div style="width:200px;" v-if="handleEditFlag">{{form.sendCity}}</div>
     </el-form-item>
     <el-form-item label="首重价格" prop="presetWeightPrice" :label-width="formLabelWidth">
-      <el-input placeholder="请输入内容" v-model.number="form.presetWeightPrice">
+      <el-input placeholder="请输入内容" v-model.number="form.presetWeightPrice" type="number">
               <template slot="append">元</template>
       </el-input>
     </el-form-item>
     <el-form-item label="首重重量" prop="presetWeight" :label-width="formLabelWidth">
-      <el-input placeholder="请输入内容" v-model.number="form.presetWeight">
+      <el-input placeholder="请输入内容" v-model.number="form.presetWeight"  type="number">
               <template slot="append">公斤</template>
       </el-input>
     </el-form-item>
     <el-form-item label="续重价格" prop="extraWeightPrice" :label-width="formLabelWidth">
-      <el-input placeholder="请输入内容" v-model.number="form.extraWeightPrice">
+      <el-input placeholder="请输入内容" v-model.number="form.extraWeightPrice"  type="number">
               <template slot="append">元</template>
       </el-input>
     </el-form-item>
     <el-form-item label="续重重量" prop="extraWeightUnit" :label-width="formLabelWidth">
-      <el-input placeholder="请输入内容" v-model.number="form.extraWeightUnit">
+      <el-input placeholder="请输入内容" v-model.number="form.extraWeightUnit"  type="number">
               <template slot="append">公斤</template>
       </el-input>
     </el-form-item>
@@ -701,7 +701,9 @@ export default {
       },
       this.handleEditFlag = false;
       this.dialogFormVisible = true;
-      this.$refs['form'].resetFields();
+      if(this.$refs['form']) {
+        this.$refs['form'].resetFields();
+      }
     },
   handleAddSave(formName){
       // 是否为编辑运线快递费
@@ -775,7 +777,9 @@ export default {
       this.dialogTitle="编辑运线快递费",
       this.handleEditFlag = true;
       this.dialogFormVisible = true;
-      this.$refs[formName].resetFields();
+      if(this.$refs[formName]){
+          this.$refs[formName].resetFields();
+      }
       console.log(scope);
       this.id = scope.id;
       this.form.expressName = scope.logMerchantName;
@@ -889,7 +893,7 @@ export default {
 </script>
 
 <style lang="scss">
-.dialogWidth{
+.dialogWidthPrice{
    width:39% !important
 }
 .el-tabs .el-tabs__content {

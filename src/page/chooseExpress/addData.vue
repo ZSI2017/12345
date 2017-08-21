@@ -17,13 +17,14 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
+        list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
-      <el-input v-model.number="ruleForm.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-model.number="ruleForm.sortWeight" type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
       <el-select  v-model="ruleForm.linkHeader" style="width:100px;float:left;border-right:0" placeholder="请选择活动区域">
@@ -198,13 +199,13 @@ export default {
           }
       ],
         sortWeight: [
-          { required: true, message: '排序值不能为空'},
-          // { type: 'number', message: '排序值必须为数字值'}
+           { required: true, message: '排序值不能为空'},
+           { type: 'integer', message: '排序值必须为整数'},
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         linkUrl: [
           {required: false,message: "请输入正确链接",trigger: 'blur'},
-          {min:1, max:200,message:'链接长度不大于200'}                    
+          {min:1, max:200,message:'链接长度不大于200'}
         ],
         date1: [{
           required: true,
@@ -503,8 +504,10 @@ export default {
       for (var m = 0; m < allCount; m++) {
         this.isIndeterminate.splice(m, 1, !event.target.checked)
         this.checkAll.splice(m, 1, event.target.checked);
+        this.gridData[m].check = event.target.checked;
         let CityAllCity = [];
         for(let i =0;i<this.gridData[m].citys.length;i++) {
+           this.gridData[m].citys[i].check = event.target.checked;
            CityAllCity.push(this.gridData[m].citys[i].cityName)
         };
         this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity : [])
