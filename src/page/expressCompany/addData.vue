@@ -57,39 +57,39 @@
       <div style="color:#888;">最多添加两个标签，每个标签最多8个字符。</div>
     </el-form-item>
     <el-form-item label="客服电话" prop="custServiceTel">
-      <el-input v-model.number="ruleForm.custServiceTel" placeholder="请输入客服电话"> </el-input>
+      <el-input v-model.number="ruleForm.custServiceTel" type="number" placeholder="请输入客服电话"> </el-input>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
       <el-input v-model.number="ruleForm.sortWeight"  type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="是否由系统发起支付">
-      <el-radio-group v-model="ruleForm.isManualPrice">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+      <el-radio-group v-model="ruleForm.pricingMode">
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="2">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="是否允许议价">
-      <el-radio-group v-model="ruleForm.pricingMode">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+      <el-radio-group v-model="ruleForm.isManualPrice">
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="是否最热">
       <el-radio-group v-model="ruleForm.hotStatus">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="是否最新">
       <el-radio-group v-model="ruleForm.newStatus">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-model="ruleForm.opStatus">
-        <el-radio class="radio" :label="0">上架</el-radio>
-        <el-radio class="radio" :label="1">下架</el-radio>
+        <el-radio class="radio" :label="2">上线</el-radio>
+        <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
@@ -133,10 +133,10 @@ export default {
         tag: '',
         custServiceTel:'',
         sortWeight:'',
-        isManualPrice: 1,
+        isManualPrice: 0,
         pricingMode:1,
-        hotStatus: 1,
-        newStatus: 1,
+        hotStatus: 0,
+        newStatus: 0,
         opStatus:1
       },
       rules: {
@@ -174,7 +174,7 @@ export default {
   mounted() {
     let _this = this;
     let AccessHttp = '/api/logisMerchant/getListByAccessStatus';
-    _this.$http.post(AccessHttp,{'moduleType':2,'accessStatus':1},(result) => {
+    _this.$http.post(AccessHttp,{'moduleType':1},(result) => {
         console.log(result)
         // this.options = result;
         // if(options.length === 0 ){
@@ -316,5 +316,6 @@ label {
        padding-top:15px !important;
     }
 }
+
 
 </style>

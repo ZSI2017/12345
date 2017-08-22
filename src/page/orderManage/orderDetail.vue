@@ -93,10 +93,10 @@
         </el-dialog>
          <!--  订单作废对话框       :label-width="formLabelWidth" -->
         <el-dialog title="作废订单" :visible.sync="dialogOrderVisible">
-         <p style="color:red"> 该订单已经生产账单，作废后将用户取消订单不再提示用户支付。请与用户、快递方法核实情况后再操作</p>
+         <p style="color:red"> 该订单已经生产账单，作废后将用户取消订单不再提示用户支付。请与用户核实情况后再操作。</p>
           <el-form :model="cancelCause" :rules="cancelRules">
             <el-form-item label="作废原因">
-                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" v-model="invalid"></el-input>
+                 <el-input  style="color:red" type="textarea" maxlength="150" placeholder="请记录具体原因，最多150字" v-model="invalid"></el-input>
            </el-form-item>
          </el-form>
           <div slot="footer" class="dialog-footer">
@@ -106,10 +106,10 @@
         </el-dialog>
          <!--  标记其他渠道支付对话框       :label-width="formLabelWidth" -->
         <el-dialog title="确认标记其他渠道支付？" :visible.sync="dialogOtherpayVisible">
-         <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单切显示支付完成，不再提示用户支付，请与用户、快递双方核实情况后再操作。</p>
+         <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单切显示支付完成，不再提示用户支付，请与用户核实情况后再操作。</p>
           <el-form>
             <el-form-item label="标记其他渠道支付原因">
-                 <el-input  style="color:red" type="textarea" placeholder="请记录具体原因，最多150字" v-model="invalid1"></el-input>
+                 <el-input  style="color:red" type="textarea" maxlength="150" placeholder="请记录具体原因，最多150字" v-model="invalid1"></el-input>
            </el-form-item>
          </el-form>
           <div slot="footer" class="dialog-footer">
@@ -331,11 +331,6 @@ import localEvent from 'src/vuex/function.js';
                 }else{
                     this.ChangeExpressFlag = false;
                 }
-                // if(rsp.gmtBill  == '暂无' || rsp.payStatus == '1'){
-                //     this.OtherPayFlag = true;
-                // }else{
-                //     this.OtherPayFlag = false;
-                // }
                 if(rsp.payStatus == '3'){
                     this.payDetailFlag = true;
                 }else{
@@ -501,7 +496,7 @@ import localEvent from 'src/vuex/function.js';
         },
         //  确定 作废
         handleDialogOrderSave () {
-            this.$http.post("/api/order/cancelConfirm",{"cause":this.invalid,orderNo:this.orderNo},(rsp)=>{
+            this.$http.post("/api/order/revoke",{"cause":this.invalid,orderNo:this.orderNo},(rsp)=>{
                 this.$message({
                     type: 'success',
                     message: '作废成功!'

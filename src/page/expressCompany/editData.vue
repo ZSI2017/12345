@@ -47,7 +47,7 @@
       </div>
     </el-form-item>
     <el-form-item label="客服电话">
-      <el-input v-model.number="ruleForm.custServiceTel" v-if="isFromAddData" placeholder="请输入客服电话"> </el-input>
+      <el-input v-model.number="ruleForm.custServiceTel" type="number" v-if="isFromAddData" placeholder="请输入客服电话"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.custServiceTel}} </div>
     </el-form-item>
     <el-form-item label="排序值">
@@ -55,33 +55,33 @@
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="是否由系统发起支付">
-      <el-radio-group :disabled='!disabled'  v-model="ruleForm.isManualPrice">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+      <el-radio-group :disabled='!disabled'  v-model="ruleForm.pricingMode">
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="2">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="是否允许议价">
-      <el-radio-group :disabled='!disabled' v-model="ruleForm.pricingMode">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+      <el-radio-group :disabled='!disabled' v-model="ruleForm.isManualPrice">
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="是否最热">
       <el-radio-group :disabled='!disabled' v-model="ruleForm.hotStatus">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="是否最新">
       <el-radio-group :disabled='!disabled' v-model="ruleForm.newStatus">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group :disabled='!disabled' v-model="ruleForm.opStatus">
-        <el-radio class="radio" :label="0">上架</el-radio>
-        <el-radio class="radio" :label="1">下架</el-radio>
+        <el-radio class="radio" :label="2">上线</el-radio>
+        <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
@@ -122,10 +122,10 @@ export default {
         tag: '',
         custServiceTel:'',
         sortWeight:'',
-        isManualPrice: 1,
-        pricingMode:1,
-        hotStatus: 1,
-        newStatus: 1,
+        isManualPrice: 0,
+        pricingMode:2,
+        hotStatus: 0,
+        newStatus: 0,
         opStatus:1
       },
       disabled:true,
@@ -195,9 +195,9 @@ export default {
       console.log(rsp.tag)
       // this.dialogConfig(true)
       if ( this.$route.path == "/chooseExpressOrder/detail") {
-          this.ruleForm.opStatus =  rsp.status=='1'?1:0;        
+          this.ruleForm.opStatus =  rsp.status=='1'?1:2;        
       } else {
-          this.ruleForm.opStatus =  rsp.opStatus=='1'?1:0;
+          this.ruleForm.opStatus =  rsp.opStatus=='1'?1:2;
       }
     },(error)=>{
       console.log(error)
@@ -323,5 +323,6 @@ label {
        padding-top:15px !important;
     }
 }
+
 
 </style>

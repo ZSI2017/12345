@@ -4,7 +4,7 @@
       <el-col :span="24" class="status-font">当前状态：
         当日用户取消 ≥          
         <el-input-number v-if="!showNumber" v-model="num1" @change="handleChange" :min="1" :max="100"></el-input-number>
-        <span v-if="showNumber" style="color:red;font-size:26px;">{{ num1 }}</span>
+        <span v-if="showNumber" style="color:red;font-size:26px;">{{ num2 }}</span>
         单，将被列为黑名单   
       </el-col>
       <el-col :span="4" v-if="showNumber">
@@ -25,21 +25,16 @@ import localEvent from 'src/vuex/function.js';
     data() {
       return {
         num1: "",
+        num2:"",
         showNumber:true
       }
     },
     mounted() {
-    // var localData = localEvent.get("blacklistTimes");
-    // if(localData == ""){
-    //     this.num1 = 5;
-    // }else{
-    //     this.num1 = localData;        
-    // }
     let cancleUrl = "/api/commonConf/getCancelFreq";
     var _this = this;
     _this.$http.post(cancleUrl,{},(result) => {
         console.log(result)
-        this.num1 = result;  
+        this.num2 = result;  
     },(error) => {
         this.$message({
             type: 'error',
@@ -54,19 +49,19 @@ import localEvent from 'src/vuex/function.js';
         console.log(value);
       },
       handleShift(){
+        this.num1 = this.num2;
         this.showNumber = false;
       },
       handleCtrl(){
         this.showNumber = true;
-        // localEvent.set("blacklistTimes",this.num1);
         let ctrlUrl = "/api/commonConf/updateCancelFreq";
           var _this = this;
+          this.num2 = this.num1;          
           _this.$http.post(ctrlUrl,{'cancelFreq':this.num1.toString()},(result) => {
               console.log(result)
-              // this.num1 = result;  
               this.$message({
                   type: 'success',
-                  message: "订单取消频次报存成功！"
+                  message: `当日用户取消大于${this.num1}单，将被列为黑名单`
               });
 
           },(error) => {
@@ -78,8 +73,6 @@ import localEvent from 'src/vuex/function.js';
       },
       handleCancle(){
         this.showNumber = true;
-        var localData = localEvent.get("blacklistTimes");
-        this.num1 = localData;
       }
     }
   };

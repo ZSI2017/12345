@@ -58,14 +58,14 @@
     </el-table-column>
     <el-table-column prop="custServiceTel" label="客服电话">
     </el-table-column>
-    <el-table-column prop="isManualPrice" label="系统发起支付" width="120">
+    <el-table-column prop="pricingMode" label="系统发起支付" width="120">
       <template scope="scope">
-        {{scope.row.tag == 0? "否" : "是" }}
+        {{scope.row.pricingMode == 2? "否" : "是" }}
       </template>
     </el-table-column>
-    <el-table-column prop="pricingMode" label="允许议价">
+    <el-table-column prop="isManualPrice" label="允许议价">
       <template scope="scope">
-        {{scope.row.pricingMode == 0? "否" : "是" }}
+        {{scope.row.isManualPrice == 0? "否" : "是" }}
       </template>
     </el-table-column>
     <el-table-column prop="hotStatus" label="是否最热">
@@ -357,6 +357,10 @@ export default {
         _this.showOperation2 = false;
         _this.showOperation3 = true;
         // _this.radio2 = 1;
+        if(this.radio2 == 3){
+            this.showOperation = false;
+            this.showOperation3 = false;
+        }
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
         _this.url = "/api/expresscompany/audit/list"
@@ -469,6 +473,10 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
       this.PageStore.commit("setPage",1);
+      let statusPageFlag = this.radio2;
+      if(this.tabFlag == '待审核'){
+        statusPageFlag = '';
+      }
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -476,7 +484,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": this.radio2
+          "status": statusPageFlag
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
