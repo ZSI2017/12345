@@ -486,7 +486,7 @@ export default {
               this.gridData = localResult.provinces;
               console.log("12344444444444444%o",this.gridData);
               this.initCheckBox(localResult.check)
-            return;
+             return;
           }
       }
 

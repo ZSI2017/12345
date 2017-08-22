@@ -63,7 +63,7 @@
      <img width="100%" :src="ruleForm.fileList" alt="">
   </el-dialog>
   <!-- 覆盖地区   配置对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
+  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class" :before-close='beforeDialogConfigClose'>
 
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
@@ -86,11 +86,6 @@
                 @change="handleCheckAllChange(scope.$index,$event)"
              ></el-checkbox>
              {{scope.row.provinceName}}
-            <!-- <el-tag type="primary" style="float:left;overflow:hidden;font-size:16px;width:80px;margin-right:10px;text-overflow:ellipsis">{{scope.row.provinceName}}</el-tag> -->
-            <!-- <el-checkbox
-                  v-model="checkAll[scope.$index]"
-                  @change="handleCheckAllChange(scope.$index,$event)"
-               ></el-checkbox> -->
           </template>
       </el-table-column>
       <el-table-column property="citys" label="市">
@@ -190,7 +185,7 @@ export default {
         title: [{type: "string",
           required: true,
           message: '请输入正确公告名称',
-          trigger: 'blur'
+          trigger: 'none'
           },
           {  min:1,
              max:10,
@@ -503,6 +498,12 @@ export default {
         };
         this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity : [])
       }
+    },
+    // 对话框关闭回调
+    beforeDialogConfigClose(){
+      alert("assdfasdf");
+      this.dialogFormVisible = false
+      this.DialogConfigSaveFlag = false;
     },
     // 配置覆盖地区 取消
     handleDialogConfigCancel(){

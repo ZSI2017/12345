@@ -152,7 +152,7 @@
   <el-dialog :title="dialogFlag" :visible.sync="dialogFormVisible" size="tiny"  :before-close="handleClose">
     <el-form class='newAddedForm' :rules="rules" ref="formAdd" label-position="right" label-width="160px" :model="formAdd">
       <el-form-item label="快递公司" prop="logisMerchantName">
-        <el-select  v-if="this.dialogFlag != '详情'" v-model="formAdd.logisMerchantName" @visible-change="handExpressChange" placeholder="请选择快递公司" style="width:100%;">
+        <el-select  v-if="this.dialogFlag != '详情'"  :disabled="selectDisabled" v-model="formAdd.logisMerchantName" @visible-change="handExpressChange" placeholder="请选择快递公司" style="width:100%;">
           <el-option
             v-for="item in expressOptions"
             :disabled="item.label == '全部'"
@@ -236,6 +236,7 @@ export default {
   },
   data() {
     return {
+      selectDisabled:false,
       expressLoading:false,   // 选择 下拉框
       expressName:'全部',    // 选择后快递公司名
       expressOptions:[],  // 下拉快递公司列表数据
@@ -306,15 +307,16 @@ export default {
         },
         rules: {
           logisMerchantName:[
-            { required: true, message: '快递公司名不能为空',},
+            { required: true, message: '快递公司名不能为空' }
             // { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
           ],
           productName: [
-            { required: true, message: '请输入服务类型', trigger: 'blur'},
+            {whitespace:true, required: true, message: '请输入服务类型',trigger: 'blur',
+          },
             { min: 1, max: 50, message: '最大长度50', trigger: 'blur'}
           ],
          productTypeCode :[
-             { required: true, message: '请输入类型码', trigger: 'blur'},
+             { required: true,whitespace:true, message: '请输入类型码', trigger: 'blur'},
              { min: 1, max: 20, message: '最大长度20', trigger: 'blur'}
          ],
           description:[
@@ -761,6 +763,7 @@ export default {
           discountNum:0,
           status:'1'
         };
+        this.selectDisabled = false;
         this.dialogFormVisible = true;
         if(this.$refs['formAdd']) {
            this.$refs['formAdd'].resetFields();
@@ -864,6 +867,7 @@ export default {
       };
       this.id = scope.id;
       this.logisMerchId = scope.logisMerchId;
+      this.selectDisabled = true;
       this.dialogFormVisible = true;
       // row.tabName = this.activeName2;
       // var _this = this;

@@ -1,5 +1,5 @@
 <template>
-<div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
+<div class="section main" style="overflow:hidden"  :element-loading-text="loadingText" v-loading.body.fullscreen.lock="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
@@ -192,6 +192,7 @@ export default {
   },
   data() {
     return {
+      loadingText:'拼命加载中...',
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
       // 排序是否显示
@@ -377,6 +378,7 @@ export default {
     //dialog 确认按钮
     handleConfirm(){
       this.loadingTakeOffFlag = false;
+      this.loadingText = '拼命加载中...'
       this.listLoading = true;
       this.$http.post(this.noticeURL, {
           "id": this.noticeID.toString(),
@@ -475,6 +477,7 @@ export default {
     handleTabClick(tab, event,countPage,loadingFlag) {
       var _this = this;
       if(loadingFlag === undefined){
+         this.loadingText = '';
         _this.listLoading = true;
       }
       _this.tableFalg = false
@@ -588,6 +591,7 @@ export default {
     // 查看覆盖地区
     checkArea(id) {
       // var _this = this;
+      this.loadingText='拼命加载中...'
       this.listLoading = true;
       let URL= "/api/notice/audit/areaConf/all";
       if(this.activeName2 === "已上线") {
@@ -762,6 +766,9 @@ export default {
 }
 </script>
 <style lang="scss">
+.loadingClass{
+  background-color: red;
+}
 .el-tabs .el-tabs__content {
     display: none;
 }
