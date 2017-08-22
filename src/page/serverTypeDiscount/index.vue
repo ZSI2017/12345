@@ -184,7 +184,7 @@
           <el-col :span="6" style="width: 187px; height: 42.5px;line-height:42.5px;">
             <el-radio-group   v-model="formAdd.discount">
                 <el-radio class="radio" label="有折扣">有折扣</el-radio>
-                <el-radio class="radio"  label="无折扣">无折扣</el-radio>
+                <el-radio class="radio" label="无折扣">无折扣</el-radio>
             </el-radio-group>
           </el-col>
           <el-col :span="6" style="width: 100px;">
