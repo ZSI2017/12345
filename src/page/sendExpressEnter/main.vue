@@ -603,6 +603,10 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
       this.PageStore.commit("setPage",1);
+      let statusPageFlag = this.radio2;
+      if(this.tabFlag == '待审核'){
+        statusPageFlag = '';
+      }
       this.$http.post(this.url, {
         "pages": {
           "page_size": this.pageSize,
@@ -610,7 +614,7 @@ export default {
         },
         "con": {
           "pageId": this.pageId,
-          "status": this.radio2
+          "status": statusPageFlag
         }
       }, (rsp) => {
         this.tableData = rsp.page_list;
