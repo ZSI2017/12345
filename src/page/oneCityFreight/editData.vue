@@ -11,9 +11,9 @@
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-      <img v-if="!isFromAddData" width="150px" style="float:left;" src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png" alt="">
+      <img v-if="!isFromAddData" width="150px" style="float:left;" :src="this.form.logo[0].url" alt="">
       <el-popover ref="popover4" placement="right" trigger="click">
-        <img src="https://expressprod.oss-cn-hangzhou.aliyuncs.com/OperativeLogo/f2c570f3-7f84-44ca-afa9-e19a71ba10c5.png">
+        <img :src="this.form.logo[0].url">
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
@@ -68,7 +68,7 @@
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-if="isFromAddData" v-model="form.opStatus">
-        <el-radio class="radio" :label="0">上架</el-radio>
+        <el-radio class="radio" :label="2">上架</el-radio>
         <el-radio class="radio" :label="1">下架</el-radio>
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
@@ -238,7 +238,7 @@ export default {
           this.form.opStatus = 1;
           this.currentStateText = "已下线"
         } else {
-          this.form.opStatus = 0;
+          this.form.opStatus = 2;
           this.currentStateText = "已上线"
         }     
       } else {
@@ -246,7 +246,7 @@ export default {
           this.form.opStatus = 1;
           this.currentStateText = "已下线"
         } else {
-          this.form.opStatus = 0;
+          this.form.opStatus = 2;
           this.currentStateText = "已上线"
         }
       }
