@@ -483,7 +483,6 @@ export default {
               this.checkAll[i] = false;
               for(let j = 0;j<this.gridData[i].citys.length;j++) {
                   if(this.gridData[i].citys[j].check) {
-
                     this.checkedCities[i].push(this.gridData[i].citys[j].cityName)
                   }
               }
@@ -592,14 +591,12 @@ export default {
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-label {
-    font-weight: bold;
-}
-.dialog-class {
-    .el-dialog__body{
-       padding-top:15px !important;
-
-    }
-}
-
+  label {
+      font-weight: bold;
+  }
+  .dialog-class {
+      .el-dialog__body{
+         padding-top:15px !important;
+      }
+  }
 </style>
