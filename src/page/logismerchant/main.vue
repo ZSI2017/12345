@@ -42,7 +42,7 @@
         <el-table-column label="操作" align="center">
             <template scope="scope">
                 <el-button @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
-                <el-button ref='allIfo' @click="handleDelete(scope.$index,scope.row)" type="text" size="small">删除</el-button>
+                <!--<el-button ref='allIfo' @click="handleDelete(scope.$index,scope.row)" type="text" size="small">删除</el-button>-->
                 <el-popover
                     ref="popover"
                     trigger="click"
@@ -143,40 +143,40 @@ export default {
       this.bigImageUrl = row || '11';
     },
     //删除
-    handleDelete(index,row){
-        this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-        }).then(() => {
-            console.log(row);
-            var _this = this;
-            var deleteUrl = '/api/logisMerchant/del';
-            _this.$http.post(deleteUrl,{
-            "id": row.id.toString()
-            },(rsp)=>{
-                // _this.listLoading = false;
-                console.log(rsp)
-                this.loadData();
-                this.$message({
-                message: '删除成功！',
-                type: 'success'
-                });
-            },(error)=>{
-                console.log(error)
-                // _this.listLoading = false;
-                this.$message({
-                    message: '删除失败！',
-                    type: 'error'
-                });
-            });
-        }).catch(() => {
-            this.$message({
-                type: 'info',
-                message: '已取消删除'
-            });          
-        });
-    },
+    // handleDelete(index,row){
+    //     this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+    //         confirmButtonText: '确定',
+    //         cancelButtonText: '取消',
+    //         type: 'warning'
+    //     }).then(() => {
+    //         console.log(row);
+    //         var _this = this;
+    //         var deleteUrl = '/api/logisMerchant/del';
+    //         _this.$http.post(deleteUrl,{
+    //         "id": row.id.toString()
+    //         },(rsp)=>{
+    //             // _this.listLoading = false;
+    //             console.log(rsp)
+    //             this.loadData();
+    //             this.$message({
+    //             message: '删除成功！',
+    //             type: 'success'
+    //             });
+    //         },(error)=>{
+    //             console.log(error)
+    //             // _this.listLoading = false;
+    //             this.$message({
+    //                 message: '删除失败！',
+    //                 type: 'error'
+    //             });
+    //         });
+    //     }).catch(() => {
+    //         this.$message({
+    //             type: 'info',
+    //             message: '已取消删除'
+    //         });          
+    //     });
+    // },
     //切换页条数
     handleSizeChange(val) {  
         this.currentPage = 1;

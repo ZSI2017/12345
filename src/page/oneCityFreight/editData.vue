@@ -54,7 +54,7 @@
       </div>
     </el-form-item>
     <el-form-item label="排序值" >
-      <el-input v-if="isFromAddData" v-model="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromAddData" type="number" v-model="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">

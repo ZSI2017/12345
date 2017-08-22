@@ -93,6 +93,13 @@
           console.log("$router: " + this.$route.path);
           let url = "/api/epuser/findByMobile";
           var _this = this;
+          if(_this.keyword == ''){
+              _this.$message({
+                  type: 'warning',
+                  message: '查询内容不能为空！'
+              });
+              return;
+          }
           _this.$http.post(url,{'mobile':this.keyword},(result) => {
               console.log(result)
               if(result.result === null){

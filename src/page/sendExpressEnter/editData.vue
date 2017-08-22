@@ -51,7 +51,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.description}} </div>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
-      <el-input v-if="isFromAddData" v-model.number="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromAddData" type='number' v-model.number="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
@@ -288,18 +288,18 @@ export default {
       this.form.description = rsp.description;
       if ( this.$route.path == "/sendExpressEnter/detail") {
         if (rsp.status == "1") {
-          this.form.opStatus = 1;
+          this.form.radio = 1;
           this.currentStateText = "已下线"
         } else {
-          this.form.opStatus = 0;
+          this.form.radio = 2;
           this.currentStateText = "已上线"
         }     
       } else {
         if (rsp.opStatus == "1") {
-          this.form.opStatus = 1;
+          this.form.radio = 1;
           this.currentStateText = "已下线"
         } else {
-          this.form.opStatus = 0;
+          this.form.radio = 2;
           this.currentStateText = "已上线"
         }
       }

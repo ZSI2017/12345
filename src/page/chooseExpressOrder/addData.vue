@@ -59,26 +59,26 @@
     <el-form-item label="排序值" prop="sortWeight">
       <el-input v-model.number="ruleForm.sortWeight"  type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
-    <el-form-item label="链接" prop="linkUrl">
+    <el-form-item label="链接" prop="linkUrl" v-if='linkUrlShow'>
       <el-input v-model.trim="ruleForm.linkUrl" placeholder="请输入需要跳转的链接，如果跳外部链接必须以http://开头"> </el-input>
       <!-- <el-input placeholder="请输入内容" v-model="ruleForm.linkUrl"> <template slot="prepend">Http://</template> </el-input> -->
     </el-form-item>
     <el-form-item label="是否最热">
       <el-radio-group v-model="ruleForm.hotStatus">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="是否最新">
       <el-radio-group v-model="ruleForm.newStatus">
-        <el-radio class="radio" :label="0">是</el-radio>
-        <el-radio class="radio" :label="1">否</el-radio>
+        <el-radio class="radio" :label="1">是</el-radio>
+        <el-radio class="radio" :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-model="ruleForm.opStatus">
-        <el-radio class="radio" :label="0">上架</el-radio>
-        <el-radio class="radio" :label="1">下架</el-radio>
+        <el-radio class="radio" :label="2">上线</el-radio>
+        <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
@@ -114,16 +114,18 @@ export default {
       options: [],
       value:'',
       merchantLogo:'',
+      linkUrlShow:true,
       // 对输入表单进行验证
       ruleForm: {
         merchantName:'',
         isvMerchantId:'',
+        accessStatus:'',
         slogan: '',
         tag: '',
         linkUrl: '',
         sortWeight:'',
-        hotStatus: 1,
-        newStatus: 1,
+        hotStatus: 0,
+        newStatus: 0,
         opStatus:1
       },
       rules: {
@@ -156,14 +158,14 @@ export default {
   mounted() {
     let _this = this;
     let AccessHttp = '/api/logisMerchant/getListByAccessStatus';
-    _this.$http.post(AccessHttp,{'moduleType':2,'accessStatus':1},(result) => {
+    _this.$http.post(AccessHttp,{'moduleType':2},(result) => {
         console.log(result)
         // this.options = result;
         // if(options.length === 0 ){
           for(let i =0;i<result.length;i++) {
              this.options.push({
                    lable:result[i].merchantName,
-                   value:[result[i].merchantLogo,result[i].merchantName,result[i].id]
+                   value:[result[i].merchantLogo,result[i].merchantName,result[i].id,result[i].accessStatus]
              })
           }
         // }
@@ -199,6 +201,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
+          console.log(_this.ruleForm.linkUrl)
           let httpData = {
                 "data": {
                   "pageId": _this.pageId,
@@ -210,7 +213,7 @@ export default {
                   "hotStatus":_this.ruleForm.hotStatus,
                   "newStatus":_this.ruleForm.newStatus,
                   "opStatus":_this.ruleForm.opStatus,
-                  "Url": _this.ruleForm.linkUrl,
+                  "url": _this.ruleForm.linkUrl,
                 }
               };
           _this.$http.post(_this.url,httpData,(result) => {
@@ -278,6 +281,14 @@ export default {
       this.merchantLogo = this.value[0];
       this.ruleForm.merchantName = this.value[1];
       this.ruleForm.isvMerchantId = this.value[2];
+      this.ruleForm.accessStatus = this.value[3]; 
+      console.log(this.ruleForm.accessStatus)
+      if(this.ruleForm.accessStatus == '1'){
+          this.linkUrlShow = false;
+      }else{
+          this.linkUrlShow = true;
+      }     
+
     },
     handlePreview(file) {
       this.dialogVisible = true;
