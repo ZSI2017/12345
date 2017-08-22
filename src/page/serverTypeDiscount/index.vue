@@ -68,6 +68,9 @@
     <el-table-column prop="sortWeight" label="排序值">
     </el-table-column>
     <el-table-column prop="discount" label="结算折扣">
+      <template scope="scope">
+          {{scope.row.discount == "100"?"无折扣":Number(scope.row.discount)/10+"折"}}
+      </template>
     </el-table-column>
     <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">>
        <template scope="scope">
@@ -182,7 +185,7 @@
       <el-form-item label="结算折扣" prop="discountNum">
         <el-row v-if="this.dialogFlag != '详情'" >
           <el-col :span="6" style="width: 187px; height: 42.5px;line-height:42.5px;">
-            <el-radio-group   v-model="formAdd.discount">
+            <el-radio-group @change = "radioChange"   v-model="formAdd.discount">
                 <el-radio class="radio" label="有折扣">有折扣</el-radio>
                 <el-radio class="radio" label="无折扣">无折扣</el-radio>
             </el-radio-group>
@@ -197,7 +200,7 @@
             ><template slot="append">折</template></el-input>
           </el-col>
         </el-row>
-        <div v-if="this.dialogFlag == '详情'">{{formAdd.discountNum == "100"?"无折扣":formAdd.discountNum/100+"折"}}</div>
+        <div v-if="this.dialogFlag == '详情'">{{formAdd.discountNum == "100"?"无折扣":formAdd.discountNum/10+"折"}}</div>
       </el-form-item>
       <el-form-item label="当前状态"  prop="status">
         <el-radio-group v-if="this.dialogFlag != '详情'" v-model="formAdd.status">
@@ -291,22 +294,31 @@ export default {
       searchContent:'',
       searchCompanyName: [],
         formAdd:{
-          logisMerchantName:[],  // 快递公司名
+          logisMerchantName:'',  // 快递公司名
           productName:'',
           productTypeCode:'',
           description:'',
           sortWeight: '',
           discount:'无折扣',
           discountNum:"0",
-          status:'1'
+          status:'1',
+          textRadio:1,
         },
         rules: {
+          logisMerchantName:[
+            { required: true, message: '快递公司名不能为空',},
+            // { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
+          ],
           productName: [
             { required: true, message: '请输入服务类型', trigger: 'blur'},
-            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
+            { min: 1, max: 50, message: '最大长度50', trigger: 'blur'}
           ],
+         productTypeCode :[
+             { required: true, message: '请输入类型码', trigger: 'blur'},
+             { min: 1, max: 20, message: '最大长度20', trigger: 'blur'}
+         ],
           description:[
-              {min:1, max:20,message:'描述最大长度20'}
+              {min:1, max:30,message:'描述最大长度30'}
           ],
           sortWeight:[
              { required: true, message: '排序值不能为空'},
@@ -315,14 +327,13 @@ export default {
              { type: 'number', min:1, max:999,message:'排序值范围1-999'}
           ],
           discountNum:[
-             { type: 'number', min:0, max:9.9,message:'请输入正确的折扣值'},
-             { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1}|[1-9][0-9]*\.\d{1})))$/,message:'最多1位小数'}
+
           ],
-          status: [{
-            required: true,
-            message: '请选择状态',
-            trigger: 'change'
-          }],
+          // status: [{
+          //   required: true,
+          //   message: '请选择状态',
+          //   trigger: 'change'
+          // }],
         }
     }
   },
@@ -369,6 +380,17 @@ export default {
   watch: {
   },
   methods: {
+    // 单选框 监听事件
+    radioChange(label){
+      if(label === "有折扣") {
+           this.rules.discountNum = [
+             { type: 'number', min:0, max:9.9,message:'请输入正确的折扣值'},
+             { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1}|[1-9][0-9]*\.\d{1})))$/,message:'最多1位小数'}
+           ]
+      }else {
+           this.rules.discountNum = []
+      }
+    },
     //下拉搜索框
     handExpressChange(visible) {
       if (visible) {
@@ -542,7 +564,7 @@ export default {
         this.myDiglogContent = "确认后，该内容将提交审核，通过后变为'已上线'";
         this.producttypeMessage = '已置为上线待审核';
       }
-      this.producttypeID = row.producttypeId || row.id;
+      this.producttypeID = row.productTypeId || row.id;
       this.producttypeURL = '/api/producttype/status/update';
       this.producttypeType = 'success';
       this.url = "/api/producttype/audit/list"; // 刷新列表 url
@@ -736,7 +758,8 @@ export default {
           description:'',
           sortWeight:'',
           discount:'无折扣',
-          discountNum:0
+          discountNum:0,
+          status:'1'
         };
         this.dialogFormVisible = true;
         if(this.$refs['formAdd']) {
@@ -837,15 +860,8 @@ export default {
         sortWeight:scope.sortWeight,
         discount:scope.discount == "100"?'无折扣':'有折扣',
         discountNum:scope.discount == "100"?0:Number(scope.discount/10),
+        status:scope.opStatus == "2"?"2":"1"
       };
-      // alert(scope.opStatus)
-      if (scope.opStatus == "1") {
-         this.formAdd.status = "1";
-        //  this.currentStateText = "已下线"
-      } else {
-         this.formAdd.status = "2";
-        // this.currentStateText = "已上线"
-      }
       this.id = scope.id;
       this.logisMerchId = scope.logisMerchId;
       this.dialogFormVisible = true;
@@ -861,6 +877,7 @@ export default {
 
     effectiveDetails(scope) {
       this.dialogFlag = '详情';
+      console.log(scope);
       // this.form.promotionId = localData.promotionId;
       // this.id = localData.id;
       //  let URL,Id;
@@ -879,7 +896,7 @@ export default {
 
       let  URL = "/api/producttype/get";
       this.$http.post(URL,{
-        "id":scope.id.toString()
+        "id":scope.productTypeId.toString()
       },(result)=>{
         // console.log(result);
         this.formAdd={
