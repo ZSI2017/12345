@@ -761,7 +761,7 @@ export default {
 </script>
 <style lang="scss">
 .dialogWidth{
-   width:22% !important
+   width:423px !important
 }
 .el-tabs .el-tabs__content {
     display: none;

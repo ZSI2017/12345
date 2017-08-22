@@ -14,8 +14,8 @@
           <div v-if="showLi">
             <checkbox-group v-model="checkCity">
               <li v-if='(item.check&&onlyRead)||!onlyRead' :class="[index==li1?activeClass:'', commonliClass]" @click="li1Click2($event,item,index)" v-for="(item,index) in list2" :key="index" style="position:relative">
-                <span style="margin-right:20px">{{item.cityName}}</span>
-                <checkbox v-if="!onlyRead" style="position:absolute;left:10px;top:9px;" :label="item.cityName" :key="item.cityName" @change="handleCheckAllChange(index,item,$event)" >全选</checkbox>
+                <span style="margin-right:0px;display:inline-block;margin-top:3px;">{{item.cityName}}</span>
+                <checkbox v-if="!onlyRead" style="position:absolute;left:10px;top:9px;" :label="item.cityName" :key="item.cityName" @change="handleCheckAllChange(index,item,$event)" ></checkbox>
               </li>
             </checkbox-group>
           </div>

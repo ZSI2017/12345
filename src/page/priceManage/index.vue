@@ -46,7 +46,7 @@
       </el-select>
     </el-col>
   </el-row>
-  <el-button @click="handleQuery" size="large" type="primary">查询</el-button>
+  <el-button @click="handleQuery(true)" size="large" type="primary">查询</el-button>
   <el-row :span="24" style="height:1px;width:100%;background-color:rgb(211, 220, 230);margin:10px 0;"></el-row>
   <el-button @click="handleAddLine" type="primary">新增运线</el-button>
   <el-button @click="handleLeadLine" type="primary">导入运线</el-button>
@@ -210,7 +210,7 @@
         <el-option v-for="item in recCityOptions" :disabled="item.label == '全部'" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-        <div style="width:200px;" v-if="handleEditFlag">{{form.sendCity}}</div>
+        <div style="width:200px;" v-if="handleEditFlag">{{form.recCity}}</div>
     </el-form-item>
     <el-form-item label="首重价格" prop="presetWeightPrice" :label-width="formLabelWidth">
       <el-input placeholder="请输入内容" v-model.number="form.presetWeightPrice" type="number">
@@ -261,6 +261,7 @@ export default {
       halfListLoading: false,
       tableData: [],
       pageSize: 5,
+      handleCurrentChangeFlag:true,
       options: [{
         value: ['选项1', '选项2'],
         label: '黄金糕'
@@ -399,8 +400,8 @@ export default {
   },
   mounted(){
      // 初始化页面
-     let showNull = true
-      this.handleQuery(showNull);
+    //  let showNull = true
+      this.handleQuery();
   },
   methods: {
 
@@ -488,11 +489,14 @@ export default {
     // 选择服务类型
     handleServiceChange(visible) {
       let logisMerchId = this.expressName[1];
+
       if(this.dialogFormVisible){
           logisMerchId = this.form.expressName[1];
       } else if (this.dialogImportVisible) {
           logisMerchId = this.importForm.expressName[1];
       }
+      if(logisMerchId === "部" || typeof logisMerchId === 'undefined') {this.typeOfServiceOptions = [];  return;}
+
       if (visible) {
         this.$http.post("/api/freightPriceRule/productType", {
           "logisMerchId": logisMerchId.toString()
@@ -511,6 +515,7 @@ export default {
         })
 
       }
+
     },
     handleSendProvinceChange(visible) {
       if (visible) {
@@ -538,6 +543,7 @@ export default {
       if(this.dialogFormVisible){
           provinceName = this.form.sendProvince[0];
       }
+     if(provinceName === "全" || typeof provinceName === 'undefined')   {  this.sendCityOptions = []; return; }
       if(visible){
         this.$http.post("/api/freightPriceRule/city", {
           "provinceName": provinceName
@@ -582,6 +588,7 @@ export default {
       if(this.dialogFormVisible){
           provinceName = this.form.recProvince[0]
       }
+     if(provinceName === "全" || typeof provinceName === 'undefined')  {this.recCityOptions=[];  return;}
       if (visible) {
         this.$http.post("/api/freightPriceRule/city", {
           "provinceName": provinceName
@@ -621,30 +628,37 @@ export default {
           this.form.recCity = '';
       }
     },
-    handleQuery(showNull) {
-
+    handleQuery(showNull,pageChange) {
+      // alert(showNull)
+     if(showNull) {
+        this.currentPage = 0;
+        this.handleCurrentChangeFlag = false;
+      //  this.handleCurrentChange(0,true)
+    }
     let data = {
          "pages":{
               "page_size":(this.pageSize).toString(),
-              "page_num":(this.currentPage-1).toString(),
-         },
+              "page_num":showNull?'0':(this.currentPage-1).toString(),
+          },
          "con":{
-            "logisMerchId":this.expressName[1] ==="部"?'':this.expressName[1],
-            "productTypeId":this.typeOfService[1] ==="部"?'':this.typeOfService[1],
-            "fromPrvnCode":this.sendProvince[1] ==="部"?'':this.sendProvince[1],
-            "fromCityCode":this.sendCity[1]  ==="部"?'':this.sendCity[1] ,
-            "toPrvnCode":this.recProvince[1] ==="部"?'':this.recProvince[1] ,
-            "toCityCode":this.recCity[1] ==="部"?'':this.recCity[1],
-         }
+            "logisMerchId":this.expressName[1] ==="部"||(!showNull&&!pageChange)?'':this.expressName[1],
+            "productTypeId":this.typeOfService[1] ==="部"||(!showNull&&!pageChange)?'':this.typeOfService[1],
+            "fromPrvnCode":this.sendProvince[1] ==="部"||(!showNull&&!pageChange)?'':this.sendProvince[1],
+            "fromCityCode":this.sendCity[1]  ==="部"||(!showNull&&!pageChange)?'':this.sendCity[1] ,
+            "toPrvnCode":this.recProvince[1] ==="部"||(!showNull&&!pageChange)?'':this.recProvince[1] ,
+            "toCityCode":this.recCity[1] ==="部"||(!showNull&&!pageChange)?'':this.recCity[1],
+          }
       }
       this.$http.post('/api/freightPriceRule/list',data,(result) =>{
              //  alert(result.page_list.length)
               if(showNull && result.page_list.length === 0) {
                  this.$message('未查询到内容，请重新选择！');
               }
+              if(showNull) {  this.handleCurrentChangeFlag = true;}
                 this.tableData = result.page_list;
                 this.totalCount = parseInt(result.pages.cnt);
       },(error) =>{
+        if(showNull) {  this.handleCurrentChangeFlag = true;}
         this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
          console.log(error);
       })
@@ -687,6 +701,8 @@ export default {
       //     style: 'color: teal'
       //   }, '点击了新增运线')
       // });
+      // 添加验证
+      this.changeRules(true)
       this.dialogTitle="新增运线快递费",
       this.form={
          expressName:'',
@@ -707,79 +723,83 @@ export default {
       }
     },
   handleAddSave(formName){
+    this.$refs[formName].validate((valid) => {
+        if(valid) {
       // 是否为编辑运线快递费
-    if(this.handleEditFlag){
-      let data = {
-         "id":this.id,
-         "presetWeight":this.form.presetWeight,
-         "presetWeightPrice":this.form.presetWeightPrice,
-         "extraWeightUnit":this.form.extraWeightUnit,
-         "extraWeightPrice":this.form.extraWeightPrice
-      }
-      this.$http.post('/api/freightPriceRule/update',data,(result)=>{
-        if(result.meta.code == "0000") {
-          this.dialogFormVisible = false;
-          this.$message({
-              type: 'success',
-              message: '修改成功'
-          });
-            this.handleQuery()
-        }
-      },(error) => {
-          // _this.listLoading = false
-          this.$message({
-              type: 'error',
-              message: error.data.meta.code+"--"+error.data.meta.msg
-          });
-      })
-    }else {
-      // 新增
-      this.$refs[formName].validate((valid) => {
-          if(valid) {
-            let data = {
-              "logMerchantId":this.form.expressName[1],
-              "productTypeId":this.form.typeOfService[1] ,
-              "frmProvinceCode":this.form.sendProvince[1],
-              "frmCityCode":this.form.sendCity[1],
-              "toProvinceCode":this.form.recProvince[1],
-              "toCityCode":this.form.recCity[1],
-              "presetWeight":this.form.presetWeight,
-              "presetWeightPrice":this.form.presetWeightPrice,
-              "extraWeightUnit":this.form.extraWeightUnit,
-              "extraWeightPrice":this.form.extraWeightPrice
+            if(this.handleEditFlag){
+              let data = {
+                 "id":this.id,
+                 "presetWeight":this.form.presetWeight,
+                 "presetWeightPrice":this.form.presetWeightPrice,
+                 "extraWeightUnit":this.form.extraWeightUnit,
+                 "extraWeightPrice":this.form.extraWeightPrice
+              }
+              this.$http.post('/api/freightPriceRule/update',data,(result)=>{
+                if(result.meta.code == "0000") {
+                  this.dialogFormVisible = false;
+                  this.$message({
+                      type: 'success',
+                      message: '修改成功'
+                  });
+                    this.handleQuery()
+                }
+              },(error) => {
+                  // _this.listLoading = false
+                  this.$message({
+                      type: 'error',
+                      message: error.data.meta.code+"--"+error.data.meta.msg
+                  });
+              })
+            }else {
+              // 新增
+
+                let data = {
+                  "logMerchantId":this.form.expressName[1],
+                  "productTypeId":this.form.typeOfService[1] ,
+                  "frmProvinceCode":this.form.sendProvince[1],
+                  "frmCityCode":this.form.sendCity[1],
+                  "toProvinceCode":this.form.recProvince[1],
+                  "toCityCode":this.form.recCity[1],
+                  "presetWeight":this.form.presetWeight,
+                  "presetWeightPrice":this.form.presetWeightPrice,
+                  "extraWeightUnit":this.form.extraWeightUnit,
+                  "extraWeightPrice":this.form.extraWeightPrice
+                }
+                this.$http.post('/api/freightPriceRule/save',data,(result) => {
+                     if(result.meta.code == "0000") {
+                       this.$refs['form'].resetFields();
+                       this.dialogFormVisible = false;
+                       this.$message({
+                           type: 'success',
+                           message: '保存成功'
+                       });
+                       this.handleQuery();
+                     }
+                       console.log(result)
+                },(error) => {
+                    // _this.listLoading = false
+                    this.$message({
+                        type: 'error',
+                        message: error.data.meta.code+"--"+error.data.meta.msg
+                    });
+                })
             }
-            this.$http.post('/api/freightPriceRule/save',data,(result) => {
-                 if(result.meta.code == "0000") {
-                   this.$refs['form'].resetFields();
-                   this.dialogFormVisible = false;
-                   this.$message({
-                       type: 'success',
-                       message: '保存成功'
-                   });
-                   this.handleQuery();
-                 }
-                   console.log(result)
-            },(error) => {
-                // _this.listLoading = false
-                this.$message({
-                    type: 'error',
-                    message: error.data.meta.code+"--"+error.data.meta.msg
-                });
-            })
-          } else {
-              return false;
-          }
-        })
-    }
+           } else {
+            return false;
+         }
+       })
   },
   //修改运线
   handleEdit(scope,formName){
+      // 去除验证
+      this.changeRules(false)
+
 
       this.dialogTitle="编辑运线快递费",
       this.handleEditFlag = true;
       this.dialogFormVisible = true;
       if(this.$refs[formName]){
-          this.$refs[formName].resetFields();
+        this.$refs[formName].resetFields();
       }
       console.log(scope);
       this.id = scope.id;
@@ -789,11 +809,10 @@ export default {
       this.form.sendCity = scope.frmCityName;
       this.form.recProvince = scope.toProvinceName;
       this.form.recCity = scope.toCityName;
-      this.form.presetWeight = scope.presetWeight;
-      this.form.presetWeightPrice = scope.presetWeightPrice;
-      this.form.extraWeightPrice = scope.extraWeightPrice;
-      this.form.extraWeightUnit = scope.extraWeightUnit;
-
+      this.form.presetWeight = Number(scope.presetWeight);
+      this.form.presetWeightPrice = Number(scope.presetWeightPrice);
+      this.form.extraWeightPrice = Number(scope.extraWeightPrice);
+      this.form.extraWeightUnit = Number(scope.extraWeightUnit);
       //
       //      expressName:'',
       //      typeOfService:'',
@@ -808,10 +827,18 @@ export default {
       //   },
 
   },
+  changeRules(flag){
+    this.rules.expressName[0].required = flag;
+    this.rules.typeOfService[0].required = flag;
+    this.rules.sendProvince[0].required = flag;
+    this.rules.sendCity[0].required = flag;
+    this.rules.recProvince[0].required = flag;
+    this.rules.recCity[0].required = flag;
+  },
   // 对话框关闭
   handleClose(){
-        this.$refs['form'].resetFields();
-        this.dialogFormVisible= false;
+      this.$refs['form'].resetFields();
+      this.dialogFormVisible= false;
   },
   handleCancel(){
     // this.$refs['form'].resetFields();
@@ -826,12 +853,12 @@ export default {
     handleExportLine() {
       const h = this.$createElement;
       const _this = this;
-      this.$notify({
-        title: '导出运线',
-        message: h('i', {
-          style: 'color: teal'
-        }, '点击了导出运线')
-      });
+      // this.$notify({
+      //   title: '导出运线',
+      //   message: h('i', {
+      //     style: 'color: teal'
+      //   }, '点击了导出运线')
+      // });
       this.$confirm('确认批量导出?', '提示', {
            confirmButtonText: '确定',
            cancelButtonText: '取消',
@@ -862,27 +889,26 @@ export default {
     handleLeadLine() {
         this.dialogImportVisible = true;
       const h = this.$createElement;
-      this.$notify({
-        title: '导入运线',
-        message: h('i', {
-          style: 'color: teal'
-        }, '点击了导入运线')
-      });
+      // this.$notify({
+      //   title: '导入运线',
+      //   message: h('i', {
+      //     style: 'color: teal'
+      //   }, '点击了导入运线')
+      // });
 
     },
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
-      this.handleQuery();
-
-
+      this.handleQuery(false,true);
     },
-    handleCurrentChange(val) {
+    handleCurrentChange(val,noFresh) {
+      // alert(noFresh)
       this.currentPage = val;
-      this.handleQuery();
-
-
-
+      // if(noFresh) return
+      if(this.handleCurrentChangeFlag) {
+         this.handleQuery(false,true);
+      }
       // setTimeout(() => {
       //   _this.halfListLoading = false;
       // }, 600);
@@ -895,7 +921,7 @@ export default {
 
 <style lang="scss">
 .dialogWidthPrice{
-   width:39% !important
+   width:750px !important
 }
 .el-tabs .el-tabs__content {
     display: none;
