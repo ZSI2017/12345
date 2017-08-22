@@ -198,7 +198,7 @@ export default {
         linkUrl: '',
         radio: "",  // radio 代表上下架状态的选择
         Forder: '',
-        // promotionId:'',
+        promotionId:'',
         gmtBegin:'',
         gmtEnd:'',
         coverArea:'',
@@ -425,10 +425,6 @@ export default {
     },
     // 搜索框
     querySearch(queryString, cb) {
-      // var provinces = this.provinces;
-      // var results = queryString ? provinces.filter(this.createFilter(queryString)) : provinces;
-      // // 调用 callback 返回建议列表的数据
-      // cb(results);
       if(queryString === '') {
         this.showProvinces = '';
       }
@@ -443,11 +439,6 @@ export default {
     },
     handleQuerySelect(items) {
          this.showProvinces = items.value
-      // console.log(items);
-      // this.gridData = this.gridDataCopy.filter(function(item) {
-      //   return item.value == items.value
-      // })
-      // console.log(this.gridData);
     },
     handleIconClick(ev) {
       this.showProvinces = ''
@@ -455,40 +446,14 @@ export default {
     },
     // 覆盖地区选择
     dialogConfig(visible) {
-      // if(this.gridData.length>0){
-      //     if(this.DialogConfigSaveFlag){
-      //         this.dialogFormVisible = true;
-      //         return;
-      //     }else {
-      //       this.gridData = this.gridDataCopy.slice(0);
-      //       console.log(this.gridDataCopy)
-      //
-      //       for (var i = 0; i < this.gridData.length; i++) {
-      //         // _this.isIndeterminate[i] = true;
-      //           this.checkedCities.splice(i, 1, []);
-      //            if(this.gridData[i].check){
-      //                 this.checkAll.splice(i, 1, true);
-      //               for(let j = 0;j<this.gridData[i].citys.length;j++) {
-      //                   this.checkedCities[i].push(this.gridData[i].citys[j].cityName)
-      //               }
-      //            }else {
-      //                console.log(this.gridData[i].check);
-      //                this.checkAll.splice(i, 1, false);
-      //            }
-      //
-      //       }
-      //       this.dialogFormVisible = true;
-      //       return;
-      //     }
-      // }
-       this.form.coverArea = "hasClick";
        this.handleIconClick();
+       this.form.coverArea = "hasClick";
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
               return;
           }else {
-              let localResult = localEvent.get("gridDataEnter")
+              let localResult = localEvent.get("gridOnecityData")
               this.gridData = localResult.provinces;
               console.log("12344444444444444%o",this.gridData);
               this.initCheckBox(localResult.check)
@@ -496,49 +461,32 @@ export default {
           }
       }
       var _this = this;
-      this.listLoading = true;
-      var URL = "/api/sendapp/areaConf/all";   // 默认是 已上线 中的覆盖地区
-      let id = this.form.noticeId;
-      // alert(id)
-      // alert(this.form.noticeId)
+        this.listLoading = true;
+      var URL = "/api/sendapp/areaConf/all";  // 默认是 配置 中的覆盖地区
+      let id = this.form.promotionId;
       if(this.localData.tabName === "配置") {
           URL = "/api/sendapp/audit/areaConf/all";
-          id = this.id;
+          id = this.id
       }
-      _this.$http.post(URL,{id:this.id.toString()},
+      _this.$http.post(URL,{id:id.toString()},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
              _this.searchProvinces[i]={};
              _this.searchProvinces[i].value = _this.gridData[i].provinceName;
           }
-            localEvent.set("gridDataEnter", rsp);
+            localEvent.set("gridOnecityData", rsp);
             if(visible === undefined) {
                 _this.initCheckBox(rsp.check);
             }else {
+                this.listLoading = false;
               this.initCheckBox(rsp.check,visible);
             }
-          // _this.gridDataCopy = rsp.provinces.slice(0);
-          // console.log(_this.gridDataCopy);
-          // _this.provinces = _this.gridData;
-          // 初始化 配置的多选框操作
-          // this.check = rsp.check;
-          // for (var i = 0; i < _this.gridData.length; i++) {
-          //   // _this.isIndeterminate[i] = true;
-          //     _this.checkedCities[i] = [];
-          //      if(_this.gridData[i].check){
-          //         _this.checkAll[i] = true;
-          //         for(let j = 0;j<_this.gridData[i].citys.length;j++) {
-          //             _this.checkedCities[i].push(_this.gridData[i].citys[j].cityName)
-          //         }
-          //      }else {
-          //         _this.checkAll[i] = false;
-          //      }
-          //
-          // }
-          // console.log(_this.checkAll);
-          // _this.dialogFormVisible = true;
-          // console.log(_this.gridData);
+
+        },(error) =>{
+             this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+             this.listLoading = false;
+             console.log(error);
         })
     },
     initCheckBox(isAllcheck,visible){
@@ -571,6 +519,7 @@ export default {
         this.handleCheckAll({target:{checked:true}})
       }
       if(visible === undefined) {
+          this.listLoading =false;
         this.dialogFormVisible = true;
       }
 
@@ -580,10 +529,10 @@ export default {
       for (var m = 0; m < allCount; m++) {
           this.isIndeterminate.splice(m, 1, !event.target.checked)
           this.checkAll.splice(m, 1, event.target.checked);
-              this.gridData[m].check = event.target.checked;
+          this.gridData[m].check = event.target.checked;
           let CityAllCity = [];
           for(let i =0;i<this.gridData[m].citys.length;i++) {
-                this.gridData[m].citys[i].check = event.target.checked;
+            this.gridData[m].citys[i].check = event.target.checked;
              CityAllCity.push(this.gridData[m].citys[i].cityName)
           };
           this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity: [])
@@ -596,7 +545,13 @@ export default {
     },
     // 配置覆盖地区 保存
     handleDialogConfigSave(){
-      localEvent.set("gridDataEnter",{"provinces":this.gridData,"check":this.check,code:"000000"})
+      if(this.check || this.checkAll.filter(function(value){return value === true }).length>0 || this.checkedCities.filter(function(value){return value.length>0} ).length>0) {
+             this.form.coverArea = "hasClick";
+      }else {
+            this.form.coverArea = "";
+      }
+
+      localEvent.set("gridOnecityData",{"provinces":this.gridData,"check":this.check,code:"000000"})
         this.dialogFormVisible = false;
         this.DialogConfigSaveFlag = true;
 
@@ -646,7 +601,7 @@ export default {
     },
 
     dialogTable() {
-      let localResult = localEvent.get("gridDataEnter")
+      let localResult = localEvent.get("gridOnecityData")
       this.CoverData = localResult.provinces;
       this.dialogTableVisible = true;
     },

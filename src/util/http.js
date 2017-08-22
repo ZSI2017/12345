@@ -18,7 +18,7 @@ let URL = 'http://192.168.12.54:8080'
 if(process.env.NODE_ENV === "development"){
     //  开发环境下调用
     // URL = 'http://192.168.12.54:8080'
-    URL  = "http://sendexmng-sit.alipay-eco.com";
+    // URL  = "http://sendexmng-sit.alipay-eco.com";
 }else {
     URL = "http://sendexmng-sit.alipay-eco.com"
 }

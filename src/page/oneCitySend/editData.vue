@@ -3,7 +3,7 @@
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form :model="form" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="公司名称">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入公司名称"> </el-input>
+      <el-input v-if="isFromAddData" maxlength="10" v-model="form.name" placeholder="请输入公司名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="LOGO">
@@ -197,6 +197,7 @@ export default {
         markPrice:'',
 
       },
+      promotionId:''
     }
   },
   created() {
@@ -209,8 +210,8 @@ export default {
   mounted() {
     var localData = localEvent.get("localOnecitySend");
     this.localData = localData;
-    // console.log(localData);
-    // console.log(localData.promotionId);
+    console.log(localData);
+    console.log(localData.promotionId);
     this.form.promotionId = localData.sendappId;
     this.id = localData.id;
     var _this =this;
@@ -374,15 +375,14 @@ export default {
     },
     // 覆盖地区选择
     dialogConfig(visible) {
-
-       this.form.coverArea = "hasClick";
        this.handleIconClick();
+       this.form.coverArea = "hasClick";
       if(this.gridData.length>0){
           if(this.DialogConfigSaveFlag){
               this.dialogFormVisible = true;
               return;
           }else {
-              let localResult = localEvent.get("gridDataSend")
+              let localResult = localEvent.get("gridOnecityData")
               this.gridData = localResult.provinces;
               console.log("12344444444444444%o",this.gridData);
               this.initCheckBox(localResult.check)
@@ -390,31 +390,37 @@ export default {
           }
       }
       var _this = this;
-      this.listLoading = true;
-      var URL = "/api/sendapp/areaConf/all";   // 默认是 已上线 中的覆盖地区
-      let id = this.form.noticeId;
-      // alert(id)
-      // alert(this.form.noticeId)
+        this.listLoading = true;
+      var URL = "/api/sendapp/areaConf/all";  // 默认是 配置 中的覆盖地区
+      let id = this.form.promotionId;
       if(this.localData.tabName === "配置") {
           URL = "/api/sendapp/audit/areaConf/all";
-          id = this.id;
+          id = this.id
       }
-      _this.$http.post(URL,{id:this.id.toString()},
+      _this.$http.post(URL,{id:id.toString()},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
           for( let i =0;i<_this.gridData.length;i++) {
              _this.searchProvinces[i]={};
              _this.searchProvinces[i].value = _this.gridData[i].provinceName;
           }
-            localEvent.set("gridDataSend", rsp);
+            localEvent.set("gridOnecityData", rsp);
             if(visible === undefined) {
                 _this.initCheckBox(rsp.check);
             }else {
+                this.listLoading = false;
               this.initCheckBox(rsp.check,visible);
             }
+
+        },(error) =>{
+             this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+             this.listLoading = false;
+             console.log(error);
         })
     },
     initCheckBox(isAllcheck,visible){
+      // console.log(_this.gridDataCopy);
+
       this.provinces = this.gridData;
       // 初始化 配置的多选框操作
       for (var i = 0; i < this.gridData.length; i++) {
@@ -442,6 +448,7 @@ export default {
         this.handleCheckAll({target:{checked:true}})
       }
       if(visible === undefined) {
+          this.listLoading =false;
         this.dialogFormVisible = true;
       }
 
@@ -451,10 +458,10 @@ export default {
       for (var m = 0; m < allCount; m++) {
           this.isIndeterminate.splice(m, 1, !event.target.checked)
           this.checkAll.splice(m, 1, event.target.checked);
-              this.gridData[m].check = event.target.checked;
+          this.gridData[m].check = event.target.checked;
           let CityAllCity = [];
           for(let i =0;i<this.gridData[m].citys.length;i++) {
-                this.gridData[m].citys[i].check = event.target.checked;
+            this.gridData[m].citys[i].check = event.target.checked;
              CityAllCity.push(this.gridData[m].citys[i].cityName)
           };
           this.checkedCities.splice(m, 1, event.target.checked ? CityAllCity: [])
@@ -467,7 +474,13 @@ export default {
     },
     // 配置覆盖地区 保存
     handleDialogConfigSave(){
-      localEvent.set("gridDataSend",{"provinces":this.gridData,"check":this.check,code:"000000"})
+      if(this.check || this.checkAll.filter(function(value){return value === true }).length>0 || this.checkedCities.filter(function(value){return value.length>0} ).length>0) {
+             this.form.coverArea = "hasClick";
+      }else {
+            this.form.coverArea = "";
+      }
+
+      localEvent.set("gridOnecityData",{"provinces":this.gridData,"check":this.check,code:"000000"})
         this.dialogFormVisible = false;
         this.DialogConfigSaveFlag = true;
 
@@ -517,7 +530,7 @@ export default {
     },
 
     dialogTable() {
-      let localResult = localEvent.get("gridDataSend")
+      let localResult = localEvent.get("gridOnecityData")
       this.CoverData = localResult.provinces;
       this.dialogTableVisible = true;
     },
