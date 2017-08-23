@@ -85,7 +85,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
     <el-form-item label="标价">
-      <el-input placeholder="请输入价格" v-if="isFromAddData" v-model="form.markPrice" style="width:200px;">
+      <el-input placeholder="请输入价格" maxlength="11" v-if="isFromAddData" v-model="form.markPrice" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.markPrice}} 元起 </div>

@@ -37,7 +37,7 @@
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
         <div slot="tip" class="el-upload__tip" style='color:red;'>（非必填）</div>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过3kb</div>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10kb</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="描述" prop="description">
@@ -75,10 +75,10 @@
 
   <!--图片预览 框  -->
    <el-dialog v-model="dialogVisible" size="tiny">
-     <img width="100%" :src="dialogImg" alt="">
+     <img width="100%" :src="dialogImg[0]" alt="">
   </el-dialog>
   <el-dialog v-model="dialogVisible2" size="tiny">
-     <img width="100%" :src="dialogImg2" alt="">
+     <img width="100%" :src="dialogImg2[0]" alt="">
   </el-dialog>
   <!-- 覆盖地区   配置对话框 -->
   <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible"  :before-close='handleDialogConfigCancel' class="dialog-class">
@@ -109,7 +109,7 @@
                   v-model="checkAll[scope.$index]"
                   @change="handleCheckAllChange(scope.$index,$event)"
                ></el-checkbox> -->
-          </template>
+        </template>
       </el-table-column>
       <el-table-column property="citys" label="市">
         <template scope="scope">
@@ -257,16 +257,20 @@ export default {
     handleSubmit(formName) {
       var _this = this;
       console.log("-----------------------");
-        console.log(this.$refs[formName]),
+      console.log(this.$refs[formName]);
+      
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
+          if(_this.dialogImg2.length < 1){
+            var dialogImgSave = ''
+          }
           let httpData = {
                 "data": {
                   "pageId": _this.pageId,
                   "name": _this.ruleForm.name,
-                  "logo": _this.dialogImg,
-                  "icon": _this.dialogImg2,
+                  "logo": _this.dialogImg[0],
+                  "icon": dialogImgSave,
                   "description": _this.ruleForm.description,
                   "sortWeight": _this.ruleForm.sortWeight,
                   "linkUrl": _this.ruleForm.linkUrl,
@@ -314,7 +318,10 @@ export default {
     },
     handleSuccess(file){
       console.log(file.result);
-      this.dialogImg = file.result;
+      this.dialogImg.push(file.result);
+      if(this.dialogImg.length > 1){
+          this.dialogImg.slice(-1);
+      }
     },
     handlerror(err, file, fileList){
       alert(err);
@@ -352,7 +359,11 @@ export default {
     },
     handleSuccess2(file){
       console.log(file.result)
-      this.dialogImg2 = file.result;
+      // this.dialogImg2 = file.result;
+      this.dialogImg2.push(file.result);
+      if(this.dialogImg2.length > 1){
+          this.dialogImg2.slice(-1);
+      }
     },
     handlerror2(err, file, fileList){
       alert(err);
@@ -452,7 +463,7 @@ export default {
       }
       var _this = this;
       this.listLoading = true
-      var URL = "/api/promotion/areaConf/all";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/sendapp/areaConf/all";   // 默认是 配置 中的覆盖地区
       _this.$http.post(URL,{id:"0"},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);

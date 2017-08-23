@@ -217,7 +217,7 @@ export default {
               Cookie.delete("ctoken",topLevel_domains);
               Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
               Cookie.delete('express1');
-              this.$router.push({path:'/login'});
+              _this.$router.push({path:'/login'});
         })
 
     }

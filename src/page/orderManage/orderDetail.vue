@@ -8,7 +8,7 @@
             <el-collapse-item title="基本信息" name="0">
                 <el-row class="basic-table">
                     <el-col :md="12" :lg="6" v-for="(item,index) in items" :key="index">
-                        <div class="grid-content bg-purple">
+                        <div class="grid-content bg-purple" ref="mybox">
                             <el-col :span="9" class="cell-left">{{item.name}}</el-col >
                             <el-col :span="15" class="cell-right">{{item.message}}</el-col>
                         </div>
@@ -129,7 +129,20 @@
                 <el-button type="primary" @click="handleChangeExpressConfirm">确 定</el-button>
             </span>
         </el-dialog>
-
+        <!--按钮操作-->
+        <el-dialog
+            title="提示"
+            :visible.sync="dialogButtonVisible"
+            size="tiny"
+            :before-close="handleClose">
+            <i class="el-icon-information" 
+                style="color:#f7ba2a;font-size:40px;float:left;"></i><span style="height:40px;line-height:40px;display:inline-block;float:left;padding-left:10px;">
+                    {{buttonText}}
+                </span>
+            <span slot="footer" class="dialog-footer" style="display:inline-block;">
+                <el-button type="primary" @click="handleChangeButtonConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
 
 
     </el-collapse>
@@ -152,9 +165,11 @@ import localEvent from 'src/vuex/function.js';
         dialogOrderVisible:false,
         dialogOtherpayVisible:false,
         dialogTimeVisible:false,
+        dialogButtonVisible:false,
         cancelCauseArr:[],
         payDetailFlag:false, //支付详情显示
         serverShow:true,
+        buttonText:'',//button 操作失败弹框
         cancelCause:{
           region:''
         },
@@ -376,9 +391,15 @@ import localEvent from 'src/vuex/function.js';
                 this.payDetails[1].message = rsp.gmtPayment || '暂无';
                 this.payDetails[2].message = rsp.receiptAmount || '暂无';
 
+                this.$refs.mybox.find('.cell-right').style.color = 'green';  
+
             },(error)=>{
                 console.log('failed');
             });
+        },
+        handleChangeButtonConfirm(){
+            this.requestHttp();
+            this.dialogButtonVisible = false;
         },
         handleShowIfo(){
             var _this = this;
@@ -449,10 +470,17 @@ import localEvent from 'src/vuex/function.js';
                                 this.requestHttp();
                                 // this.cancelFlag = false;
                         },(error)=>{
-                            this.$message({
-                                type: 'error',
-                                message: error.data.meta.msg
-                            });
+                            console.log(error.data.meta.code)
+                            if(error.data.meta.code == '0212'|| error.data.meta.code == '0211'){
+                                this.buttonText = '该订单不能取消，请对点击确定重新操作！';
+                                this.dialogButtonVisible = true;
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: error.data.meta.msg
+                                });
+                            }
+                            
                         });
                     }).catch(() => {
                         this.$message({
@@ -480,6 +508,9 @@ import localEvent from 'src/vuex/function.js';
                         type: 'warning',
                         message: '请记录具体原因，字数在150字以内。'
                     });
+                }else if(error.data.meta.code == '1101'){
+                    this.buttonText = '该订单不能标记其他渠道支付，请对点击确定重新操作！';
+                    this.dialogButtonVisible = true;
                 }else{
                     this.$message({
                         type: 'error',
@@ -510,10 +541,17 @@ import localEvent from 'src/vuex/function.js';
                         message: '请记录具体原因，字数在150字以内。'
                     });
                 }else{
-                    this.$message({
-                        type: 'error',
-                        message: error.data.meta.msg
-                    });
+
+                    console.log(error.data.meta.code)
+                    if(error.data.meta.code == '1001'){
+                        this.buttonText = '该订单不能作废，请对点击确定重新操作！';
+                        this.dialogButtonVisible = true;
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: error.data.meta.msg
+                        });
+                    }
                     this.dialogOrderVisible = false;
                 }
             })
@@ -530,10 +568,16 @@ import localEvent from 'src/vuex/function.js';
                     });
                     this.requestHttp();                    
             },(error)=>{
-                this.$message({
-                    type: 'error',
-                    message: error.data.meta.msg
-                });
+                console.log(error.data.meta.code)
+                if(error.data.meta.code == '0915'){
+                    this.buttonText = '该订单不能转其他快递，请对点击确定重新操作！';
+                    this.dialogButtonVisible = true;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: error.data.meta.msg
+                    });
+                }
             });
             this.dialogTimeVisible = false;
             
@@ -674,5 +718,17 @@ import localEvent from 'src/vuex/function.js';
         border-bottom: 1px solid #eaeefb;
               
     } 
+
+    .success_color {
+        color: #ff851b;
+    }
+
+    .pickupno_color {
+        color: red;
+    }
+
+    .pickupyes_color {
+        color: #00a65a;
+    }
 
 </style>
