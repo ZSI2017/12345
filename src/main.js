@@ -46,8 +46,6 @@ const router = new VueRouter({
                }
       }
 });
-
-
 function filterMenu(result) {
     let uid= result.userInfo.uid;
     store.dispatch('setUid',uid);
@@ -58,110 +56,99 @@ function filterMenu(result) {
           if(pm.Operator) {
             store.dispatch('setAuthority',"开发者");
               if(pm.CustomerService){
-                filterName = [];
+                  filterName = [];
               }else {
-                 filterName = ['订单管理','黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+                 filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具"];
               }
           }else {
             store.dispatch('setAuthority',"审核");
             if(pm.CustomerService){
-              filterName = ['服务类型及折扣管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+              filterName = ["开发者工具"];
             }else {
-               filterName = ["订单管理","服务类型及折扣管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+               filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具"];
             }
           }
    }else {
        if(pm.Operator) {
             store.dispatch('setAuthority',"配置");
            if(pm.CustomerService){
-             filterName = ['非服务地区管理',"价格管理","运线快递费管理","开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+             filterName = ["开发者工具"];
            }else {
-              filterName = ['订单管理','非服务地区管理',"价格管理","运线快递费管理",'黑名单管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+              filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具"];
            }
        }else {
          if(pm.CustomerService){
-           filterName = ['运营位管理','订单取消频次管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+           filterName = ["快递公司管理",'入口管理','运营位管理','公告管理','开发者工具'];
          }else {
-            filterName = ['运营位管理',"订单管理","用户管理",'黑名单管理','寄快递首页','选择快递页','选快递下单页','寄快递首页管理','快递公司管理','选快递下单管理','服务类型及折扣管理','非服务地区管理','运线快递费管理','同城直送管理','附近快递资源管理','公告管理','订单取消频次管理',"开发者工具",'矫正坐标','物流机构','缓存管理工具','白名单管理'];
+            filterName = ['订单管理','订单取消频次管理',"黑名单管理","快递公司管理",'入口管理','运营位管理','公告管理','开发者工具'];
          }
        }
    }
   for (var i = 0; i < routerArr.length; i++) {
        if(routerArr[i].children !== undefined) {
             for(let j =0;j<filterName.length;j++) {
-                if(routerArr[i].children.length <= 1) {
-                  if(routerArr[i].children[0].name === filterName[j]) {
-                     router.options.routes[i].isHide = true;
-                  }
-                } else {
-                   if( filterName[j] ==="黑名单管理"&&router.options.routes[i].name === "用户管理") {
-                      router.options.routes[i].children[1].isHideChild = true;
-                   } else if( filterName[j] ==="订单取消频次管理"&&router.options.routes[i].name === "用户管理") {
-                      router.options.routes[i].children[0].isHideChild = true;
-                   } else {
-                     if(routerArr[i].children[0].name === filterName[j]) {
-                        router.options.routes[i].isHide = true;
-                     }
-                   }
-                }
+              if(routerArr[i].name === filterName[j] || routerArr[i].children[0].name === filterName[j]) {
+                    router.options.routes[i].isHide = true;
+               }
             }
        }
      }
 }
 // 注册全局的构子 路由
  router.beforeEach((to,from,next) => {
-        // 模拟 权限管理
+        // 模拟 权限管理  {"pm":{"Auditor":true,"Operator":true,"CustomerService":true},"userInfo":{"uid":"123456"}}
        //  隐藏 或者显示 导航菜单 服务类型及折扣改管理
        //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")  &&Cookie.get("SMJSESSIONID")
       // Cookie.delete("express1");
-// if(store.getters.getisAuthority)  {
-//    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
-//
-//              console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
-//              localEvent.get("ACL");
-//              console.log(localEvent.get("ACL") == '');
-//            if(localEvent.get("ACL") !== '') {
-//                  let result = localEvent.get("ACL");
-//                  filterMenu(result);
-//                     // window.location.reload();
-//            }else {
-//              http.post('/api/user/info/get',{},(result)=>{
-//                       if(result.error ==  "ACL_NO_PRIVILEGE"){
-//                          window.location.href =  result.redrect;
-//                       }
-//                       console.log("+++++++++++++++++");
-//                       console.log(result);
-//                       localEvent.set('ACL',result);
-//                       filterMenu(result);
-//                         // router.go(0)
-//                  });
-//            }
-//           //  if(to.fullPath == "/login") {
-//           //      next({
-//           //             path:"/home",
-//           //         });
-//           //  };
-//        // 跳转到登录页面
-//
-//    } else if(to.fullPath == "/login") {
-//       store.dispatch('setLoginOutFlag',false);
-//        localEvent.clear("ACL");
-//       //  Cookie.delete("ECOACLJSESSIONID");
-//       //  Cookie.delete("SMJSESSIONID");
-//       //  Cookie.delete("ctoken");
-//    } else {
-//        store.dispatch('changeNextRouter',to.fullPath);
-//       //  alert(from.fullPath);
-//          console.log(to)
-//        next({
-//               path:"/login",
-//           });
-//       // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
-//    }
-//  } else {
-//      store.dispatch('setAuthority',"开发者");
-//  }
-    store.dispatch('setAuthority',"开发者");
+if(store.getters.getisAuthority)  {
+   if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
+
+             console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
+             localEvent.get("ACL");
+             console.log(localEvent.get("ACL") == '');
+           if(localEvent.get("ACL") !== '') {
+                 let result = localEvent.get("ACL");
+                 filterMenu(result);
+           }else {
+             http.post('/api/user/info/get',{},(result)=>{
+
+                      if(result.error ==  "ACL_NO_PRIVILEGE"){
+                           alert(result.redrect)
+                        //  window.location.href =  result.redrect;
+                      }
+                      console.log("+++++++++++++++++");
+                      console.log(result);
+                      localEvent.set('ACL',result);
+                      filterMenu(result);
+                        // router.go(0)
+                 });
+           }
+          //  if(to.fullPath == "/login") {
+          //      next({
+          //             path:"/home",
+          //         });
+          //  };
+       // 跳转到登录页面
+
+   } else if(to.fullPath == "/login") {
+      store.dispatch('setLoginOutFlag',false);
+       localEvent.clear("ACL");
+      //  Cookie.delete("ECOACLJSESSIONID");
+      //  Cookie.delete("SMJSESSIONID");
+      //  Cookie.delete("ctoken");
+   } else {
+       store.dispatch('changeNextRouter',to.fullPath);
+      //  alert(from.fullPath);
+         console.log(to)
+       next({
+              path:"/login",
+          });
+      // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
+   }
+ } else {
+     store.dispatch('setAuthority',"开发者");
+ }
+    // store.dispatch('setAuthority',"开发者");
 
 
       // 这里是对于 登录时的 状态验证

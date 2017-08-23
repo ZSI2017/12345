@@ -12,7 +12,7 @@
         </el-row>
         <el-row>
             <el-col :span="2" class="import-search" style="float:right;">
-                <el-button type="primary" @click="handleAddData" style="width:100px;float:right;"><i class="el-icon-plus"></i> 添加</el-button>                
+                <el-button type="primary" @click="handleAddData" style="width:100px;float:right;"><i class="el-icon-plus"></i> 添加</el-button>
             </el-col>
         </el-row>
     </div>
@@ -52,9 +52,9 @@
                 </el-popover>    -->
                 <el-button @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
                 <!--<el-button ref='allIfo' @click="handleDelete(scope.$index,scope.row)" type="text" size="small">删除</el-button>-->
-                 
+
                 <el-button @click='useqrcode(scope.row)' type="text" size="small">生产二维码</el-button>
-                        
+
             </template>
         </el-table-column>
     </el-table>
@@ -62,7 +62,7 @@
         <div>
             <div id='code'></div>
             <canvas id="canvas"></canvas>
-        </div> 
+        </div>
         <!--<div slot="footer" class="dialog-footer">
             <el-button @click="dialogServerVisible = false">关 闭</el-button>
         </div>-->
@@ -139,7 +139,7 @@ export default {
           });
         console.log('failed');
       });
-    },  
+    },
     handleAddData(){
         this.$router.push({path:'/dev/logismerchant/addData'});
     },
@@ -184,11 +184,11 @@ export default {
     //         this.$message({
     //             type: 'info',
     //             message: '已取消删除'
-    //         });          
+    //         });
     //     });
     // },
     //切换页条数
-    handleSizeChange(val) {  
+    handleSizeChange(val) {
         this.currentPage = 1;
         this.pageSize = val;
         this.loadData();
@@ -212,13 +212,13 @@ export default {
         })
 
     }
-    
+
   }
 }
 </script>
 
 <style lang="scss">
-            
+
 .keyword-input{
   margin: 20px 0 10px;
 }
@@ -228,22 +228,25 @@ export default {
   text-align: right;
   padding-right: 20px;
   font-weight: 700;
-}       
+}
 .import-search{
   margin-left: 20px;
 }  
 .self .el-dialog{
     width:344px;
 }
+// .section .el-dialog{
+//     width:344px;
+// }
 
 #canvas{width:300px!important;height:300px!important;}
-input[type=number] {  
-    -moz-appearance:textfield;  
-}  
+input[type=number] {
+    -moz-appearance:textfield;
+}
 input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button{
       -webkit-appearance: none !important;
-      margin: 0; 
+      margin: 0;
   }
 
 </style>

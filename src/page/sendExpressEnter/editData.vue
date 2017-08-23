@@ -636,7 +636,7 @@ export default {
       const isLt2M = file.size / 1024 < 10;
 
       if (!isJPG && !isPNG) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传LOGO大小不能超过 10K!');
@@ -645,7 +645,7 @@ export default {
         return  Promise.reject("error")
       }
     },
-    
+
     //对icon图片操作的控制
     handleRemove2(file, fileList) {
       console.log(file, fileList);
@@ -673,7 +673,7 @@ export default {
       const isLt2M2 = file.size / 1024 < 10;
 
       if (!isJPG2 && !isPNG2) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M2) {
         this.$message.error('上传LOGO大小不能超过 10K!');
