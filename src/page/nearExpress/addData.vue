@@ -68,11 +68,11 @@
         <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="标价" prop="markPrice">
+    <!--<el-form-item label="标价">
       <el-input placeholder="请输入价格" v-model.number="ruleForm.markPrice"   type="number" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
-    </el-form-item>
+    </el-form-item>-->
     <el-col class="line" :span="2"> </el-col>
     <el-button type="primary" @click="handleSubmit('ruleForm')">提交</el-button>
   </el-form>
@@ -188,7 +188,6 @@ export default {
         linkUrl: '',
         opStatus:1,
         coverArea:'',
-        markPrice:'',
       },
       rules: {
         name: [
@@ -217,11 +216,11 @@ export default {
         coverArea: [
           {required: true,message: '请选择覆盖地区'}
         ],
-        markPrice:[
-          { required: true, message: '标价不能为空'},
-          // { type: 'number', message: '排序值必须为数字值'}
-           { type: 'number',message:'标价必须为数字'}
-        ]
+        // markPrice:[
+        //   { required: true, message: '标价不能为空'},
+        //   // { type: 'number', message: '排序值必须为数字值'}
+        //    { type: 'number',message:'标价必须为数字'}
+        // ]
       }
     }
   },
@@ -265,7 +264,6 @@ export default {
                   "sortWeight":_this.ruleForm.sortWeight,
                   "linkUrl": _this.ruleForm.linkUrl,
                   "opStatus": _this.ruleForm.opStatus,
-                  "markPrice": _this.ruleForm.markPrice,
                 },
                 "area": {
                   "code": "000000",

@@ -29,7 +29,7 @@
     style="width: 100%"
     max-height="3000"
   >
-    <el-table-column prop="gmtCreate" align="center" width="115" label="下单时间">
+    <el-table-column prop="gmtCreate" align="center" width="180" label="下单时间">
     </el-table-column>
     <el-table-column align="center" label="相关订单号" width="250">
       <template scope="scope">
@@ -37,21 +37,21 @@
           <p style="text-align:left">运单号：{{scope.row.waybillNo || "-"}}</p>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="寄件人信息" width="250">
+    <el-table-column align="center" label="寄件人信息">
       <template scope="scope">
           <span>{{scope.row.snderName}}</span> <span>{{scope.row.snderMobile}}</span><br/>
           <span>{{scope.row.snderAddress}}</span>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="收件人信息" width="250">
+    <el-table-column align="center" label="收件人信息" >
       <template scope="scope">
           <span>{{scope.row.rcvrName}} {{scope.row.rcvrMobile}}</span><br/>
           <span>{{scope.row.rcvrAddress}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="expName" align="center" width="95" label="快递公司">
+    <el-table-column prop="expName" align="center" width="110" label="快递公司">
     </el-table-column>
-    <el-table-column prop="status" align="center"  label="状态">
+    <el-table-column prop="status" align="center"  label="状态" width="130">
     </el-table-column>
     <el-table-column label="操作" align="center" width="200">
       <template scope="scope">

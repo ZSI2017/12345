@@ -68,7 +68,7 @@
         <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="标价" prop="markPrice">
+    <el-form-item label="标价">
       <el-input placeholder="请输入价格" v-model.number="ruleForm.markPrice"  style="width:200px;">
         <template slot="append">元起</template>
       </el-input>

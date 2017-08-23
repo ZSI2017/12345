@@ -2,11 +2,11 @@
 <section class="section editData-class">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form ref="form" :model="form" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
-    <el-form-item label="入口名称" prop="name">
+    <el-form-item label="入口名称">
       <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入入口名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-    <el-form-item label="LOGO" prop="logo">
+    <el-form-item label="LOGO">
       <el-upload v-if="isFromAddData"
         action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange"
@@ -27,7 +27,7 @@
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
-    <el-form-item label="角标" prop="icon">
+    <el-form-item label="角标">
       <el-upload v-if="isFromAddData"
         action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange2"
@@ -48,24 +48,24 @@
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
-    <el-form-item label="描述" prop="description">
+    <el-form-item label="描述">
       <el-input v-if="isFromAddData" v-model="form.description" placeholder="请输入描述内容"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.description}} </div>
     </el-form-item>
-    <el-form-item label="排序值" prop="sortWeight">
+    <el-form-item label="排序值">
       <el-input v-if="isFromAddData" type='number' v-model.number="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
-    <el-form-item label="链接" prop="linkUrl">
+    <el-form-item label="链接">
       <el-input v-if="isFromAddData"  v-model="form.linkUrl" placeholder="请输入需要跳转的链接，如果调"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.linkUrl}} </div>
     </el-form-item>
-    <el-form-item label="覆盖地区" prop="coverArea">
+    <el-form-item label="覆盖地区">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button v-if="!isFromAddData"  size="mini" type="text" @click="dialogTable ">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
     </el-form-item>
-    <el-form-item label="当前状态"  prop="radio">
+    <el-form-item label="当前状态" >
       <el-radio-group v-if="isFromAddData" v-model="form.radio">
         <el-radio class="radio" :label="2">上线</el-radio>
         <el-radio class="radio" :label="1">下线</el-radio>
