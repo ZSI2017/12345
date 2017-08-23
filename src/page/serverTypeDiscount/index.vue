@@ -1,9 +1,9 @@
 <template>
-<div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
+<div class="section main" style="overflow:hidden"  element-loading-text="拼命加载中..."  v-loading.body.fullscreen.lock="listLoading">
 
 <el-row :span="24" style="position: relative;">
    <el-col :span="24">
-    <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
+    <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick" v-loading.body.fullscreen.lock="listLoadingNoText" >
       <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
       <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
       <el-tab-pane  v-if ="(Authority == '审核'||Authority == '开发者')" label="待审核" name="待审核">待审核</el-tab-pane>
@@ -236,6 +236,7 @@ export default {
   },
   data() {
     return {
+      listLoadingNoText:false,
       selectDisabled:false,
       expressLoading:false,   // 选择 下拉框
       expressName:'全部',    // 选择后快递公司名
@@ -610,7 +611,7 @@ export default {
     handleTabClick(tab, event,countPage,loadingFlag) {
       var _this = this;
       if(loadingFlag === undefined){
-        _this.listLoading = true;
+        _this.listLoadingNoText = true;
       }
       _this.tableFalg = false
       _this.showConfig = false;
@@ -650,6 +651,8 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list;
           _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
@@ -680,6 +683,8 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list
             _this.totalCount =  parseInt(rsp.pages.cnt);
+            _this.listLoadingNoText = false;
+            _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
@@ -710,15 +715,12 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list;
           _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
       }
-      setTimeout(() => {
-        _this.listLoading = false;
-        _this.tableFalg = true;
-      }, 300);
-
     },
     // 查看覆盖地区
     checkArea(id) {
