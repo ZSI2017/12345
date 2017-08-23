@@ -1,5 +1,5 @@
 <template>
-<div class="section main" style="overflow:hidden"  element-loading-text="拼命加载中..."  v-loading.body.fullscreen.lock="listLoading">
+<div class="section main" style="overflow:hidden"  element-loading-text="正在处理中..."  v-loading.body.fullscreen.lock="listLoading">
 
 <el-row :span="24" style="position: relative;">
    <el-col :span="24">

@@ -15,10 +15,12 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
+        :before-upload="beforeAvatarUpload"
         list-type="picture"
         :file-list="form.fileList2">
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+        <div slot="tip" class="el-upload__tip">文件类型限 jpg、png，尺寸750*176，请保持60kb以内</div>
       </el-upload>
       <img v-if="!isFromaddData" width="100px" style="float:left;" :src="form.fileList2[0].url" alt="">
       <el-popover ref="popover4" placement="right" trigger="click">
@@ -196,7 +198,7 @@ export default {
        name: [{type: "string",
          required: true,
          message: '请输入正确运营图名称',
-         trigger: 'blur'
+         trigger: 'none'
          },
          {  min:1,
             max:10,
@@ -204,7 +206,7 @@ export default {
          }
      ],
        Forder: [
-         { required: true, message: '排序值不能为空'},
+         { required: true, message: '排序值不能为空',trigger: 'none'},
          { type: 'number', message: '排序值必须为数字值'},
          { type: 'number', min:1, max:999,message:'排序值范围1-999'}
        ],
@@ -357,6 +359,21 @@ export default {
     }
   },
   methods: {
+
+    beforeAvatarUpload(file) {
+        const  isJPGorPNG = ((file.type == "image/jpeg")||(file.type=="image/png"));
+        const isLt60KB = file.size/1024 <=60;
+        if(!isJPGorPNG) {
+           this.$message.error('上传图片只能是JPG或PNG格式!');
+        }
+        if(!isLt60KB) {
+            this.$message.error("上传图片大小不能超过60KB!")
+        }
+        if(!isJPGorPNG || !isLt60KB) {
+          return  Promise.reject("error")
+        }
+
+    },
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
@@ -441,7 +458,6 @@ handleSubmit(formName) {
     //   //  this.$route.push({ path:this.defaultActive});
     // },
     handlePreview() {},
-    handleRemove() {},
     handleSuccess(file){
       console.log(file.result)
       this.form.fileList2[0].url = file.result;
@@ -702,7 +718,7 @@ handleSubmit(formName) {
       console.log('submit!');
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
       // alert('adfasd')
@@ -710,9 +726,10 @@ handleSubmit(formName) {
       this.dialogVisible = true;
     },
     handleImageChange(file,fileList){
+         console.log(fileList);
          this.form.fileList2 = fileList.slice(-1);
+         console.log(this.form.fileList2);
     },
-
   }
 }
 </script>
