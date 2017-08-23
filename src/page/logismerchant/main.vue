@@ -1,5 +1,5 @@
 <template>
-<div class="section">
+<div class="section self">
     <div class="keyword-input">
         <el-row>
             <el-col :span="6" class="import-font">物流机构名称：</el-col>
@@ -232,7 +232,7 @@ export default {
 .import-search{
   margin-left: 20px;
 }  
-.section .el-dialog{
+.self .el-dialog{
     width:344px;
 }
 

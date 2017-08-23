@@ -378,7 +378,7 @@ export default {
       }
       var _this = this;
       this.listLoading = true
-      var URL = "/api/promotion/areaConf/all";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/sendapp/areaConf/all";   // 默认是 配置 中的覆盖地区
       _this.$http.post(URL,{id:"0"},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);

@@ -17,7 +17,6 @@
         :before-upload="beforeAvatarUpload"
         :file-list="form.logo"
         list-type="picture">
-        <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
       <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.logo[0].url" alt="">
@@ -37,7 +36,7 @@
         :on-error='handlerror2'
         :before-upload="beforeAvatarUpload2"
         list-type="picture"
-        :file-list="form.icon">
+        >
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>

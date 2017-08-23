@@ -69,7 +69,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="标价">
-      <el-input placeholder="请输入价格" v-model.number="ruleForm.markPrice"  type="number" style="width:200px;">
+      <el-input placeholder="请输入价格" maxlength="11" v-model.number="ruleForm.markPrice"  type="number" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
     </el-form-item>
@@ -380,7 +380,7 @@ export default {
       }
       var _this = this;
       this.listLoading = true
-      var URL = "/api/promotion/areaConf/all";   // 默认是 配置 中的覆盖地区
+      var URL = "/api/sendapp/areaConf/all";   // 默认是 配置 中的覆盖地区
       _this.$http.post(URL,{id:"0"},
         (rsp) => {
           _this.gridData = rsp.provinces.slice(0);
