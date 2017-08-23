@@ -102,6 +102,10 @@ function filterMenu(result) {
       // Cookie.delete("express1");
       console.log("beforeEach router --------------------------");
       console.log(store.getters.getisAuthority)
+      console.log(Cookie.get("ECOACLJSESSIONID"));
+      console.log(Cookie.get("ctoken"));
+      console.log(Cookie.get("SMJSESSIONID"));
+      console.log("beforeEach router --------------------------");
 // if(store.getters.getisAuthority)  {
    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
 
