@@ -15,6 +15,7 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
+        :before-upload="beforeAvatarUpload"
         list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -568,7 +569,25 @@ export default {
       alert(file);
       alert(fileList);
     },
-    handleRemove() {},
+    beforeAvatarUpload(file) {
+      console.log(file)
+      const isJPG2 = file.type === 'image/jpeg';
+      const isPNG2 = file.type === 'image/png';
+      const isLt2M2 = file.size / 1024 < 10;
+
+      if (!isJPG2 && !isPNG2) {
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+      }
+      if (!isLt2M2) {
+        this.$message.error('上传LOGO大小不能超过 10K!');
+      }
+      if((!isJPG2 && !isPNG2) || !isLt2M2) {
+        return  Promise.reject("error")
+      }
+    },
+    handleRemove(file,fileList) {
+          this.ruleForm.logo = fileList;
+    },
   }
 }
 </script>

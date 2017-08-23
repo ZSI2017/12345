@@ -95,6 +95,7 @@
 <script type="text/javascript">
 //  import coverArea from "@/page/chooseExpress/coverArea.vue";
 import localEvent from 'src/vuex/function.js';
+import timg from './../../assets/timg.jpg'
 
 export default {
   data() {
@@ -113,7 +114,7 @@ export default {
       //select 快递公司选项
       options: [],
       value:'',
-      merchantLogo:'',
+      merchantLogo:'' || timg,
       linkUrlShow:true,
       // 对输入表单进行验证
       ruleForm: {
@@ -278,7 +279,7 @@ export default {
     },
     handleMerchant(){
       console.log(this.value)
-      this.merchantLogo = this.value[0];
+      this.merchantLogo = this.value[0] || timg;
       this.ruleForm.merchantName = this.value[1];
       this.ruleForm.isvMerchantId = this.value[2];
       this.ruleForm.accessStatus = this.value[3]; 

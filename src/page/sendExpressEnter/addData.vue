@@ -15,6 +15,7 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
+        :before-upload="beforeAvatarUpload"
         list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -31,6 +32,7 @@
         :on-remove="handleRemove2"
         :on-success='handleSuccess2'
         :on-error='handlerror2'
+        :before-upload="beforeAvatarUpload2"        
         list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -311,7 +313,7 @@ export default {
       console.log(file.response)
     },
     handleSuccess(file){
-      console.log(file.result)
+      console.log(file.result);
       this.dialogImg = file.result;
     },
     handlerror(err, file, fileList){
@@ -319,7 +321,26 @@ export default {
       alert(file);
       alert(fileList);
     },
-    handleRemove() {},
+    beforeAvatarUpload(file) {
+      console.log(file)
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 < 10;
+
+      if (!isJPG && !isPNG) {
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+      }
+      if (!isLt2M) {
+        this.$message.error('上传LOGO大小不能超过 10K!');
+      }
+      if((!isJPG && !isPNG) || !isLt2M) {
+        return  Promise.reject("error")
+      }
+    },
+    handleRemove(file,fileList) {
+          this.ruleForm.logo = fileList;
+    },
+      
 
      // 对图片操作的控制
     handleImageChange2(file,fileList){
@@ -337,6 +358,22 @@ export default {
       alert(err);
       alert(file);
       alert(fileList);
+    },
+    beforeAvatarUpload2(file) {
+      console.log(file)
+      const isJPG2 = file.type === 'image/jpeg';
+      const isPNG2 = file.type === 'image/png';
+      const isLt2M2 = file.size / 1024 < 10;
+
+      if (!isJPG2 && !isPNG2) {
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+      }
+      if (!isLt2M2) {
+        this.$message.error('上传LOGO大小不能超过 10K!');
+      }
+      if((!isJPG2 && !isPNG2) || !isLt2M2) {
+        return  Promise.reject("error")
+      }
     },
     handleRemove2() {},
 

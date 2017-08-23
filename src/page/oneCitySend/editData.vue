@@ -7,7 +7,18 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="LOGO">
-      <el-upload v-if="isFromAddData" list-type="picture" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="form.logo">
+      <el-upload 
+          action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+          :on-change="handleImageChange"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove"
+          :on-success='handleSuccess'
+          :on-error='handlerror'
+          :before-upload="beforeAvatarUpload"
+          list-type="picture"
+          :file-list="form.logo"
+          v-if="isFromAddData" 
+          >
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
@@ -259,7 +270,11 @@ export default {
       this.form.logo[0].name = rsp.logo;
       this.form.markPrice = rsp.markPrice;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
-
+      if(this.dynamicTags.length > 1){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }
 
      this.dialogConfig(true)
 
@@ -537,6 +552,7 @@ export default {
     onSubmit() {
       console.log('submit!');
     },
+    //对logo图片操作的控制
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -544,6 +560,35 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
+    handleImageChange(file,fileList){
+         this.form.logo = fileList.slice(-1);
+    },
+    handleSuccess(file){
+      console.log(file.result)
+      this.form.logo[0].url = file.result;
+    },
+    handlerror(err, file, fileList){
+      alert(err);
+      alert(file);
+      alert(fileList);
+    },
+    beforeAvatarUpload(file) {
+      console.log(file)
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 < 10;
+
+      if (!isJPG && !isPNG) {
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+      }
+      if (!isLt2M) {
+        this.$message.error('上传LOGO大小不能超过 10K!');
+      }
+      if((!isJPG && !isPNG) || !isLt2M) {
+        return  Promise.reject("error")
+      }
+    },
+
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       if(this.dynamicTags.length >= 2){

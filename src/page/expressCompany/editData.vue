@@ -11,7 +11,7 @@
       <img width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
     </el-form-item>
     <el-form-item label="广告语">
-      <el-input v-if="isFromAddData" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
+      <el-input v-if="isFromAddData" maxlength="20" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.slogan}} </div>
     </el-form-item>
     <el-form-item label="标签">
@@ -97,6 +97,8 @@
 </template>
 <script type="text/javascript">
 import localEvent from 'src/vuex/function.js';
+import timg from './../../assets/timg.jpg'
+
 
 export default {
   data() {
@@ -171,7 +173,7 @@ export default {
       "id":this.ruleForm.logisMerchId.toString()
     },(rsp)=>{
       console.log(rsp)
-      this.merchantLogo = rsp.merchantLogo;
+      this.merchantLogo = rsp.merchantLogo || timg;
       this.merchantName = rsp.merchantName;
     },(error)=>{
       console.log(error)
@@ -193,6 +195,11 @@ export default {
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       console.log(this.dynamicTags)
       console.log(rsp.tag)
+      if(this.dynamicTags.length > 1){
+        this.addTag = false;
+      }else{
+        this.addTag = true;
+      }
       // this.dialogConfig(true)
       if ( this.$route.path == "/chooseExpressOrder/detail") {
           this.ruleForm.opStatus =  rsp.status=='1'?1:2;        

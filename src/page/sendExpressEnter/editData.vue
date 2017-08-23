@@ -14,6 +14,7 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
+        :before-upload="beforeAvatarUpload"
         :file-list="form.logo"
         list-type="picture">
         <!--<i class="el-icon-plus"></i>-->
@@ -34,6 +35,7 @@
         :on-remove="handleRemove2"
         :on-success='handleSuccess2'
         :on-error='handlerror2'
+        :before-upload="beforeAvatarUpload2"
         list-type="picture"
         :file-list="form.icon">
         <!--<i class="el-icon-plus"></i>-->
@@ -628,6 +630,23 @@ export default {
       alert(file);
       alert(fileList);
     },
+    beforeAvatarUpload(file) {
+      console.log(file)
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 < 10;
+
+      if (!isJPG && !isPNG) {
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+      }
+      if (!isLt2M) {
+        this.$message.error('上传LOGO大小不能超过 10K!');
+      }
+      if((!isJPG && !isPNG) || !isLt2M) {
+        return  Promise.reject("error")
+      }
+    },
+    
     //对icon图片操作的控制
     handleRemove2(file, fileList) {
       console.log(file, fileList);
@@ -647,6 +666,22 @@ export default {
       alert(err);
       alert(file);
       alert(fileList);
+    },
+    beforeAvatarUpload2(file) {
+      console.log(file)
+      const isJPG2 = file.type === 'image/jpeg';
+      const isPNG2 = file.type === 'image/png';
+      const isLt2M2 = file.size / 1024 < 10;
+
+      if (!isJPG2 && !isPNG2) {
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+      }
+      if (!isLt2M2) {
+        this.$message.error('上传LOGO大小不能超过 10K!');
+      }
+      if((!isJPG2 && !isPNG2) || !isLt2M2) {
+        return  Promise.reject("error")
+      }
     },
 
   }
