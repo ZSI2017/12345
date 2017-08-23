@@ -61,7 +61,7 @@ import localEvent from 'src/vuex/function.js';
               console.log(result)
               this.$message({
                   type: 'success',
-                  message: `当日用户取消大于${this.num1}单，将被列为黑名单`
+                  message: `订单取消频次保存成功！`
               });
 
           },(error) => {

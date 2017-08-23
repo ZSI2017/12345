@@ -1,6 +1,6 @@
 <template>
-<div class="section main" style="overflow:hidden" :element-loading-text="loadingText" v-loading.body.fullscreen.lock="listLoading">
-  <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
+<div class="section main" style="overflow:hidden" element-loading-text="拼命加载中..." v-loading.body.fullscreen.lock="listLoading">
+  <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick" v-loading.body.fullscreen.lock="listLoadingNoText">
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
     <el-tab-pane  v-if ="(Authority == '审核'||Authority == '开发者')" label="待审核" name="待审核">待审核</el-tab-pane>
@@ -174,7 +174,7 @@ import {
 export default {
   data() {
     return {
-      loadingText:'',
+      listLoadingNoText:false,
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
       showSortable: 'custom',//设置后端排序
@@ -265,7 +265,6 @@ export default {
     },
     //dialog 确认按钮
     handleConfirm(){
-      this.loadingText = '拼命加载中...';
       this.loadingTakeOffFlag = false;
       this.listLoading = true;
       this.$http.post(this.promotionURL, {
@@ -277,33 +276,12 @@ export default {
           message: this.promotionMessage,
           type: this.promotionType
         });
-        // this.handleTabClick({label:this.activeName2})
-        this.request();
+        this.handleTabClick({label:this.activeName2})
       },(error)=>{
         console.log(error)
         this.listLoading = false;
       })
 
-    },
-    request(){
-      let operationFlag = this.radio2;
-      if(this.tabFlag == '待审核'){
-        operationFlag = '';
-      }
-      this.$http.post(this.url, {
-        "pages": {
-          "page_size": this.pageSize,
-          "page_num": this.currentPage - 1
-        },
-        "con": {
-          "pageId": this.pageId,
-          "status":operationFlag           
-        }
-      }, (rsp) => {
-        this.tableData = rsp.page_list;
-        this.totalCount =  parseInt(rsp.pages.cnt);
-
-      })
     },
     // 操作栏对应的事件响应
     OperationTakeOff(row) {
@@ -364,8 +342,7 @@ export default {
     handleTabClick(tab, event,countPage,loadingFlag) {
       var _this = this;
       if(loadingFlag === undefined){
-        _this.listLoading = true;
-        _this.loadingText = '';
+            _this.listLoadingNoText = true;
       }
       _this.tableFalg = false
       _this.showConfig = false;
@@ -407,6 +384,8 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list;
           _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
@@ -434,7 +413,9 @@ export default {
           }
         }, (rsp) => {
           _this.tableData = rsp.page_list
-            _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
@@ -462,6 +443,8 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list;
           _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
