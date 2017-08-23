@@ -198,7 +198,7 @@ export default {
         description: '',
         sortWeight: '',
         linkUrl: '',
-        radio: "",  // radio 代表上下架状态的选择
+        radio: "",  // radio 代表上下线状态的选择
         Forder: '',
         promotionId:'',
         gmtBegin:'',

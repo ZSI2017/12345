@@ -17,10 +17,11 @@
         :on-remove="handleRemove"
         :on-success='handleSuccess'
         :on-error='handlerror'
+        :before-upload="beforeAvatarUpload"
         list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        <div slot="tip" class="el-upload__tip">文件类型限 jpg、png，尺寸750*176，请保持60kb以内</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
@@ -49,8 +50,8 @@
     </el-form-item>
     <el-form-item label="当前状态" prop="status">
       <el-radio-group v-model="ruleForm.status">
-        <el-radio class="radio" v-model="radio" label="2">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="1">下架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">上线</el-radio>
+        <el-radio class="radio" v-model="radio" label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
@@ -148,7 +149,7 @@ export default {
       // 搜索框中省名初始化
       searchProvinces:[],
       showProvinces:'',
-      // radio 代表上下架状态的选择
+      // radio 代表上下线状态的选择
       radio: "1",
       url:'/api/promotion/audit/save',
       // dialogFormVisible 代表是否打开配置地区的对话框
@@ -264,7 +265,19 @@ export default {
     //     }
     //  }
   },
-  methods: {
+  methods:{
+    // 图片上传限制
+    beforeAvatarUpload(file){
+        const  isJPGorPNG = ((file.type == "image/jpeg")||(file.type=="image/png"));
+        const isLt60KB = file.size/1024 <=60;
+        if(!isJPGorPNG) {
+           this.$message.error('上传图片只能是JPG或PNG格式!');
+        }
+        if(!isLt60KB) {
+            this.$message.error("上传图片大小不能超过60KB!")
+        }
+        return isJPGorPNG && isLt60KB;
+    },
     //
     dataChagne(value) {
       console.log(value);
@@ -353,8 +366,9 @@ export default {
   },
   // 对图片操作的控制
   handleImageChange(file,fileList){
-       console.log(this.ruleForm.imageList);
+     console.log(fileList);
        this.ruleForm.imageList = fileList.slice(-1);
+       console.log(this.ruleForm.imageList);
   },
   handlePreview(file) {
       this.dialogVisible = true;
@@ -377,7 +391,7 @@ export default {
       console.log(tab.label);
     },
     handleQueryBlur() {
-      alert("dsfasdf");
+      // alert("dsfasdf");
 
     },
     // 搜索框

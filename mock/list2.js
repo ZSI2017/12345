@@ -12,7 +12,7 @@ var tableDate = [];
 for(var i =0;i<6;i++){
     tableDate.push(
        Mock.mock({
-        //  "currentState":"已上架",
+        //  "currentState":"已上线",
         //  "Forder":Mock.Random.natural(0, 1000),
         //  "link":Mock.Random.url('http') + Mock.Random.paragraph(),
         //  "operationsMapName":Mock.Random.name(),

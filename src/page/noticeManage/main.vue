@@ -1,5 +1,5 @@
 <template>
-<div class="section main" style="overflow:hidden"  element-loading-text="拼命加载中..." v-loading.body.fullscreen.lock="listLoading">
+<div class="section main" style="overflow:hidden"  element-loading-text="正在处理中..." v-loading.body.fullscreen.lock="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick"  v-loading.body.fullscreen.lock="listLoadingNoText" >
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
@@ -193,7 +193,7 @@ export default {
   data() {
     return {
       listLoadingNoText:false,
-      loadingText:'拼命加载中...',
+      loadingText:'正在处理中...',
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
       // 排序是否显示

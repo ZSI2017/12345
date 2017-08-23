@@ -64,8 +64,8 @@
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-model="ruleForm.opStatus">
-        <el-radio class="radio" :label="2">上架</el-radio>
-        <el-radio class="radio" :label="1">下架</el-radio>
+        <el-radio class="radio" :label="2">上线</el-radio>
+        <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="标价" prop="markPrice">
