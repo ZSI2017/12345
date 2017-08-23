@@ -1,14 +1,20 @@
 <template type="html">
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
+  <el-form 
+      ref="ruleForm" 
+      :model="ruleForm" 
+      :rules="rules" 
+      label-width="100px"  
+      style="width:800px;padding-left:100px" 
+      v-loading.body.fullscreen.lock="saveLoading">
     <el-form-item label="入口名称" prop="name">
       <el-input v-model.trim="ruleForm.name" placeholder="请输入入口名称"> </el-input>
     </el-form-item>
     <el-form-item label="LOGO" prop="logo">
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="http://sendexmng-sit.alipay-eco.com/sendapp/upload"
         :on-change="handleImageChange"
         :file-list="ruleForm.logo"
         :on-preview="handlePreview"
@@ -25,7 +31,7 @@
     <el-form-item label="角标">
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="http://sendexmng-sit.alipay-eco.com/sendapp/upload"
         :on-change="handleImageChange2"
         :file-list="ruleForm.icon"
         :on-preview="handlePreview2"
@@ -151,6 +157,7 @@ export default {
   },
   data() {
     return {
+      saveLoading: false,
       pageId:'',
       // 展示警告信息
       showAlert:false,
@@ -255,6 +262,7 @@ export default {
     },
     //  点击提交
     handleSubmit(formName) {
+      this.saveLoading = true;
       var _this = this;
       console.log("-----------------------");
       console.log(this.$refs[formName]);
@@ -284,10 +292,12 @@ export default {
               };
             _this.$http.post(_this.url,httpData,(result) => {
               _this.$store.dispatch('changeLoadingChange',true);
+              this.saveLoading = false;
               _this.$router.go(-1);
             // _this.tableData = result.page_list;
             // _this.totalCount = parseInt(result.pages.cnt);
           },(error) => {
+              this.saveLoading = false;
               this.$message({
                   type: 'error',
                   message: error.data.meta.msg

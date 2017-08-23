@@ -319,6 +319,7 @@ export default {
 
     //  点击提交
     handleSubmit(formName) {
+        this.listLoading = true;  
          var result = {
              "data":{
                  "id":this.id,
@@ -342,6 +343,7 @@ export default {
          var _this = this;
         this.$http.post("/api/sendapp/audit/update",result,(result) => {
           _this.$store.dispatch('changeLoadingChange', true);
+          this.listLoading = false;  
           console.log(this);
           console.log(result);
           this.$router.go(-1);
@@ -350,6 +352,7 @@ export default {
                 message: '报存成功！'
             });
         },(error) => {
+          this.listLoading = false;            
           if(error.data.meta.code == "0017") {
               this.$message.error('"名称重复！"')
           } else {
