@@ -103,8 +103,30 @@ export default {
        console.log(newData);
        console.log(newData+"++++++++++++++++"+oldData);
        console.log(oldData);
-      // this.li1Click('event',0,this.sourceData.noProvinces[0]);
-       this.checkedData = newData.noProvinces;
+        this.checkedData = newData.noProvinces;
+       if(!this.onlyRead) {
+         this.li1Click('event',0,newData.noProvinces[0]);
+         this.li1Click2('event', newData.noProvinces[0].noServiceCitys&&newData.noProvinces[0].noServiceCitys[0],0)
+       } else {
+          let index1,index2;
+          for(let i =0;i<newData.noProvinces.length;i++) {
+                  if(newData.noProvinces[i].check){
+                     index1 = i;
+                     break;
+                  }
+          }
+          this.li1Click('event',index1,newData.noProvinces[index1]);
+        if(typeof newData.noProvinces[index1] !== "undefined"){
+            for(let k =0;k<newData.noProvinces[index1].noServiceCitys.length;k++) {
+                    if(newData.noProvinces[index1].noServiceCitys[k].check) {
+                         index2 = k;
+                         break;
+                    }
+            }
+            this.li1Click2('event',newData.noProvinces[index1].noServiceCitys[index2],index2);
+          }
+       }
+
     }
 
   },
@@ -225,14 +247,16 @@ export default {
               noServiceCitys: []
             };
             console.log("li1li1li1li1li1li1li1li1li1lil1li1li1l.");
-            console.log(this.check);
+
           // console.log(event);
           // this.sourceData.noProvinces[index].noServiceCitys;
-          var noServiceCitysArr = this.checkedData[index].noServiceCitys;
+          var noServiceCitysArr = this.checkedData[index].noServiceCitys
+              console.log(this.checkedData[index].noServiceCitys[0].check);
           if (noServiceCitysArr.length > 0) {
             let tempArr = [];
             for (let k = 0; k < noServiceCitysArr.length; k++) {
               if (typeof noServiceCitysArr[k] === "object") {
+
                 if (noServiceCitysArr[k].check) tempArr.push(noServiceCitysArr[k].cityName);
                 // else
                 // toDo  增加不确定状态的标记
@@ -278,38 +302,6 @@ export default {
             this.checkedData[this.li0].noServiceCitys[index] = {};
           }
    }
-
-      //  if( Object.prototype.toString.call(this.checkedData[this.li0]) === "[object Array]" && this.checkedData[this.li0].length>0) {
-      //  if(this.checkedData[this.li0][this.li1].districtName === "all") {
-      //    let tempArr = [];
-      //    // this.sourceData.no
-      //    for(let i =0;i<item.noServiceDistricts.length;i++) {
-      //       tempArr.push(item.noServiceDistricts[i].districtName);
-      //    }
-      //
-      //    this.checkedDistric =tempArr
-      //       // this.districChecked = true;
-      //
-      //  }
-      // alert(item.cityName)
-      //   console.log();
-      //     for(let m =0;m<this.checkedData[this.li0].length;m++) {
-      //          if(this.checkedData[this.li0][m].cityName == item.cityName && this.checkedData[this.li0][m].noServiceDistricts.length>0){
-      //              let noServiceArr = this.checkedData[this.li0][m].noServiceDistricts
-      //             //  console.log(noServiceArr);
-      //              let tempArr = [];
-      //               // this.sourceData.no
-      //               for(let i =0;i<noServiceArr.length;i++) {
-      //                  tempArr.push(noServiceArr[i].districtName);
-      //               }
-      //               this.checkedDistric =tempArr;
-      //          }
-      //     }
-      //  }else {
-      //        this.checkedDistric =[];
-      //       //  this.districChecked = false;
-      //  }
-      //  console.log(this.checkedDistric);
       this.showLi2 = true;
     },
     dialogClose() {

@@ -173,7 +173,7 @@ export default {
 
       form: {
         linkHeader:'http://',    // url的 默认头部
-        // radio 代表上下架状态的选择
+        // radio 代表上下线状态的选择
         radio: "",
         // date1 代表时间段选择的
         date1: [],

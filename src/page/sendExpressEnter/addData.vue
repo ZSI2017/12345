@@ -63,8 +63,8 @@
     </el-form-item>
     <el-form-item label="当前状态">
       <el-radio-group v-model="ruleForm.status">
-        <el-radio class="radio" v-model="radio" label="2">上架</el-radio>
-        <el-radio class="radio" v-model="radio" label="1">下架</el-radio>
+        <el-radio class="radio" v-model="radio" label="2">上线</el-radio>
+        <el-radio class="radio" v-model="radio" label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
@@ -165,7 +165,7 @@ export default {
       // 搜索框中省名初始化
       searchProvinces:[],
       showProvinces:'',
-      // radio 代表上下架状态的选择
+      // radio 代表上下线状态的选择
       radio: "1",
       url:'/api/sendapp/audit/save',
       // dialogFormVisible 代表是否打开配置地区的对话框
