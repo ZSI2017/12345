@@ -206,7 +206,7 @@ export default {
          }
      ],
        Forder: [
-         { required: true, message: '排序值不能为空',trigger: 'none'},
+         { required: true, message: '排序值不能为空',},
          { type: 'number', message: '排序值必须为数字值'},
          { type: 'number', min:1, max:999,message:'排序值范围1-999'}
        ],
@@ -372,7 +372,6 @@ export default {
         if(!isJPGorPNG || !isLt60KB) {
           return  Promise.reject("error")
         }
-
     },
     changeVisible(flag){
       this.dialogTableVisible = flag;
@@ -719,6 +718,7 @@ handleSubmit(formName) {
     },
     handleRemove(file, fileList) {
       // console.log(file, fileList);
+       this.form.fileList2 = fileList
     },
     handlePictureCardPreview(file) {
       // alert('adfasd')
