@@ -180,6 +180,7 @@ export default {
     handleConfirm(){
         // this.dialogFormVisible = false; 
         var _this =this;
+        _this.keyword = '';
         var saveHttp = '/api/whitelist/save';
          _this.$http.post(saveHttp,{
             "data": {
@@ -199,6 +200,7 @@ export default {
                 message: '添加成功！',
                 type: 'success'
             });
+            this.loadData();
             
         },(error)=>{
             console.log(error)

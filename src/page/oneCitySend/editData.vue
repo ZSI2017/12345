@@ -18,7 +18,7 @@
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
     <el-form-item label="广告语">
-      <el-input v-if="isFromAddData" v-model="form.slogan" placeholder="请输入广告语"> </el-input>
+      <el-input v-if="isFromAddData" maxlength="20" v-model="form.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.slogan}} </div>
     </el-form-item>
     <el-form-item label="标签">
