@@ -112,7 +112,8 @@ if(store.getters.getisAuthority)  {
            }else {
              http.post('/api/user/info/get',{},(result)=>{
                       if(result.error ==  "ACL_NO_PRIVILEGE"){
-                         window.location.href =  result.redrect;
+                           alert(result.redrect)
+                        //  window.location.href =  result.redrect;
                       }
                       console.log("+++++++++++++++++");
                       console.log(result);

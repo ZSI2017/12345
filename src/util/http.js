@@ -44,7 +44,9 @@ axios.interceptors.response.use(
       //  TODO after response
     if(response.data&&response.data.error&&response.data.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
-        window.location.href=response.redrect;
+            alert(response.redrect)
+            loginTimeout()
+        // window.location.href=response.redrect;
         return Promise.reject(error);
     }
     return response;
