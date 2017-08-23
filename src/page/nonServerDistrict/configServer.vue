@@ -103,6 +103,7 @@ export default {
        console.log(newData);
        console.log(newData+"++++++++++++++++"+oldData);
        console.log(oldData);
+      // this.li1Click('event',0,this.sourceData.noProvinces[0]);
        this.checkedData = newData.noProvinces;
     }
 
@@ -324,6 +325,7 @@ export default {
         console.log(this.checkedData);
         this.$http.post(url,{"noService":{noProvinces:this.checkedData},"data":{"logisMerchId":this.logisMerchId}},(result) =>{
               this.fullscreenLoading = false;
+              this.$emit('listenToConfigFresh');
         this.$message({
               message: '保存成功',
               type: 'success'

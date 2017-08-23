@@ -109,6 +109,7 @@
       :logisMerchId = 'logisMerchId'
       :onlyRead='isCheckServer'
       @listenToConfig="changeConfigVisible"
+      @listenToConfigFresh = 'initList'
       > </config-server>
 </div>
 
@@ -258,30 +259,33 @@ export default {
             },
             changeConfigVisible(flag) {
                 this.dialogConfigVisible = flag;
+            },
+            initList(){
+              let url = "/api/noService/list";
+              var _this = this;
+              // _this.fullscreenLoading = true;
+              _this.$http.post(url,{}, (data) => {
+                  console.log("successadsafasdf");
+                  this.searchCompanyName = data.slice(0)
+                  // console.log(data);
+                  for(let i =0;i<data.length;i++) {
+                    this.searchCompanyName[i].value= data[i].logisMerchName;
+                    this.searchCompanyName[i].label= data[i].logisMerchName;
+                    this.searchCompanyName[i].index = i;
+                    // console.log(data[i].logisMerchName)
+                  }
+                  console.log(this.searchCompanyName);
+                  setTimeout(() => {
+                      _this.tableData = data.slice(0);
+                  }, 0);
+              }, (error) => {
+                  console.log("errorasdfawefasdfaweasdfew");
+                  console.log(error);
+              });
             }
     },
     created() {
-        let url = "/api/noService/list";
-        var _this = this;
-        // _this.fullscreenLoading = true;
-        _this.$http.post(url,{}, (data) => {
-            console.log("successadsafasdf");
-            this.searchCompanyName = data.slice(0)
-            // console.log(data);
-            for(let i =0;i<data.length;i++) {
-              this.searchCompanyName[i].value= data[i].logisMerchName;
-              this.searchCompanyName[i].label= data[i].logisMerchName;
-              this.searchCompanyName[i].index = i;
-              // console.log(data[i].logisMerchName)
-            }
-            console.log(this.searchCompanyName);
-            setTimeout(() => {
-                _this.tableData = data.slice(0);
-            }, 0);
-        }, (error) => {
-            console.log("errorasdfawefasdfaweasdfew");
-            console.log(error);
-        });
+        this.initList();
     }
 };
 

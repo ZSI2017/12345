@@ -79,7 +79,7 @@
      <img width="100%" :src="dialogImg2" alt="">
   </el-dialog>
   <!-- 覆盖地区   配置对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
+  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible"  :before-close='handleDialogConfigCancel' class="dialog-class">
 
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
@@ -202,14 +202,14 @@ export default {
         ],
         linkUrl: [
           {required: true,message: "请输入正确链接",trigger: 'blur'},
-           {min:1, max:200,message:'链接长度不大于200'}                    
+           {min:1, max:200,message:'链接长度不大于200'}
         ],
         logo: [
           {required: true,message: '请上传图片',type:'array',trigger: 'on-change'}
         ],
         description: [
           {required: true,message: '请输入描述',type:'string',trigger: 'blur'},
-           {min:1, max:20,message:'描述长度不大于20'}          
+           {min:1, max:20,message:'描述长度不大于20'}
         ],
         coverArea: [{
           required: true,

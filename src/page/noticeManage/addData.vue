@@ -63,7 +63,7 @@
      <img width="100%" :src="ruleForm.fileList" alt="">
   </el-dialog>
   <!-- 覆盖地区   配置对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class" :before-close='beforeDialogConfigClose'>
+  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class" :before-close='handleDialogConfigCancel'>
 
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
@@ -241,7 +241,7 @@ export default {
 
   },
   beforeDestory() {
-    alert("beforeDestory")
+    // alert("beforeDestory")
   },
   watch: {
     //  loadingFlag:{
@@ -501,7 +501,6 @@ export default {
     },
     // 对话框关闭回调
     beforeDialogConfigClose(){
-      alert("assdfasdf");
       this.dialogFormVisible = false
       this.DialogConfigSaveFlag = false;
     },

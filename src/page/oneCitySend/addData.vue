@@ -82,7 +82,7 @@
   </el-dialog>
 
   <!-- 覆盖地区   配置对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
+  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible"  :before-close='handleDialogConfigCancel' class="dialog-class">
 
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
@@ -199,7 +199,7 @@ export default {
         ],
         slogan:[
           {type: 'string',required: true,message: '请输入广告语',trigger: 'blur'},
-          {min:1, max:20,message:'广告语长度不大于20'}                    
+          {min:1, max:20,message:'广告语长度不大于20'}
         ],
         sortWeight: [
           { required: true, message: '排序值不能为空'},
@@ -208,7 +208,7 @@ export default {
         ],
         linkUrl: [
           {required: true,message: "请输入正确链接",trigger: 'blur'},
-          {min:1, max:200,message:'链接长度不大于200'}                    
+          {min:1, max:200,message:'链接长度不大于200'}
         ],
         opStatus: [
           {required: true,message: '请选择状态',trigger: 'change'}

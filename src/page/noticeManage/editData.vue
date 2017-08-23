@@ -71,7 +71,7 @@
   </el-form>
 
   <!-- 覆盖地区   配置对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class">
+  <el-dialog title="覆盖地区" :visible.sync="dialogFormVisible" class="dialog-class" :before-close='handleDialogConfigCancel'>
     <el-row :span="24" style="margin-bottom:10px;padding-top:5px;border-top:1px solid grey">
       <el-col :span="4" style="padding-top:10px;">
         <el-checkbox v-model="check" @change="handleCheckAll($event)">全选</el-checkbox>
