@@ -8,7 +8,7 @@
     </el-form-item>
     <el-form-item label="LOGO">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="http://sendexmng-sit.alipay-eco.com/sendapp/upload"
         :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
@@ -28,7 +28,7 @@
     </el-form-item>
     <el-form-item label="角标">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="http://192.168.12.54:8080/api/sendapp/upload"
         :on-change="handleImageChange2"
         :on-preview="handlePictureCardPreview2"
         :on-remove="handleRemove2"
@@ -36,6 +36,7 @@
         :on-error='handlerror2'
         :before-upload="beforeAvatarUpload2"
         list-type="picture"
+        :file-list="fileIcon"
         >
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -148,7 +149,7 @@ export default {
   },
   data() {
     return {
-
+      fileIcon:[],
       url: '', // 待审详情的 url
       id:'',
       tabName:'', // 标签页 名称
@@ -286,6 +287,12 @@ export default {
       this.form.icon[0].url = rsp.icon;
       this.form.logo[0].name = rsp.logo;
       this.form.icon[0].name = rsp.icon;
+      if(this.form.icon[0].url == ''){
+          this.fileIcon = []
+      }else{
+          this.fileIcon = this.form.icon
+      }
+
       this.form.description = rsp.description;
       if ( this.$route.path == "/sendExpressEnter/detail") {
         if (rsp.status == "1") {
@@ -611,6 +618,7 @@ export default {
     },
     //对logo图片操作的控制
     handleRemove(file, fileList) {
+      this.form.logo[0].url = '';
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
@@ -648,6 +656,7 @@ export default {
 
     //对icon图片操作的控制
     handleRemove2(file, fileList) {
+      this.form.icon[0].url = '';
       console.log(file, fileList);
     },
     handlePictureCardPreview2(file) {
