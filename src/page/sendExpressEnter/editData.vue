@@ -28,7 +28,7 @@
     </el-form-item>
     <el-form-item label="角标">
       <el-upload v-if="isFromAddData"
-        action="http://192.168.12.54:8080/api/sendapp/upload"
+        action="http://sendexmng-sit.alipay-eco.com/sendapp/upload"
         :on-change="handleImageChange2"
         :on-preview="handlePictureCardPreview2"
         :on-remove="handleRemove2"
