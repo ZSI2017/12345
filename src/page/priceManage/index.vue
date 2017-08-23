@@ -437,6 +437,10 @@ export default {
           this.$http.post("/api/freightPriceRule/import",data,(result)=>{
                   this.$refs["importForm"].resetFields();
                   this.dialogImportVisible = false;
+                  this.$message({
+                    type: 'success',
+                    message: '导入成功'
+                  });
            },(error)=>{
               this.$refs["importForm"].resetFields();
                if(error.data.meta.code == '0012'){
@@ -741,7 +745,7 @@ export default {
                       type: 'success',
                       message: '修改成功'
                   });
-                    this.handleQuery()
+                    this.handleQuery(false,true);
                 }
               },(error) => {
                   // _this.listLoading = false
