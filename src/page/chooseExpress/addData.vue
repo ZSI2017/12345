@@ -345,7 +345,7 @@ export default {
               _this.listLoading = false
               this.$message({
                   type: 'error',
-                  message: error.data.meta.code+"--"+error.data.meta.msg
+                  message: error.data.meta.msg
               });
           });
 
@@ -476,7 +476,7 @@ export default {
           // console.log(_this.gridData);
         }, (error) => {
             _this.listLoading = false;
-            this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+            this.$message.error(error.data.meta.msg);
           console.log(error);
         })
     },

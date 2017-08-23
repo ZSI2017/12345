@@ -533,7 +533,7 @@ export default {
           },(error) => {
               this.$message({
                   type: 'error',
-                  message: error.data.meta.code+"--"+error.data.meta.msg
+                  message: error.data.meta.msg
               });
           });
 

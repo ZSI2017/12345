@@ -117,7 +117,7 @@ function loginTimeout() {
 function checkErrorCode(response) {
       if(typeof response.data.meta.code !== "undefined") {
          if(response.data.meta.code == "0012"){
-             vue.$message.error('系统异常 code:0012');
+             vue.$message.error('系统异常');
              console.log("%c[axios log]error :\n %o","color:red;font-size:16px;",response);
             // 错误码定义的提示信息
          } else if (response.data.meta.code == "2345") {
@@ -127,7 +127,7 @@ function checkErrorCode(response) {
             // 其他错误处理代码
          }
       }else {
-         vue.$message.error('系统异常 code无效');
+         vue.$message.error('系统异常');
       }
   };
 

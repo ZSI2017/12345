@@ -548,7 +548,7 @@ export default {
 
         this.handleTabClick({label:this.activeName2})
       },(error) => {
-           this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+           this.$message.error(error.data.meta.msg);
            this.listLoading = false;
            console.log(error);
 

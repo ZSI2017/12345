@@ -2,23 +2,23 @@
   <div class="section main">
     <el-row>
       <el-col :span="24" class="status-font tip1"><i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;"></i>提示：
-        当日用户取消 ≥          
+        当日用户取消 ≥
         <span style="color:red;font-size:26px;">{{ num1 }}</span>
-        单，将被列为黑名单并永久限制下单操作如需解除黑名单，需用户提供与支付宝绑定的手机号   
-      </el-col>   
-      <el-col :span="2" class="status-font">手机号：</el-col>      
+        单，将被列为黑名单并永久限制下单操作如需解除黑名单，需用户提供与支付宝绑定的手机号
+      </el-col>
+      <el-col :span="2" class="status-font">手机号：</el-col>
       <el-col :span="10">
           <el-input :span="10" v-model="keyword" type="number"  @keyup.enter.native="handleSearch" size="large" placeholder="请输入用户手机号码"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
         <el-button type="primary" @click='handleSearch' size="large">查 询</el-button>
-      </el-col>   
+      </el-col>
     </el-row>
 
     <!-- 表格  -->
     <el-table
         class="mainTable"
-        style="width: 100%;margin-top:10px;"    
+        style="width: 100%;margin-top:10px;"
         :data="tableData"
         stripe v-loading.body="listLoading"
         lement-loading-text="拼命加载中"
@@ -76,17 +76,17 @@
       _this.$http.post(cancleUrl,{},(result) => {
           console.log(result)
           this.num1 = result;
-           
+
       },(error) => {
           this.$message({
               type: 'error',
-              message: error.data.meta.code+"--"+error.data.meta.msg
+              message: error.data.meta.msg
           });
       });
 
     },
     created() {
-      
+
     },
     methods: {
       handleSearch(){
@@ -112,11 +112,11 @@
               let resultSpace = [];
               resultSpace.push(result);
               _this.alipayUserId = result.alipayUserId;
-              _this.tableData = resultSpace.splice(0,1);   
+              _this.tableData = resultSpace.splice(0,1);
           },(error) => {
               _this.$message({
                   type: 'error',
-                  message: error.data.meta.code+"--"+error.data.meta.msg
+                  message: error.data.meta.msg
               });
           });
 
@@ -134,13 +134,13 @@
           },(error) => {
               _this.$message({
                   type: 'error',
-                  message: error.data.meta.code+"--"+error.data.meta.msg
+                  message: error.data.meta.msg
               });
           });
       }
 
     }
-  }    
+  }
 </script>
 
 <style lang="scss">
@@ -159,16 +159,15 @@
     .blangListRed{
       color:red;
     }
-    input[type=number] {  
-    -moz-appearance:textfield;  
-    }  
+    input[type=number] {
+    -moz-appearance:textfield;
+    }
     input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button{
           -webkit-appearance: none !important;
-          margin: 0; 
+          margin: 0;
       }
   }
 
 
 </style>
-

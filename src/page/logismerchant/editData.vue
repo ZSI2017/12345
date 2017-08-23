@@ -164,12 +164,12 @@
             minTime: ruleForm.acceptOrderFrom
             }">
         </el-time-select>
-        
+
     </el-form-item>
     <el-form-item label="服务时间段间隔">
-        <el-input 
-        placeholder="请选择服务时间段间隔" 
-        style='width:100%;' 
+        <el-input
+        placeholder="请选择服务时间段间隔"
+        style='width:100%;'
         v-model="ruleForm.serviceTimeInterval">
           <template slot="append">小时</template>
         </el-input>
@@ -200,7 +200,7 @@
         <el-date-picker
           v-model="ruleForm.authTokenExpried"
           type="datetime"
-          style='width:100%;'                      
+          style='width:100%;'
           placeholder="请选择商户有权令牌有效期">
         </el-date-picker>
     </el-form-item>
@@ -208,7 +208,7 @@
         <el-date-picker
           v-model="ruleForm.rtExpried"
           type="datetime"
-          style='width:100%;'                      
+          style='width:100%;'
           placeholder="请选择刷新令牌有效期">
         </el-date-picker>
     </el-form-item>
@@ -315,7 +315,7 @@ export default {
         }, {
           value: '0',
           label: '未授权'
-        }], 
+        }],
         //接入方式
         options2:[{
           value: '1',
@@ -363,15 +363,15 @@ export default {
         let newDate3 = new Date(result.gmtCreate);
         let newDate4 = new Date(result.gmtModified);
         console.log(newDate3)
-        
+
         // this.$router.go(-1);
         _this.ruleForm.merchantCode = result.merchantCode;
         _this.ruleForm.merchantType = result.merchantType;
         _this.ruleForm.merchantName = result.merchantName;
         _this.ruleForm.merchantLogo[0].url = result.merchantLogo;
-        _this.ruleForm.merchantLogo[0].name = result.merchantLogo;        
+        _this.ruleForm.merchantLogo[0].name = result.merchantLogo;
         _this.ruleForm.merchantLogo_card[0].url = result.merchantLogo_card;
-        _this.ruleForm.merchantLogo_card[0].name = result.merchantLogo_card;        
+        _this.ruleForm.merchantLogo_card[0].name = result.merchantLogo_card;
         _this.ruleForm.payeePid = result.payeePid;
         _this.ruleForm.payeeAccount = result.payeeAccount;
         _this.ruleForm.contactName = result.contactName;
@@ -408,11 +408,11 @@ export default {
         _this.ruleForm.gmtCreate = formatDate(newDate3, 'yyyy-MM-dd hh:mm:ss');
         _this.ruleForm.gmtModified = formatDate(newDate4, 'yyyy-MM-dd hh:mm:ss');
 
-        
+
     },(error) => {
         this.$message({
             type: 'error',
-            message: error.data.meta.code+"--"+error.data.meta.msg
+            message: error.data.meta.msg
         });
     });
 
@@ -493,7 +493,7 @@ export default {
         },(error) => {
             this.$message({
                 type: 'error',
-                message: error.data.meta.code+"--"+error.data.meta.msg
+                message: error.data.meta.msg
             });
         });
 
@@ -531,7 +531,7 @@ export default {
     },
     handleSuccess2(file){
       console.log(file.result)
-      this.ruleForm.merchantLogo_card[0].url = file.result;      
+      this.ruleForm.merchantLogo_card[0].url = file.result;
     },
     handlerror2(err, file, fileList){
       alert(err);

@@ -663,7 +663,7 @@ export default {
                 this.totalCount = parseInt(result.pages.cnt);
       },(error) =>{
         if(showNull) {  this.handleCurrentChangeFlag = true;}
-        this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+        this.$message.error(error.data.meta.msg);
          console.log(error);
       })
     },
@@ -685,7 +685,7 @@ export default {
           },(error)=>{
               this.$message({
                   type: 'error',
-                  message: error.data.meta.code+"--"+error.data.meta.msg
+                  message: error.data.meta.msg
               });
           });
           }).catch(() => {
@@ -751,7 +751,7 @@ export default {
                   // _this.listLoading = false
                   this.$message({
                       type: 'error',
-                      message: error.data.meta.code+"--"+error.data.meta.msg
+                      message: error.data.meta.msg
                   });
               })
             }else {
@@ -784,7 +784,7 @@ export default {
                     // _this.listLoading = false
                     this.$message({
                         type: 'error',
-                        message: error.data.meta.code+"--"+error.data.meta.msg
+                        message: error.data.meta.msg
                     });
                 })
             }

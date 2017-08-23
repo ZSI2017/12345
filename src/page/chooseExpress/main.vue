@@ -412,7 +412,7 @@ export default {
 
         // console.log(this.$route.matched);
       },(error) => {
-       this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+       this.$message.error(error.data.meta.msg);
         this.listLoading = false;
         console.log(error);
       })

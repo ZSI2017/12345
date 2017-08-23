@@ -195,7 +195,7 @@
                // console.log(_this.gridData);
              }, (error) => {
                  _this.listLoading = false;
-                 this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+                 this.$message.error(error.data.meta.msg);
                console.log(error);
              })
          },

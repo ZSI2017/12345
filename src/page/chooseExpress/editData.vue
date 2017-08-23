@@ -428,7 +428,7 @@ handleSubmit(formName) {
           } else {
             this.$message({
                 type: 'error',
-                message: error.data.meta.code+"--"+error.data.meta.msg
+                message: error.data.meta.msg
             });
           }
 
@@ -592,7 +592,7 @@ handleSubmit(formName) {
           // _this.dialogFormVisible = true;
           // console.log(_this.gridData);
         },(error) =>{
-             this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
+             this.$message.error(error.data.meta.msg);
              this.listLoading = false;
              console.log(error);
         })

@@ -139,7 +139,7 @@ export default {
         ],
         slogan:[
           {required: true,message: '请输入广告语'},
-          {min:1, max:20,message:'广告语长度不大于20'}                    
+          {min:1, max:20,message:'广告语长度不大于20'}
         ],
         // tag:[
         //   {required: true,message: '请输入标签',type: 'string',trigger: 'blur'},
@@ -179,7 +179,7 @@ export default {
     },(error) => {
         this.$message({
             type: 'error',
-            message: error.data.meta.code+"--"+error.data.meta.msg
+            message: error.data.meta.msg
         });
     });
   },
@@ -231,7 +231,7 @@ export default {
             _this.listLoading = false;
             this.$message({
                 type: 'error',
-                message: error.data.meta.code+"--"+error.data.meta.msg
+                message: error.data.meta.msg
             });
           });
 
@@ -282,13 +282,13 @@ export default {
       this.merchantLogo = this.value[0] || timg;
       this.ruleForm.merchantName = this.value[1];
       this.ruleForm.isvMerchantId = this.value[2];
-      this.ruleForm.accessStatus = this.value[3]; 
+      this.ruleForm.accessStatus = this.value[3];
       console.log(this.ruleForm.accessStatus)
       if(this.ruleForm.accessStatus == '1'){
           this.linkUrlShow = false;
       }else{
           this.linkUrlShow = true;
-      }     
+      }
 
     },
     handlePreview(file) {
