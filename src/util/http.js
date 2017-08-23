@@ -125,7 +125,7 @@ function loginNoeprivileged(baseUrl) {
       }).then(() => {
 
         store.dispatch('setLoginOutFlag',true);
-        // let topLevel_domains = ".alipay-eco.com"
+        let topLevel_domains = ".alipay-eco.com"
         console.log(topLevel_domains);
         localEvent.clear("ACL");
         Cookie.delete("SMJSESSIONID");
