@@ -101,8 +101,8 @@ function filterMenu(result) {
        //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")  &&Cookie.get("SMJSESSIONID")
       // Cookie.delete("express1");
       console.log("beforeEach router --------------------------");
-      // console.log(store.getters.getisAuthority)
-if(store.getters.getisAuthority)  {
+      console.log(store.getters.getisAuthority)
+// if(store.getters.getisAuthority)  {
    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
 
              console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
@@ -147,9 +147,9 @@ if(store.getters.getisAuthority)  {
           });
       // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
- } else {
-     store.dispatch('setAuthority',"开发者");
- }
+ // } else {
+ //     store.dispatch('setAuthority',"开发者");
+ // }
     // store.dispatch('setAuthority',"开发者");
 
 
