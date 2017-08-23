@@ -103,6 +103,7 @@ export default {
        console.log(newData);
        console.log(newData+"++++++++++++++++"+oldData);
        console.log(oldData);
+      // this.li1Click('event',0,this.sourceData.noProvinces[0]);
        this.checkedData = newData.noProvinces;
     }
 
