@@ -1,5 +1,5 @@
 <template>
-<div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
+<div class="section main" style="overflow:hidden" :element-loading-text="loadingText" v-loading.body.fullscreen.lock="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
@@ -168,6 +168,7 @@ import {
 export default {
   data() {
     return {
+      loadingText:'',
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
       showSortable: 'custom',//设置后端排序
@@ -258,6 +259,7 @@ export default {
     },
     //dialog 确认按钮
     handleConfirm(){
+      this.loadingText = '拼命加载中...';
       this.loadingTakeOffFlag = false;
       this.listLoading = true;
       this.$http.post(this.promotionURL, {
@@ -269,13 +271,35 @@ export default {
           message: this.promotionMessage,
           type: this.promotionType
         });
-        this.handleTabClick({label:this.activeName2})
+        // this.handleTabClick({label:this.activeName2})
+        this.request();
+        
 
       },(error)=>{
         console.log(error)
         this.listLoading = false;
       })
 
+    },
+    request(){
+      let operationFlag = this.radio2;
+      if(this.tabFlag == '待审核'){
+        operationFlag = '';
+      }
+      this.$http.post(this.url, {
+        "pages": {
+          "page_size": this.pageSize,
+          "page_num": this.currentPage - 1
+        },
+        "con": {
+          "pageId": this.pageId,
+          "status":operationFlag           
+        }
+      }, (rsp) => {
+        this.tableData = rsp.page_list;
+        this.totalCount =  parseInt(rsp.pages.cnt);
+
+      })
     },
     // 操作栏对应的事件响应
     OperationTakeOff(row) {
@@ -335,8 +359,10 @@ export default {
       var _this = this;
       if(loadingFlag === undefined){
         _this.listLoading = true;
+        _this.loadingText = '';
+        
       }
-      _this.tableFalg = false
+      _this.tableFalg = false;
       _this.showConfig = false;
       _this.showflag = false;
       if(countPage !== undefined) {
@@ -363,7 +389,7 @@ export default {
         }
         _this.auditState = "审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/expresscompany/audit/list"
+        this.url = "/api/expresscompany/audit/list"
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": this.pageSize,
@@ -391,7 +417,7 @@ export default {
         // _this.radio2 = '';
         _this.auditState = "状态";
         _this.auditStatusFlage = false;
-        _this.url = "/api/expresscompany/onlineList";
+        this.url = "/api/expresscompany/onlineList";
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,
@@ -419,7 +445,7 @@ export default {
         // _this.radio2 = '';
         _this.auditState = "待审核状态";
         _this.auditStatusFlage = true;
-        _this.url = "/api/expresscompany/audit/list";
+        this.url = "/api/expresscompany/audit/list";
         _this.$http.post(_this.url, {
           "pages": {
             "page_size": _this.pageSize,
