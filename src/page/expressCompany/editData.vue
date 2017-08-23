@@ -2,7 +2,7 @@
 <section class="section" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
 
-  <el-form ref="ruleForm" :model="ruleForm" labelPosition="left" label-width="180px" style="width:800px;padding-left:100px;">
+  <el-form ref="ruleForm" :model="ruleForm" labelPosition="right" label-width="180px" style="width:800px;padding-left:100px;">
     <el-form-item label="公司名称">
         <el-input disabled :value="merchantName"> </el-input>
       </el-col>

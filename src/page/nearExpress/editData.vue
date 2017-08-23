@@ -84,12 +84,12 @@
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
-    <el-form-item label="标价">
+    <!--<el-form-item label="标价">
       <el-input placeholder="请输入价格" v-if="isFromAddData" v-model="form.markPrice" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.markPrice}} 元起 </div>
-    </el-form-item>
+    </el-form-item>-->
     <el-col class="line" :span="2"> </el-col>
     <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
   </el-form>
@@ -206,7 +206,6 @@ export default {
         linkUrl: '',
         coverArea:'',
         opStatus:'',
-        markPrice:'',
 
       },
       promotionId:''
@@ -244,7 +243,6 @@ export default {
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.logo[0].name = rsp.logo;
-      this.form.markPrice = rsp.markPrice;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       if(this.dynamicTags.length > 1){
         this.addTag = false;
@@ -332,7 +330,6 @@ export default {
                  "sortWeight":this.form.sortWeight,
                  "linkUrl":this.form.linkUrl,
                  'opStatus':this.form.opStatus,
-                 'markPrice':this.form.markPrice,
                },
              "area":{
                 "code":"000000",
