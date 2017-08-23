@@ -45,9 +45,9 @@ axios.interceptors.response.use(
       console.log(response);
     if(response.data&&response.data.error&&response.data.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
-            alert(response.data.redrect)
+            loginNoeprivileged(response.data.redrect)
             // loginTimeout()
-        window.location.href=response.data.redrect;
+        // window.location.href=response.data.redrect;
         return Promise.reject(error);
     }
     return response;
@@ -115,7 +115,38 @@ function loginTimeout() {
             message: '已取消'
           });
       });
-}
+};
+function loginNoeprivileged(baseUrl) {
+  console.log(baseUrl)
+  vue.$confirm('没有权限，点击确定前往申请！', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+
+        store.dispatch('setLoginOutFlag',true);
+        // let topLevel_domains = ".alipay-eco.com"
+        console.log(topLevel_domains);
+        localEvent.clear("ACL");
+        Cookie.delete("SMJSESSIONID");
+        Cookie.delete('ALIPAYJSESSIONID');
+        Cookie.delete("ctoken",topLevel_domains);
+        Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
+        Cookie.delete('express1');
+        // let index = window.location.href.indexOf("#");
+        // let baseURL = window.location.href.slice(0,index);
+        // let fullPath = baseURL +"#"+"/login";
+        window.location.href = baseUrl;
+        // vue.$router.push({path:'/login'});
+      }).catch(() => {
+          vue.$message({
+            type: 'info',
+            message: '已取消'
+          });
+      });
+};
+
+
 // 这里
 function checkErrorCode(response) {
       if(typeof response.data.meta.code !== "undefined") {
