@@ -18,7 +18,7 @@
   <div style="display:flex;flex-direction:row;" >
 
     <div
-      class="main-left" style="position:fixed;top:60px;bottom:0;min-width:180px;width:230px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;"
+      class="main-left" style="position:fixed;top:60px;bottom:0;min-width:180px;width:220px;background-color:#fff;overflow-x: hidden; overflow-y: auto;padding-top:20px;"
       v-loading.body.fullscreen.lock="fullscreenLoading"
       v-show="fold"
       >
