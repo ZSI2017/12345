@@ -43,12 +43,11 @@ axios.interceptors.response.use(
       console.log("%c[axios log]success response:%s \n %o","color:green;font-size:16px;",response.config.url,response);
       //  TODO after response
       console.log(response);
-      alert(response)
     if(response.data&&response.data.error&&response.data.error === "ACL_NO_PRIVILEGE") {
             // 没有权限时，跳转到 支付宝的权限管理页面
-            alert(response.redrect)
-            loginTimeout()
-        // window.location.href=response.redrect;
+            alert(response.data.redrect)
+            // loginTimeout()
+        window.location.href=response.data.redrect;
         return Promise.reject(error);
     }
     return response;
