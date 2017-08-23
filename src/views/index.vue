@@ -206,16 +206,20 @@ export default {
       }
     },
     handleLogout(){
-        this.$store.dispatch('setLoginOutFlag',true);
-        let topLevel_domains = ".alipay-eco.com"
-        console.log(topLevel_domains);
-        localEvent.clear("ACL");
-        Cookie.delete("SMJSESSIONID");
-        Cookie.delete('ALIPAYJSESSIONID');
-        Cookie.delete("ctoken",topLevel_domains);
-        Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
-        Cookie.delete('express1');
-        this.$router.push({path:'/login'});
+       let _this = this;
+        this.$http.post('/api/logout',{},(result)=>{
+              _this.$store.dispatch('setLoginOutFlag',true);
+              let topLevel_domains = ".alipay-eco.com"
+              console.log(topLevel_domains);
+              localEvent.clear("ACL");
+              Cookie.delete("SMJSESSIONID");
+              Cookie.delete('ALIPAYJSESSIONID');
+              Cookie.delete("ctoken",topLevel_domains);
+              Cookie.delete('ECOACLJSESSIONID',topLevel_domains);
+              Cookie.delete('express1');
+              _this.$router.push({path:'/login'});
+        })
+
     }
   }
 }
