@@ -3,7 +3,7 @@
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
   <el-form :model="form" label-width="100px"  style="width:800px;padding-left:100px">
     <el-form-item label="公司名称">
-      <el-input v-if="isFromAddData" v-model="form.name" placeholder="请输入公司名称"> </el-input>
+      <el-input v-if="isFromAddData" maxlength="10" v-model="form.name" placeholder="请输入公司名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="LOGO">
@@ -18,7 +18,7 @@
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
     <el-form-item label="广告语">
-      <el-input v-if="isFromAddData" v-model="form.slogan" placeholder="请输入广告语"> </el-input>
+      <el-input v-if="isFromAddData" maxlength="20" v-model="form.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.slogan}} </div>
     </el-form-item>
     <el-form-item label="标签">

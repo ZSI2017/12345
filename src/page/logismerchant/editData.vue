@@ -37,6 +37,7 @@
             :on-remove="handleRemove"
             :on-success='handleSuccess'
             :on-error='handlerror'
+            list-type="picture"
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -52,6 +53,7 @@
             :on-remove="handleRemove2"
             :on-success='handleSuccess2'
             :on-error='handlerror2'
+            list-type="picture"
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -367,7 +369,9 @@ export default {
         _this.ruleForm.merchantType = result.merchantType;
         _this.ruleForm.merchantName = result.merchantName;
         _this.ruleForm.merchantLogo[0].url = result.merchantLogo;
+        _this.ruleForm.merchantLogo[0].name = result.merchantLogo;        
         _this.ruleForm.merchantLogo_card[0].url = result.merchantLogo_card;
+        _this.ruleForm.merchantLogo_card[0].name = result.merchantLogo_card;        
         _this.ruleForm.payeePid = result.payeePid;
         _this.ruleForm.payeeAccount = result.payeeAccount;
         _this.ruleForm.contactName = result.contactName;

@@ -41,9 +41,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
             <template scope="scope">
-                <el-button @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
-                <!--<el-button ref='allIfo' @click="handleDelete(scope.$index,scope.row)" type="text" size="small">删除</el-button>-->
-                <el-popover
+                <!--<el-popover
                     ref="popover"
                     trigger="click"
                     placement="left"
@@ -51,12 +49,24 @@
                     >
                     <div id='code'></div>
                     <canvas id="canvas"></canvas>
-                </el-popover>     
-                <el-button ref='allIfo' @click='useqrcode(scope.row)' type="text" size="small" v-popover:popover >生产二维码</el-button>
+                </el-popover>    -->
+                <el-button @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
+                <!--<el-button ref='allIfo' @click="handleDelete(scope.$index,scope.row)" type="text" size="small">删除</el-button>-->
+                 
+                <el-button @click='useqrcode(scope.row)' type="text" size="small">生产二维码</el-button>
                         
             </template>
         </el-table-column>
     </el-table>
+    <el-dialog title="二维码" :visible.sync="dialogServerVisible">
+        <div>
+            <div id='code'></div>
+            <canvas id="canvas"></canvas>
+        </div> 
+        <!--<div slot="footer" class="dialog-footer">
+            <el-button @click="dialogServerVisible = false">关 闭</el-button>
+        </div>-->
+    </el-dialog>
     <div class="block pagination" style="margin-top:30px;float:right;">
         <el-pagination
         @size-change="handleSizeChange"
@@ -91,7 +101,7 @@ export default {
         url:'/api/logisMerchant/list',
         codes:'',
         codeVisible:false,
-
+        dialogServerVisible:false
     }
   },
   created() {
@@ -191,6 +201,7 @@ export default {
     },
     useqrcode(row){
         // this.codeVisible = true;
+        this.dialogServerVisible = true;
         console.log(row.id)
         var canvas = document.getElementById('canvas');
         // let codeHttp = 'www.baidu.com';
@@ -220,8 +231,12 @@ export default {
 }       
 .import-search{
   margin-left: 20px;
-}     
-#canvas{width:200px!important;height:200px!important;}
+}  
+.section .el-dialog{
+    width:344px;
+}
+
+#canvas{width:300px!important;height:300px!important;}
 input[type=number] {  
     -moz-appearance:textfield;  
 }  
