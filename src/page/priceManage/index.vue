@@ -322,13 +322,13 @@ export default {
          { required: true, message: '发货省不能为空'},
        ],
        sendCity: [
-         { required: true, message: '发货市不能为空'},
+         { required: false, message: '发货市不能为空'},
        ],
        recProvince: [
          { required: true, message: '收货省不能为空'},
        ],
        recCity: [
-         { required: true, message: '收货市不能为空'},
+         { required: false, message: '收货市不能为空'},
        ],
        presetWeightPrice: [
          { required: true, message: '首重价格不能为空'},
@@ -831,9 +831,9 @@ export default {
     this.rules.expressName[0].required = flag;
     this.rules.typeOfService[0].required = flag;
     this.rules.sendProvince[0].required = flag;
-    this.rules.sendCity[0].required = flag;
+    this.rules.sendCity[0].required = false;
     this.rules.recProvince[0].required = flag;
-    this.rules.recCity[0].required = flag;
+    this.rules.recCity[0].required = false;
   },
   // 对话框关闭
   handleClose(){

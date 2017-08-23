@@ -1,6 +1,6 @@
 <template>
-<div class="section main" style="overflow:hidden" v-loading.body.fullscreen.lock="listLoading">
-  <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
+<div class="section main" style="overflow:hidden"  element-loading-text="拼命加载中..."  v-loading.body.fullscreen.lock="listLoading">
+  <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick" v-loading.body.fullscreen.lock="listLoadingNoText">
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
     <el-tab-pane  v-if ="(Authority == '审核'||Authority == '开发者')" label="待审核" name="待审核">待审核</el-tab-pane>
@@ -192,6 +192,7 @@ export default {
   },
   data() {
     return {
+      listLoadingNoText:false,
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
       // 排序是否显示
@@ -473,7 +474,7 @@ export default {
     handleTabClick(tab, event,countPage,loadingFlag) {
       var _this = this;
       if(loadingFlag === undefined){
-        _this.listLoading = true;
+        _this.listLoadingNoText = true;
       }
       _this.tableFalg = false
       _this.showConfig = false;
@@ -516,6 +517,8 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list;
           _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
@@ -545,6 +548,8 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list
             _this.totalCount =  parseInt(rsp.pages.cnt);
+            _this.listLoadingNoText = false;
+            _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
@@ -573,15 +578,12 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list;
           _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
       }
-      setTimeout(() => {
-        _this.listLoading = false;
-        _this.tableFalg = true;
-      }, 300);
-
     },
     // 查看覆盖地区
     checkArea(id) {

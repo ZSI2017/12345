@@ -1,6 +1,6 @@
 <template>
-<div class="section main" style="overflow:hidden"  :element-loading-text="loadingText" v-loading.body.fullscreen.lock="listLoading">
-  <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick">
+<div class="section main" style="overflow:hidden"  element-loading-text="拼命加载中..." v-loading.body.fullscreen.lock="listLoading">
+  <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick"  v-loading.body.fullscreen.lock="listLoadingNoText" >
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
     <el-tab-pane  v-if ="(Authority == '审核'||Authority == '开发者')" label="待审核" name="待审核">待审核</el-tab-pane>
@@ -192,6 +192,7 @@ export default {
   },
   data() {
     return {
+      listLoadingNoText:false,
       loadingText:'拼命加载中...',
       pageId: '', // 当前页的id
       url: '', // 当前页面的url
@@ -377,8 +378,8 @@ export default {
     },
     //dialog 确认按钮
     handleConfirm(){
+      let _this = this;
       this.loadingTakeOffFlag = false;
-      this.loadingText = '拼命加载中...'
       this.listLoading = true;
       this.$http.post(this.noticeURL, {
           "id": this.noticeID.toString(),
@@ -390,34 +391,10 @@ export default {
           type: this.noticeType
         });
         this.handleTabClick({label:this.activeName2})
-
-        // this.pageId = "SD1010"; // 寄快递首页
-        // ((this.$route.path == "/chooseExpress" &&
-        //     (this.pageId = "BM1010")) ||
-        //   (this.$route.path == "/expressOrder" &&
-        //     (this.pageId = "SS1010")))
-        // var _this = this;
-        // _this.$http.post(_this.url,{
-        //   "pages": {
-        //     "page_size": this.pageSize,
-        //     "page_num": this.currentPage - 1
-        //   },
-        //   "con": {
-        //     "pageId": this.pageId,
-        //     "status":this.radio2
-        //   }
-        // }, (result) => {
-        //
-        //   _this.tableData = result.page_list;
-        //   _this.totalCount = parseInt(result.pages.cnt);
-        // });
-
-        // console.log(this.$route.matched);
       },(error) => {
            this.$message.error(error.data.meta.code+"--"+error.data.meta.msg);
            this.listLoading = false;
            console.log(error);
-
       })
 
     },
@@ -477,8 +454,7 @@ export default {
     handleTabClick(tab, event,countPage,loadingFlag) {
       var _this = this;
       if(loadingFlag === undefined){
-         this.loadingText = '';
-        _this.listLoading = true;
+        _this.listLoadingNoText = true;
       }
       _this.tableFalg = false
       _this.showConfig = false;
@@ -520,6 +496,8 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list;
           _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
@@ -549,6 +527,8 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list
             _this.totalCount =  parseInt(rsp.pages.cnt);
+            _this.listLoadingNoText = false;
+            _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
@@ -578,20 +558,16 @@ export default {
         }, (rsp) => {
           _this.tableData = rsp.page_list;
           _this.totalCount =  parseInt(rsp.pages.cnt);
+          _this.listLoadingNoText = false;
+          _this.tableFalg = true;
           //  console.log("success");
           //  console.log(data);
         })
       }
-      setTimeout(() => {
-        _this.listLoading = false;
-        _this.tableFalg = true;
-      }, 300);
-
     },
     // 查看覆盖地区
     checkArea(id) {
       // var _this = this;
-      this.loadingText='拼命加载中...'
       this.listLoading = true;
       let URL= "/api/notice/audit/areaConf/all";
       if(this.activeName2 === "已上线") {
