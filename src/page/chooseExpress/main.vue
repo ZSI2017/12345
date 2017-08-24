@@ -278,6 +278,7 @@ export default {
       _this.activeName2 = _this.PageStore.tabName ||   _this.initActiveName;
 
       _this.currentPage = _this.PageStore.pageCount;
+        //  alert("first init"+_this.currentPage)
       _this.radio2= Number(_this.PageStore.radio);
       console.log("$router: %o",_this.$route);
       _this.handleTabClick({label:_this.activeName2},null,_this.currentPage)
@@ -484,6 +485,8 @@ export default {
       } else {
         _this.currentPage = 1;    //跳转标签页 页码归 1
       };
+      // alert("before fff")
+      // alert(_this.currentPage)
       console.log(tab.label);
       this.tabFlag =  tab.label;
       this.PageStore.commit("setTabName",tab.label);   // 记录当前标签页
@@ -550,6 +553,7 @@ export default {
             _this.totalCount =  parseInt(rsp.pages.cnt);
             _this.listLoadingNoText = false;
             _this.tableFalg = true;
+
           //  console.log("success");
           //  console.log(data);
         })
@@ -580,6 +584,8 @@ export default {
           _this.totalCount =  parseInt(rsp.pages.cnt);
           _this.listLoadingNoText = false;
           _this.tableFalg = true;
+          // alert("fffff");
+          // alert(_this.currentPage);
           //  console.log("success");
           //  console.log(data);
         })
@@ -670,6 +676,7 @@ export default {
     //切换分页
     handleCurrentChange(val) {
       this.halfListLoading = true;
+      // alert("cccc"+this.currentPage)
       this.currentPage = val;
       this.PageStore.commit("setPage",val);
       let status = this.radio2;

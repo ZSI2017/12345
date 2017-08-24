@@ -149,8 +149,8 @@
   </el-dialog>
 
   <!--新增内容-->
-  <el-dialog :title="dialogFlag" :visible.sync="dialogFormVisible" size="tiny"  :before-close="handleClose">
-    <el-form class='newAddedForm' :rules="rules" ref="formAdd" label-position="right" label-width="160px" :model="formAdd">
+  <el-dialog :title="dialogFlag" :visible.sync="dialogFormVisible" size="tiny" custom-class="dialogClassServer" :before-close="handleClose">
+    <el-form class='newAddedForm' :rules="rules" ref="formAdd" label-position="right" style="padding-right:60px;" label-width="160px" :model="formAdd">
       <el-form-item label="快递公司" prop="logisMerchantName">
         <el-select  v-if="this.dialogFlag != '详情'"  :disabled="selectDisabled" v-model="formAdd.logisMerchantName" @visible-change="handExpressChange" placeholder="请选择快递公司" style="width:100%;">
           <el-option
@@ -190,9 +190,9 @@
                 <el-radio class="radio" label="无折扣">无折扣</el-radio>
             </el-radio-group>
           </el-col>
-          <el-col :span="6" style="width: 100px;">
+          <el-col :span="6" style="width: 110px;">
             <el-input
-              placeholder="0"
+              placeholder="0.1-9.9"
               :number="true"
               size="large"
               v-model.number="formAdd.discountNum"
@@ -302,7 +302,7 @@ export default {
           description:'',
           sortWeight: '',
           discount:'无折扣',
-          discountNum:"0",
+          discountNum:"",
           status:'1',
           textRadio:1,
         },
@@ -314,7 +314,7 @@ export default {
           productName: [
             {whitespace:true, required: true, message: '请输入服务类型',trigger: 'blur',
           },
-            { min: 1, max: 50, message: '最大长度50', trigger: 'blur'}
+            { min: 1, max: 8, message: '最大长度8', trigger: 'change'}
           ],
          productTypeCode :[
              { required: true,whitespace:true, message: '请输入类型码', trigger: 'blur'},
@@ -330,7 +330,7 @@ export default {
              { type: 'number', min:1, max:999,message:'排序值范围1-999'}
           ],
           discountNum:[
-
+                   
           ],
           // status: [{
           //   required: true,
@@ -387,8 +387,8 @@ export default {
     radioChange(label){
       if(label === "有折扣") {
            this.rules.discountNum = [
-             { type: 'number', min:0, max:9.9,message:'请输入正确的折扣值'},
-             { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1}|[1-9][0-9]*\.\d{1})))$/,message:'最多1位小数'}
+             { type: 'number', min:0.1, max:9.9,message:'请输入正确的折扣值',trigger:'change'},
+             { pattern: /^(([0-9][0-9]*)|(([0]\.\d{1}|[1-9][0-9]*\.\d{1})))$/,message:'最多1位小数',trigger:'change'}
            ]
       }else {
            this.rules.discountNum = []
@@ -762,7 +762,7 @@ export default {
           description:'',
           sortWeight:'',
           discount:'无折扣',
-          discountNum:0,
+          discountNum:'',
           status:'1'
         };
         this.selectDisabled = false;
@@ -1009,7 +1009,9 @@ export default {
     .el-table th > .cell {
         padding: 0 7px;
     }
-
+  .dialogClassServer{
+      width:570px;
+  }
     /*.el-table__body .el-table__row .cell {
         max-height: 150px !important;
         overflow-y: auto;

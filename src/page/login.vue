@@ -36,12 +36,12 @@ export default {
       //     // _this.totalCount = result.page_list.length; //获取数据长度
       // });
       // Cookie.set("express1","mng",6000000);
-      // this.$router.push({
-      //   path: "/"
-      // })
+      this.$router.push({
+        path: "/"
+      })
     },
     loginInText() {
-          this.$store.dispatch('setIsAuthority',true);
+        this.$store.dispatch('setIsAuthority',true);
         this.$store.dispatch('setLoginOutFlag',false);
           // Cookie.set("express1","mng",6000000);
      let hashURL = this.$store.getters.getNextRouter;

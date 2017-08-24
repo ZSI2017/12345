@@ -222,9 +222,9 @@ export default {
                 // before the request data is sent to the server
                 return data;
             }],
-            // headers:{
-            //      'X-Requested-With':'XMLHttpRequest'
-            // },
+            headers:{
+                 'X-Requested-With':'XMLHttpRequest'
+            },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
@@ -261,8 +261,8 @@ export default {
                         }
                     } else if(error.request) {
                         // vue.$message.error('接口异常');
-                      if(error.request.status === 0){
-                                //  loginTimeout();
+                      if(error.request.status === 0 &&error.request.statusText == "" ){
+                              loginTimeout();
                             // vue.$message.error('登录超时');
 
                         }
@@ -306,9 +306,9 @@ export default {
                         // vue.$message.error('登录超时');
                     }
                 } else if(error.request) {
-                  // if(error.request.status === 0){
-                  //       vue.$message.error('登录超时');
-                  //   }
+                  if(error.request.status === 0 &&error.request.statusText == "" ){
+                            loginTimeout();
+                    }
                      // 请求发出了，但是没有接受到 响应
                     //  'error.request' 是一个 浏览器中的XMLHttpRequest 实例，
                     //   在node.js 中 就是 http.ClientRequest 实例；

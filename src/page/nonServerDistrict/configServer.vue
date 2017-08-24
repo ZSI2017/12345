@@ -3,7 +3,7 @@
   <el-row :span="24" style="border:1px solid #d1dbe5;border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.12),0 0 6px rgba(0,0,0,.04);">
     <el-col :span="8">
       <li class="commonli-class li-title">省份</li>
-      <ul class="ul-block">
+      <ul class="ul-block" v-if="visible" >
         <li v-if='(item.check)&&onlyRead||!onlyRead' class="commonli-class" :class="[index ==li0 ?activeClass:'',commonliClass]" @click="li1Click($event,index,item)" v-for="(item,index) in sourceData.noProvinces">{{item.provinceName}}</li>
       </ul>
     </el-col>
@@ -274,7 +274,20 @@ export default {
       this.list2 = this.sourceData.noProvinces[index].noServiceCitys;
       this.showLi = true;
       this.showLi2 = false;
-
+      if(!this.onlyRead) {
+        this.li1Click2('event',this.sourceData.noProvinces[index].noServiceCitys&&this.sourceData.noProvinces[index].noServiceCitys[0],0)
+      }else {
+        let index2;
+        if(typeof this.sourceData.noProvinces[index] !== "undefined"){
+            for(let k =0;k<this.sourceData.noProvinces[index].noServiceCitys.length;k++) {
+                    if(this.sourceData.noProvinces[index].noServiceCitys[k].check) {
+                         index2 = k;
+                         break;
+                    }
+            }
+            this.li1Click2('event',this.sourceData.noProvinces[index].noServiceCitys[index2],index2);
+          }
+      }
     },
     li1Click2(event, item, index) {
       this.checkedDistric = [];

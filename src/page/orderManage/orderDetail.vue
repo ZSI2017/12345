@@ -81,21 +81,21 @@
               </div>
         </el-dialog>
            <!--  查看信息服务       :label-width="formLabelWidth" -->
-        <el-dialog title="服务记录" :visible.sync="dialogServerVisible">
+        <el-dialog title="服务记录" :visible.sync="dialogServerVisible" :lock-scroll="!dialogServerVisible">
             <div style="max-height:300px; overflow-y: auto;" v-if="serverShow">
                 <div v-for='serverList in serverLists'>
                     <el-row :span="24" class="serverList serverList1">
                         <el-col :span="6">{{serverList.time}}</el-col>
-                        <el-col :span="6">{{serverList.title || '暂无信息'}}</el-col>                
+                        <el-col :span="6">{{serverList.title || '暂无信息'}}</el-col>
                     </el-row>
                     <el-row :span="24" class="serverList serverList2">
-                        <el-col :span="24">原因：{{serverList.content || '暂无数据'}}</el-col>               
+                        <el-col :span="24">原因：{{serverList.content || '暂无数据'}}</el-col>
                     </el-row>
                 </div>
-            </div> 
+            </div>
             <div style="max-height:300px; overflow-y: auto;" v-if="serverShow == false" >
                     暂无服务信息！
-            </div> 
+            </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogServerVisible = false">关 闭</el-button>
             </div>
@@ -126,7 +126,7 @@
               <el-button type="primary" @click="handleDialogOtherpaySave">确 定</el-button>
             </div>
         </el-dialog>
-         <!--  超时转快递       :label-width="formLabelWidth" -->        
+         <!--  超时转快递       :label-width="formLabelWidth" -->
         <el-dialog
             title="确定将该订单转为其他快递公司吗？"
             :visible.sync="dialogTimeVisible"
@@ -144,7 +144,7 @@
             :visible.sync="dialogButtonVisible"
             size="tiny"
             :before-close="handleClose">
-            <i class="el-icon-information" 
+            <i class="el-icon-information"
                 style="color:#f7ba2a;font-size:40px;float:left;"></i><span style="height:40px;line-height:40px;display:inline-block;float:left;padding-left:10px;">
                     {{buttonText}}
                 </span>
@@ -275,7 +275,7 @@ import localEvent from 'src/vuex/function.js';
                     this.OtherPayFlag = true;
                 }else{
                     this.InvaliOrderFlag = false;
-                    this.OtherPayFlag = false;                    
+                    this.OtherPayFlag = false;
                 }
                 if(rsp.orderStatus == '1'){
                     this.ChangeExpressFlag = true;
@@ -285,7 +285,7 @@ import localEvent from 'src/vuex/function.js';
                 if(rsp.payStatus == '3'){
                     this.payDetailFlag = true;
                 }else{
-                    this.payDetailFlag = false;                    
+                    this.payDetailFlag = false;
                 }
                 this.waybillNo = rsp.waybillNo|| '暂无';
                 this.expName = rsp.expName|| '暂无';  
@@ -350,17 +350,17 @@ import localEvent from 'src/vuex/function.js';
                 this.couriers[0].message = rsp.acppeter || "暂无";
                 this.couriers[1].message = rsp.acppetermobile || "暂无";
                 //快递费用
-                this.expressPays[0].message = rsp.payStatus=="5"? "其他" : '支付宝在线支付';                
+                this.expressPays[0].message = rsp.payStatus=="5"? "其他" : '支付宝在线支付';
                 this.expressPays[1].message = rsp.estimatePrice || '暂无';
                 this.expressPays[2].message = rsp.orderAmount || '暂无';
                 this.expressPays[3].message = rsp.receiptAmount || '暂无';
 
                 //支付详情
-                this.payDetails[0].message = rsp.tradeNo || '暂无';                
+                this.payDetails[0].message = rsp.tradeNo || '暂无';
                 this.payDetails[1].message = rsp.gmtPayment || '暂无';
                 this.payDetails[2].message = rsp.receiptAmount || '暂无';
 
-                this.$refs.mybox.find('.cell-right').style.color = 'green';  
+                this.$refs.mybox.find('.cell-right').style.color = 'green';
 
             },(error)=>{
                 console.log('failed');
@@ -403,7 +403,7 @@ import localEvent from 'src/vuex/function.js';
                     if(rsp.length <= 0 ){
                         this.serverShow = false;
                     }else{
-                        this.serverShow = true;                        
+                        this.serverShow = true;
                     }
                 },(error)=>{
                     this.$message({
@@ -449,7 +449,7 @@ import localEvent from 'src/vuex/function.js';
                                     message: error.data.meta.msg
                                 });
                             }
-                            
+
                         });
                     }).catch(() => {
                         this.$message({
@@ -477,7 +477,7 @@ import localEvent from 'src/vuex/function.js';
                     message: '标记成功!'
                 });
                 this.dialogOtherpayVisible = false;
-                this.requestHttp();                
+                this.requestHttp();
             },(error)=>{
                 this.dialogOtherpayVisible = false;                
                 if(error.data.meta.code == '1101'){
@@ -510,7 +510,7 @@ import localEvent from 'src/vuex/function.js';
                     type: 'success',
                     message: '作废成功!'
                 });
-                this.requestHttp();                
+                this.requestHttp();
                 this.dialogOrderVisible = false;
             },(error)=>{
                 this.dialogOrderVisible = false;
@@ -537,6 +537,7 @@ import localEvent from 'src/vuex/function.js';
                         type: 'success',
                         message: '转快递成功!'
                     });
+
                     this.requestHttp();   
                     this.dialogTimeVisible = false;                                     
             },(error)=>{
@@ -660,8 +661,8 @@ import localEvent from 'src/vuex/function.js';
     //         overflow: hidden;   
     //     }
     .selfCollapse .goods-table div:nth-child(2) div .el-col-18{
-            color:red;         
-    }    
+            color:red;
+    }
     //    @media screen and (min-width: 901px) {
     //     .cell-left{
     //         text-align: left;
@@ -685,28 +686,28 @@ import localEvent from 'src/vuex/function.js';
         padding:20px 0 20px 15px;
     }
     .main .el-collapse-item__header{
-        background-color: #eaeefb;  
-        color:#5295e2;  
+        background-color: #eaeefb;
+        color:#5295e2;
     }
     .main .serverList{
         line-height: 48px;
-        font-size: 14px;    
-        border-left: 1px solid #eaeefb;    
-        border-right: 1px solid #eaeefb;       
+        font-size: 14px;
+        border-left: 1px solid #eaeefb;
+        border-right: 1px solid #eaeefb;
         padding-left: 15px;
-        padding-right: 15px;               
-    } 
+        padding-right: 15px;
+    }
     .main .serverList1{
         background-color: #eaeefb;
         color: #5295e2;
         border-bottom: 1px solid #eaeefb;
-    } 
+    }
     .main .serverList2{
         background-color: #fbfdff;
         color: #1f2d3d;
         border-bottom: 1px solid #eaeefb;
-              
-    } 
+
+    }
 
     .success_color {
         color: #ff851b;

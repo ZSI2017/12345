@@ -17,7 +17,7 @@
     </el-form-item>
     <el-form-item label="LOGO">
       <img v-show="merchantLogo!=''" width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
-      <div v-show="merchantLogo==''" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>            
+      <div v-show="merchantLogo==''" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>
     </el-form-item>
     <el-form-item label="广告语" prop="slogan">
       <el-input v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
@@ -123,7 +123,7 @@ export default {
       },
       rules: {
         merchantName: [
-          {required: true,message: '请选择公司名称',trigger: 'change'}
+          {required: true,message: '请选择公司名称',trigger: 'none'}
         ],
         sortWeight: [
           { required: true, message: '排序值不能为空'},
@@ -271,7 +271,7 @@ export default {
     },
     handleMerchant(){
       console.log(this.value)
-      this.merchantLogo = this.value[0] || timg;
+      this.merchantLogo = this.value[0];
       this.ruleForm.merchantName = this.value[1];
       this.ruleForm.isvMerchantId = this.value[2];
       this.ruleForm.accessStatus = this.value[3];
