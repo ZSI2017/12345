@@ -35,7 +35,7 @@ export default {
       // }, (result) => {
       //     // _this.totalCount = result.page_list.length; //获取数据长度
       // });
-      Cookie.set("express1","mng",6000000);
+      // Cookie.set("express1","mng",6000000);
       // this.$router.push({
       //   path: "/"
       // })
@@ -43,7 +43,7 @@ export default {
     loginInText() {
           this.$store.dispatch('setIsAuthority',true);
         this.$store.dispatch('setLoginOutFlag',false);
-          Cookie.set("express1","mng",6000000);
+          // Cookie.set("express1","mng",6000000);
      let hashURL = this.$store.getters.getNextRouter;
      if(hashURL == "/login"||hashURL== "/") {
          hashURL= "/home";

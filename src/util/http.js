@@ -252,17 +252,17 @@ export default {
            (error) => {
                     $('.el-loading-mask').css("display",'none');
                     if(error.response) {
-                      vue.$message.error('response');
+                      // vue.$message.error('response');
                       //  发出了请求，服务端返回了 状态码 2xx
                       console.log("%cresponse error %o","color:red;font-size:16px;",error.response)
                       if(error.response.status === 0){
 
-                            // loginTime();
+                            // loginTimeout();
                         }
                     } else if(error.request) {
-                        vue.$message.error('接口异常');
+                        // vue.$message.error('接口异常');
                       if(error.request.status === 0){
-                                //  loginTime();
+                                //  loginTimeout();
                             // vue.$message.error('登录超时');
 
                         }
