@@ -158,7 +158,7 @@ function filterMenu(result) {
              //  router.app.$store.state.loadingChange = false
               store.dispatch('changeLoadingChange',false);
                //  router.app.$store.state.loadingFlag = false;
-               alert("asdfasdfsd")
+              //  alert("asdfasdfsd")
                 next();
            }
 
