@@ -120,7 +120,7 @@ function filterMenu(result) {
              http.post('/api/user/info/get',{},(result)=>{
 
                       if(result.error ==  "ACL_NO_PRIVILEGE"){
-                           alert(result.redrect)
+                           console.log(result.redrect);
                         //  window.location.href =  result.redrect;
                       }
                       console.log("+++++++++++++++++");

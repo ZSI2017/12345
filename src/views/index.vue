@@ -209,6 +209,7 @@ export default {
        let _this = this;
         this.$http.post('/api/logout',{},(result)=>{
               _this.$store.dispatch('setLoginOutFlag',true);
+              _this.$store.dispatch('changeNextRouter','/home');
               let topLevel_domains = ".alipay-eco.com"
               console.log(topLevel_domains);
               localEvent.clear("ACL");

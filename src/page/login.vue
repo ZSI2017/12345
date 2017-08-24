@@ -41,7 +41,7 @@ export default {
       })
     },
     loginInText() {
-          this.$store.dispatch('setIsAuthority',true);
+        this.$store.dispatch('setIsAuthority',true);
         this.$store.dispatch('setLoginOutFlag',false);
           // Cookie.set("express1","mng",6000000);
      let hashURL = this.$store.getters.getNextRouter;
