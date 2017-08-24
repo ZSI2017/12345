@@ -201,7 +201,7 @@ export default {
         this.addTag = true;
       }
       // this.dialogConfig(true)
-      if ( this.$route.path == "/chooseExpressOrder/detail") {
+      if ( this.$route.path == "/expressCompany/detail") {
           this.ruleForm.opStatus =  rsp.status=='1'?1:2;        
       } else {
           this.ruleForm.opStatus =  rsp.opStatus=='1'?1:2;
@@ -232,7 +232,12 @@ export default {
       // this.$refs[formName].validate((valid) => {
       //   if (valid) {
           console.log('error submit');
-          this.ruleForm.tag = this.dynamicTags.join(',') + ',';
+          if(this.dynamicTags.length<=0){
+                this.ruleForm.tag = this.dynamicTags.join(',');
+            }else{
+                this.ruleForm.tag = this.dynamicTags.join(',') + ',';
+            }
+          
           let httpData = {
                 "data": {
                   "id": this.id,

@@ -207,7 +207,7 @@ export default {
         coverArea:'',
         opStatus:'',
         markPrice:'',
-
+        tag:''
       },
       rules: {
         name: [
@@ -357,6 +357,12 @@ export default {
       console.log(this.$refs[formName])
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if(this.dynamicTags.length<=0){
+              this.form.tag = this.dynamicTags.join(',')
+          }else{
+              this.form.tag = this.dynamicTags.join(',') + ',';
+          }
+  
             var result = {
                 "data":{
                     "id":this.id,
@@ -364,7 +370,8 @@ export default {
                     "sendappId":this.localData.sendappId,
                     "name":this.form.name,
                     "logo":this.form.logo[0].url,
-                    slogan:this.form.slogan,
+                    'slogan':this.form.slogan,
+                    "tag":this.form.tag,
                     "sortWeight":this.form.sortWeight,
                     "linkUrl":this.form.linkUrl,
                     'opStatus':this.form.opStatus,
@@ -639,6 +646,7 @@ export default {
 
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      console.log(this.dynamicTags)
       if(this.dynamicTags.length >= 2){
         this.addTag = false;
       }else{
