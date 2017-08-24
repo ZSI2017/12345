@@ -93,7 +93,7 @@
         </el-dialog>
          <!--  订单作废对话框       :label-width="formLabelWidth" -->
         <el-dialog title="作废订单" :visible.sync="dialogOrderVisible">
-         <p style="color:red"> 该订单已经生产账单，作废后将用户取消订单不再提示用户支付。请与用户核实情况后再操作。</p>
+         <p style="color:red"> 该订单已经生产账单，作废后将用户取消订单不再提示用户支付。请与用户、快递方核实情况后再操作。</p>
           <el-form :model="cancelCause" :rules="cancelRules">
             <el-form-item label="作废原因">
                  <el-input  style="color:red" type="textarea" maxlength="150" placeholder="请记录具体原因，最多150字" v-model="invalid"></el-input>
@@ -106,7 +106,7 @@
         </el-dialog>
          <!--  标记其他渠道支付对话框       :label-width="formLabelWidth" -->
         <el-dialog title="确认标记其他渠道支付？" :visible.sync="dialogOtherpayVisible">
-         <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单且显示支付完成，不再提示用户支付，请与用户核实情况后再操作。</p>
+         <p style="color:red"> 该订单已经生产账单，标记其他渠道支付后将为用户取消账单且显示支付完成，不再提示用户支付，请与用户、快递方核实情况后再操作。</p>
           <el-form>
             <el-form-item label="标记其他渠道支付原因">
                  <el-input  style="color:red" type="textarea" maxlength="150" placeholder="请记录具体原因，最多150字" v-model="invalid1"></el-input>

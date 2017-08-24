@@ -198,6 +198,7 @@
     </el-form-item>
     <el-form-item label="商户有权令牌有效期">
         <el-date-picker
+          disabled
           v-model="ruleForm.authTokenExpried"
           type="datetime"
           style='width:100%;'
@@ -206,6 +207,7 @@
     </el-form-item>
     <el-form-item label="刷新令牌有效期">
         <el-date-picker
+          disabled
           v-model="ruleForm.rtExpried"
           type="datetime"
           style='width:100%;'
@@ -213,16 +215,16 @@
         </el-date-picker>
     </el-form-item>
     <el-form-item label="后台操作用户ID">
-      <el-input v-model="ruleForm.mngUid" placeholder="请输入后台操作用户ID"> </el-input>
+      <el-input disabled v-model="ruleForm.mngUid" placeholder="请输入后台操作用户ID"> </el-input>
     </el-form-item>
     <el-form-item label="后台操作用户名称">
-      <el-input v-model="ruleForm.mngUname" placeholder="请输入后台操作用户名称"> </el-input>
+      <el-input disabled v-model="ruleForm.mngUname" placeholder="请输入后台操作用户名称"> </el-input>
     </el-form-item>
     <el-form-item label="创建时间">
-      <el-input v-model="ruleForm.gmtCreate" placeholder="请输入创建时间"> </el-input>
+      <el-input disabled v-model="ruleForm.gmtCreate" placeholder="请输入创建时间"> </el-input>
     </el-form-item>
     <el-form-item label="修改时间">
-      <el-input v-model="ruleForm.gmtModified" placeholder="请输入创建时间"> </el-input>
+      <el-input disabled v-model="ruleForm.gmtModified" placeholder="请输入创建时间"> </el-input>
     </el-form-item>
 
     <el-button type="primary" size="large" @click="handleSubmit('ruleForm')">提 交</el-button>

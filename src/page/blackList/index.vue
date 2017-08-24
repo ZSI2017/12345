@@ -93,7 +93,7 @@
           console.log("$router: " + this.$route.path);
           let url = "/api/epuser/findByMobile";
           var _this = this;
-          if(_this.keyword == ''){
+          if(this.keyword == ''){
               _this.$message({
                   type: 'warning',
                   message: '查询内容不能为空！'
@@ -130,8 +130,11 @@
                   type: 'success',
                   message: '解除黑名单成功！'
               });
+              _this.alipayUserId = '';
+              _this.tableData = '';
               _this.loadingTakeOffFlag = false;
           },(error) => {
+              _this.loadingTakeOffFlag = false;              
               _this.$message({
                   type: 'error',
                   message: error.data.meta.msg

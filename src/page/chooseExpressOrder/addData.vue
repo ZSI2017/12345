@@ -16,15 +16,8 @@
       </el-col>
     </el-form-item>
     <el-form-item label="LOGO">
-      <!--<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove">
-        <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
-      </el-upload>-->
-      <img width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
-      <!--<el-popover ref="popover4" placement="right" trigger="click">
-        <img :src="merchantLogo">
-      </el-popover>-->
-      <!--<el-button style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>-->
+      <img v-show="merchantLogo!=''" width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
+      <div v-show="merchantLogo==''" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>            
     </el-form-item>
     <el-form-item label="广告语" prop="slogan">
       <el-input v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
@@ -95,7 +88,6 @@
 <script type="text/javascript">
 //  import coverArea from "@/page/chooseExpress/coverArea.vue";
 import localEvent from 'src/vuex/function.js';
-import timg from './../../assets/timg.jpg'
 
 export default {
   data() {
@@ -114,7 +106,7 @@ export default {
       //select 快递公司选项
       options: [],
       value:'',
-      merchantLogo:'' || timg,
+      merchantLogo:'',
       linkUrlShow:true,
       // 对输入表单进行验证
       ruleForm: {

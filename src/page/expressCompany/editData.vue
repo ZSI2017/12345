@@ -8,7 +8,8 @@
       </el-col>
     </el-form-item>
     <el-form-item label="LOGO">
-      <img width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
+      <img v-show="merchantLogo!='' && merchantLogo!=null" width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
+      <div v-show="merchantLogo=='' || merchantLogo==null" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>            
     </el-form-item>
     <el-form-item label="广告语">
       <el-input v-if="isFromAddData" maxlength="20" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
@@ -97,7 +98,6 @@
 </template>
 <script type="text/javascript">
 import localEvent from 'src/vuex/function.js';
-import timg from './../../assets/timg.jpg'
 
 
 export default {
@@ -173,7 +173,7 @@ export default {
       "id":this.ruleForm.logisMerchId.toString()
     },(rsp)=>{
       console.log(rsp)
-      this.merchantLogo = rsp.merchantLogo || timg;
+      this.merchantLogo = rsp.merchantLogo;
       this.merchantName = rsp.merchantName;
     },(error)=>{
       console.log(error)

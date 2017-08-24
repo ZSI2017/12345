@@ -16,7 +16,8 @@
       </el-col>
     </el-form-item>
     <el-form-item label="LOGO">
-      <img width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
+      <img v-show="merchantLogo!=''" width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
+      <div v-show="merchantLogo==''" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>            
     </el-form-item>
     <el-form-item label="广告语" prop="slogan">
       <el-input v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
@@ -98,7 +99,6 @@
 <script type="text/javascript">
 //  import coverArea from "@/page/chooseExpress/coverArea.vue";
 import localEvent from 'src/vuex/function.js';
-import timg from './../../assets/timg.jpg'
 
 
 export default {
@@ -118,7 +118,7 @@ export default {
       //select 快递公司选项
       options: [],
       value:'',
-      merchantLogo:'' || timg,
+      merchantLogo:'',
       // 对输入表单进行验证
       ruleForm: {
         merchantName:'',

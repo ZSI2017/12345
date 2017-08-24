@@ -1,12 +1,12 @@
 <template type="html">
-<section class="section editData-class">
+<section class="section editData-class" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form :model="form" label-width="100px"  style="width:800px;padding-left:100px">
-    <el-form-item label="公司名称">
+  <el-form ref="form" :model="form" :rules="rules" label-width="100px"  style="width:800px;padding-left:100px">
+    <el-form-item label="公司名称" prop="name">
       <el-input v-if="isFromAddData" maxlength="10" v-model="form.name" placeholder="请输入公司名称"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
-    <el-form-item label="LOGO">
+    <el-form-item label="LOGO" prop="logo">
       <el-upload 
           action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
           :on-change="handleImageChange"
@@ -28,7 +28,7 @@
       </el-popover>
       <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
-    <el-form-item label="广告语">
+    <el-form-item label="广告语" prop="slogan">
       <el-input v-if="isFromAddData" maxlength="20" v-model="form.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.slogan}} </div>
     </el-form-item>
@@ -64,15 +64,15 @@
         <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
       </div>
     </el-form-item>
-    <el-form-item label="排序值" >
-      <el-input v-if="isFromAddData" type='number' v-model="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+    <el-form-item label="排序值" prop="sortWeight">
+      <el-input v-if="isFromAddData" type='number' v-model.number="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
       <el-input v-if="isFromAddData"  v-model="form.linkUrl" placeholder="请输入需要跳转的链接，如果调"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.linkUrl}} </div>
     </el-form-item>
-    <el-form-item label="覆盖地区">
+    <el-form-item label="覆盖地区" prop="coverArea">
       <el-button v-if="isFromAddData" size="mini" @click="dialogConfig">点击配置</el-button>
       <el-button v-if="!isFromAddData" size="mini" type="text" @click="dialogTable">查看已配置</el-button>
       <!-- <el-input v-model="form.name" placeholder="点击配置"> </el-input> -->
@@ -91,7 +91,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.markPrice}} 元起 </div>
     </el-form-item>
     <el-col class="line" :span="2"> </el-col>
-    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit">提交</el-button>
+    <el-button v-if="isFromAddData" type="primary" @click="handleSubmit('form')">提交</el-button>
   </el-form>
 
   <!--大图-->
@@ -160,6 +160,7 @@ export default {
   },
   data() {
     return {
+      listLoading:false,
       id:'',
       url:'',
       localData:{}, // 上一个页面的数据
@@ -207,6 +208,39 @@ export default {
         opStatus:'',
         markPrice:'',
 
+      },
+      rules: {
+        name: [
+          {type: "string",required: true,message: '请输入正确运营图名称',trigger: 'blur'},
+          {min:1,max:10,message:'名称长度不大于10'}
+        ],
+        logo: [
+          {required: true,message: '请上传图片',type:'array',trigger: 'on-change'}
+        ],
+        slogan:[
+          {type: 'string',required: true,message: '请输入广告语',trigger: 'blur'},
+          {min:1, max:20,message:'广告语长度不大于20'}
+        ],
+        sortWeight: [
+          { required: true, message: '排序值不能为空'},
+          // { type: 'number', message: '排序值必须为数字值'}
+           { type: 'number', min:1, max:999,message:'排序值范围1-999'}
+        ],
+        linkUrl: [
+          {required: true,message: "请输入正确链接",trigger: 'blur'},
+          {min:1, max:200,message:'链接长度不大于200'}
+        ],
+        opStatus: [
+          {required: true,message: '请选择状态',trigger: 'change'}
+        ],
+        coverArea: [
+          {required: true,message: '请选择覆盖地区'}
+        ],
+        markPrice:[
+          { required: true, message: '标价不能为空'},
+          // { type: 'number', message: '排序值必须为数字值'}
+           { type: 'number',message:'标价必须为数字'}
+        ]
       },
       promotionId:''
     }
@@ -267,7 +301,7 @@ export default {
       this.form.slogan = rsp.slogan;
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
-      this.form.logo[0].name = rsp.logo;
+      this.form.logo[0].name = '点击查看大图';
       this.form.markPrice = rsp.markPrice;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       if(this.dynamicTags.length > 1){
@@ -319,48 +353,61 @@ export default {
 
     //  点击提交
     handleSubmit(formName) {
-         var result = {
-             "data":{
-                 "id":this.id,
-                 "pageId":this.localData.pageId,
-                 "sendappId":this.localData.sendappId,
-                 "name":this.form.name,
-                 "logo":this.form.logo[0].url,
-                 slogan:this.form.slogan,
-                 "sortWeight":this.form.sortWeight,
-                 "linkUrl":this.form.linkUrl,
-                 'opStatus':this.form.opStatus,
-                 'markPrice':this.form.markPrice,
-               },
-             "area":{
-                "code":"000000",
-                "check":false,
-                "provinces":this.gridData,
-                "currStatus":this.check
-             },
-         }
-         console.log("result%o ",result);
-         var _this = this;
-        this.$http.post("/api/sendapp/audit/update",result,(result) => {
-          _this.$store.dispatch('changeLoadingChange', true);
-          console.log(this);
-          console.log(result);
-          this.$router.go(-1);
-          this.$message({
-                type: 'success',
-                message: '报存成功！'
-            });
-        },(error) => {
-          if(error.data.meta.code == "0017") {
-              this.$message.error('"名称重复！"')
-          } else {
-            this.$message({
-                type: 'error',
-                message: error.data.meta.msg
-            });
-          }
+      this.listLoading = true;
+      console.log(this.$refs[formName])
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+            var result = {
+                "data":{
+                    "id":this.id,
+                    "pageId":this.localData.pageId,
+                    "sendappId":this.localData.sendappId,
+                    "name":this.form.name,
+                    "logo":this.form.logo[0].url,
+                    slogan:this.form.slogan,
+                    "sortWeight":this.form.sortWeight,
+                    "linkUrl":this.form.linkUrl,
+                    'opStatus':this.form.opStatus,
+                    'markPrice':this.form.markPrice,
+                  },
+                "area":{
+                    "code":"000000",
+                    "check":false,
+                    "provinces":this.gridData,
+                    "currStatus":this.check
+                },
+            }
+            console.log("result%o ",result);
+            var _this = this;
+            this.$http.post("/api/sendapp/audit/update",result,(result) => {
+              _this.$store.dispatch('changeLoadingChange', true);
+              console.log(this);
+              console.log(result);
+              this.listLoading = false;
+              this.$router.go(-1);
+              this.$message({
+                    type: 'success',
+                    message: '报存成功！'
+                });
+            },(error) => {
+              this.listLoading = false;
+              if(error.data.meta.code == "0017") {
+                  this.$message.error('"名称重复！"')
+              } else {
+                this.$message({
+                    type: 'error',
+                    message: error.data.meta.msg
+                });
+              }
 
-        });
+            });
+
+        }else{
+          this.listLoading = false;
+          return false;
+        }
+      }) 
+         
 
     },
     // 点击返回 对应的事件处理
@@ -405,7 +452,7 @@ export default {
           }
       }
       var _this = this;
-        this.listLoading = true;
+      this.listLoading = true;
       var URL = "/api/sendapp/areaConf/all";  // 默认是 配置 中的覆盖地区
       let id = this.form.promotionId;
       if(this.localData.tabName === "配置") {
@@ -554,6 +601,7 @@ export default {
     },
     //对logo图片操作的控制
     handleRemove(file, fileList) {
+      this.form.logo[0].url = '';
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
