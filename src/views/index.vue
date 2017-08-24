@@ -212,7 +212,7 @@ export default {
               let topLevel_domains = ".alipay-eco.com"
               console.log(topLevel_domains);
               localEvent.clear("ACL");
-              Cookie.delete("SMJSESSIONID");
+              // Cookie.delete("SMJSESSIONID");
               Cookie.delete('ALIPAYJSESSIONID');
               Cookie.delete("ctoken",topLevel_domains);
               Cookie.delete('ECOACLJSESSIONID',topLevel_domains);

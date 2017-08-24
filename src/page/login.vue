@@ -29,21 +29,21 @@ export default {
     loginIn() {
         this.$store.dispatch('setIsAuthority',false);
       this.$store.dispatch('setLoginOutFlag',false);
-      const URL = "/loginProxy"
-      this.$http.get(URL,{
-        "realUrl":"http://192.168.11.88:8080/#/home"
-      }, (result) => {
-          // _this.totalCount = result.page_list.length; //获取数据长度
-      });
-      Cookie.set("express1","mng",6000000);
-      this.$router.push({
-        path: "/"
-      })
+      // const URL = "/loginProxy"
+      // this.$http.get(URL,{
+      //   "realUrl":"http://192.168.11.88:8080/#/home"
+      // }, (result) => {
+      //     // _this.totalCount = result.page_list.length; //获取数据长度
+      // });
+      // Cookie.set("express1","mng",6000000);
+      // this.$router.push({
+      //   path: "/"
+      // })
     },
     loginInText() {
           this.$store.dispatch('setIsAuthority',true);
         this.$store.dispatch('setLoginOutFlag',false);
-          Cookie.set("express1","mng",6000000);
+          // Cookie.set("express1","mng",6000000);
      let hashURL = this.$store.getters.getNextRouter;
      if(hashURL == "/login"||hashURL== "/") {
          hashURL= "/home";
