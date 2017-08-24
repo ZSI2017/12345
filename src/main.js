@@ -129,6 +129,39 @@ function filterMenu(result) {
                         // router.go(0)
                  });
            }
+
+           store.dispatch('changeNextRouter',to.fullPath);
+           if(((from.path == "/promotion/sendExpress/addData")
+             ||(from.path == "/promotion/chooseExpress/addData")
+             ||(from.path == "/promotion/expressOrder/addData")
+             ||(from.path == "/sendExpressEnter/addData")
+             ||(from.path == "/noticeManage/addData")
+             ||(from.path == "/nearExpress/addData")
+             ||(from.path == "/oneCitySend/addData")
+             ||(from.path == '/expressCompany/addData')
+             ||(from.path == "/chooseExpressOrder/addData")
+             ||(from.path == "/dev/logismerchant/addData")
+             ||(from.path == "/promotion/sendExpress/editData")
+             ||(from.path == "/promotion/chooseExpress/editData")
+             ||(from.path == "/promotion/expressOrder/editData")
+             ||(from.path == "/sendExpressEnter/editData")
+             ||(from.path == "/noticeManage/editData")
+             ||(from.path == "/nearExpress/editData")
+             ||(from.path == "/oneCitySend/editData")
+             ||(from.path == '/expressCompany/editData')
+             ||(from.path == "/chooseExpressOrder/editData")
+             ||(from.path == "/dev/logismerchant/editData")
+           )&&store.getters.getLoadingChange === false) {
+               store.dispatch('changeLoadingFlag');
+               next({path:from.path});
+            }else{
+             //  router.app.$store.state.loadingChange = false
+              store.dispatch('changeLoadingChange',false);
+               //  router.app.$store.state.loadingFlag = false;
+               alert("asdfasdfsd")
+                next();
+           }
+
           //  if(to.fullPath == "/login") {
           //      next({
           //             path:"/home",
@@ -137,18 +170,21 @@ function filterMenu(result) {
        // 跳转到登录页面
 
    } else if(to.fullPath == "/login") {
-      store.dispatch('setLoginOutFlag',false);
+      console.log("login ----");
+       store.dispatch('setLoginOutFlag',false);
        localEvent.clear("ACL");
+       next();
       //  Cookie.delete("ECOACLJSESSIONID");
       //  Cookie.delete("SMJSESSIONID");
       //  Cookie.delete("ctoken");
    } else {
-       store.dispatch('changeNextRouter',to.fullPath);
+      //  store.dispatch('changeNextRouter',to.fullPath);
       //  alert(from.fullPath);
          console.log(to)
-       next({
-              path:"/login",
-          });
+        console.log("tttttttttttt");
+        // alert("/login")
+        next({path:"/login"});
+        console.log("tto");
       // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
  // } else {
@@ -171,36 +207,6 @@ function filterMenu(result) {
         // 权限管理 路由跳转前进行权限验证
         // 从运营位管理 选择快递页面的 添加返回时出现提示框
         //  记录即将进入的路由
-        store.dispatch('changeNextRouter',to.fullPath);
-        if(((from.path == "/promotion/sendExpress/addData")
-          ||(from.path == "/promotion/chooseExpress/addData")
-          ||(from.path == "/promotion/expressOrder/addData")
-          ||(from.path == "/sendExpressEnter/addData")
-          ||(from.path == "/noticeManage/addData")
-          ||(from.path == "/nearExpress/addData")
-          ||(from.path == "/oneCitySend/addData")
-          ||(from.path == '/expressCompany/addData')
-          ||(from.path == "/chooseExpressOrder/addData")
-          ||(from.path == "/dev/logismerchant/addData")
-          ||(from.path == "/promotion/sendExpress/editData")
-          ||(from.path == "/promotion/chooseExpress/editData")
-          ||(from.path == "/promotion/expressOrder/editData")
-          ||(from.path == "/sendExpressEnter/editData")
-          ||(from.path == "/noticeManage/editData")
-          ||(from.path == "/nearExpress/editData")
-          ||(from.path == "/oneCitySend/editData")
-          ||(from.path == '/expressCompany/editData')
-          ||(from.path == "/chooseExpressOrder/editData")
-          ||(from.path == "/dev/logismerchant/editData")
-        )&&store.getters.getLoadingChange === false) {
-            store.dispatch('changeLoadingFlag');
-            next({path:from.path});
-         }else{
-          //  router.app.$store.state.loadingChange = false
-           store.dispatch('changeLoadingChange',false);
-            //  router.app.$store.state.loadingFlag = false;
-             next();
-        }
       // }
        if((to.path != "/orderManage/main") && (to.path != "/orderManage/orderDetail")){
             localEvent.clear("localorderKeyword");
