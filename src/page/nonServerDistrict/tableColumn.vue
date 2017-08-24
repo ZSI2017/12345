@@ -76,5 +76,8 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
 </script>
 
 <style lang="scss">
+  .cell{
+      font-size:14px;
+  }
 
 </style>

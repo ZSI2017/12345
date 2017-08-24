@@ -19,7 +19,7 @@
         :before-upload="beforeAvatarUpload"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">文件类型限：jpg,png,尺寸40*40, 请保持5kb以内</div>
+        <div slot="tip" class="el-upload__tip">文件类型限：jpg,png,尺寸40*40, 请保持10kb以内</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="广告语" prop="slogan">
@@ -574,7 +574,7 @@ export default {
       const isLt2M = file.size / 1024 < 10;
 
       if (!isJPG && !isPNG) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传LOGO大小不能超过 10K!');
