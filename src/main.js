@@ -107,94 +107,30 @@ function filterMenu(result) {
       console.log(Cookie.get("SMJSESSIONID"));
       console.log("beforeEach router --------------------------");
 // if(store.getters.getisAuthority)  {
-  //  if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
+   if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
 
-  //            console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
-  //            localEvent.get("ACL");
-  //            console.log(localEvent.get("ACL") == '');
-  //          if(localEvent.get("ACL") !== '') {
-  //                let result = localEvent.get("ACL");
-  //                filterMenu(result);
-  //          }else {
-  //            http.post('/api/user/info/get',{},(result)=>{
+             console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
+             localEvent.get("ACL");
+             console.log(localEvent.get("ACL") == '');
+           if(localEvent.get("ACL") !== '') {
+                 let result = localEvent.get("ACL");
+                 filterMenu(result);
+           }else {
+             http.post('/api/user/info/get',{},(result)=>{
 
-  //                     if(result.error ==  "ACL_NO_PRIVILEGE"){
-  //                          alert(result.redrect)
-  //                       //  window.location.href =  result.redrect;
-  //                     }
-  //                     console.log("+++++++++++++++++");
-  //                     console.log(result);
-  //                     localEvent.set('ACL',result);
-  //                     filterMenu(result);
-  //                       // router.go(0)
-  //                });
-  //          }
+                      if(result.error ==  "ACL_NO_PRIVILEGE"){
+                           alert(result.redrect)
+                        //  window.location.href =  result.redrect;
+                      }
+                      console.log("+++++++++++++++++");
+                      console.log(result);
+                      localEvent.set('ACL',result);
+                      filterMenu(result);
+                        // router.go(0)
+                 });
+           }
 
-  //          store.dispatch('changeNextRouter',to.fullPath);
-  //          if(((from.path == "/promotion/sendExpress/addData")
-  //            ||(from.path == "/promotion/chooseExpress/addData")
-  //            ||(from.path == "/promotion/expressOrder/addData")
-  //            ||(from.path == "/sendExpressEnter/addData")
-  //            ||(from.path == "/noticeManage/addData")
-  //            ||(from.path == "/nearExpress/addData")
-  //            ||(from.path == "/oneCitySend/addData")
-  //            ||(from.path == '/expressCompany/addData')
-  //            ||(from.path == "/chooseExpressOrder/addData")
-  //            ||(from.path == "/dev/logismerchant/addData")
-  //            ||(from.path == "/promotion/sendExpress/editData")
-  //            ||(from.path == "/promotion/chooseExpress/editData")
-  //            ||(from.path == "/promotion/expressOrder/editData")
-  //            ||(from.path == "/sendExpressEnter/editData")
-  //            ||(from.path == "/noticeManage/editData")
-  //            ||(from.path == "/nearExpress/editData")
-  //            ||(from.path == "/oneCitySend/editData")
-  //            ||(from.path == '/expressCompany/editData')
-  //            ||(from.path == "/chooseExpressOrder/editData")
-  //            ||(from.path == "/dev/logismerchant/editData")
-  //          )&&store.getters.getLoadingChange === false) {
-  //              store.dispatch('changeLoadingFlag');
-  //              next({path:from.path});
-  //           }else{
-  //            //  router.app.$store.state.loadingChange = false
-  //             store.dispatch('changeLoadingChange',false);
-  //              //  router.app.$store.state.loadingFlag = false;
-  //             //  alert("asdfasdfsd")
-  //               next();
-  //          }
-
-  //         //  if(to.fullPath == "/login") {
-  //         //      next({
-  //         //             path:"/home",
-  //         //         });
-  //         //  };
-  //      // 跳转到登录页面
-
-  //  } else if(to.fullPath == "/login") {
-  //     console.log("login ----");
-  //      store.dispatch('setLoginOutFlag',false);
-  //      localEvent.clear("ACL");
-  //      next();
-  //     //  Cookie.delete("ECOACLJSESSIONID");
-  //     //  Cookie.delete("SMJSESSIONID");
-  //     //  Cookie.delete("ctoken");
-  //  } else {
-  //     //  store.dispatch('changeNextRouter',to.fullPath);
-  //     //  alert(from.fullPath);
-  //        console.log(to)
-  //       console.log("tttttttttttt");
-  //       // alert("/login")
-  //       next({path:"/login"});
-  //       console.log("tto");
-  //     // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
-  //  }
- // } else {
- //     store.dispatch('setAuthority',"开发者");
- // }
-
-
-    store.dispatch('setAuthority',"开发者");
-
-    store.dispatch('changeNextRouter',to.fullPath);
+           store.dispatch('changeNextRouter',to.fullPath);
            if(((from.path == "/promotion/sendExpress/addData")
              ||(from.path == "/promotion/chooseExpress/addData")
              ||(from.path == "/promotion/expressOrder/addData")
@@ -225,6 +161,37 @@ function filterMenu(result) {
               //  alert("asdfasdfsd")
                 next();
            }
+
+          //  if(to.fullPath == "/login") {
+          //      next({
+          //             path:"/home",
+          //         });
+          //  };
+       // 跳转到登录页面
+
+   } else if(to.fullPath == "/login") {
+      console.log("login ----");
+       store.dispatch('setLoginOutFlag',false);
+       localEvent.clear("ACL");
+       next();
+      //  Cookie.delete("ECOACLJSESSIONID");
+      //  Cookie.delete("SMJSESSIONID");
+      //  Cookie.delete("ctoken");
+   } else {
+      //  store.dispatch('changeNextRouter',to.fullPath);
+      //  alert(from.fullPath);
+         console.log(to)
+        console.log("tttttttttttt");
+        // alert("/login")
+        next({path:"/login"});
+        console.log("tto");
+      // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
+   }
+ // } else {
+ //     store.dispatch('setAuthority',"开发者");
+ // }
+    // store.dispatch('setAuthority',"开发者");
+
 
       // 这里是对于 登录时的 状态验证
 
