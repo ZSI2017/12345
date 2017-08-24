@@ -8,7 +8,7 @@
     </el-form-item>
     <el-form-item label="LOGO">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/sendapp/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
@@ -28,7 +28,7 @@
     </el-form-item>
     <el-form-item label="角标">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/sendapp/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange2"
         :on-preview="handlePictureCardPreview2"
         :on-remove="handleRemove2"
@@ -619,7 +619,8 @@ export default {
     //对logo图片操作的控制
     handleRemove(file, fileList) {
       this.form.logo[0].url = '';
-      console.log(file, fileList);
+      console.log(file);
+      console.log(fileList);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
