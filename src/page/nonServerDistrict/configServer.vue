@@ -274,7 +274,20 @@ export default {
       this.list2 = this.sourceData.noProvinces[index].noServiceCitys;
       this.showLi = true;
       this.showLi2 = false;
-
+      if(!this.onlyRead) {
+        this.li1Click2('event',this.sourceData.noProvinces[index].noServiceCitys&&this.sourceData.noProvinces[index].noServiceCitys[0],0)
+      }else {
+        let index2;
+        if(typeof this.sourceData.noProvinces[index] !== "undefined"){
+            for(let k =0;k<this.sourceData.noProvinces[index].noServiceCitys.length;k++) {
+                    if(this.sourceData.noProvinces[index].noServiceCitys[k].check) {
+                         index2 = k;
+                         break;
+                    }
+            }
+            this.li1Click2('event',this.sourceData.noProvinces[index].noServiceCitys[index2],index2);
+          }
+      }
     },
     li1Click2(event, item, index) {
       this.checkedDistric = [];

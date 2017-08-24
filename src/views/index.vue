@@ -127,7 +127,7 @@ export default {
     setTimeout(() => {
       console.log(_this);
         _this.menuFlag = true;
-    },400);
+    },500);
     console.log("router");
     console.log(this);
   },

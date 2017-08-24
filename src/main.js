@@ -106,6 +106,7 @@ function filterMenu(result) {
       console.log(Cookie.get("ctoken"));
       console.log(Cookie.get("SMJSESSIONID"));
       console.log("beforeEach router --------------------------");
+
 // if(store.getters.getisAuthority)  {
    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
 
@@ -187,6 +188,9 @@ function filterMenu(result) {
         console.log("tto");
       // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
+
+  //  ###########################################################
+  //  #############################################################
  // } else {
  //     store.dispatch('setAuthority',"开发者");
  // }
