@@ -69,7 +69,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="标价">
-      <el-input placeholder="请输入价格" maxlength="11" v-model.number="ruleForm.markPrice"  type="number" style="width:200px;">
+      <el-input placeholder="请输入价格" maxlength="3" v-model="ruleForm.markPrice" type="number" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
     </el-form-item>
@@ -220,7 +220,8 @@ export default {
         markPrice:[
           { required: true, message: '标价不能为空'},
           // { type: 'number', message: '排序值必须为数字值'}
-           { type: 'number',message:'标价必须为数字'}
+          {pattern: /^(?!00)(?:[0-9]{1,3}|1000)$/,message:'标价范围0-1000'}
+
         ]
       }
     }

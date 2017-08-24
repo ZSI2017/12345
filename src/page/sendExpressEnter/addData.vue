@@ -205,7 +205,7 @@ export default {
           {min:1,max:10,message:'名称长度不大于10'}
         ],
         sortWeight: [
-          { required: false, message: '排序值不能为空'},
+          { required: true, message: '排序值不能为空'},
           // { type: 'number', message: '排序值必须为数字值'}
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
@@ -308,7 +308,7 @@ export default {
 
         } else {
           console.log(_this);
-
+          this.saveLoading = false;          
           return false;
         }
       })
@@ -355,7 +355,7 @@ export default {
       }
     },
     handleRemove(file,fileList) {
-          this.ruleForm.logo = fileList;
+      this.ruleForm.logo = fileList;
     },
       
 
@@ -396,7 +396,9 @@ export default {
         return  Promise.reject("error")
       }
     },
-    handleRemove2() {},
+    handleRemove2(file,fileList) {
+      this.ruleForm.icon = fileList;
+    },
 
     // 标签页选择
     handleTabClick(tab, event) {

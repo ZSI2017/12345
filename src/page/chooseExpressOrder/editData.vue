@@ -2,15 +2,16 @@
 <section class="section" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
 
-  <el-form ref="ruleForm" :model="ruleForm" labelPosition="left" label-width="180px" style="width:800px;padding-left:100px;">
+  <el-form ref="ruleForm" :rules="rules" :model="ruleForm" labelPosition="right" label-width="180px" style="width:800px;padding-left:100px;">
     <el-form-item label="公司名称">
         <el-input disabled :value="merchantName" maxlength="10"> </el-input>
       </el-col>
     </el-form-item>
-    <el-form-item label="LOGO">
-      <img width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
+    <el-form-item label="LOGO" prop="logo">
+      <img v-show="merchantLogo!='' && merchantLogo!=null" @click="handlePreview" style="width:150px;float:left;cursor:pointer;" :src="merchantLogo" alt="">
+      <div v-show="merchantLogo=='' || merchantLogo==null" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>            
     </el-form-item>
-    <el-form-item label="广告语">
+    <el-form-item label="广告语" prop="slogan">
       <el-input v-if="isFromAddData" maxlength="20" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.slogan}} </div>
     </el-form-item>
@@ -46,7 +47,7 @@
         <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
       </div>
     </el-form-item>
-    <el-form-item label="排序值">
+    <el-form-item label="排序值"  prop="sortWeight">
       <el-input v-model.number="ruleForm.sortWeight"  type="number" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
@@ -85,7 +86,6 @@
 </template>
 <script type="text/javascript">
 import localEvent from 'src/vuex/function.js';
-import timg from './../../assets/timg.jpg'
 
 
 export default {
@@ -115,6 +115,23 @@ export default {
         hotStatus: 0,
         newStatus: 0,
         opStatus:1
+      },
+      rules: {
+        merchantName: [
+          {required: true,message: '请选择公司名称',trigger: 'change'}
+        ],
+        sortWeight: [
+          { required: true, message: '排序值不能为空'},
+          { required: true,type: 'number', min:1, max:999,message:'排序值范围1-999'}
+        ],
+        slogan:[
+          {required: true,message: '请输入广告语'},
+          {min:1, max:20,message:'广告语长度不大于20'}
+        ],
+        // tag:[
+        //   {required: true,message: '请输入标签',type: 'string',trigger: 'blur'},
+        //   {type: 'string', min:1, max:9,message:'标签范围1-8个字'}
+        // ],
       },
       disabled:true,
       isFromAddData:false
@@ -159,7 +176,7 @@ export default {
       "id":this.ruleForm.logisMerchId.toString()
     },(rsp)=>{
       console.log(rsp)
-      this.merchantLogo = rsp.merchantLogo || timg;
+      this.merchantLogo = rsp.merchantLogo;
       this.merchantName = rsp.merchantName;
     },(error)=>{
       console.log(error)
@@ -213,8 +230,8 @@ export default {
       _this.listLoading = true;
       console.log("-----------------------");
         console.log(this.$refs[formName]),
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
           console.log('error submit');
           this.ruleForm.tag = this.dynamicTags.join(',') + ',';
           let httpData = {
@@ -250,12 +267,12 @@ export default {
 
           // console.log(this.$route.matched);
 
-      //   } else {
-      //     console.log(_this);
-
-      //     return false;
-      //   }
-      // })
+        } else {
+          console.log(_this);
+          _this.listLoading = false;          
+          return false;
+        }
+      })
 
     },
     // 点击返回 对应的事件处理

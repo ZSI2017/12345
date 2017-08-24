@@ -33,7 +33,7 @@
     :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="logisMerchantLogo" label="LOGO">
         <template scope="scope">
-            <img width="50px" style="cursor:pointer;" :src="scope.row.logisMerchantLogo || ''" trigger="click" placement="right" @click="showImg(scope.row.logisMerchantLogo)">
+            <img v-show="scope.row.logisMerchantLogo != ''" width="50px" style="cursor:pointer;" :src="scope.row.logisMerchantLogo || ''" trigger="click" placement="right" @click="showImg(scope.row.logisMerchantLogo)">
             <el-dialog v-model="dialogVisible" size="tiny">
               <img width="100%" :src="bigImageUrl" alt="">
             </el-dialog>
@@ -89,9 +89,14 @@
           {{scope.row.gmtCreate | formatDate}}
       </template>
     </el-table-column>
+    <el-table-column prop="gmtModified" label="修改时间" width="100" :sortable="showSortable">
+      <template scope="scope">
+          {{scope.row.gmtModified | formatDate}}
+      </template>
+    </el-table-column>
     <el-table-column prop="sortWeight" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="status" label="状态" sortable>
+    <el-table-column prop="status" label="状态" :sortable="showSortable">
        <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下线":"待上线")))}}
         </template>
@@ -358,6 +363,7 @@ export default {
       var tableDataCopy = _this.tableData;
       if (tab.label == "配置") {
         // 配置排序
+        _this.showSortable = "custom";
         _this.tableData = [];
         _this.showConfig = true;
         _this.showflag = true;
@@ -391,6 +397,7 @@ export default {
         })
       } else if (tab.label == "已上线") {
         // 配置排序
+        _this.showSortable = false;
         _this.tableData = [];
         // window.location.reload();
         _this.showConfig = false;
@@ -421,6 +428,7 @@ export default {
         })
       } else {
         // 配置排序
+        _this.showSortable = false;
         _this.showOperation = false;
         _this.tableData = [];
         // window.location.reload();

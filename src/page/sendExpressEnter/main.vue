@@ -33,7 +33,7 @@
     :default-sort="{prop: 'date', order: 'descending'}">
     <el-table-column prop="logo" label="LOGO">
       <template scope="scope">
-            <img width="50px" style="cursor:pointer;" :src="scope.row.logo" trigger="click" placement="right" @click="showImg(scope.row.logo)">
+            <img width="50px" v-show="scope.row.logo!=''" style="cursor:pointer;" :src="scope.row.logo" trigger="click" placement="right" @click="showImg(scope.row.logo)">
             <el-dialog v-model="dialogVisible" size="tiny">
               <img width="100%" :src="bigImageUrl" alt="">
             </el-dialog>
@@ -41,7 +41,7 @@
     </el-table-column>
     <el-table-column prop="icon" label="角标">
        <template scope="scope">
-            <img width="50px" style="cursor:pointer;" :src="scope.row.icon" trigger="click" placement="right" @click="showImg(scope.row.icon)">
+            <img width="50px" v-show="scope.row.icon!=''" style="cursor:pointer;" :src="scope.row.icon" trigger="click" placement="right" @click="showImg(scope.row.icon)">
             <el-dialog v-model="dialogVisible" size="tiny">
               <img width="100%" :src="bigImageUrl" alt="">
             </el-dialog>
@@ -51,7 +51,7 @@
     </el-table-column>
     <el-table-column prop="description" label="描述">
     </el-table-column>
-    <el-table-column label="链接">
+    <el-table-column label="链接" width="90">
       <template scope="scope">
         <el-popover ref="popover4" width="300" trigger="click">
             <span style="word-break:break-all;">{{scope.row.linkUrl}}</span>
@@ -63,6 +63,11 @@
        <template scope="scope">
          <el-button @click="checkArea(scope.row.id)" type="text" size="small">查看</el-button>
        </template>
+    </el-table-column>
+    <el-table-column prop="gmtModified" label="修改时间" width="100" :sortable="showSortable">
+      <template scope="scope">
+          {{scope.row.gmtModified | formatDate}}
+      </template>
     </el-table-column>
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>

@@ -85,7 +85,7 @@
     </el-table-column>
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">>
+    <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">
        <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下线":"待上线")))}}
         </template>

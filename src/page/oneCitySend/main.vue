@@ -56,7 +56,7 @@
         </el-tag>
       </template>
     </el-table-column>
-    <el-table-column label="链接">
+    <el-table-column label="链接" width="90">
       <template scope="scope">
         <el-popover ref="popover4" width="300" trigger="click">
               <span style="word-break:break-all;">{{scope.row.linkUrl}}</span>
@@ -69,6 +69,11 @@
          <el-button @click="checkArea(scope.row.id)" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
+    <el-table-column prop="gmtModified" label="修改时间" width="100" :sortable="showSortable">
+      <template scope="scope">
+          {{scope.row.gmtModified | formatDate}}
+      </template>
+    </el-table-column>
     <el-table-column prop="markPrice" width="70" align="center" label="标价">
         <template scope="scope">
          {{scope.row.markPrice || '-'}}
@@ -76,7 +81,7 @@
     </el-table-column>
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
-    <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">>
+    <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">
        <template scope="scope">
             {{ scope.row.status==0? "草稿":(scope.row.status==1?"已下线":(scope.row.status==2?"已上线":(scope.row.status==3?"待下线":"待上线")))}}
         </template>

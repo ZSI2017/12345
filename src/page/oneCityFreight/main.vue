@@ -69,6 +69,11 @@
          <el-button @click="checkArea(scope.row.id)" type="text" size="small">查看</el-button>
        </template>
     </el-table-column>
+    <el-table-column prop="gmtModified" label="修改时间" width="100" :sortable="showSortable">
+      <template scope="scope">
+          {{scope.row.gmtModified | formatDate}}
+      </template>
+    </el-table-column>
     <el-table-column prop="markPrice" width="70" align="center" label="标价">
         <template scope="scope">
          {{scope.row.markPrice || '-'}}
