@@ -1,12 +1,12 @@
 <template type="html">
 <section class="section">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
-  <el-form 
-      ref="ruleForm" 
-      :model="ruleForm" 
-      :rules="rules" 
-      label-width="100px"  
-      style="width:800px;padding-left:100px" 
+  <el-form
+      ref="ruleForm"
+      :model="ruleForm"
+      :rules="rules"
+      label-width="100px"
+      style="width:800px;padding-left:100px"
       v-loading.body.fullscreen.lock="saveLoading">
     <el-form-item label="入口名称" prop="name">
       <el-input v-model.trim="ruleForm.name" placeholder="请输入入口名称"> </el-input>
@@ -25,7 +25,7 @@
         list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10kb</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="角标">
@@ -38,7 +38,7 @@
         :on-remove="handleRemove2"
         :on-success='handleSuccess2'
         :on-error='handlerror2'
-        :before-upload="beforeAvatarUpload2"        
+        :before-upload="beforeAvatarUpload2"
         list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -266,7 +266,7 @@ export default {
       var _this = this;
       console.log("-----------------------");
       console.log(this.$refs[formName]);
-      
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
@@ -308,7 +308,7 @@ export default {
 
         } else {
           console.log(_this);
-          this.saveLoading = false;          
+          this.saveLoading = false;
           return false;
         }
       })
@@ -345,7 +345,7 @@ export default {
       const isLt2M = file.size / 1024 < 10;
 
       if (!isJPG && !isPNG) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传LOGO大小不能超过 10K!');
@@ -357,7 +357,7 @@ export default {
     handleRemove(file,fileList) {
       this.ruleForm.logo = fileList;
     },
-      
+
 
      // 对图片操作的控制
     handleImageChange2(file,fileList){
@@ -387,7 +387,7 @@ export default {
       const isLt2M2 = file.size / 1024 < 10;
 
       if (!isJPG2 && !isPNG2) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M2) {
         this.$message.error('上传LOGO大小不能超过 10K!');

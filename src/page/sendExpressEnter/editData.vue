@@ -41,12 +41,11 @@
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
       </el-upload>
-      <img v-if="!isFromAddData" width="100px" style="float:left;" :src="form.icon[0].url" alt="">
-
+      <img v-if="!isFromAddData&&form.icon[0].url!=''" width="100px" style="float:left;" :src="form.icon[0].url" alt="">
       <el-popover ref="popover4" placement="right" trigger="click">
         <img :src="form.icon[0].url">
       </el-popover>
-      <el-button v-if="!isFromAddData" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
+      <el-button v-if="!isFromAddData&&form.icon[0].url!=''" style="float:left;margin-left:20px" size="small" v-popover:popover4>查看原图</el-button>
     </el-form-item>
     <el-form-item label="描述" prop="description">
       <el-input v-if="isFromAddData" v-model="form.description" placeholder="请输入描述内容"> </el-input>
@@ -399,7 +398,7 @@ export default {
           return false;
         }
       })
-          
+
 
     },
     // 点击返回 对应的事件处理
@@ -619,7 +618,7 @@ export default {
     handleRemove(file, fileList) {
       this.form.logo[0].name = file.name;
       this.form.logo[0].url = file.url;
-      
+
       console.log(file);
       console.log(fileList);
 

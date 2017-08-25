@@ -9,7 +9,7 @@
     </el-form-item>
     <el-form-item label="LOGO" prop="logo">
       <img v-show="merchantLogo!='' && merchantLogo!=null" @click="handlePreview" style="width:150px;float:left;cursor:pointer;" :src="merchantLogo" alt="">
-      <div v-show="merchantLogo=='' || merchantLogo==null" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>            
+      <div v-show="merchantLogo=='' || merchantLogo==null" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>
     </el-form-item>
     <el-form-item label="广告语" prop="slogan">
       <el-input v-if="isFromAddData" maxlength="20" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
@@ -273,7 +273,7 @@ export default {
 
         } else {
           console.log(_this);
-          _this.listLoading = false;          
+          _this.listLoading = false;
           return false;
         }
       })

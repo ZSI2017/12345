@@ -7,7 +7,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="LOGO" prop="logo">
-      <el-upload 
+      <el-upload
           action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
           :on-change="handleImageChange"
           :on-preview="handlePictureCardPreview"
@@ -17,7 +17,7 @@
           :before-upload="beforeAvatarUpload"
           list-type="picture"
           :file-list="form.logo"
-          v-if="isFromAddData" 
+          v-if="isFromAddData"
           >
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -302,7 +302,7 @@ export default {
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.logo[0].name = '点击查看大图';
-      this.form.markPrice = rsp.markPrice;     
+      this.form.markPrice = rsp.markPrice;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       if(this.dynamicTags.length > 1){
         this.addTag = false;
@@ -363,7 +363,7 @@ export default {
           }else{
               this.form.tag = this.dynamicTags.join(',') + ',';
           }
-  
+
             var result = {
                 "data":{
                     "id":this.id,
@@ -395,7 +395,7 @@ export default {
               this.$router.go(-1);
               this.$message({
                     type: 'success',
-                    message: '报存成功！'
+                    message: '保存成功！'
                 });
             },(error) => {
               this.listLoading = false;
@@ -414,8 +414,8 @@ export default {
           this.listLoading = false;
           return false;
         }
-      }) 
-         
+      })
+
 
     },
     // 点击返回 对应的事件处理
@@ -635,7 +635,7 @@ export default {
       const isLt2M = file.size / 1024 < 10;
 
       if (!isJPG && !isPNG) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传LOGO大小不能超过 10K!');

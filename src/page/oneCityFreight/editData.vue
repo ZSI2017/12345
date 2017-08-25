@@ -7,7 +7,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="LOGO" prop="logo">
-      <el-upload 
+      <el-upload
           action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
           :on-change="handleImageChange"
           :on-preview="handlePictureCardPreview"
@@ -17,7 +17,7 @@
           :before-upload="beforeAvatarUpload"
           list-type="picture"
           :file-list="form.logo"
-          v-if="isFromAddData" 
+          v-if="isFromAddData"
           >
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -387,14 +387,14 @@ export default {
               _this.$store.dispatch('changeLoadingChange', true);
               console.log(this);
               console.log(result);
-              this.listLoading = false;              
+              this.listLoading = false;
               this.$router.go(-1);
               this.$message({
                     type: 'success',
-                    message: '报存成功！'
+                    message: '保存成功！'
                 });
             },(error) => {
-              this.listLoading = false;  
+              this.listLoading = false;
               if(error.data.meta.code == "0017") {
                   this.$message.error('"名称重复！"')
               } else {
@@ -406,11 +406,11 @@ export default {
 
             });
         }else{
-            this.listLoading = false;  
+            this.listLoading = false;
             return false;
         }
-      }) 
-         
+      })
+
 
     },
     // 点击返回 对应的事件处理
@@ -630,7 +630,7 @@ export default {
       const isLt2M = file.size / 1024 < 10;
 
       if (!isJPG && !isPNG) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传LOGO大小不能超过 10K!');

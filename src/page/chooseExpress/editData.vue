@@ -367,7 +367,7 @@ export default {
            this.$message.error('上传图片只能是JPG或PNG格式!');
         }
         if(!isLt60KB) {
-            this.$message.error("上传图片大小不能超过60KB!")
+            this.$message.error("上传图片大小不能超过60kb!")
         }
         if(!isJPGorPNG || !isLt60KB) {
           return  Promise.reject("error")

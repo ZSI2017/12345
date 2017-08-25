@@ -392,7 +392,7 @@ export default {
               this.$router.go(-1);
               this.$message({
                     type: 'success',
-                    message: '报存成功！'
+                    message: '保存成功！'
                 });
             },(error) => {
               this.listLoading = false;            

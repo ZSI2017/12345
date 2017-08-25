@@ -98,7 +98,9 @@ export default {
     store(newValue) {
       console.log();
       this.column = newValue;
-      this.scrollY = this.$refs.tableBody.querySelector("table").offsetHeight> this.$refs.tableBody.offsetHeight;
+      // alert(this.$refs.tableBody.querySelector("table").offsetHeight);
+      // alert( this.$refs.mybody.offsetHeight);
+      // this.scrollY = this.$refs.tableBody.querySelector("table").offsetHeight> this.$refs.tableBody.offsetHeight;
     }
   },
   methods() {
