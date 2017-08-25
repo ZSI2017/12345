@@ -107,7 +107,7 @@ function filterMenu(result) {
       console.log(Cookie.get("SMJSESSIONID"));
       console.log("beforeEach router --------------------------");
 
-if(store.getters.getisAuthority)  {
+// if(store.getters.getisAuthority)  {
    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
 
              console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
@@ -139,7 +139,6 @@ if(store.getters.getisAuthority)  {
              ||(from.path == "/noticeManage/addData")
              ||(from.path == "/nearExpress/addData")
              ||(from.path == "/oneCitySend/addData")
-             ||(from.path == "/oneCityFreight/addData")  
              ||(from.path == '/expressCompany/addData')
              ||(from.path == "/chooseExpressOrder/addData")
              ||(from.path == "/dev/logismerchant/addData")
@@ -149,7 +148,6 @@ if(store.getters.getisAuthority)  {
              ||(from.path == "/sendExpressEnter/editData")
              ||(from.path == "/noticeManage/editData")
              ||(from.path == "/nearExpress/editData")
-             ||(from.path == "/oneCityFreight/editData")  
              ||(from.path == "/oneCitySend/editData")
              ||(from.path == '/expressCompany/editData')
              ||(from.path == "/chooseExpressOrder/editData")
@@ -247,10 +245,12 @@ if(store.getters.getisAuthority)  {
         // 从运营位管理 选择快递页面的 添加返回时出现提示框
         //  记录即将进入的路由
       // }
+
        if((to.path != "/orderManage/main") && (to.path != "/orderManage/orderDetail")){
             localEvent.clear("localorderKeyword");
             localEvent.clear("localorderRadio");
        }
+
   });
 new Vue({
   // el: '#app',
