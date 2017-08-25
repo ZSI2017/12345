@@ -140,7 +140,7 @@ function filterMenu(result) {
              ||(from.path == "/nearExpress/addData")
              ||(from.path == "/oneCitySend/addData")
              ||(from.path == '/expressCompany/addData')
-             ||(from.path == "/oneCityFreight/addData")  
+             ||(from.path == "/oneCityFreight/addData")
              ||(from.path == "/chooseExpressOrder/addData")
              ||(from.path == "/dev/logismerchant/addData")
              ||(from.path == "/promotion/sendExpress/editData")
