@@ -57,7 +57,7 @@
               setTimeout(function(){
                   // alert(_self.$refs.mybody.querySelector("table").offsetHeight> _self.$refs.mybody.offsetHeight);
                },10000);
-            //  this.scrollY = this.$refs.mybody.querySelector("table").offsetHeight> this.$refs.mybody.offsetHeight;
+            //
             //  this.$nextTick(()=> {alert(this.scrollY)});
            })
            ()
@@ -70,6 +70,15 @@
              data(newVal){
                   this.sourceData = newVal;
                   console.log("%cthis is from MyTable:%o ","color:blue",newVal)
+                  let _this = this;
+                  setTimeout(function(){
+                    //  alert(_this.$refs.mybody.querySelector("table").offsetHeight);
+                    //  alert(_this.$refs.mybody.offsetHeight)
+                     _this.scrollY = _this.$refs.mybody.querySelector("table").offsetHeight<=_this.$refs.mybody.offsetHeight;
+                   },10)
+                  // console.log(this.$refs.mybody);
+                  //  alert();
+
                   //  if (this.storeData) {
                   //    this.data = newVal;
                   //  }

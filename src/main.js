@@ -139,7 +139,6 @@ function filterMenu(result) {
              ||(from.path == "/noticeManage/addData")
              ||(from.path == "/nearExpress/addData")
              ||(from.path == "/oneCitySend/addData")
-             ||(from.path == "/oneCityFreight/addData")              
              ||(from.path == '/expressCompany/addData')
              ||(from.path == "/chooseExpressOrder/addData")
              ||(from.path == "/dev/logismerchant/addData")
@@ -150,7 +149,6 @@ function filterMenu(result) {
              ||(from.path == "/noticeManage/editData")
              ||(from.path == "/nearExpress/editData")
              ||(from.path == "/oneCitySend/editData")
-             ||(from.path == "/oneCityFreight/editData") 
              ||(from.path == '/expressCompany/editData')
              ||(from.path == "/chooseExpressOrder/editData")
              ||(from.path == "/dev/logismerchant/editData")
@@ -205,7 +203,6 @@ function filterMenu(result) {
     //   ||(from.path == "/noticeManage/addData")
     //   ||(from.path == "/nearExpress/addData")
     //   ||(from.path == "/oneCitySend/addData")
-    //   ||(from.path == "/oneCityFreight/addData")     
     //   ||(from.path == '/expressCompany/addData')
     //   ||(from.path == "/chooseExpressOrder/addData")
     //   ||(from.path == "/dev/logismerchant/addData")
@@ -216,7 +213,6 @@ function filterMenu(result) {
     //   ||(from.path == "/noticeManage/editData")
     //   ||(from.path == "/nearExpress/editData")
     //   ||(from.path == "/oneCitySend/editData")
-    //   ||(from.path == "/oneCityFreight/editData")           
     //   ||(from.path == '/expressCompany/editData')
     //   ||(from.path == "/chooseExpressOrder/editData")
     //   ||(from.path == "/dev/logismerchant/editData")
@@ -247,12 +243,10 @@ function filterMenu(result) {
         // 从运营位管理 选择快递页面的 添加返回时出现提示框
         //  记录即将进入的路由
       // }
-
        if((to.path != "/orderManage/main") && (to.path != "/orderManage/orderDetail")){
             localEvent.clear("localorderKeyword");
             localEvent.clear("localorderRadio");
        }
-
   });
 new Vue({
   // el: '#app',
