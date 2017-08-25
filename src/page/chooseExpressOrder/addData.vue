@@ -243,6 +243,11 @@ export default {
     },
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      if(this.dynamicTags.length<=0){
+          this.ruleForm.tag = this.dynamicTags.join(',')
+      }else{
+          this.ruleForm.tag = this.dynamicTags.join(',') + ',';
+      }
       if(this.dynamicTags.length >= 2){
         this.addTag = false;
       }else{

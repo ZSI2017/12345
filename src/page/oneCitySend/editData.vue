@@ -302,13 +302,14 @@ export default {
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.logo[0].name = '点击查看大图';
-      this.form.markPrice = rsp.markPrice;
+      this.form.markPrice = rsp.markPrice;     
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       if(this.dynamicTags.length > 1){
         this.addTag = false;
       }else{
         this.addTag = true;
       }
+
 
      this.dialogConfig(true)
 

@@ -8,7 +8,7 @@
     <el-form-item label="LOGO" prop="logo">
       <el-upload
         class="upload-demo"
-        action="http://192.168.12.54:8080/api/sendapp/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange"
         :file-list="ruleForm.logo"
         :on-preview="handlePreview"
@@ -526,11 +526,19 @@ export default {
     //tag 控制
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      console.log(this.dynamicTags)
+      if(this.dynamicTags.length<=0){
+          this.ruleForm.tag = this.dynamicTags.join(',')
+      }else{
+          this.ruleForm.tag = this.dynamicTags.join(',') + ',';
+      }
+      console.log(this.ruleForm.tag)
       if(this.dynamicTags.length >= 2){
         this.addTag = false;
       }else{
         this.addTag = true;
       }
+      
     },
     showInput() {
       this.inputVisible = true;
