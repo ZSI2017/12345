@@ -202,6 +202,9 @@ export default {
           {type: 'string',required: true,message: '请输入广告语',trigger: 'blur'},
           {min:1, max:20,message:'广告语长度不大于20'}
         ],
+        tag:[
+          {type: 'string',required: true,message: '请输入标签'}
+        ],
         sortWeight: [
           { required: true, message: '排序值不能为空'},
           // { type: 'number', message: '排序值必须为数字值'}

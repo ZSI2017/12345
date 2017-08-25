@@ -2,7 +2,7 @@
 <section class="section" v-loading.body.fullscreen.lock="listLoading">
   <p style="color:#00b7f9;cursor:pointer;margin-top:0;width:100px;" @click="handleBackClick"><i class="el-icon-arrow-left"></i> 返回</p>
 
-  <el-form ref="ruleForm" :model="ruleForm" labelPosition="right" label-width="180px" style="width:800px;padding-left:100px;">
+  <el-form ref="ruleForm" :rules="rules" :model="ruleForm" labelPosition="right" label-width="180px" style="width:800px;padding-left:100px;">
     <el-form-item label="公司名称">
         <el-input disabled :value="merchantName"> </el-input>
       </el-col>
@@ -11,7 +11,7 @@
       <img v-show="merchantLogo!='' && merchantLogo!=null" width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
       <div v-show="merchantLogo=='' || merchantLogo==null" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>            
     </el-form-item>
-    <el-form-item label="广告语">
+    <el-form-item label="广告语" prop="slogan">
       <el-input v-if="isFromAddData" maxlength="20" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.slogan}} </div>
     </el-form-item>
@@ -47,11 +47,11 @@
         <span style="margin:2px;">{{dynamicTags.join(' ')}}</span>
       </div>
     </el-form-item>
-    <el-form-item label="客服电话">
+    <el-form-item label="客服电话" prop="custServiceTel">
       <el-input v-model.number="ruleForm.custServiceTel" type="number" v-if="isFromAddData" placeholder="请输入客服电话"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.custServiceTel}} </div>
     </el-form-item>
-    <el-form-item label="排序值">
+    <el-form-item label="排序值" prop="sortWeight">
       <el-input v-model.number="ruleForm.sortWeight"  type="number" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
@@ -130,6 +130,26 @@ export default {
         newStatus: 0,
         opStatus:1
       },
+      rules: {
+        merchantName: [
+          {required: true,message: '请选择公司名称',trigger: 'none'},
+          {min:1, max:10,message:'名称长度不大于10'}
+        ],
+        sortWeight: [
+          { required: true, message: '排序值不能为空'},
+          { required: true,type: 'number', min:1, max:999,message:'排序值范围1-999'}
+        ],
+        custServiceTel: [
+          {required: true,message: '电话号码不能为空'}
+        ],
+        slogan:[
+          {required: true,message: '请输入广告语'},
+          {min:1, max:20,message:'广告语长度不大于20'}
+        ],
+        tag:[
+          {required: true,message: '请输入标签'}
+        ],
+      },
       disabled:true,
       isFromAddData:false
     }
@@ -147,6 +167,7 @@ export default {
 
   },
   mounted() {
+       
     let localData = localEvent.get("localExpressCompany");
     console.log(localData);
     // console.log(localData.promotionId);
@@ -193,6 +214,7 @@ export default {
       this.ruleForm.newStatus =  Number(rsp.newStatus);
       this.ruleForm.pricingMode =  Number(rsp.pricingMode);
       // this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+
       this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1))
       console.log(this.dynamicTags)
       console.log(rsp.tag)
@@ -230,8 +252,8 @@ export default {
       _this.listLoading = true;
       console.log("-----------------------");
         console.log(this.$refs[formName]),
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
           console.log('error submit');
           if(this.dynamicTags.length<=0){
                 this.ruleForm.tag = this.dynamicTags.join(',');
@@ -274,12 +296,12 @@ export default {
 
           // console.log(this.$route.matched);
 
-      //   } else {
-      //     console.log(_this);
-
-      //     return false;
-      //   }
-      // })
+        } else {
+          console.log(_this);
+          _this.listLoading = false;
+          return false;
+        }
+      })
 
     },
     // 点击返回 对应的事件处理

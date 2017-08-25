@@ -226,6 +226,9 @@ export default {
           // { type: 'number', message: '排序值必须为数字值'}
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
+        tag:[
+          {type: 'string',required: true,message: '请输入标签'}
+        ],
         linkUrl: [
           {required: true,message: "请输入正确链接",trigger: 'blur'},
           {min:1, max:200,message:'链接长度不大于200'}
@@ -237,7 +240,7 @@ export default {
           {required: true,message: '请选择覆盖地区'}
         ],
         markPrice:[
-          { required: true, message: '标价不能为空'},
+          { required: false, message: '标价不能为空'},
           // { type: 'number', message: '排序值必须为数字值'}
            { type: 'number',message:'标价必须为数字'}
         ]
