@@ -25,7 +25,7 @@
         list-type="picture"
         >
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5kb</div>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10kb</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="角标">

@@ -107,7 +107,7 @@ function filterMenu(result) {
       console.log(Cookie.get("SMJSESSIONID"));
       console.log("beforeEach router --------------------------");
 
-// if(store.getters.getisAuthority)  {
+if(store.getters.getisAuthority)  {
    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
 
              console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
@@ -139,6 +139,7 @@ function filterMenu(result) {
              ||(from.path == "/noticeManage/addData")
              ||(from.path == "/nearExpress/addData")
              ||(from.path == "/oneCitySend/addData")
+             ||(from.path == "/oneCityFreight/addData")  
              ||(from.path == '/expressCompany/addData')
              ||(from.path == "/chooseExpressOrder/addData")
              ||(from.path == "/dev/logismerchant/addData")
@@ -148,6 +149,7 @@ function filterMenu(result) {
              ||(from.path == "/sendExpressEnter/editData")
              ||(from.path == "/noticeManage/editData")
              ||(from.path == "/nearExpress/editData")
+             ||(from.path == "/oneCityFreight/editData")  
              ||(from.path == "/oneCitySend/editData")
              ||(from.path == '/expressCompany/editData')
              ||(from.path == "/chooseExpressOrder/editData")
@@ -203,6 +205,7 @@ function filterMenu(result) {
     //   ||(from.path == "/noticeManage/addData")
     //   ||(from.path == "/nearExpress/addData")
     //   ||(from.path == "/oneCitySend/addData")
+    //   ||(from.path == "/oneCityFreight/addData")     
     //   ||(from.path == '/expressCompany/addData')
     //   ||(from.path == "/chooseExpressOrder/addData")
     //   ||(from.path == "/dev/logismerchant/addData")
@@ -213,6 +216,7 @@ function filterMenu(result) {
     //   ||(from.path == "/noticeManage/editData")
     //   ||(from.path == "/nearExpress/editData")
     //   ||(from.path == "/oneCitySend/editData")
+    //   ||(from.path == "/oneCityFreight/editData")           
     //   ||(from.path == '/expressCompany/editData')
     //   ||(from.path == "/chooseExpressOrder/editData")
     //   ||(from.path == "/dev/logismerchant/editData")

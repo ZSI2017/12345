@@ -192,7 +192,8 @@ export default {
       this.ruleForm.hotStatus =  Number(rsp.hotStatus);
       this.ruleForm.newStatus =  Number(rsp.newStatus);
       this.ruleForm.pricingMode =  Number(rsp.pricingMode);
-      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+      // this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+      this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1))
       console.log(this.dynamicTags)
       console.log(rsp.tag)
       if(this.dynamicTags.length > 1){

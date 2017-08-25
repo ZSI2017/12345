@@ -191,7 +191,8 @@ export default {
       this.ruleForm.sortWeight = rsp.sortWeight;
       this.ruleForm.hotStatus =  Number(rsp.hotStatus);
       this.ruleForm.newStatus =  Number(rsp.newStatus);
-      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+      // this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+      this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1));
       this.ruleForm.url = rsp.url;
       if(this.dynamicTags.length > 1){
         this.addTag = false;
