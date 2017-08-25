@@ -51,7 +51,7 @@
       <el-input v-model.number="ruleForm.sortWeight"  type="number" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
-    <el-form-item label="链接" prop="url">
+    <el-form-item label="链接" prop="url" v-if='linkUrlShow'>
       <el-input v-if="isFromAddData"  v-model="ruleForm.url" placeholder="请输入需要跳转的链接，如果调"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.url}} </div>
     </el-form-item>
@@ -97,6 +97,7 @@ export default {
       addTag: true,
       url:'/api/chooseorder/audit/update',
       pageId: '',
+      linkUrlShow:true,
       //标签数据
       dynamicTags: [],
       inputVisible: false,
@@ -193,6 +194,11 @@ export default {
       this.ruleForm.newStatus =  Number(rsp.newStatus);
       // this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1));
+      if(rsp.url == ''){
+          this.linkUrlShow = false;
+      }else{
+          this.linkUrlShow = true;
+      }
       this.ruleForm.url = rsp.url;
       if(this.dynamicTags.length > 1){
         this.addTag = false;
