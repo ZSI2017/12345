@@ -305,14 +305,9 @@ export default {
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.logo[0].name = '点击查看大图';
-<<<<<<< HEAD
       this.form.markPrice = rsp.markPrice;
-      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
-=======
-      this.form.markPrice = rsp.markPrice;     
       // this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
-      this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1))    
->>>>>>> 5378e49db063b185cfa898e13de704c931c6445a
+      this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1))
       if(this.dynamicTags.length > 1){
         this.addTag = false;
       }else{
