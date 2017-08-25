@@ -167,7 +167,7 @@ import localEvent from 'src/vuex/function.js';
         orderSuccess:true,
         sendExpress:false,
         payOrder:false,
-
+        cancleColor:false,
         activeNames: ['0','1','2','3','4',"5","6"],
         orderNo:'',
         waybillNo:'',
@@ -265,6 +265,9 @@ import localEvent from 'src/vuex/function.js';
             _this.url = "/api/order/details"; // 默认展开
             _this.$http.post(_this.url,this.requestData,(rsp)=>{
                 console.log(rsp);
+                console.log(rsp.orderStatus)
+                console.log(rsp.payStatus)
+                
                 if(rsp.orderStatus == "2" || rsp.orderStatus == "1"){
                     this.cancleOrderFlag = true;
                 }else{
@@ -303,34 +306,27 @@ import localEvent from 'src/vuex/function.js';
                 this.items[9].message = '.';
                 this.items[10].message = rsp.gmtWaybill || '暂无';
                 this.items[11].message = '.';
-                if ("快递员已取件" == rsp.strOrderStatus) {
-                    if(rsp.receiptAmount == '未支付'){
-                        this.orderSuccess = true;
-                        this.payOrder = false;
-                        this.sendExpress = false;
-                    }else{
-                        this.payOrder = true;
-                        this.orderSuccess = false;
-                        this.sendExpress = false;
-                    }
-                }
-                if(rsp.strOrderStatus == '下单成功,正在安排快递员'){
+                
+                if(rsp.orderStatus == '1'){
                     this.orderSuccess = true;
                     this.payOrder = false;
-                    this.sendExpress = false;
-                }else{
-                    this.sendExpress = true;
+                    this.sendExpress = false;  
+                    this.cancleColor = false;                    
+                }else if(rsp.orderStatus == '4'){
+                    this.cancleColor = true;
                     this.orderSuccess = false;
                     this.payOrder = false;
-                }
-                if(rsp.orderStatus  == '1'){
-                    this.orderSuccess = true;
-                    this.payOrder = false;
-                    this.sendExpress = false;
-                }else{
-                    this.sendExpress = true;
+                    this.sendExpress = false; 
+                }else if (rsp.orderStatus == '3' && rsp.payStatus == '1') {
                     this.orderSuccess = false;
                     this.payOrder = false;
+                    this.sendExpress = true;    
+                    this.cancleColor = false;                
+                }else{
+                    this.payOrder = true;
+                    this.orderSuccess = false;
+                    this.sendExpress = false; 
+                    this.cancleColor = false;
                 }
 
                 //寄件人信息
@@ -360,7 +356,6 @@ import localEvent from 'src/vuex/function.js';
                 this.payDetails[1].message = rsp.gmtPayment || '暂无';
                 this.payDetails[2].message = rsp.receiptAmount || '暂无';
 
-                this.$refs.mybox.find('.cell-right').style.color = 'green';
 
             },(error)=>{
                 console.log('failed');
@@ -569,58 +564,7 @@ import localEvent from 'src/vuex/function.js';
         height: 40px;
         line-height: 40px;
     }
-    // @media screen and (min-width: 1201px) {
-    //     .cell-left{
-    //         border-top: 1px solid #333;
-    //         text-align: left;
-    //         background: #eef1f6;
-    //         box-sizing:border-box;
-    //         white-space:nowrap;
-    //         text-indent: 5px;
-    //     }
-    //     .cell-right{
-    //         background: #fff;
-    //         border: 1px solid #333;
-    //         border-bottom:0;
-    //         text-align: left;
-    //         white-space:nowrap;
-    //         text-indent: 5px;
-    //     }
-    //     .basic-table .el-col:nth-child(n+9){
-    //         border-bottom: 1px solid #333;
-    //     }
-    //     .basic-table .el-col:nth-child(4n+1) .cell-left{
-    //         border-left:1px solid #333;
-    //     }
-    // }
-    // @media screen and (max-width: 1201px) {
-    //     .cell-left{
-    //         border-left: 1px solid #333;
-    //         border-top: 1px solid #333;
-    //         text-align: left;
-    //         background: #eef1f6;
-    //         box-sizing:border-box;
-    //         white-space:nowrap;
-    //         text-indent: 5px;
-    //     }
-    //     .cell-right{
-    //         overflow: hidden;
-    //         background: #fff;
-    //         border-left: 1px solid #333;
-    //         border-top: 1px solid #333;
-    //         text-align: left;
-    //         white-space:nowrap;
-    //         text-indent: 5px;
-    //     }
-    //     .basic-table .el-col:nth-child(2n) .cell-right{
-    //         border-right: 1px solid #333;
-    //     }
-    //     .basic-table .el-col:nth-child(11),.basic-table .el-col:nth-child(12){
-    //         border-bottom:1px solid #333;
-    //     }
-    // }
-
-    // @media screen and (max-width: 999px) {
+    @media screen and (min-width: 1201px) {
         .cell-left{
             border-top: 1px solid #333;
             border-left: 1px solid #333;
@@ -655,33 +599,36 @@ import localEvent from 'src/vuex/function.js';
         .basic-table .el-col:nth-child(10),.basic-table .el-col:nth-child(12){
             color:#fff;
         }
-    // }
-    // .basic-table .el-col:last-child .cell-right{
-    //         color:red;
-    //         overflow: hidden;
-    //     }
+    }
+
+    @media screen and (max-width: 1201px) {
+        .cell-left{
+            border-top: 1px solid #333;        
+            border-left: 1px solid #333;         
+            text-align: center;
+            background: #eef1f6;
+            box-sizing:border-box;
+            white-space:nowrap;
+            display: inline-block;
+        }
+       .cell-right{
+            border-top: 1px solid #333;        
+            border-left: 1px solid #333;  
+            border-right:1px solid #333;         
+            background: #fff;
+            text-align: left;
+            text-indent: 5px;
+            white-space:nowrap;
+            display: inline-block;            
+        }
+        .basic-table .el-col:nth-child(12){
+            border-bottom: 1px solid #333; 
+        }
+    }
+
     .selfCollapse .goods-table div:nth-child(2) div .el-col-18{
             color:red;
     }
-    //    @media screen and (min-width: 901px) {
-    //     .cell-left{
-    //         text-align: left;
-    //         background: #eef1f6;
-    //         box-sizing:border-box;
-    //         white-space:nowrap;
-    //     }
-    //    .cell-right{
-    //         background: #fff;
-    //         text-align: center;
-    //         white-space:nowrap;
-    //     }
-    //     .basic-table .el-col:nth-child(2n+1) .cell-right{
-    //         border-right: 1px solid #333;
-    //     }
-    //     .basic-table .el-col:nth-child(11){
-    //         border-bottom: 0;
-    //     }
-    // }
     .footer{
         padding:20px 0 20px 15px;
     }
@@ -719,6 +666,9 @@ import localEvent from 'src/vuex/function.js';
 
     .pickupyes_color {
         color: #00a65a;
+    }
+    .cancle_color {
+        color: #000;
     }
 
 </style>

@@ -68,8 +68,8 @@
         <el-radio class="radio" :label="1">下线</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="标价">
-      <el-input placeholder="请输入价格" maxlength="3" v-model="ruleForm.markPrice" type="number" style="width:200px;">
+    <el-form-item label="标价" prop="markPrice">
+      <el-input placeholder="请输入价格" v-model="ruleForm.markPrice" type="number" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
     </el-form-item>
@@ -207,6 +207,9 @@ export default {
           // { type: 'number', message: '排序值必须为数字值'}
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
+        tag:[
+          {type: 'string',required: true,message: '请输入标签'}
+        ],
         linkUrl: [
           {required: true,message: "请输入正确链接",trigger: 'blur'},
           {min:1, max:200,message:'链接长度不大于200'}
@@ -218,7 +221,7 @@ export default {
           {required: true,message: '请选择覆盖地区'}
         ],
         markPrice:[
-          { required: true, message: '标价不能为空'},
+          { required: false, message: '标价不能为空'},
           // { type: 'number', message: '排序值必须为数字值'}
           {pattern: /^(?!00)(?:[0-9]{1,3}|1000)$/,message:'标价范围0-1000'}
 

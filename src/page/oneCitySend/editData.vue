@@ -84,8 +84,8 @@
       </el-radio-group>
       <div class="detail-content" v-if="!isFromAddData"> {{currentStateText}} </div>
     </el-form-item>
-    <el-form-item label="标价">
-      <el-input placeholder="请输入价格" maxlength="11" v-if="isFromAddData" v-model="form.markPrice" style="width:200px;">
+    <el-form-item label="标价" prop="markPrice">
+      <el-input placeholder="请输入价格" v-if="isFromAddData" v-model="form.markPrice" style="width:200px;">
         <template slot="append">元起</template>
       </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.markPrice}} 元起 </div>
@@ -226,6 +226,9 @@ export default {
           // { type: 'number', message: '排序值必须为数字值'}
            { type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
+        tag:[
+          {type: 'string',required: true,message: '请输入标签'}
+        ],
         linkUrl: [
           {required: true,message: "请输入正确链接",trigger: 'blur'},
           {min:1, max:200,message:'链接长度不大于200'}
@@ -237,7 +240,7 @@ export default {
           {required: true,message: '请选择覆盖地区'}
         ],
         markPrice:[
-          { required: true, message: '标价不能为空'},
+          { required: false, message: '标价不能为空'},
           // { type: 'number', message: '排序值必须为数字值'}
            { type: 'number',message:'标价必须为数字'}
         ]
@@ -302,15 +305,19 @@ export default {
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.logo[0].name = '点击查看大图';
+<<<<<<< HEAD
       this.form.markPrice = rsp.markPrice;
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+=======
+      this.form.markPrice = rsp.markPrice;     
+      // this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+      this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1))    
+>>>>>>> 5378e49db063b185cfa898e13de704c931c6445a
       if(this.dynamicTags.length > 1){
         this.addTag = false;
       }else{
         this.addTag = true;
       }
-
-
      this.dialogConfig(true)
 
     },(error)=>{

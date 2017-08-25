@@ -150,10 +150,9 @@ export default {
           {required: true,message: '请输入广告语'},
           {min:1, max:20,message:'广告语长度不大于20'}
         ],
-        // tag:[
-        //   {required: true,message: '请输入标签',type: 'string',trigger: 'blur'},
-        //   {type: 'string', min:1, max:9,message:'标签范围1-8个字'}
-        // ],
+        tag:[
+          {type: 'string',required: true,message: '请输入标签'}
+        ],
       }
     }
   },

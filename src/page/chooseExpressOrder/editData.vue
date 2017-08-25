@@ -51,7 +51,7 @@
       <el-input v-model.number="ruleForm.sortWeight"  type="number" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
-    <el-form-item label="链接" prop="url">
+    <el-form-item label="链接" prop="url" v-if='linkUrlShow'>
       <el-input v-if="isFromAddData"  v-model="ruleForm.url" placeholder="请输入需要跳转的链接，如果调"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.url}} </div>
     </el-form-item>
@@ -97,6 +97,7 @@ export default {
       addTag: true,
       url:'/api/chooseorder/audit/update',
       pageId: '',
+      linkUrlShow:true,
       //标签数据
       dynamicTags: [],
       inputVisible: false,
@@ -116,9 +117,9 @@ export default {
         newStatus: 0,
         opStatus:1
       },
-      rules: {
+       rules: {
         merchantName: [
-          {required: true,message: '请选择公司名称',trigger: 'change'}
+          {required: true,message: '请选择公司名称',trigger: 'none'}
         ],
         sortWeight: [
           { required: true, message: '排序值不能为空'},
@@ -128,10 +129,9 @@ export default {
           {required: true,message: '请输入广告语'},
           {min:1, max:20,message:'广告语长度不大于20'}
         ],
-        // tag:[
-        //   {required: true,message: '请输入标签',type: 'string',trigger: 'blur'},
-        //   {type: 'string', min:1, max:9,message:'标签范围1-8个字'}
-        // ],
+        tag:[
+          {type: 'string',required: true,message: '请输入标签'}
+        ]
       },
       disabled:true,
       isFromAddData:false
@@ -191,7 +191,13 @@ export default {
       this.ruleForm.sortWeight = rsp.sortWeight;
       this.ruleForm.hotStatus =  Number(rsp.hotStatus);
       this.ruleForm.newStatus =  Number(rsp.newStatus);
-      this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+      // this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
+      this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1));
+      if(rsp.url == ''){
+          this.linkUrlShow = false;
+      }else{
+          this.linkUrlShow = true;
+      }
       this.ruleForm.url = rsp.url;
       if(this.dynamicTags.length > 1){
         this.addTag = false;

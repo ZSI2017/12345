@@ -191,10 +191,10 @@
       <el-input v-model="ruleForm.alipayAppid" placeholder="请输入授权商户APPID"> </el-input>
     </el-form-item>
     <el-form-item label="商户授权令牌">
-      <el-input v-model="ruleForm.alipayAuthToken" placeholder="请输入商户授权令牌"> </el-input>
+      <el-input v-model="ruleForm.alipayAuthToken" disabled placeholder="请输入商户授权令牌"> </el-input>
     </el-form-item>
     <el-form-item label="刷新令牌">
-      <el-input v-model="ruleForm.refreshToken" placeholder="请输入刷新令牌"> </el-input>
+      <el-input v-model="ruleForm.refreshToken" disabled placeholder="请输入刷新令牌"> </el-input>
     </el-form-item>
     <el-form-item label="商户有权令牌有效期">
         <el-date-picker
@@ -469,14 +469,14 @@ export default {
               'alipayAuthStatus':this.ruleForm.alipayAuthStatus,
               'alipayPid':this.ruleForm.alipayPid,
               'alipayAppid':this.ruleForm.alipayAppid,
-              'alipayAuthToken':this.ruleForm.alipayAuthToken,
-              'refreshToken':this.ruleForm.refreshToken,
-              'authTokenExpried':formatDate(newData1, 'yyyy-MM-dd hh:mm:ss'),
-              'rtExpried':formatDate(newData2, 'yyyy-MM-dd hh:mm:ss'),
-              'mngUid':this.ruleForm.mngUid,
-              'mngUname':this.ruleForm.mngUname,
+              // 'alipayAuthToken':this.ruleForm.alipayAuthToken,
+              // 'refreshToken':this.ruleForm.refreshToken,
+              // 'authTokenExpried':formatDate(newData1, 'yyyy-MM-dd hh:mm:ss'),
+              // 'rtExpried':formatDate(newData2, 'yyyy-MM-dd hh:mm:ss'),
+              // 'mngUid':this.ruleForm.mngUid,
+              // 'mngUname':this.ruleForm.mngUname,
               'serviceAreaAcqMethod':this.ruleForm.serviceAreaAcqMethod,
-              'serviceTimeInterval':this.ruleForm.serviceTimeInterval,
+              'serviceTimeInterval':this.ruleForm.serviceTimeInterval
               // 'gmtCreate':this.ruleForm.gmtCreate,
               // 'gmtModified':this.ruleForm.gmtModified
             }

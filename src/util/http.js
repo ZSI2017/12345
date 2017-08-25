@@ -11,8 +11,8 @@ var vue = new Vue();
 import axios from "axios";
 
 // let URL = "http://sendexmng-sit.alipay-eco.com"
-// let URL = 'http://192.168.12.54:8080'
-let URL  = "http://sendexmng-sit.alipay-eco.com"
+let URL = 'http://192.168.12.54:8080'
+// let URL  = "http://sendexmng-sit.alipay-eco.com"
 
    // alert(process.env.npm_config_report)
 if(process.env.NODE_ENV === "development"){
@@ -222,9 +222,9 @@ export default {
                 // before the request data is sent to the server
                 return data;
             }],
-            headers:{
-                 'X-Requested-With':'XMLHttpRequest'
-            },
+            // headers:{
+            //      'X-Requested-With':'XMLHttpRequest'
+            // },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
