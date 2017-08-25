@@ -4,13 +4,13 @@
         <el-col :span="24"><span class="grid-content bg-purple-dark orderTitle" style="font-size:28px;font-weight:600;">
             订单号：{{orderNo}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-size:20px;font-weight:600;">运单号：{{waybillNo}}</span> </el-col>
         <el-col :span="24">
-            <h4 class="grid-content bg-purple-dark orderTitle" style="margin:0;"><span>{{expName}}</span>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <h4 class="grid-content bg-purple-dark orderTitle" style="margin:0;">
+              <span>快递公司:{{expName}}&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;当前状态:</span>
                 <span :class="{'success_color':orderSuccess, 'pickupno_color': sendExpress, 'pickupyes_color':payOrder}">{{strOrderStatus}}</span>
             </h4>
         </el-col>
- 
-    
+
+
     </el-row>
     <el-row class="orderDetail">
         <el-collapse v-model="activeNames" >
@@ -206,18 +206,18 @@ import localEvent from 'src/vuex/function.js';
         items:[
             {name: "下单时间",message: '',},{name: "实际承运公司",message: '',},
             {name: "期望上门时间",message: '',},{name: "是否转快递",message: '',},
-            {name: "接单时间",message: '',},{name: "取件码",message: '',}, 
+            {name: "接单时间",message: '',},{name: "取件码",message: '',},
             {name: "取件时间",message: '',},{name: "物流公司订单号",message: '',},
             {name: "账单回传时间",message: '',},{name: ".",message: '',},
             {name: "运单回传时间",message: '',},{name: ".",message: '',}
         ],
         senderItems:[
-            {name: "寄件人",message: '',}, 
+            {name: "寄件人",message: '',},
             {name: "联系电话",message: '',},
             {name: "寄件地址",message: '',}
         ],
        rcvrItems:[
-           {name: "收件人",message: '',}, 
+           {name: "收件人",message: '',},
            {name: "联系电话", message: '',},
            {name: "收件地址",message: '',}
         ],
@@ -288,36 +288,36 @@ import localEvent from 'src/vuex/function.js';
                     this.payDetailFlag = false;
                 }
                 this.waybillNo = rsp.waybillNo|| '暂无';
-                this.expName = rsp.expName|| '暂无';  
-                this.strOrderStatus = rsp.strOrderStatus|| '暂无';  
+                this.expName = rsp.expName|| '暂无';
+                this.strOrderStatus = rsp.strOrderStatus|| '暂无';
                 //基本信息
                 this.items[0].message = rsp.gmtCreate || '暂无';
                 this.items[1].message = rsp.actCarrierName || '暂无';
                 this.items[2].message = rsp.gmtExp || '暂无';
-                this.items[3].message = rsp.expNameOld? rsp.expNameOld+'转EMS':'否';//是否转运快递                
+                this.items[3].message = rsp.expNameOld? rsp.expNameOld+'转EMS':'否';//是否转运快递
                 this.items[4].message = rsp.gmtAccept || '暂无';
                 this.items[5].message = rsp.pickUpCode || '暂无';
                 this.items[6].message = rsp.gmtTake || '暂无';
                 this.items[7].message = rsp.outOrderNo || '暂无';
                 this.items[8].message = rsp.gmtBill || '暂无';
-                this.items[9].message = '.';                
+                this.items[9].message = '.';
                 this.items[10].message = rsp.gmtWaybill || '暂无';
                 this.items[11].message = '.';
                 if ("快递员已取件" == rsp.strOrderStatus) {
                     if(rsp.receiptAmount == '未支付'){
                         this.orderSuccess = true;
                         this.payOrder = false;
-                        this.sendExpress = false;                    
+                        this.sendExpress = false;
                     }else{
                         this.payOrder = true;
                         this.orderSuccess = false;
-                        this.sendExpress = false; 
+                        this.sendExpress = false;
                     }
-                }    
+                }
                 if(rsp.strOrderStatus == '下单成功,正在安排快递员'){
                     this.orderSuccess = true;
                     this.payOrder = false;
-                    this.sendExpress = false; 
+                    this.sendExpress = false;
                 }else{
                     this.sendExpress = true;
                     this.orderSuccess = false;
@@ -326,13 +326,13 @@ import localEvent from 'src/vuex/function.js';
                 if(rsp.orderStatus  == '1'){
                     this.orderSuccess = true;
                     this.payOrder = false;
-                    this.sendExpress = false; 
+                    this.sendExpress = false;
                 }else{
                     this.sendExpress = true;
                     this.orderSuccess = false;
                     this.payOrder = false;
                 }
-                 
+
                 //寄件人信息
                 this.senderItems[0].message = rsp.snderName || '暂无';
                 this.senderItems[1].message = rsp.snderMobile || '暂无';
@@ -479,7 +479,7 @@ import localEvent from 'src/vuex/function.js';
                 this.dialogOtherpayVisible = false;
                 this.requestHttp();
             },(error)=>{
-                this.dialogOtherpayVisible = false;                
+                this.dialogOtherpayVisible = false;
                 if(error.data.meta.code == '1101'){
                     this.buttonText = '该订单不能标记其他渠道支付，请对点击确定重新操作！';
                     this.dialogButtonVisible = true;
@@ -538,10 +538,10 @@ import localEvent from 'src/vuex/function.js';
                         message: '转快递成功!'
                     });
 
-                    this.requestHttp();   
-                    this.dialogTimeVisible = false;                                     
+                    this.requestHttp();
+                    this.dialogTimeVisible = false;
             },(error)=>{
-                this.dialogTimeVisible = false;                
+                this.dialogTimeVisible = false;
                 console.log(error.data.meta.code)
                 if(error.data.meta.code == '0915'){
                     this.buttonText = '该订单不能转其他快递，请对点击确定重新操作！';
@@ -553,8 +553,8 @@ import localEvent from 'src/vuex/function.js';
                     });
                 }
             });
-            
-        }    
+
+        }
    }
 }
 </script>
@@ -622,8 +622,8 @@ import localEvent from 'src/vuex/function.js';
 
     // @media screen and (max-width: 999px) {
         .cell-left{
-            border-top: 1px solid #333;        
-            border-left: 1px solid #333;         
+            border-top: 1px solid #333;
+            border-left: 1px solid #333;
             text-align: center;
             background: #eef1f6;
             box-sizing:border-box;
@@ -631,34 +631,34 @@ import localEvent from 'src/vuex/function.js';
             display: inline-block;
         }
        .cell-right{
-            border-top: 1px solid #333;        
-            border-left: 1px solid #333;           
+            border-top: 1px solid #333;
+            border-left: 1px solid #333;
             background: #fff;
             text-align: left;
             text-indent: 5px;
             white-space:nowrap;
-            display: inline-block;            
+            display: inline-block;
         }
         .basic-table .el-col:nth-child(2n+1) .cell-right{
             border-right: 1px solid #333;
 
         }
         .basic-table .el-col:nth-child(2n) .cell-left{
-            border-left:0;          
+            border-left:0;
         }
         .basic-table .el-col:nth-child(2n) .cell-right{
-            border-right:1px solid #333;           
+            border-right:1px solid #333;
         }
         .basic-table .el-col:nth-child(11),.basic-table .el-col:nth-child(12){
-            border-bottom: 1px solid #333; 
+            border-bottom: 1px solid #333;
         }
         .basic-table .el-col:nth-child(10),.basic-table .el-col:nth-child(12){
-            color:#fff; 
+            color:#fff;
         }
     // }
     // .basic-table .el-col:last-child .cell-right{
     //         color:red;
-    //         overflow: hidden;   
+    //         overflow: hidden;
     //     }
     .selfCollapse .goods-table div:nth-child(2) div .el-col-18{
             color:red;
