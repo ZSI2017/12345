@@ -15,7 +15,7 @@
       <el-input v-if="isFromAddData" maxlength="20" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.slogan}} </div>
     </el-form-item>
-    <el-form-item label="标签">
+    <el-form-item label="标签" prop="tag">
       <div v-if="isFromAddData">
         <el-tag
           :key="tag"
