@@ -207,7 +207,7 @@ export default {
         coverArea:'',
         opStatus:'',
         markPrice:'',
-
+        tag:''
       },
       rules: {
         name: [
@@ -302,13 +302,14 @@ export default {
       this.form.linkUrl = rsp.linkUrl;
       this.form.logo[0].url = rsp.logo;
       this.form.logo[0].name = '点击查看大图';
-      this.form.markPrice = rsp.markPrice;
+      this.form.markPrice = rsp.markPrice;     
       this.dynamicTags = rsp.tag.substr(0,rsp.tag.length-1).split(",");
       if(this.dynamicTags.length > 1){
         this.addTag = false;
       }else{
         this.addTag = true;
       }
+
 
      this.dialogConfig(true)
 
@@ -357,6 +358,12 @@ export default {
       console.log(this.$refs[formName])
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if(this.dynamicTags.length<=0){
+              this.form.tag = this.dynamicTags.join(',')
+          }else{
+              this.form.tag = this.dynamicTags.join(',') + ',';
+          }
+  
             var result = {
                 "data":{
                     "id":this.id,
@@ -364,7 +371,8 @@ export default {
                     "sendappId":this.localData.sendappId,
                     "name":this.form.name,
                     "logo":this.form.logo[0].url,
-                    slogan:this.form.slogan,
+                    'slogan':this.form.slogan,
+                    "tag":this.form.tag,
                     "sortWeight":this.form.sortWeight,
                     "linkUrl":this.form.linkUrl,
                     'opStatus':this.form.opStatus,
@@ -639,6 +647,7 @@ export default {
 
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      console.log(this.dynamicTags)
       if(this.dynamicTags.length >= 2){
         this.addTag = false;
       }else{
