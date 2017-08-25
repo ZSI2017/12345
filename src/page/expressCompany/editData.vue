@@ -251,15 +251,15 @@ export default {
       var _this = this;
       _this.listLoading = true;
       console.log("-----------------------");
-        console.log(this.$refs[formName]),
+        console.log(this.$refs[formName]);
+        if(this.dynamicTags.length<=0){
+            this.ruleForm.tag = this.dynamicTags.join(',');
+        }else{
+            this.ruleForm.tag = this.dynamicTags.join(',') + ',';
+        }
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
-          if(this.dynamicTags.length<=0){
-                this.ruleForm.tag = this.dynamicTags.join(',');
-            }else{
-                this.ruleForm.tag = this.dynamicTags.join(',') + ',';
-            }
           
           let httpData = {
                 "data": {

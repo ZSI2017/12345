@@ -438,6 +438,8 @@ import localEvent from 'src/vuex/function.js';
                             if(error.data.meta.code == '0212'|| error.data.meta.code == '0211'){
                                 this.buttonText = '该订单不能取消，请对点击确定重新操作！';
                                 this.dialogButtonVisible = true;
+                            }else if(error.data.meta.code == '0514'){
+                                this.requestHttp();
                             }else{
                                 this.$message({
                                     type: 'error',

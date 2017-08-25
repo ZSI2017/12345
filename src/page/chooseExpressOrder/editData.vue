@@ -15,7 +15,7 @@
       <el-input v-if="isFromAddData" maxlength="20" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.slogan}} </div>
     </el-form-item>
-    <el-form-item label="标签">
+    <el-form-item label="标签" prop="tag">
       <div v-if="isFromAddData">
         <el-tag
           :key="tag"
@@ -235,15 +235,16 @@ export default {
       var _this = this;
       _this.listLoading = true;
       console.log("-----------------------");
-        console.log(this.$refs[formName]),
+        console.log(this.$refs[formName]);
+        if(this.dynamicTags.length<=0){
+            this.ruleForm.tag = this.dynamicTags.join(',');
+        }else{
+            this.ruleForm.tag = this.dynamicTags.join(',') + ',';
+        }
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
-          if(this.dynamicTags.length<=0){
-                this.ruleForm.tag = this.dynamicTags.join(',');
-            }else{
-                this.ruleForm.tag = this.dynamicTags.join(',') + ',';
-            }
+          
           let httpData = {
                 "data": {
                   "id": this.id,

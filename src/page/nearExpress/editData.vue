@@ -32,7 +32,7 @@
       <el-input v-if="isFromAddData" maxlength="20" v-model="form.slogan" placeholder="请输入广告语"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.slogan}} </div>
     </el-form-item>
-    <el-form-item label="标签">
+    <el-form-item label="标签" prop="tag">
       <div v-if="isFromAddData">
         <el-tag
           :key="tag"
@@ -359,13 +359,14 @@ export default {
     handleSubmit(formName) {
       this.listLoading = true;  
       console.log(this.$refs[formName])
+      if(this.dynamicTags.length<=0){
+          this.form.tag = this.dynamicTags.join(',')
+      }else{
+          this.form.tag = this.dynamicTags.join(',') + ',';
+      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if(this.dynamicTags.length<=0){
-                this.form.tag = this.dynamicTags.join(',')
-            }else{
-                this.form.tag = this.dynamicTags.join(',') + ',';
-            }
+          
             var result = {
                 "data":{
                     "id":this.id,
