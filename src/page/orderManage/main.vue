@@ -51,7 +51,7 @@
     </el-table-column>
     <el-table-column prop="expName" align="center" width="110" label="快递公司">
     </el-table-column>
-    <el-table-column prop="status" align="center"  label="状态" width="130">
+    <el-table-column prop="status" align="center" label="状态" width="130">
     </el-table-column>
     <el-table-column label="操作" align="center" width="200">
       <template scope="scope">

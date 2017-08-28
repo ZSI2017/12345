@@ -89,7 +89,7 @@
                         <el-col :span="6">{{serverList.title || '暂无信息'}}</el-col>
                     </el-row>
                     <el-row :span="24" class="serverList serverList2">
-                        <el-col :span="24">原因：{{serverList.content || '暂无数据'}}</el-col>
+                        <el-col :span="24">原因：{{serverList.content || '无'}}</el-col>
                     </el-row>
                 </div>
             </div>
@@ -247,6 +247,7 @@ import localEvent from 'src/vuex/function.js';
 
     },
     mounted() {
+        document.body.scrollTop = '0';
         var _this = this;
         var localData = localEvent.get("localorderManage");
         console.log(localData);
@@ -439,6 +440,10 @@ import localEvent from 'src/vuex/function.js';
                                 this.buttonText = '该订单不能取消，请对点击确定重新操作！';
                                 this.dialogButtonVisible = true;
                             }else if(error.data.meta.code == '0514'){
+                                this.$message({
+                                    type: 'warning',
+                                    message: '该订单已取消！'
+                                });
                                 this.requestHttp();
                             }else{
                                 this.$message({
