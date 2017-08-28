@@ -357,14 +357,13 @@ export default {
     //  点击提交
     handleSubmit(formName) {
       this.listLoading = true;
-       if(this.dynamicTags.length<=0){
-            this.form.tag = this.dynamicTags.join(',')
-        }else{
-            this.form.tag = this.dynamicTags.join(',') + ',';
-        }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-           
+            if(this.dynamicTags.length<=0){
+                this.form.tag = this.dynamicTags.join(',')
+            }else{
+                this.form.tag = this.dynamicTags.join(',') + ',';
+            }
             var result = {
                 "data":{
                     "id":this.id,

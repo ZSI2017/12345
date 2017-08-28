@@ -87,6 +87,7 @@ axios.interceptors.response.use(
 
 });
 
+var loginTimeoutFlag = true;
 //登陸超時提醒
 function loginTimeout() {
   vue.$confirm('登录超时, 请重新登录！', '提示', {
@@ -94,7 +95,7 @@ function loginTimeout() {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        loginTimeoutFlag = true;
         store.dispatch('setLoginOutFlag',true);
         let topLevel_domains = ".alipay-eco.com"
         console.log(topLevel_domains);
@@ -110,6 +111,7 @@ function loginTimeout() {
         window.location.href = fullPath;
         // vue.$router.push({path:'/login'});
       }).catch(() => {
+         loginTimeoutFlag = true;
           vue.$message({
             type: 'info',
             message: '已取消'
@@ -222,9 +224,9 @@ export default {
                 // before the request data is sent to the server
                 return data;
             }],
-            headers:{
-                 'X-Requested-With':'XMLHttpRequest'
-            },
+            // headers:{
+            //      'X-Requested-With':'XMLHttpRequest'
+            // },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
@@ -262,7 +264,10 @@ export default {
                     } else if(error.request) {
                         // vue.$message.error('接口异常');
                       if(error.request.status === 0 &&error.request.statusText == "" ){
-                              loginTimeout();
+                        if(loginTimeoutFlag) {
+                          loginTimeoutFlag= false;
+                           loginTimeout();
+                        }
                             // vue.$message.error('登录超时');
 
                         }
@@ -307,7 +312,10 @@ export default {
                     }
                 } else if(error.request) {
                   if(error.request.status === 0 &&error.request.statusText == "" ){
-                            loginTimeout();
+                         if(loginTimeoutFlag){
+                           loginTimeoutFlag = false;
+                           loginTimeout();
+                         }
                     }
                      // 请求发出了，但是没有接受到 响应
                     //  'error.request' 是一个 浏览器中的XMLHttpRequest 实例，

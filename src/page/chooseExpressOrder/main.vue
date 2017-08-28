@@ -61,7 +61,7 @@
         <el-popover class="popover" ref="popover4" width="300" trigger="click" >
           <span style="word-break:break-all;">{{scope.row.url}}</span>
         </el-popover>
-        <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
+        <el-button v-if="scope.row.url !== ''&&scope.row.url !== null"  v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
     </el-table-column>
     <!--<el-table-column prop="isManualPrice" label="系统发起支付" width="120">
@@ -114,7 +114,7 @@
     <el-table-column v-if="showOperation||showOperation2||showOperation3||showOperation4" label="操作" width="100">
       <template scope="scope">
         <div>
-          <div v-if="showOperation">
+          <div v-if="showOperation&&(Authority == '配置'||Authority == '开发者')">
             <el-button  @click="OperationTakeOff(scope.row)" type="text" size="small">
               {{scope.row.status==2? "置为下线":"置为上线"}}
             </el-button>

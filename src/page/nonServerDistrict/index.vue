@@ -265,7 +265,7 @@ export default {
               var _this = this;
               // _this.fullscreenLoading = true;
               _this.$http.post(url,{}, (data) => {
-                  console.log("successadsafasdf");
+                  // console.log("successadsafasdf");
                   this.searchCompanyName = data.slice(0)
                   // console.log(data);
                   for(let i =0;i<data.length;i++) {
@@ -274,10 +274,23 @@ export default {
                     this.searchCompanyName[i].index = i;
                     // console.log(data[i].logisMerchName)
                   }
-                  console.log(this.searchCompanyName);
-                  setTimeout(() => {
-                      _this.tableData = data.slice(0);
-                  }, 0);
+
+                  console.log("sdfasddasdfasdfasdfasdf");
+                  console.log(this.searchContent);
+              if(this.searchContent) {
+                      let searchContent = this.searchContent
+                     let filterData = data.filter(function(item){
+                         return item.logisMerchName == searchContent;
+                     })
+                     setTimeout(() => {
+                         _this.tableData = filterData.slice(0);
+                     }, 0);
+                } else {
+                   setTimeout(() => {
+                        _this.tableData = data.slice(0);
+                   }, 0);
+                 }
+
               }, (error) => {
                   console.log("errorasdfawefasdfaweasdfew");
                   console.log(error);

@@ -90,7 +90,7 @@
     <el-table-column v-if="showOperation||showOperation2||showOperation3||showOperation4" label="操作" width="130">
       <template scope="scope">
         <div>
-          <div v-if="showOperation">
+          <div v-if="showOperation&&(Authority == '配置'||Authority == '开发者')">
             <el-button  @click="OperationTakeOff(scope.row)" type="text" size="small">
               {{scope.row.status==2? "置为下线":"置为上线"}}
             </el-button>
@@ -330,7 +330,7 @@ export default {
              { type: 'number', min:1, max:999,message:'排序值范围1-999'}
           ],
           discountNum:[
-                   
+
           ],
           // status: [{
           //   required: true,

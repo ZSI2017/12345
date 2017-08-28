@@ -1,6 +1,6 @@
 <template type="html">
   <!--  覆盖地区 查看对话框 -->
-  <el-dialog title="覆盖地区" :visible.sync="visible" @close="dialogClose">
+  <el-dialog title="覆盖地区" :visible.sync="visible" @close="dialogClose" :lock-scroll="!visible">
     <el-table :data="transformGridData" border :show-header="showHeader" max-height="400">
       <el-table-column property="provinceName" label="省" width="200"></el-table-column>
       <el-table-column property="cityss" label="市">

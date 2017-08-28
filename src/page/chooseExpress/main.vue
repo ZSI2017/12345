@@ -1,5 +1,5 @@
 <template>
-<div class="section main" style="overflow:hidden"  element-loading-text="正在处理中..."  v-loading.body.fullscreen.lock="listLoading">
+<div class="section main" style="overflow:hidden"  element-loading-target="#app" element-loading-text="正在处理中..."  v-loading.body.fullscreen="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick" v-loading.body.fullscreen.lock="listLoadingNoText">
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
@@ -43,7 +43,7 @@
     empty-text="暂无数据"
     align="center"
     :default-sort="{prop: 'date', order: 'descending'}">
-    <el-table-column prop="name" label="运营图称">
+    <el-table-column prop="name" width="100" label="运营图名称">
     </el-table-column>
     <el-table-column prop="imageUrl" label="运营图">
        <template scope="scope">
@@ -58,7 +58,7 @@
         <el-popover ref="popover4" width="300" trigger="click">
             <span style="word-break:break-all;">{{scope.row.linkUrl}}</span>
         </el-popover>
-        <el-button v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
+        <el-button v-if="scope.row.linkUrl !== ''&&scope.row.linkUrl !== null" v-popover:popover4 style="font-size:12px;" size="small">查看链接</el-button>
       </template>
     </el-table-column>
     <el-table-column prop="address" label="覆盖地区">
@@ -103,7 +103,7 @@
     <el-table-column v-if="showOperation||showOperation2||showOperation3||showOperation4" label="操作" width="130">
       <template scope="scope">
         <div>
-          <div v-if="showOperation">
+          <div v-if="showOperation&&(Authority == '配置'||Authority == '开发者')">
             <el-button  @click="OperationTakeOff(scope.row)" type="text" size="small">
               {{scope.row.status==2? "置为下线":"置为上线"}}
             </el-button>
@@ -139,7 +139,7 @@
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
+        :current-page.sync="currentPage"
         :page-sizes="[5,10,20,50]"
         :page-size="pageSize"
          layout="total,sizes,prev, pager, next,jumper"
@@ -677,7 +677,7 @@ export default {
     handleCurrentChange(val) {
       this.halfListLoading = true;
       // alert("cccc"+this.currentPage)
-      this.currentPage = val;
+      // this.currentPage = val;
       this.PageStore.commit("setPage",val);
       let status = this.radio2;
       if(this.activeName2 == "待审核") {
