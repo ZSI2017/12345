@@ -224,9 +224,9 @@ export default {
                 // before the request data is sent to the server
                 return data;
             }],
-            // headers:{
-            //      'X-Requested-With':'XMLHttpRequest'
-            // },
+            headers:{
+                 'X-Requested-With':'XMLHttpRequest'
+            },
             transformResponse:[function(data) {
                   // before get the response data
                   return data;
@@ -290,7 +290,7 @@ export default {
         axios({
               url:url,
               method:'get',
-              // baseURL:URL,
+              baseURL:URL,
               timeout: 10000,
               params: data,
               headers: {
