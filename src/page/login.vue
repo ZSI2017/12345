@@ -38,7 +38,7 @@ export default {
       // Cookie.set("express1","mng",6000000);
       // this.$router.push({
       //   path: "/"
-      })
+      // })
     },
     loginInText() {
         this.$store.dispatch('setIsAuthority',true);

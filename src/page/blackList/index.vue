@@ -17,7 +17,7 @@
 
     <!-- 表格  -->
     <el-table
-        class="mainTable"
+        class="mainTable fontTable"
         style="width: 100%;margin-top:10px;"
         :data="tableData"
         stripe v-loading.body="listLoading"
@@ -148,6 +148,9 @@
 
 <style lang="scss">
 .main{
+    .fontTable .el-table__body col{
+        font-size: 20px;
+    }
     .status-font{
       height:42px;
       line-height: 42px;

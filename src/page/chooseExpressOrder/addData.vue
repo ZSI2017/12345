@@ -107,7 +107,7 @@ export default {
       options: [],
       value:'',
       merchantLogo:'',
-      linkUrlShow:true,
+      linkUrlShow:false,
       // 对输入表单进行验证
       ruleForm: {
         merchantName:'',
