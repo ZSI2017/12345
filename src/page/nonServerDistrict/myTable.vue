@@ -1,5 +1,5 @@
 <template type="html">
-   <section class="">
+   <section class="nonServerDistrict_class">
      <div class="hidden-columns">
          <slot></slot>
      </div>
@@ -104,6 +104,9 @@
         visibility: hidden;
         position: absolute;
         z-index: -1;
+    }
+    .nonServerDistrict_class {
+      // font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     }
 
 

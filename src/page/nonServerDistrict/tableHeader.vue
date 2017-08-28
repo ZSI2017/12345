@@ -81,6 +81,9 @@ export default {
     th {
         line-height: 30px;
         background-color: #eef1f6;
+        font-size:14px;
+        color:#1f2d3d;
+        font-weight: bold;
     }
     ,
     th+th {

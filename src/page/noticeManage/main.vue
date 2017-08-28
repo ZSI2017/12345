@@ -1,5 +1,5 @@
 <template>
-<div class="section main" style="overflow:hidden"  element-loading-text="正在处理中..." v-loading.body.fullscreen.lock="listLoading">
+<div class="section main" style="overflow:hidden"  element-loading-text="正在处理中..." v-loading.body.fullscreen="listLoading">
   <el-tabs v-model="activeName2" type="card" @tab-click="handleTabClick"  v-loading.body.fullscreen.lock="listLoadingNoText" >
     <el-tab-pane v-if ="(Authority == '配置'||Authority == '开发者')" label="配置" name="配置">配置</el-tab-pane>
     <el-tab-pane label="已上线" name="已上线">已上线</el-tab-pane>
@@ -104,7 +104,7 @@
     <el-table-column v-if="showOperation||showOperation2||showOperation3||showOperation4" label="操作" width="130">
       <template scope="scope">
         <div>
-          <div v-if="showOperation">
+          <div v-if="showOperation&&(Authority == '配置'||Authority == '开发者')">
             <el-button  @click="OperationTakeOff(scope.row)" type="text" size="small">
               {{scope.row.status==2? "置为下线":"置为上线"}}
             </el-button>

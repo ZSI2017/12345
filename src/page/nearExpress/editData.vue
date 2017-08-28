@@ -7,7 +7,7 @@
       <div class="detail-content" v-if="!isFromAddData"> {{form.name}} </div>
     </el-form-item>
     <el-form-item label="LOGO" prop="logo">
-      <el-upload 
+      <el-upload
           action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
           :on-change="handleImageChange"
           :on-preview="handlePictureCardPreview"
@@ -17,7 +17,7 @@
           :before-upload="beforeAvatarUpload"
           list-type="picture"
           :file-list="form.logo"
-          v-if="isFromAddData" 
+          v-if="isFromAddData"
           >
         <!--<i class="el-icon-plus"></i>-->
         <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
@@ -65,7 +65,7 @@
       </div>
     </el-form-item>
     <el-form-item label="排序值" prop="sortWeight">
-      <el-input v-if="isFromAddData" type="number" v-model="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
+      <el-input v-if="isFromAddData" type="number" v-model.number="form.sortWeight" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{form.sortWeight}} </div>
     </el-form-item>
     <el-form-item label="链接" prop="linkUrl">
@@ -224,7 +224,7 @@ export default {
         sortWeight: [
           { required: true, message: '排序值不能为空'},
           // { type: 'number', message: '排序值必须为数字值'}
-           { type: 'number', min:1, max:999,message:'排序值范围1-999'}
+           {type: 'number', min:1, max:999,message:'排序值范围1-999'}
         ],
         tag:[
           {type: 'string',required: true,message: '请输入标签'}
@@ -357,7 +357,7 @@ export default {
 
     //  点击提交
     handleSubmit(formName) {
-      this.listLoading = true;  
+      this.listLoading = true;
       console.log(this.$refs[formName])
       if(this.dynamicTags.length<=0){
           this.form.tag = this.dynamicTags.join(',')
@@ -366,7 +366,7 @@ export default {
       }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          
+
             var result = {
                 "data":{
                     "id":this.id,
@@ -391,16 +391,16 @@ export default {
             var _this = this;
             this.$http.post("/api/sendapp/audit/update",result,(result) => {
               _this.$store.dispatch('changeLoadingChange', true);
-              this.listLoading = false;  
+              this.listLoading = false;
               console.log(this);
-              console.log(result);             
+              console.log(result);
               this.$router.go(-1);
               this.$message({
                     type: 'success',
                     message: '保存成功！'
                 });
             },(error) => {
-              this.listLoading = false;            
+              this.listLoading = false;
               if(error.data.meta.code == "0017") {
                   this.$message.error('"名称重复！"')
               } else {
@@ -414,8 +414,8 @@ export default {
         }else{
             this.listLoading = false;
         }
-      })  
-         
+      })
+
 
     },
     // 点击返回 对应的事件处理
@@ -635,7 +635,7 @@ export default {
       const isLt2M = file.size / 1024 < 10;
 
       if (!isJPG && !isPNG) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传LOGO大小不能超过 10K!');

@@ -286,10 +286,10 @@ export default {
       },
       importRules:{
         expressName: [
-          { required: true, message: '公司名不能为空'},
+          {required: true, message: '公司名不能为空'},
         ],
         typeOfService: [
-          { required: true, message: '服务类型不能为空'},
+          {required: true, message: '服务类型不能为空'},
         ],
         fileList: [{
           required: true,
@@ -425,6 +425,7 @@ export default {
            this.importForm.fileList = fileList.slice(-1);
   },
   handleImportSave(){
+    console.log(this.importForm.expressName)
     this.$refs["importForm"].validate((valid) => {
         if(valid) {
           //
@@ -435,12 +436,14 @@ export default {
              "productTypeName":this.importForm.typeOfService[0]
            }
           this.$http.post("/api/freightPriceRule/import",data,(result)=>{
-                  this.$refs["importForm"].resetFields();
+
                   this.dialogImportVisible = false;
                   this.$message({
                     type: 'success',
                     message: '导入成功'
                   });
+                    this.handleQuery(true);
+                  // http://192.168.12.54:8080
            },(error)=>{
               this.$refs["importForm"].resetFields();
                if(error.data.meta.code == '0012'){
@@ -680,7 +683,7 @@ export default {
                         type: 'success',
                         message: '删除成功!'
                     });
-                    this.handleQuery();
+                    this.handleQuery(true);
                   }
           },(error)=>{
               this.$message({
@@ -891,8 +894,15 @@ export default {
       return jsonData.map(v => filterVal.map(j => v[j]));
     },
     handleLeadLine() {
-        this.dialogImportVisible = true;
-      const h = this.$createElement;
+      this.dialogImportVisible = true;
+      this.importForm={
+        expressName:'',
+        typeOfService:'',
+        fileList: [],
+      };
+      if(this.$refs["importForm"]) {
+          this.$refs["importForm"].resetFields();
+        }
       // this.$notify({
       //   title: '导入运线',
       //   message: h('i', {
