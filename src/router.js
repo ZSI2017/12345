@@ -89,7 +89,7 @@ import whitelist from './page/whitelist/index.vue'
 
 
 //订单批量处理
-import orderBatchpro from './page/orderBatchpro/index.vue'
+import orderBatchpro from './page/OrderBatchpro/index.vue'
 
 
 
