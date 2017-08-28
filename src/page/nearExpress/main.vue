@@ -39,7 +39,7 @@
             </el-dialog>
         </template>
     </el-table-column>
-    <el-table-column prop="name" label="公司名称">
+    <el-table-column prop="name" label="快递资源名称">
     </el-table-column>
     <el-table-column prop="slogan" label="广告语" width="260">
     </el-table-column>
@@ -74,11 +74,11 @@
           {{scope.row.gmtModified | formatDate}}
       </template>
     </el-table-column>
-    <el-table-column prop="markPrice" width="70" align="center" label="标价">
+    <!--<el-table-column prop="markPrice" width="70" align="center" label="标价">
         <template scope="scope">
          {{scope.row.markPrice || '-'}}
         </template>
-    </el-table-column>
+    </el-table-column>-->
     <el-table-column prop="sortWeight" width="70" align="center" label="排序值">
     </el-table-column>
     <el-table-column prop="status" width="110" label="状态" :sortable="showSortable">>

@@ -5,8 +5,8 @@
             订单号：{{orderNo}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-size:20px;font-weight:600;">运单号：{{waybillNo}}</span> </el-col>
         <el-col :span="24">
             <h4 class="grid-content bg-purple-dark orderTitle" style="margin:0;">
-              <span>快递公司:{{expName}}&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;当前状态:</span>
-                <span :class="{'success_color':orderSuccess, 'pickupno_color': sendExpress, 'pickupyes_color':payOrder}">{{strOrderStatus}}</span>
+              <span>快递公司：{{expName}}</span>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <span :class="{'success_color':orderSuccess, 'pickupno_color': sendExpress, 'pickupyes_color':payOrder,'cancle_color':cancleColor}">当前状态：{{strOrderStatus}}</span>
             </h4>
         </el-col>
 

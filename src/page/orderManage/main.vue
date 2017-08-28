@@ -28,6 +28,7 @@
     lement-loading-text="拼命加载中"
     style="width: 100%"
     max-height="3000"
+    :text-content.prop="toTop()"
   >
     <el-table-column prop="gmtCreate" align="center" width="180" label="下单时间">
     </el-table-column>
@@ -51,7 +52,7 @@
     </el-table-column>
     <el-table-column prop="expName" align="center" width="110" label="快递公司">
     </el-table-column>
-    <el-table-column prop="status" align="center"  label="状态" width="130">
+    <el-table-column prop="status" align="center" label="状态" width="130">
     </el-table-column>
     <el-table-column label="操作" align="center" width="200">
       <template scope="scope">
@@ -93,7 +94,8 @@ export default {
       listLoading: false, //loading框
       tableData: [],
       showAllifo:'查看完整信息',
-      viewIfoArray:[]
+      viewIfoArray:[],
+      scrollTop: 0
     }
   },
   mounted() {
@@ -112,11 +114,17 @@ export default {
           this.keyWord = '';
       }
 
+      this.scrollTop = 60
+
+
   },
   created() {
     // this.loadData();
   },
   methods: {
+    toTop(){  
+      this.scrollTop = 0;
+    },
     //从服务器读取数据
     loadData: function(){
       var _this =this;
@@ -161,6 +169,7 @@ export default {
       });
     },
     handleSizeChange(val) {
+      this.toTop();
       this.pageSize = val;
       this.currentPage = 1;
       this.loadData();
