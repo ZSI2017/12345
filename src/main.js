@@ -190,7 +190,6 @@ function filterMenu(result) {
         console.log("tto");
       // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
-<<<<<<< HEAD
 // } else {
   // store.dispatch('setAuthority',"开发者");
   // store.dispatch('changeNextRouter',to.fullPath);
@@ -226,10 +225,6 @@ function filterMenu(result) {
   //    //  alert("asdfasdfsd")
   //      next();
   // }
-=======
-   
-
->>>>>>> e5ebc3b145a5be70393084df1dbc0f9f48071216
   //  ###########################################################
   //  #############################################################
 //   store.dispatch('changeNextRouter',to.fullPath);
