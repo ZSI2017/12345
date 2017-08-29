@@ -1,16 +1,14 @@
 <template>
 <div class="section">
-  <div class="addButton">
-    <el-row :span="24">
-        <el-col :span="22" style="height:48px;">
-        </el-col>
-        <el-col :span="2" style="height:48px;">
-            <el-button type="primary" @click="setNewData" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
-        </el-col>
-    </el-row>
-  </div>
-
-
+    <div class="addButton">
+        <el-row :span="24">
+            <el-col :span="22" style="height:48px;">
+            </el-col>
+            <el-col :span="2" style="height:48px;">
+                <el-button type="primary" @click="setNewData" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
+            </el-col>
+        </el-row>
+    </div>
     <el-table
         class="mainTable"
         :data="tableData"
@@ -18,14 +16,23 @@
         max-height="3000"
         align="center"
         >
-        <el-table-column prop="logo" label="处理结果记录" align="center">
+        <el-table-column prop="gmtBegin" label="创建时间" align="center">
+        </el-table-column>
+        <el-table-column prop="logo" label="处理结果" align="center">
+            <template scope="scope">
+                `成功处理${scope.row.successCnt},失败处理${scope.row.failCnt}`
+            </template>
         </el-table-column>
         <el-table-column prop="tag" label="处理时间" align="center">
+            <template scope="scope">
+                <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtBegin | formatDate}}</p>
+                <p style="padding:0;margin:0;text-align:center">至</p>
+                <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtEnd | formatDate}}</p>
+            </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column prop="tag" label="操作" align="center">
         </el-table-column>
     </el-table>
-
     <div class="block pagination" style="margin-top:30px;float:right;">
         <el-pagination
         @size-change="handleSizeChange"
@@ -36,10 +43,9 @@
         layout="total,sizes,prev, pager, next,jumper" :total="totalCount">
         </el-pagination>
     </div>
-
     <el-dialog title="批量导入" :visible.sync="dialogImportVisible" size="tiny" :before-close="handleImportClose">
         <el-form :model="importForm" style="margin-left:40px">
-            <el-radio-group v-model="radio2" style="padding-bottom:10px;">
+            <el-radio-group v-model="radio2" style="padding-bottom:20px;">
                 <el-radio :label="1">标记其他渠道支付</el-radio>
                 <el-radio :label="2">备选项</el-radio>
             </el-radio-group>
@@ -57,54 +63,57 @@
                 <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
                 <div slot="tip" class="el-upload__tip">仅支持xls格式的文件</div>
             </el-upload>
-
             <!-- <a href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/download">下载模板</a> -->
             </el-form-item>
-
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogImportVisible = false">取 消</el-button>
             <el-button type="primary" @click="handleImportSave">确 定</el-button>
         </div>
     </el-dialog>
-
-
 </div>
-  
 </template>
 
 <script>
-import localEvent from 'src/vuex/function.js';
-
+// import localEvent from 'src/vuex/function.js';
+import {
+  formatDate
+} from 'src/util/date.js';
 
 export default {
-  data() {
-    return {
-        url:'',
-        tableData: [],
-        pageSize: 5,
-        currentPage: 1,
-        dialogImportVisible:false,
-        dialogVisible:false,
-        radio2:1,
-        totalCount: 0, //默认数据总数
-        // 导入对话框
-        importForm:{
-            // expressName:'',
-            // typeOfService:'',
-            fileList: []
+    data() {
+        return {
+            url:'',
+            tableData: [],
+            pageSize: 5,
+            currentPage: 1,
+            dialogImportVisible:false,
+            dialogVisible:false,
+            radio2:1,
+            totalCount: 0, //默认数据总数
+            // 导入对话框
+            importForm:{
+                // expressName:'',
+                // typeOfService:'',
+                fileList: []
+            }
+
         }
-
-    }
-  },
-  mounted() {
+    },
+    mounted() {
 
 
-  },
-  created() {
-        
-  },
-  methods: {
+    },
+    created() {
+            
+    },
+        filters: {
+        formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+        }
+    },
+    methods: {
         loadData: function(){
             var _this =this;
             _this.currentPage = 1;

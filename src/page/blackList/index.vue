@@ -1,5 +1,5 @@
 <template>
-  <div class="section main">
+  <div class="section main mainFont">
     <el-row>
       <el-col :span="24" class="status-font tip1"><i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;"></i>提示：
         当日用户取消 ≥
@@ -147,10 +147,10 @@
 </script>
 
 <style lang="scss">
-.main{
-    .fontTable .el-table__body col{
-        font-size: 20px;
+    .mainFont .el-table__body-wrapper .el-table__row .cell,.mainFont .el-table__body-wrapper .el-table__row .cell span{
+        font-size: 22px;
     }
+.main{
     .status-font{
       height:42px;
       line-height: 42px;
