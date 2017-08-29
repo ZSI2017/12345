@@ -106,7 +106,7 @@ export default {
           this.radio = localRadio;
           console.log(localKeyword);
 
-          this.loadData();
+          this.loadData(true);
       }else{
           this.radir = '1';
           this.keyWord = '';
@@ -114,13 +114,20 @@ export default {
 
   },
   created() {
+    this.currentPage = Number(this.PageStore.pageCount);
+    this.pageSize = this.PageStore.pageSize;
     // this.loadData();
   },
   methods: {
     //从服务器读取数据
-    loadData: function(){
+    loadData: function(pageNotChange){
       var _this =this;
-      _this.currentPage = 1;
+      if(pageNotChange){}else {
+        _this.currentPage = 1;
+        _this.pageSize = 5;
+        this.PageStore.commit("setPage",1);
+        this.PageStore.commit("setPageSize",5);
+      }
       _this.listLoading = true;
       _this.url = "/api/order/list"; // 默认展开
       if(this.keyword == ""){
@@ -163,11 +170,14 @@ export default {
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
-      this.loadData();
+      this.PageStore.commit("setPage",1);
+      this.PageStore.commit("setPageSize",val);
+      this.loadData(true);
     },
     handleCurrentChange(val) {
       this.currentPage = val;
       this.listLoading = true;
+      this.PageStore.commit("setPage",val);
       this.$message(`当前页${val}`);
       var _this = this;
       _this.$http.post(this.url,{

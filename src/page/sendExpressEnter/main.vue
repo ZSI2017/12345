@@ -258,12 +258,13 @@ export default {
     // var interval = setInterval(function(){
     //      console.log(_this.Authority);
     // },100);
+    _this.currentPage = Number(_this.PageStore.pageCount);
+    _this.pageSize = _this.PageStore.pageSize;
     setTimeout(function(){
       _this.initActiveName = _this.Authority == "审核"?"已上线":'配置'
       // alert(this.PageStore.tabName);
       _this.activeName2 = _this.PageStore.tabName ||   _this.initActiveName;
 
-      _this.currentPage = _this.PageStore.pageCount;
       _this.radio2= Number(_this.PageStore.radio);
       console.log("$router: %o",_this.$route);
       _this.handleTabClick({label:_this.activeName2},null,_this.currentPage)
@@ -615,6 +616,7 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
       this.PageStore.commit("setPage",1);
+      this.PageStore.commit("setPageSize",val);
       let statusPageFlag = this.radio2;
       if(this.tabFlag == '待审核'){
         statusPageFlag = '';
