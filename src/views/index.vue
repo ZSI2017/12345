@@ -81,6 +81,7 @@ import "@/style/common.scss";
 import { getLoadingFlag } from "@/vuex/getters";
 import localEvent from 'src/vuex/function.js';
 import Cookie from "@/util/cookie.js"
+import SessionStorage from "@/util/sessionStorage.js"
 // import "../styles/usage/page/app.scss";
 // import tableVue from "./views/table";
 // import VueRouter  from "vue-router"
@@ -213,7 +214,7 @@ export default {
               _this.$store.dispatch('changeNextRouter','/home');
               let topLevel_domains = ".alipay-eco.com"
               console.log(topLevel_domains);
-              localEvent.clear("ACL");
+              SessionStorage.clear("ACL");
               // Cookie.delete("SMJSESSIONID");
               Cookie.delete('ALIPAYJSESSIONID');
               Cookie.delete("ctoken",topLevel_domains);

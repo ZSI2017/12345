@@ -7,6 +7,7 @@ import routes  from "./router.js"
 import Axios from "axios";
 import Vuex from "vuex";
 import Cookie from "@/util/cookie.js"
+import SessionStorage from "@/util/sessionStorage.js"
 
 
 // 引入vuex 进行全局状态管理
@@ -111,10 +112,10 @@ function filterMenu(result) {
    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
 
              console.log("ECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONIDECOACLJSESSIONID");
-             localEvent.get("ACL");
-             console.log(localEvent.get("ACL") == '');
-           if(localEvent.get("ACL") !== '') {
-                 let result = localEvent.get("ACL");
+             SessionStorage.get("ACL");
+             console.log(SessionStorage.get("ACL") == '');
+           if(SessionStorage.get("ACL") !== '') {
+                 let result = SessionStorage.get("ACL");
                  filterMenu(result);
            }else {
              http.post('/api/user/info/get',{},(result)=>{
@@ -125,7 +126,7 @@ function filterMenu(result) {
                       }
                       console.log("+++++++++++++++++");
                       console.log(result);
-                      localEvent.set('ACL',result);
+                      SessionStorage.set('ACL',result);
                       filterMenu(result);
                         // router.go(0)
                  });
@@ -175,7 +176,7 @@ function filterMenu(result) {
    } else if(to.fullPath == "/login") {
       console.log("login ----");
        store.dispatch('setLoginOutFlag',false);
-       localEvent.clear("ACL");
+       SessionStorage.clear("ACL");
        next();
       //  Cookie.delete("ECOACLJSESSIONID");
       //  Cookie.delete("SMJSESSIONID");
