@@ -9,7 +9,7 @@ export default {
            },
           get: function(key) {
               if(this.issessionStorage) {
-                return window.sessionStorage.getItem(item) ?JSON.parse(window.sessionStorage.getItem(key)):''
+                return window.sessionStorage.getItem(key) ?JSON.parse(window.sessionStorage.getItem(key)):''
               } else {
                console.log("no sessionStorage");
               }
