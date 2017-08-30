@@ -270,8 +270,11 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
+          var dialogImgSave = '';
           if(_this.dialogImg2.length < 1){
-            var dialogImgSave = ''
+              dialogImgSave = '';
+          }else{
+              dialogImgSave = _this.dialogImg2[0];
           }
           let httpData = {
                 "data": {

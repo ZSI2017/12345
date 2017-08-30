@@ -164,7 +164,7 @@ import localEvent from 'src/vuex/function.js';
   export default {
     data() {
       return {
-        orderSuccess:true,
+        orderSuccess:false,
         sendExpress:false,
         payOrder:false,
         cancleColor:false,
@@ -248,6 +248,7 @@ import localEvent from 'src/vuex/function.js';
     },
     mounted() {
         document.body.scrollTop = '0';
+        document.documentElement.scrollTop = '0';
         var _this = this;
         var localData = localEvent.get("localorderManage");
         console.log(localData);
@@ -323,6 +324,11 @@ import localEvent from 'src/vuex/function.js';
                     this.payOrder = false;
                     this.sendExpress = true;    
                     this.cancleColor = false;                
+                }else if (rsp.orderStatus == '3' && rsp.payStatus == '5') {
+                    this.orderSuccess = false;
+                    this.payOrder = false;
+                    this.sendExpress = false;    
+                    this.cancleColor = true;                
                 }else{
                     this.payOrder = true;
                     this.orderSuccess = false;

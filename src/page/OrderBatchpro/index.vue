@@ -17,20 +17,26 @@
         align="center"
         >
         <el-table-column prop="gmtBegin" label="创建时间" align="center">
+            <template scope="scope">
+                <p>{{scope.row.gmtBegin | formatDate}}</p>
+            </template>
         </el-table-column>
         <el-table-column prop="logo" label="处理结果" align="center">
             <template scope="scope">
-                `成功处理${scope.row.successCnt},失败处理${scope.row.failCnt}`
+                {{`成功处理${scope.row.successCnt}个，失败处理${scope.row.failCnt}个`}}
             </template>
         </el-table-column>
-        <el-table-column prop="tag" label="处理时间" align="center">
+        <el-table-column label="处理时间" align="center">
             <template scope="scope">
                 <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtBegin | formatDate}}</p>
                 <p style="padding:0;margin:0;text-align:center">至</p>
                 <p style="padding:0;margin:0;text-align:center">{{scope.row.gmtEnd | formatDate}}</p>
             </template>
         </el-table-column>
-        <el-table-column prop="tag" label="操作" align="center">
+        <el-table-column label="操作" align="center">
+            <template scope="scope">
+                <el-button @click="handleUpdown(scope.$index,scope.row)" type="text" size="small">下载处理结果</el-button>
+            </template>
         </el-table-column>
     </el-table>
     <div class="block pagination" style="margin-top:30px;float:right;">
@@ -43,31 +49,29 @@
         layout="total,sizes,prev, pager, next,jumper" :total="totalCount">
         </el-pagination>
     </div>
-    <el-dialog title="批量导入" :visible.sync="dialogImportVisible" size="tiny" :before-close="handleImportClose">
+    <el-dialog title="批量导入" :visible.sync="dialogImportVisible" size="tiny" :before-close="handleClose">
         <el-form :model="importForm" style="margin-left:40px">
             <el-radio-group v-model="radio2" style="padding-bottom:20px;">
                 <el-radio :label="1">标记其他渠道支付</el-radio>
-                <el-radio :label="2">备选项</el-radio>
+                <!--<el-radio :label="2">备选项</el-radio>-->
             </el-radio-group>
-            <el-form-item label="选择导入文本" prop="fileList" :inline="true"  :label-width="120">
-            <!-- http://sendexmng-sit.alipay-eco.com -->
-            <el-upload
-                class="upload-demo"
-                action="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/upload"
-                :on-change="handleFileChange"
-                :file-list="importForm.fileList"
-                :on-remove="handleRemove"
-                :on-success='handleSuccess'
-                :on-error='handlerror'
-                >
-                <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-                <div slot="tip" class="el-upload__tip">仅支持xls格式的文件</div>
-            </el-upload>
-            <!-- <a href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/download">下载模板</a> -->
+            <el-form-item label="选择导入文本"  :label-width="120">
+                <el-upload
+                    class="upload-demo"
+                    action="http://sendexmng-sit.alipay-eco.com/api/orderbatch/batchOtherPay"
+                    :on-change="handleFileChange"
+                    :file-list="importForm.fileList"
+                    :on-remove="handleRemove"
+                    :on-success='handleSuccess'
+                    :on-error='handlerror'
+                    >
+                    <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+                    <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
+                </el-upload>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogImportVisible = false">取 消</el-button>
+            <el-button @click="handleCanle">取 消</el-button>
             <el-button type="primary" @click="handleImportSave">确 定</el-button>
         </div>
     </el-dialog>
@@ -93,8 +97,6 @@ export default {
             totalCount: 0, //默认数据总数
             // 导入对话框
             importForm:{
-                // expressName:'',
-                // typeOfService:'',
                 fileList: []
             }
 
@@ -102,40 +104,47 @@ export default {
     },
     mounted() {
 
-
     },
     created() {
             
     },
-        filters: {
+    filters: {
         formatDate(time) {
-        var date = new Date(time);
-        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+            var date = new Date(time);
+            return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
         }
     },
     methods: {
         loadData: function(){
             var _this =this;
-            _this.currentPage = 1;
             _this.listLoading = true;
-            _this.url = ""; // 默认展开
-            _this.$http.post(this.url,{},
+            let listUrl = "/api/orderbatch/list"; // 默认展开
+            _this.$http.post(listUrl,{
+                "pages": {
+                    "page_size": this.pageSize,
+                    "page_num": _this.currentPage - 1
+                },
+                "con": {
+                    "searchStr":''
+                }
+            },
             (rsp)=>{
+                console.log(rsp);
                 _this.listLoading = false;
                 _this.tableData = rsp.page_list;
                 _this.totalCount = parseInt(rsp.pages.cnt);
                 if(_this.totalCount == "0"){
                 this.$message({
-                    message: '未查询到内容，请重新输入！',
-                    type: 'warning'
+                    message: '成功！',
+                    type: 'success'
                 });
                 }
             },(error)=>{
                 console.log(error)
                 _this.listLoading = false;
                 this.$message({
-                    message: '未查询到内容，请重新输入！',
-                    type: 'warning'
+                    message: '失败！',
+                    type: 'error'
                 });
                 console.log('failed');
             });
@@ -143,55 +152,53 @@ export default {
         setNewData(){
             this.dialogImportVisible = true;
         },
+        //取消
+        handleCanle(){
+            this.dialogImportVisible = false;
+        },
+         //确定
+        handleImportSave(){
+            this.dialogImportVisible = false; 
+            this.loadData();
+            this.importForm.fileList = [];                                   
+        },
         handlerror(err){
-            // alert(err)
+            console.log(err)
         },
         handleSuccess(response){
-            // alert(response)
+            console.log('success')
+            console.log(response)
         },
         handleFileChange(file,fileList){
-                this.importForm.fileList = fileList.slice(-1);
+            this.importForm.fileList = fileList.slice(-1);
         },
-        handleImportSave(){
-            // this.$refs["importForm"].validate((valid) => {
-            //     if(valid) {
-                //
-                // let data = {
-                //     "logMerchantId":this.importForm.expressName[1].toString(),
-                //     "logMerchantName":this.importForm.expressName[0],
-                //     "productTypeId":this.importForm.typeOfService[1].toString(),
-                //     "productTypeName":this.importForm.typeOfService[0]
-                // }
-                // this.$http.post("/api/freightPriceRule/import",data,(result)=>{
-                //         this.$refs["importForm"].resetFields();
-                //         this.dialogImportVisible = false;
-                //         this.$message({
-                //             type: 'success',
-                //             message: '导入成功'
-                //         });
-                // },(error)=>{
-                //     this.$refs["importForm"].resetFields();
-                //     if(error.data.meta.code == '0012'){
-                //         //  this.dialogVisible = true;
-                //         this.$confirm('导入文件失败，是否下载查看失败内容?', '提示', {
-                //             confirmButtonText: '确定',
-                //             cancelButtonText: '取消',
-                //             type: 'warning'
-                //             }).then(() => {
-                //             window.location.href="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/findFile"
-                //             }).catch(() => {
-                //             // this.$message({
-                //             //   type: 'info',
-                //             //   message: '已取消删除'
-                //             // });
-                //             });
-                //         };
-                //     });
-                // }else {
-                //     return false;
-                // }
-            // })
-        }
+        //关闭dialog
+        handleClose(){
+            this.dialogImportVisible = false;
+            this.importForm.fileList = [];
+        },
+        //下载详情
+        handleUpdown(index,row){
+            console.log(index)
+            console.log(row)
+            let downloadLink = row.fileUrl;
+            window.location.href = downloadLink;
+        },
+        //处理分页
+        handleSizeChange(val) {
+            this.pageSize = val;
+            this.currentPage = 1;
+            this.loadData();
+        },
+        handleCurrentChange(val) {
+            this.currentPage = val;
+            this.listLoading = true;
+            this.$message(`当前页${val}`);
+            var _this = this;
+            this.loadData();
+            console.log(`当前页: ${val}`);
+        },
+
     }    
 }
 </script>
