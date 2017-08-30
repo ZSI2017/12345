@@ -477,7 +477,7 @@ export default {
     },
     // 标签页导航
     handleTabClick(tab, event,countPage,loadingFlag,internalPageSize) {
-      console.log("%c into handleTabClick","color:red;font-size:16px;");
+      // console.log("%c into handleTabClick","color:red;font-size:16px;");
       var _this = this;
       if(loadingFlag === undefined){
         _this.listLoadingNoText = true;
@@ -485,8 +485,8 @@ export default {
       _this.tableFalg = false
       _this.showConfig = false;
       _this.showflag = false;
-      console.log("%c currentpage from handleTabClick:  %s",'color:red',this.currentPage);
-      console.log("%c countPage from handleTabClick:  %s",'color:red', countPage);
+      // console.log("%c currentpage from handleTabClick:  %s",'color:red',this.currentPage);
+      // console.log("%c countPage from handleTabClick:  %s",'color:red', countPage);
       if(countPage !== undefined) {
         _this.currentPage = countPage;
       } else  {

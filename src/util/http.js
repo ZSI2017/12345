@@ -4,6 +4,7 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import store from "@/vuex/store.js";
 import localEvent from '@/vuex/function.js';
+import SessionStorage from "@/util/sessionStorage.js"
 import 'element-ui/lib/theme-default/index.css'
 import $ from'jquery';
 Vue.use(ElementUI);
@@ -99,7 +100,7 @@ function loginTimeout() {
         store.dispatch('setLoginOutFlag',true);
         let topLevel_domains = ".alipay-eco.com"
         console.log(topLevel_domains);
-        localEvent.clear("ACL");
+        SessionStorage.clear("ACL");
         Cookie.delete("SMJSESSIONID");
         Cookie.delete('ALIPAYJSESSIONID');
         Cookie.delete("ctoken",topLevel_domains);
@@ -128,7 +129,7 @@ function loginNoeprivileged(baseUrl) {
         store.dispatch('setLoginOutFlag',true);
         let topLevel_domains = ".alipay-eco.com"
         console.log(topLevel_domains);
-        localEvent.clear("ACL");
+        SessionStorage.clear("ACL");
         Cookie.delete("SMJSESSIONID");
         Cookie.delete('ALIPAYJSESSIONID');
         Cookie.delete("ctoken",topLevel_domains);
