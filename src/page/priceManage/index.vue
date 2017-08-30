@@ -123,10 +123,11 @@
       </el-select>
     </el-form-item>
     <el-form-item label="选择导入文本" prop="fileList" :inline="true"  :label-width="importLabelWidth">
+      <!-- action="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/upload" -->
       <!-- http://sendexmng-sit.alipay-eco.com -->
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/upload"
+        action="http://192.168.12.54:8080/api/freightPriceRule/upload"
         :on-change="handleFileChange"
         :file-list="importForm.fileList"
         :on-remove="handleRemove"
@@ -447,7 +448,7 @@ export default {
            },(error)=>{
               this.$refs["importForm"].resetFields();
                if(error.data.meta.code == '0012'){
-                //  this.dialogVisible = true;
+                 this.dialogImportVisible = false;
                  this.$confirm('导入文件失败，是否下载查看失败内容?', '提示', {
                       confirmButtonText: '确定',
                       cancelButtonText: '取消',
@@ -520,9 +521,7 @@ export default {
           this.typeOfServiceOptions = result.slice(0);
           this.typeOfServiceLoading = false;
         })
-
       }
-
     },
     handleSendProvinceChange(visible) {
       if (visible) {
