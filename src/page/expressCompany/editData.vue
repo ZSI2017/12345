@@ -55,13 +55,13 @@
       <el-input v-model.number="ruleForm.sortWeight"  type="number" v-if="isFromAddData" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
       <div class="detail-content" v-if="!isFromAddData"> {{ruleForm.sortWeight}} </div>
     </el-form-item>
-    <el-form-item label="是否由系统发起支付">
-      <el-radio-group :disabled='!disabled'  v-model="ruleForm.pricingMode">
+    <el-form-item label="是否由系统发起支付" >
+      <el-radio-group :disabled='!disabled' v-model="ruleForm.pricingMode" @change="pricingFlag">
         <el-radio class="radio" :label="1">是</el-radio>
         <el-radio class="radio" :label="2">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否允许议价">
+    <el-form-item label="是否允许议价" v-show="pricingFlagvis">
       <el-radio-group :disabled='!disabled' v-model="ruleForm.isManualPrice">
         <el-radio class="radio" :label="1">是</el-radio>
         <el-radio class="radio" :label="0">否</el-radio>
@@ -105,6 +105,7 @@ export default {
     return {
       dialogVisible:false,//大图显示
       listLoading:false,//loading框
+      pricingFlagvis: false,
       //标签添加控制
       addTag: true,
       url:'/api/expresscompany/audit/update',
@@ -218,6 +219,12 @@ export default {
       this.dynamicTags = rsp.tag.split(',',(rsp.tag.split(',').length-1))
       console.log(this.dynamicTags)
       console.log(rsp.tag)
+      console.log(`系统支付${this.ruleForm.pricingMode}`)
+      if(this.ruleForm.pricingMode == 1){
+          this.pricingFlagvis = false;
+      }else{
+          this.pricingFlagvis = true;
+      }
       if(this.dynamicTags.length > 1){
         this.addTag = false;
       }else{
@@ -344,7 +351,15 @@ export default {
     handlePreview(file) {
       this.dialogVisible = true;
     },
-
+    //系统发起支付是/否
+    pricingFlag(lebel){
+        if(this.ruleForm.pricingMode == 1){
+            this.pricingFlagvis = false;
+            this.ruleForm.isManualPrice = 0;
+        }else{
+          this.pricingFlagvis = true;
+        }
+    }
 
   }
 }

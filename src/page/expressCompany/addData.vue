@@ -56,12 +56,12 @@
       <el-input v-model.number="ruleForm.sortWeight"  type="number" placeholder="请输入1-999，排序值越大越靠前"> </el-input>
     </el-form-item>
     <el-form-item label="是否由系统发起支付">
-      <el-radio-group v-model="ruleForm.pricingMode">
+      <el-radio-group v-model="ruleForm.pricingMode"  @change="pricingFlag">
         <el-radio class="radio" :label="1">是</el-radio>
         <el-radio class="radio" :label="2">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否允许议价">
+    <el-form-item label="是否允许议价" v-show="pricingFlagvis">
       <el-radio-group v-model="ruleForm.isManualPrice">
         <el-radio class="radio" :label="1">是</el-radio>
         <el-radio class="radio" :label="0">否</el-radio>
@@ -105,6 +105,7 @@ export default {
   data() {
     return {
       pageId:'',
+      pricingFlagvis:false,
       dialogVisible:false,//大图显示
       listLoading: false,//loading框
       //标签添加控制
@@ -300,8 +301,15 @@ export default {
     handlePreview(file) {
       this.dialogVisible = true;
     },
-
-
+    //系统发起支付是/否
+    pricingFlag(lebel){
+        if(lebel == 1){
+            this.pricingFlagvis = false;
+            this.ruleForm.isManualPrice = 0;
+        }else{
+          this.pricingFlagvis = true;
+        }
+    }
   }
 }
 </script>

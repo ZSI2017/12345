@@ -4,7 +4,8 @@
     <el-row>
       <el-col :span="6" class="import-font">关键字：</el-col>
       <el-col :span="10">
-          <el-input :span="10" :type="number" v-model="keyword" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
+          <el-input :span="10" v-if="regFlag" :type="number" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" v-model="keyword" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
+          <el-input :span="10" v-if="!regFlag" :type="number" v-model="keyword" size="large" @keyup.enter.native="loadData" placeholder="请输入支付宝绑定的手机号/订单号/运单号"></el-input>
       </el-col>
       <el-col :span="4" class="import-search">
         <el-button type="primary" @click="loadData" style="width:100px;">搜 索</el-button>
@@ -82,6 +83,7 @@ export default {
   data() {
     return {
       number:'number',
+      regFlag:true,
       pageSize: 5,
       currentPage: 1,
       //输入框关键字
@@ -93,7 +95,8 @@ export default {
       listLoading: false, //loading框
       tableData: [],
       showAllifo:'查看完整信息',
-      viewIfoArray:[]
+      viewIfoArray:[],
+      oldNum:0  
     }
   },
   mounted() {
@@ -112,6 +115,17 @@ export default {
           this.keyWord = '';
       }
 
+  },
+  computed:{
+    keyword:{
+        get:function(){
+            return this.oldNum;
+        
+        },
+        set:function(newValue){
+            this.oldNum=newValue.replace(/[^\d]/g,'');
+        }
+    }
   },
   created() {
     this.currentPage = Number(this.PageStore.pageCount);
@@ -270,8 +284,10 @@ export default {
       this.type = this.radio.toString()
       if(this.radio == 3){
         this.number = '';
+        this.regFlag = false;
       }else{
         this.number = 'number';
+        this.regFlag = true;
       }
     }
   }
