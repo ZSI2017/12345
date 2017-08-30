@@ -50,7 +50,7 @@
         </el-pagination>
     </div>
     <el-dialog title="批量导入" :visible.sync="dialogImportVisible" size="tiny" :before-close="handleClose">
-        <el-form :model="importForm" style="margin-left:40px">
+        <el-form :model="importForm" style="margin-left:40px;height:160px;">
             <el-radio-group v-model="radio2" style="padding-bottom:20px;">
                 <el-radio :label="1">标记其他渠道支付</el-radio>
                 <!--<el-radio :label="2">备选项</el-radio>-->
@@ -70,6 +70,7 @@
                 </el-upload>
             </el-form-item>
         </el-form>
+        <el-button style="margin-left:40px" type="text"  @click="handleDownload">下载模板</el-button>
         <div slot="footer" class="dialog-footer">
             <el-button @click="handleCanle">取 消</el-button>
             <el-button type="primary" @click="handleImportSave">确 定</el-button>
@@ -158,6 +159,13 @@ export default {
         },
          //确定
         handleImportSave(){
+            if(this.importForm.fileList.length == 0){
+                this.$message({
+                    message: '请选择导入文本！',
+                    type: 'warning'
+                });
+                return;
+            }
             this.dialogImportVisible = false; 
             this.loadData();
             this.importForm.fileList = [];                                   
@@ -171,6 +179,9 @@ export default {
         },
         handleFileChange(file,fileList){
             this.importForm.fileList = fileList.slice(-1);
+        },
+        handleDownload(){
+            window.location.href="http://expressprod.oss-cn-hangzhou.aliyuncs.com/DemoExcel/template-orderbatch.xlsx"
         },
         //关闭dialog
         handleClose(){
