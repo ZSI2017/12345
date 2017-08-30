@@ -10,6 +10,7 @@ const PageStore = function(pageCount) {
        this.pageCount = "1";    // 默认的数据类型
        this.tabName =  "";  // tab 菜单页
        this.radio=  "1";       // 单选按钮
+       this.pageSize = 5;      // 默认 每页数量
 }
 PageStore.prototype.mutations = {
      setPage(pageCount){
@@ -20,6 +21,9 @@ PageStore.prototype.mutations = {
      },
      setRadio(radio) {
          this.radio = radio;
+     },
+     setPageSize(size) {
+         this.pageSize  = size;
      }
 },
 

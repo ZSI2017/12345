@@ -41,13 +41,14 @@ export default {
       // })
     },
     loginInText() {
-        this.$store.dispatch('setIsAuthority',true);
-        this.$store.dispatch('setLoginOutFlag',false);
+      this.$store.dispatch('setIsAuthority',true);
+      this.$store.dispatch('setLoginOutFlag',false);
           // Cookie.set("express1","mng",6000000);
      let hashURL = this.$store.getters.getNextRouter;
      if(hashURL == "/login"||hashURL== "/") {
          hashURL= "/home";
      };
+      hashURL = hashURL.replace('/addData','').replace('/editData','').replace('/detail','');
       let index = window.location.href.indexOf("#");
       let baseURL = window.location.href.slice(0,index);
       let fullPath = baseURL +"#"+hashURL;

@@ -177,6 +177,7 @@ export default {
     handleSelect(key, keyPath) {
          this.PageStore.commit("setPage",1);
          this.PageStore.commit("setRadio",1);
+         this.PageStore.commit("setPageSize",5);
          this.PageStore.commit("setTabName",this.Authority == "审核"?"已上线":'配置');
       if (this.$route.path == "/sendExpress/addData"
            ||this.$route.path == "/sendExpressEnter/addData"

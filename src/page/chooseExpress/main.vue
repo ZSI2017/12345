@@ -259,7 +259,6 @@ export default {
 
     //  alert(this.$store.state.loadingFlag)
     // 在页面初始化时，获取pageName,标签页，单选框 的记录值
-
     this.pageId = "SD1010"; // 寄快递首页
     ((this.$route.path == "/promotion/chooseExpress" &&
         (this.pageId = "BM1010")) ||
@@ -272,11 +271,15 @@ export default {
     // var interval = setInterval(function(){
     //      console.log(_this.Authority);
     // },100);
-    _this.currentPage = _this.PageStore.pageCount;
+    console.log("%c currentpage from created:  %s",'color:red',this.currentPage);
+    console.log("%c currentpage from created:  %s",'color:red', this.PageStore.pageCount);
+    _this.currentPage = Number(_this.PageStore.pageCount);
+    _this.pageSize = _this.PageStore.pageSize;
+    // alert(this.PageStore.pageSize);
     setTimeout(function(){
       _this.initActiveName = _this.Authority == "审核"?"已上线":'配置'
       // alert(this.PageStore.tabName);
-      _this.activeName2 = _this.PageStore.tabName ||   _this.initActiveName;
+      _this.activeName2 = _this.PageStore.tabName || _this.initActiveName;
 
         //  alert("first init"+_this.currentPage)
       _this.radio2= Number(_this.PageStore.radio);
@@ -306,7 +309,7 @@ export default {
           (this.pageId = "SS1010")))
       // this.pageId = "SD1010"; // 寄快递首页
       this.activeName2 = this.initActiveName;
-      this.handleTabClick({label:this.activeName2},null,undefined,true);
+      this.handleTabClick({label:this.activeName2},null,undefined,true,5);
       // alert(this.auditStatusFlage)
       // 默认状态是 运营位管理的 寄快递首页
 
@@ -322,6 +325,7 @@ export default {
       // this.showflag = true;
       this.PageStore.commit("setPage",1);
       this.PageStore.commit("setRadio",1);
+      this.PageStore.commit("setPageSize",5);
       this.PageStore.commit("setTabName",this.initActiveName);
 
       //
@@ -472,7 +476,8 @@ export default {
       this.myDiglogContent = "确认后，该内容将待审详情";
     },
     // 标签页导航
-    handleTabClick(tab, event,countPage,loadingFlag) {
+    handleTabClick(tab, event,countPage,loadingFlag,internalPageSize) {
+      console.log("%c into handleTabClick","color:red;font-size:16px;");
       var _this = this;
       if(loadingFlag === undefined){
         _this.listLoadingNoText = true;
@@ -480,11 +485,16 @@ export default {
       _this.tableFalg = false
       _this.showConfig = false;
       _this.showflag = false;
+      console.log("%c currentpage from handleTabClick:  %s",'color:red',this.currentPage);
+      console.log("%c countPage from handleTabClick:  %s",'color:red', countPage);
       if(countPage !== undefined) {
         _this.currentPage = countPage;
-      } else {
-        _this.currentPage = 1;    //跳转标签页 页码归 1
-      };
+      } else  {
+         _this.currentPage = 1;    //跳转标签页 页码归 1
+      }
+      if(internalPageSize !== undefined) {
+           this.pageSize = internalPageSize;
+      }
       // alert("before fff")
       // alert(_this.currentPage)
       console.log(tab.label);
@@ -653,6 +663,7 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
       this.PageStore.commit("setPage",1);
+      this.PageStore.commit("setPageSize",val);
       let status = this.radio2;
       if(this.activeName2 == "待审核") {
           status = "";
@@ -675,6 +686,7 @@ export default {
     },
     //切换分页
     handleCurrentChange(val) {
+      console.log("%c into handleCurrentChange","color:red;font-size:16px;");
       this.halfListLoading = true;
       // alert("cccc"+this.currentPage)
       // this.currentPage = val;

@@ -190,8 +190,41 @@ function filterMenu(result) {
         console.log("tto");
       // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
-   
-
+// } else {
+  // store.dispatch('setAuthority',"开发者");
+  // store.dispatch('changeNextRouter',to.fullPath);
+  // if(((from.path == "/promotion/sendExpress/addData")
+  //   ||(from.path == "/promotion/chooseExpress/addData")
+  //   ||(from.path == "/promotion/expressOrder/addData")
+  //   ||(from.path == "/sendExpressEnter/addData")
+  //   ||(from.path == "/noticeManage/addData")
+  //   ||(from.path == "/nearExpress/addData")
+  //   ||(from.path == "/oneCitySend/addData")
+  //   ||(from.path == '/expressCompany/addData')
+  //   ||(from.path == "/oneCityFreight/addData")
+  //   ||(from.path == "/chooseExpressOrder/addData")
+  //   ||(from.path == "/dev/logismerchant/addData")
+  //   ||(from.path == "/promotion/sendExpress/editData")
+  //   ||(from.path == "/promotion/chooseExpress/editData")
+  //   ||(from.path == "/promotion/expressOrder/editData")
+  //   ||(from.path == "/sendExpressEnter/editData")
+  //   ||(from.path == "/noticeManage/editData")
+  //   ||(from.path == "/nearExpress/editData")
+  //   ||(from.path == "/oneCitySend/editData")
+  //    ||(from.path == "/oneCityFreight/editData")
+  //   ||(from.path == '/expressCompany/editData')
+  //   ||(from.path == "/chooseExpressOrder/editData")
+  //   ||(from.path == "/dev/logismerchant/editData")
+  // )&&store.getters.getLoadingChange === false) {
+  //     store.dispatch('changeLoadingFlag');
+  //     next({path:from.path});
+  //  }else{
+  //   //  router.app.$store.state.loadingChange = false
+  //    store.dispatch('changeLoadingChange',false);
+  //     //  router.app.$store.state.loadingFlag = false;
+  //    //  alert("asdfasdfsd")
+  //      next();
+  // }
   //  ###########################################################
   //  #############################################################
 //   store.dispatch('changeNextRouter',to.fullPath);
