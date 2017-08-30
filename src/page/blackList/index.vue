@@ -162,60 +162,60 @@
         },
         handleEdit(index,row) {
 
-            // console.log(index)
-            // console.log(row)
-            // console.log(row.orderNo)
+            console.log(index)
+            console.log(row)
+            console.log(row.orderNo)
 
 
-            // var orderNo = row.orderNo;
-            // var _this = this;
-            // var allIfoUrl = '/api/order/details';
-            // var requestData = {};
-            // //脱敏判断
-            // if(this.viewIfoArray.indexOf(row.orderNo) == -1){
-            //     this.viewIfoArray.push(row.orderNo)
-            //     console.log(this.viewIfoArray)
-            //     requestData = {
+            var orderNo = row.orderNo;
+            var _this = this;
+            var allIfoUrl = '/api/order/details';
+            var requestData = {};
+            //脱敏判断
+            if(this.viewIfoArray.indexOf(row.orderNo) == -1){
+                this.viewIfoArray.push(row.orderNo)
+                console.log(this.viewIfoArray)
+                requestData = {
+                'orderNo': orderNo,
+                'isFull':'1'
+                }
+                this.tableData[index].checked = true;
+            }else{
+                this.viewIfoArray.splice(this.viewIfoArray.indexOf(row.orderNo),1);
+                console.log(this.viewIfoArray)
+                requestData = {
+                'orderNo': orderNo,
+                'isFull':'0'
+                }
+                this.tableData[index].checked = false;
+
+            }
+            // if(this.checked  == false){
+            //   requestData = {
             //     'orderNo': orderNo,
             //     'isFull':'1'
-            //     }
-            //     this.tableData[index].checked = true;
+            //   }
+            //   this.checked = true;
             // }else{
-            //     this.viewIfoArray.splice(this.viewIfoArray.indexOf(row.orderNo),1);
-            //     console.log(this.viewIfoArray)
-            //     requestData = {
+            //   requestData = {
             //     'orderNo': orderNo,
             //     'isFull':'0'
-            //     }
-            //     this.tableData[index].checked = false;
+            //   }
+            //   this.checked = false;
 
             // }
-            // // if(this.checked  == false){
-            // //   requestData = {
-            // //     'orderNo': orderNo,
-            // //     'isFull':'1'
-            // //   }
-            // //   this.checked = true;
-            // // }else{
-            // //   requestData = {
-            // //     'orderNo': orderNo,
-            // //     'isFull':'0'
-            // //   }
-            // //   this.checked = false;
 
-            // // }
-
-            // _this.$http.post(allIfoUrl,requestData,(rsp)=>{
-            //     console.log(rsp);
-            //     row.snderName =  rsp.snderName;
-            //     row.snderMobile = rsp.snderMobile;
-            //     row.snderAddress = rsp.snderAddress;
-            //     row.rcvrName = rsp.rcvrName;
-            //     row.rcvrMobile = rsp.rcvrMobile;
-            //     row.rcvrAddress  = rsp.rcvrAddress;
-            // },(error)=>{
-            //     console.log('failed');
-            // });
+            _this.$http.post(allIfoUrl,requestData,(rsp)=>{
+                console.log(rsp);
+                row.snderName =  rsp.snderName;
+                row.snderMobile = rsp.snderMobile;
+                row.snderAddress = rsp.snderAddress;
+                row.rcvrName = rsp.rcvrName;
+                row.rcvrMobile = rsp.rcvrMobile;
+                row.rcvrAddress  = rsp.rcvrAddress;
+            },(error)=>{
+                console.log('failed');
+            });
 
         },
 
@@ -225,7 +225,7 @@
 
 <style lang="scss">
     .mainFont .el-table__body-wrapper .el-table__row .cell,.mainFont .el-table__body-wrapper .el-table__row .cell span{
-        font-size: 20px;
+        font-size: 14px;
     }
 .main{
     .status-font{
