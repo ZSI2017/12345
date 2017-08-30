@@ -152,7 +152,7 @@ export default {
           {min:1, max:20,message:'广告语长度不大于20'}
         ],
         tag:[
-          {type: 'string',required: true,message: '请输入标签'}
+          {type: 'string',whitespace:true,required: true,message: '请输入标签'}
         ],
       }
     }
@@ -280,7 +280,7 @@ export default {
     },
     handleInputConfirm() {
       let inputValue = this.inputValue;
-      if (inputValue) {
+      if (inputValue&&inputValue.trim().length !== 0) {
         this.dynamicTags.push(inputValue);
         this.ruleForm.tag = this.dynamicTags.join(',') + ',';
         if(this.dynamicTags.length >= 2){

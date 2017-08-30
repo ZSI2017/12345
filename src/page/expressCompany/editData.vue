@@ -9,7 +9,7 @@
     </el-form-item>
     <el-form-item label="LOGO">
       <img v-show="merchantLogo!='' && merchantLogo!=null" width="150px" @click="handlePreview" style="float:left;cursor:pointer;" :src="merchantLogo" alt="">
-      <div v-show="merchantLogo=='' || merchantLogo==null" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>            
+      <div v-show="merchantLogo=='' || merchantLogo==null" style='width:150px;height:100px;border:1px solid #ccc;border-radius:5px;'></div>
     </el-form-item>
     <el-form-item label="广告语" prop="slogan">
       <el-input v-if="isFromAddData" maxlength="20" v-model="ruleForm.slogan" placeholder="请输入广告语"> </el-input>
@@ -168,7 +168,7 @@ export default {
 
   },
   mounted() {
-       
+
     let localData = localEvent.get("localExpressCompany");
     console.log(localData);
     // console.log(localData.promotionId);
@@ -232,7 +232,7 @@ export default {
       }
       // this.dialogConfig(true)
       if ( this.$route.path == "/expressCompany/detail") {
-          this.ruleForm.opStatus =  rsp.status=='1'?1:2;        
+          this.ruleForm.opStatus =  rsp.status=='1'?1:2;
       } else {
           this.ruleForm.opStatus =  rsp.opStatus=='1'?1:2;
       }
@@ -267,7 +267,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log('error submit');
-          
+
           let httpData = {
                 "data": {
                   "id": this.id,
@@ -331,7 +331,7 @@ export default {
     },
     handleInputConfirm() {
       let inputValue = this.inputValue;
-      if (inputValue) {
+      if (inputValue&&inputValue.trim().length !== 0) {
         this.dynamicTags.push(inputValue);
         this.ruleForm.tag = this.dynamicTags.join(',');
         if(this.dynamicTags.length >= 2){
