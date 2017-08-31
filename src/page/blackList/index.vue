@@ -39,7 +39,7 @@
             <template scope="scope">
                 <div>
                     <el-button @click="loadingTakeOffFlag = true" type="text" size="small">解除黑名单</el-button>
-                    <el-button @click="RegardOrderFlag = true" type="text" size="small">查看相关订单</el-button>
+                    <el-button @click="handleRegardOrder" type="text" size="small">查看相关订单</el-button>
                     <el-button ref='allIfo' @click="handleEdit(scope.$index,scope.row)" type="text" size="small">{{scope.row.checked?"隐藏完整信息":"查看完整信息"}}</el-button>
                 </div>
             </template>
@@ -58,13 +58,19 @@
     </el-dialog>
       <!-- 相关订单 对话框  -->
     <el-dialog title="相关订单" :visible.sync="RegardOrderFlag" size="tiny">
-        <el-table :data="gridData">
-            <el-table-column property="orderNo" label="订单号" ></el-table-column>
-            <el-table-column property="time" label="创建时间"></el-table-column>
-        </el-table>
+        <div style="max-height:300px;overflow:auto;">
+            <el-table :data="gridData" >
+                <el-table-column property="orderNo" align="center" label="订单号" ></el-table-column>
+                <el-table-column property="gmtCancel" align="center" label="取消时间">
+                    <template scope="scope">
+                        <p>{{scope.row.gmtCancel | formatDate}}</p>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="RegardOrderFlag = false">取 消</el-button>
-            <el-button type="primary" @click="handleRegardOrder">确 定</el-button>
+            <!--<el-button @click="RegardOrderFlag = false">取 消</el-button>-->
+            <el-button type="primary" @click="RegardOrderFlag = false">确 定</el-button>
         </span>
     </el-dialog>
 
@@ -72,6 +78,9 @@
 
 </template>
 <script>
+import {
+  formatDate
+} from 'src/util/date.js';
 
   export default {
     data() {
@@ -79,6 +88,7 @@
         keyword:"",
         num1: "",
         tableData: [],
+        gridData:[],
         loadingTakeOffFlag: false,
         RegardOrderFlag: false,
         alipayUserId:'',//Uid
@@ -102,6 +112,12 @@
     },
     created() {
 
+    },
+    filters: {
+        formatDate(time) {
+            var date = new Date(time);
+            return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+        }
     },
     methods: {
       handleSearch(){
@@ -158,61 +174,54 @@
         },
         //查看相关订单
         handleRegardOrder(){
-            
+            this.RegardOrderFlag = true;
+            let regardUrl = "/api/epuser/cancelorder/list";
+            var _this = this;
+            _this.$http.post(regardUrl,{'alipayUid':this.alipayUserId},(result) => {
+                console.log(result)
+                _this.gridData = result;
+            },(error) => {
+                
+                _this.$message({
+                    type: 'error',
+                    message: error.data.meta.msg
+                });
+            });
         },
         handleEdit(index,row) {
 
             console.log(index)
             console.log(row)
-            console.log(row.orderNo)
+            console.log(row.alipayUserId)
 
 
-            var orderNo = row.orderNo;
+            var alipayUserId = row.alipayUserId;
             var _this = this;
-            var allIfoUrl = '/api/order/details';
+            var allIfoUrl = '/api/epuser/hide';
             var requestData = {};
             //脱敏判断
-            if(this.viewIfoArray.indexOf(row.orderNo) == -1){
-                this.viewIfoArray.push(row.orderNo)
+            if(this.viewIfoArray.indexOf(row.alipayUserId) == -1){
+                this.viewIfoArray.push(row.alipayUserId)
                 console.log(this.viewIfoArray)
                 requestData = {
-                'orderNo': orderNo,
-                'isFull':'1'
+                'uid': alipayUserId,
+                'hided':false
                 }
                 this.tableData[index].checked = true;
             }else{
-                this.viewIfoArray.splice(this.viewIfoArray.indexOf(row.orderNo),1);
+                this.viewIfoArray.splice(this.viewIfoArray.indexOf(row.alipayUserId),1);
                 console.log(this.viewIfoArray)
                 requestData = {
-                'orderNo': orderNo,
-                'isFull':'0'
+                'uid': alipayUserId,
+                'hided':true
                 }
                 this.tableData[index].checked = false;
-
             }
-            // if(this.checked  == false){
-            //   requestData = {
-            //     'orderNo': orderNo,
-            //     'isFull':'1'
-            //   }
-            //   this.checked = true;
-            // }else{
-            //   requestData = {
-            //     'orderNo': orderNo,
-            //     'isFull':'0'
-            //   }
-            //   this.checked = false;
-
-            // }
-
             _this.$http.post(allIfoUrl,requestData,(rsp)=>{
                 console.log(rsp);
-                row.snderName =  rsp.snderName;
-                row.snderMobile = rsp.snderMobile;
-                row.snderAddress = rsp.snderAddress;
-                row.rcvrName = rsp.rcvrName;
-                row.rcvrMobile = rsp.rcvrMobile;
-                row.rcvrAddress  = rsp.rcvrAddress;
+                row.alipayUserName =  rsp.alipayUserName;
+                row.alipayUserMoblie = rsp.alipayUserMoblie;
+                row.blackCnt = rsp.blackCnt;
             },(error)=>{
                 console.log('failed');
             });

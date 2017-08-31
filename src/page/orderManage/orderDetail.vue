@@ -5,8 +5,8 @@
             订单号：{{orderNo}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-size:20px;font-weight:600;">运单号：{{waybillNo}}</span> </el-col>
         <el-col :span="24">
             <h4 class="grid-content bg-purple-dark orderTitle" style="margin:0;">
-              <span>快递公司：{{expName}}</span>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                <span :class="{'success_color':orderSuccess, 'pickupno_color': sendExpress, 'pickupyes_color':payOrder,'cancle_color':cancleColor}">当前状态：{{strOrderStatus}}</span>
+              <span>快递公司：{{expName}}</span>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;当前状态：
+                <span :class="{'success_color':orderSuccess, 'pickupno_color': sendExpress, 'pickupyes_color':payOrder,'cancle_color':cancleColor}">{{strOrderStatus}}</span>
             </h4>
         </el-col>
 
@@ -309,31 +309,36 @@ import localEvent from 'src/vuex/function.js';
                 this.items[10].message = rsp.gmtWaybill || '暂无';
                 this.items[11].message = '.';
                 
-                if(rsp.orderStatus == '1'){
+                if(rsp.orderStatus == '1' || rsp.orderStatus == '2'){ //待支付 || 待取件
                     this.orderSuccess = true;
                     this.payOrder = false;
                     this.sendExpress = false;  
                     this.cancleColor = false;                    
-                }else if(rsp.orderStatus == '4'){
+                }else if(rsp.orderStatus == '4'){ //已取件
                     this.cancleColor = true;
                     this.orderSuccess = false;
                     this.payOrder = false;
                     this.sendExpress = false; 
-                }else if (rsp.orderStatus == '3' && rsp.payStatus == '1') {
+                }else if (rsp.orderStatus == '3' && rsp.payStatus == '1') { //已取件未支付
                     this.orderSuccess = false;
                     this.payOrder = false;
                     this.sendExpress = true;    
                     this.cancleColor = false;                
-                }else if (rsp.orderStatus == '3' && rsp.payStatus == '5') {
+                }else if (rsp.orderStatus == '3' && rsp.payStatus == '3') { //已取件已支付
+                    this.orderSuccess = false;
+                    this.payOrder = true;
+                    this.sendExpress = false;    
+                    this.cancleColor = false;                
+                }else if (rsp.orderStatus == '3' && rsp.payStatus == '5') { // 已取件转其他渠道支付
                     this.orderSuccess = false;
                     this.payOrder = false;
                     this.sendExpress = false;    
                     this.cancleColor = true;                
                 }else{
-                    this.payOrder = true;
                     this.orderSuccess = false;
-                    this.sendExpress = false; 
-                    this.cancleColor = false;
+                    this.payOrder = false;
+                    this.sendExpress = false;    
+                    this.cancleColor = false; 
                 }
 
                 //寄件人信息
