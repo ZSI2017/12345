@@ -60,7 +60,7 @@
             //
             //  this.$nextTick(()=> {alert(this.scrollY)});
            })
-           ()
+           
          console.log(" %cthis is from MyTable:%o ","color:green",this.ColumnData);
        },
        mounted(){

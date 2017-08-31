@@ -35,7 +35,14 @@ Object.defineProperty(Vue.prototype, '$http', { value: http})
 Object.defineProperty(Vue.prototype,'PageStore',{value:PageStore})
 
  // Vue的 日志与警告
-Vue.config.silent = true
+Vue.config.silent = true;
+// if(process.env.NODE_ENV === "development"){}else {
+//   //去除控制台打印
+//   console.log = function(){};
+//   console.warn = function(){};
+//   console.error = function(){};
+// }
+
 
 const router = new VueRouter({
       routes,

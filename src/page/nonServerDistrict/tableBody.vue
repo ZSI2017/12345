@@ -1,25 +1,3 @@
-<!-- <template type="html">
-  <section class="tableBody">
-      <table-column />
-    <table
-        border="0"
-        cellspacing="0"
-        bgcolor="white"
-        width="100%"
-        align="center"
-        >
-        <colgroup>
-            <col  v-for="(item,index) in store"  :key="index"/>
-        </colgroup>
-          <tr v-for="(items,indexs) in sourceData">kk
-            <td v-for="(item,index) in store ">
-                {{items[item.myProps]?items[item.myProps]:"---"}}
-             </td>
-          </tr>
-    </table>
-
-  </section>
-</template> -->
 <script type="text/javascript">
 import scrollbarWidth from 'element-ui/src/utils/scrollbar-width';
 import tableColumn from "@/page/nonServerDistrict/tableColumn"
