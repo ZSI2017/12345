@@ -60,7 +60,14 @@ export default {
 
         // _this.listLoading = false;
         console.log(rsp)
-        if(rsp){
+        if(rsp.result === null) {
+          this.$message({
+              message: '未查询到内容，请重新输入！',
+              type: 'warning'
+            });
+            this.hasData = false;
+            this.showCode = false;
+        }else {
           this.$message({
             message: '查询到内容！',
             type: 'success'
@@ -68,17 +75,7 @@ export default {
           this.content = rsp;
           this.hasData = true;
           this.showCode = true;
-        }else {
-          this.$message({
-              message: '未查询到内容，请重新输入！',
-              type: 'warning'
-            });
-            this.hasData = false;
-            this.showCode = false;
         }
-
-
-
       },(error)=>{
         _this.showCode = false;
         this.$message({
