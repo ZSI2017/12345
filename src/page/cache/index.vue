@@ -72,7 +72,7 @@ export default {
             message: '查询到内容！',
             type: 'success'
           });
-          this.content = rsp.replace(",",",<br>").replace("{","{<br>").replace("[","[<br>").replace("]","]<br>").replace("}","}<br>");
+          this.content = rsp.replace(/,/g,",<br>").replace(/{/g,"{<br>").replace(/\[/g,"[<br>").replace(/]/g,"]<br>").replace(/}/g,"<br>}");
           this.hasData = true;
           this.showCode = true;
         }
@@ -87,7 +87,7 @@ export default {
     },
     clearData() {
       var _this =this;
-      this.$http.post(this.url,{
+      this.$http.post("/api/ocs/del",{
           "key":this.keyword
       },(rsp)=>{
          this.content = '';
