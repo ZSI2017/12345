@@ -4,7 +4,7 @@
   <header class="header" :class="{ 'header-fixed' : headerFixed }" style="background-color:#5295e2;">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content" @click="handleHome" style="float:left;width:230px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;">{{ title }}</div>
+        <div class="grid-content" @click="handleHome" style="float:left;width:220px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;">{{ title }}</div>
         <div class="header-right" style="float:right;width:400px;height:60px;text-align:center;line-height:60px;color:#fff;cursor: pointer;padding-right:20px;">
           <el-row>
             <el-col :span="17"><div class="grid-content">当前用户: {{userID}}</div></el-col>
