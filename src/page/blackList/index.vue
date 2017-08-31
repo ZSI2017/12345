@@ -133,17 +133,18 @@ import {
           }
           _this.$http.post(url,{'mobile':this.keyword},(result) => {
               console.log(result)
-              let resultSpace = [];
-              resultSpace.push(result);
-              _this.alipayUserId = result.alipayUserId;
-              _this.tableData = resultSpace.splice(0,1);
               if(result.result === null){
                   _this.$message({
                       type: 'warning',
                       message: '该数据没有查询到内容！'
                   });
+                  this.tableData = [];
                   return;
               }
+              let resultSpace = [];
+              resultSpace.push(result);
+              _this.alipayUserId = result.alipayUserId;
+              _this.tableData = resultSpace.splice(0,1);
           },(error) => {
               _this.$message({
                   type: 'error',
