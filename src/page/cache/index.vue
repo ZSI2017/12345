@@ -72,7 +72,7 @@ export default {
             message: '查询到内容！',
             type: 'success'
           });
-          this.content = rsp.replace(",",",<br>").replace("{","{<br>").replace("[","[<br>").replace("]","]<br>").replace("}","}<br>");。;
+          this.content = rsp.replace(",",",<br>").replace("{","{<br>").replace("[","[<br>").replace("]","]<br>").replace("}","}<br>");
           this.hasData = true;
           this.showCode = true;
         }
