@@ -69,7 +69,7 @@
                     <el-button style="margin-left: 10px;" size="small" type="success" @click="handleImportSave">上传到服务器</el-button>
                     <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
                 </el-upload>-->
-                
+
                 <el-upload
                     class="upload-demo"
                     ref="upload"
@@ -80,7 +80,7 @@
                     :on-change="handleFileChange"
                     :on-success='handleSuccess'
                     :auto-upload="false">
-                    <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>                    
+                    <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
                     <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
                 </el-upload>
             </el-form-item>
@@ -120,7 +120,7 @@ export default {
         this.loadData();
     },
     created() {
-            
+
     },
     filters: {
         formatDate(time) {
@@ -183,24 +183,24 @@ export default {
             //     });
             //     return;
             // }
-            this.$refs.upload.submit();            
+            this.$refs.upload.submit();
             this.dialogImportVisible = false;
             this.listLoading = true;
-                
-            
-            
+
+
+
         },
         handlerror(err){
             console.log(err)
         },
         handleSuccess(response, file, fileList){
 
-            
-           
+
+
             console.log(this.fileList)
             console.log('success')
             this.loadData();
-            this.listLoading = false;                  
+            this.listLoading = false;
         },
         handleRemove(file, fileList) {
             console.log(file, fileList);
@@ -211,7 +211,7 @@ export default {
             // this.fileList = fileList.slice(-1);
             console.log(file)
             console.log(fileList)
-   
+
         },
 
         handleDownload(){
@@ -243,7 +243,7 @@ export default {
             console.log(`当前页: ${val}`);
         },
 
-    }    
+    }
 }
 </script>
 
