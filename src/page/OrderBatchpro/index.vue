@@ -50,6 +50,7 @@
         </el-pagination>
     </div>
     <el-dialog title="批量导入" :visible.sync="dialogImportVisible" size="tiny" :before-close="handleClose">
+        <p style="color:red;margin:0 40px 20px 40px;">请先与快递公司、用户确认所有批处理订单均真实支付，否则可能产生巨额资金损失！！！</p>
         <el-form :model="importForm" ref="importForm" style="margin-left:40px;height:160px;">
             <el-radio-group v-model="radio2" style="padding-bottom:20px;">
                 <el-radio :label="1">标记其他渠道支付</el-radio>
@@ -75,8 +76,17 @@
         <el-button style="margin-left:40px" type="text"  @click="handleDownload">下载模板</el-button>
         <div slot="footer" class="dialog-footer">
             <el-button @click="handleCanle">取 消</el-button>
-            <el-button type="primary" @click="handleImportSave">确 定</el-button>
+            <el-button type="primary" @click="handleConfirm">确 定</el-button>
         </div>
+    </el-dialog>
+    <el-dialog title="" :visible.sync="loadingTakeOffFlag" size="tiny">
+        <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
+        <p style="margin:0 40px 20px 40px;">确认批量标记其他渠道支付？</p>        
+        <p style="color:red;margin:0 40px 20px 40px;">请先与快递公司、用户确认所有批处理订单均真实支付，否则可能产生巨额资金损失！！！</p>
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
+        <el-button type="primary" @click="handleImportSave">确 定</el-button>
+        </span>
     </el-dialog>
 </div>
 </template>
@@ -100,7 +110,8 @@ export default {
             totalCount: 0, //默认数据总数
             // 导入对话框
             fileList: [],
-            isDisabled:false
+            isDisabled:false,
+            loadingTakeOffFlag:false
         }
     },
     mounted() {
@@ -171,6 +182,14 @@ export default {
             this.$refs.upload.submit();            
             this.dialogImportVisible = false;
             this.listLoading = true;
+            this.$message({
+                message: '批量处理完成！',
+                type: 'success'
+            });
+        },
+        handleConfirm(){
+            this.loadingTakeOffFlag = true;
+            this.dialogImportVisible = false;
         },
         handlerror(err){
             console.log(err)
