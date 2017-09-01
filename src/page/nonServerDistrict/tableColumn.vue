@@ -19,7 +19,7 @@ import {bus} from "@/page/nonServerDistrict/bus.js";
            {
              'class' :'table-cell'
             },
-           [this.$scopedSlots.default()]
+           [this.$scopedSlots.default?this.$scopedSlots.default():'']
         )
      },
      data() {

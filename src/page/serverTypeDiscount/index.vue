@@ -34,19 +34,6 @@
       <el-button type="primary" @click="setNewData" style="float:right;"><i class="el-icon-plus"></i> 添加</el-button>
     </el-col>
   </el-row>
-
-  <!--<div class="block pagination" style="margin: 5px 0 5px 0;float:right;">
-    <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5,10,20,50]"
-        :page-size="pageSize"
-        layout="total,sizes,prev, pager, next,jumper"
-        :total="totalCount">
-    </el-pagination>
-  </div>-->
-
   <!-- 表格  -->
   <el-table v-if="tableFalg"
     class="mainTable"
@@ -357,19 +344,20 @@ export default {
 
   },
   created() {
-    var _this = this;
+    // var _this = this;
     // var interval = setInterval(function(){
     //      console.log(_this.Authority);
     // },100);
-    _this.currentPage = Number(_this.PageStore.pageCount);
-    setTimeout(function(){
-      _this.initActiveName = _this.Authority == "审核"?"已上线":'配置'
+    this.currentPage = Number(this.PageStore.pageCount);
+    setTimeout(_=>{
+      console.log(this)
+      this.initActiveName = this.Authority == "审核"?"已上线":'配置'
       // alert(this.PageStore.tabName);
-      _this.activeName2 = _this.PageStore.tabName ||   _this.initActiveName;
+      this.activeName2 = this.PageStore.tabName ||   this.initActiveName;
 
-      _this.radio2= Number(_this.PageStore.radio);
-      console.log("$router: %o",_this.$route);
-      _this.handleTabClick({label:_this.activeName2},null,_this.currentPage)
+      this.radio2= Number(this.PageStore.radio);
+      console.log("$router: %o",this.$route);
+      this.handleTabClick({label:this.activeName2},null,this.currentPage)
     },600)
 
 

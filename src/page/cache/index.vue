@@ -4,7 +4,7 @@
         <el-row :span="24">
             <el-col :span="6" class="import-font">KEY：</el-col>
             <el-col :span="10">
-                <el-input :span="10" v-model="keyword" type="text" size="large" @keyup.enter.native="handleSearchData" placeholder="请输入缓存关键字"></el-input>
+                <el-input :span="10" v-model="keyword" type="text" size="large" @keyup.enter.native="loadData" placeholder="请输入缓存关键字"></el-input>
 
             </el-col>
             <el-col :span="6" class="import-search">
@@ -15,7 +15,7 @@
         </el-row>
     </div>
     <div class=" " style="margin-top:30px;">
-        缓存内容
+        缓存内容:
     </div>
 
 <pre>
@@ -60,26 +60,24 @@ export default {
 
         // _this.listLoading = false;
         console.log(rsp)
-        if(rsp.result){
-          this.$message({
-            message: '查询到内容！',
-            type: 'success'
-          });
-          _this.content = rsp;
-          _this.hasData = true;
-          _this.showCode = true;
-        }else {
+        if(rsp.result === null) {
           this.$message({
               message: '未查询到内容，请重新输入！',
               type: 'warning'
             });
-              _this.showCode = false;
+            this.hasData = false;
+            this.showCode = false;
+        }else {
+          this.$message({
+            message: '查询到内容！',
+            type: 'success'
+          });
+          this.content = rsp.replace(",",",<br>").replace("{","{<br>").replace("[","[<br>").replace("]","]<br>").replace("}","}<br>");
+          this.hasData = true;
+          this.showCode = true;
         }
-
-
-
       },(error)=>{
-          _this.showCode = false;
+        _this.showCode = false;
         this.$message({
             message: '未查询到内容，请重新输入！',
             type: 'warning'
@@ -92,15 +90,16 @@ export default {
       this.$http.post(this.url,{
           "key":this.keyword
       },(rsp)=>{
-         _this.content = '';
-         _this.hasData = false;
+         this.content = '';
+         this.showCode = false;
+         this.hasData = false;
          this.$message({
              message: '清除成功',
              type: 'success'
            });
       },(error)=>{
         this.$message({
-            message: '清除失敗，請重試！',
+            message: '清除失败，请重试！',
             type: 'warning'
           });
       });

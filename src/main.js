@@ -35,7 +35,14 @@ Object.defineProperty(Vue.prototype, '$http', { value: http})
 Object.defineProperty(Vue.prototype,'PageStore',{value:PageStore})
 
  // Vue的 日志与警告
-Vue.config.silent = true
+Vue.config.silent = true;
+// if(process.env.NODE_ENV === "development"){}else {
+//   //去除控制台打印
+//   console.log = function(){};
+//   console.warn = function(){};
+//   console.error = function(){};
+// }
+
 
 const router = new VueRouter({
       routes,
@@ -59,14 +66,14 @@ function filterMenu(result) {
               if(pm.CustomerService){
                   filterName = [];
               }else {
-                 filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具"];
+                 filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","订单批量处理"];
               }
           }else {
             store.dispatch('setAuthority',"审核");
             if(pm.CustomerService){
               filterName = ["开发者工具"];
             }else {
-               filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具"];
+               filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","订单批量处理"];
             }
           }
    }else {
@@ -75,13 +82,13 @@ function filterMenu(result) {
            if(pm.CustomerService){
              filterName = ["开发者工具"];
            }else {
-              filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具"];
+              filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","订单批量处理"];
            }
        }else {
          if(pm.CustomerService){
            filterName = ["快递公司管理",'入口管理','运营位管理','公告管理','开发者工具'];
          }else {
-            filterName = ['订单管理','订单取消频次管理',"黑名单管理","快递公司管理",'入口管理','运营位管理','公告管理','开发者工具'];
+            filterName = ['订单管理','订单取消频次管理',"黑名单管理","快递公司管理",'入口管理','运营位管理','公告管理','开发者工具',"订单批量处理"];
          }
        }
    }
