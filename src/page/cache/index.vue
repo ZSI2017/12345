@@ -19,7 +19,7 @@
     </div>
 
 <pre>
-    <code  v-if = "showCode"v-html="content" style="display: block;overflow-x: auto;font-size:18px;padding: 0.5em;background: #474949;color: #d1d9e1;" >
+    <code  v-if = "showCode" v-html="content" style="display: block;overflow-x: auto;font-size:18px;padding: 0.5em;background: #474949;color: #d1d9e1;" >
     </code>
 </pre>
 
