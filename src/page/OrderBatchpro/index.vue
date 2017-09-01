@@ -81,7 +81,7 @@
     </el-dialog>
     <el-dialog title="" :visible.sync="loadingTakeOffFlag" size="tiny">
         <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
-        <p style="margin:0 40px 20px 40px;">确认批量标记其他渠道支付？</p>        
+        <p style="margin:0 40px 20px 40px;">确认批量标记其他渠道支付？</p>
         <p style="color:red;margin:0 40px 20px 40px;">请先与快递公司、用户确认所有批处理订单均真实支付，否则可能产生巨额资金损失！！！</p>
         <span slot="footer" class="dialog-footer">
         <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
@@ -178,8 +178,8 @@ export default {
         handleImportSave(){
             console.log(222)
             console.log(this.$refs.upload)
-            console.log(this.fileList)           
-            this.$refs.upload.submit();            
+            console.log(this.fileList)
+            this.$refs.upload.submit();
             this.loadingTakeOffFlag = false;
             this.listLoading = true;
             this.$message({
@@ -201,7 +201,7 @@ export default {
             this.listLoading = false;
         },
         handleRemove(file, fileList) {
-            this.isDisabled = false;            
+            this.isDisabled = false;
             console.log(file, fileList);
             console.log(file)
             console.log(fileList)
