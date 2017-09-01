@@ -55,19 +55,22 @@
             <el-radio-group v-model="radio2" style="padding-bottom:20px;">
                 <el-radio :label="1">标记其他渠道支付</el-radio>
                 <!--<el-radio :label="2">备选项</el-radio>-->
-                <!-- :disabled="isDisabled" -->
+                <!--  -->
             </el-radio-group>
             <el-form-item label="选择导入文本"  :label-width="120">
                 <el-upload
                     class="upload-demo"
                     ref="upload"
+
                     action="http://sendexmng-sit.alipay-eco.com/api/orderbatch/batchOtherPay"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :file-list="fileList"
                     :on-change="handleFileChange"
                     :on-success='handleSuccess'
-                    :auto-upload="false">
+                    :auto-upload="false"
+                    :disabled="isDisabled"
+                    >
                     <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
                     <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
                 </el-upload>
