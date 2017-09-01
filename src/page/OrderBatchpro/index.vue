@@ -50,22 +50,37 @@
         </el-pagination>
     </div>
     <el-dialog title="批量导入" :visible.sync="dialogImportVisible" size="tiny" :before-close="handleClose">
-        <el-form :model="importForm" style="margin-left:40px;height:160px;">
+        <el-form :model="importForm" ref="importForm" style="margin-left:40px;height:160px;">
             <el-radio-group v-model="radio2" style="padding-bottom:20px;">
                 <el-radio :label="1">标记其他渠道支付</el-radio>
                 <!--<el-radio :label="2">备选项</el-radio>-->
             </el-radio-group>
             <el-form-item label="选择导入文本"  :label-width="120">
-                <el-upload
+                <!--<el-upload
                     class="upload-demo"
-                    action="http://sendexmng-sit.alipay-eco.com/api/orderbatch/batchOtherPay"
+                    ref="upload"
+                    action="http://192.168.12.54:8080/api/orderbatch/batchOtherPay"
                     :on-change="handleFileChange"
                     :file-list="importForm.fileList"
                     :on-remove="handleRemove"
-                    :on-success='handleSuccess'
-                    :on-error='handlerror'
+                    :auto-upload="false"
                     >
-                    <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+                    <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+                    <el-button style="margin-left: 10px;" size="small" type="success" @click="handleImportSave">上传到服务器</el-button>
+                    <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
+                </el-upload>-->
+                
+                <el-upload
+                    class="upload-demo"
+                    ref="upload"
+                    action="http://192.168.12.54:8080/api/orderbatch/batchOtherPay"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :file-list="fileList"
+                    :on-change="handleFileChange"
+                    :on-success='handleSuccess'
+                    :auto-upload="false">
+                    <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>                    
                     <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
                 </el-upload>
             </el-form-item>
@@ -97,14 +112,12 @@ export default {
             radio2:1,
             totalCount: 0, //默认数据总数
             // 导入对话框
-            importForm:{
-                fileList: []
-            }
+            fileList: [],
 
         }
     },
     mounted() {
-
+        this.loadData();
     },
     created() {
             
@@ -151,6 +164,8 @@ export default {
             });
         },
         setNewData(){
+            // this.fileList = [];
+            console.log(this.fileList)
             this.dialogImportVisible = true;
         },
         //取消
@@ -158,35 +173,53 @@ export default {
             this.dialogImportVisible = false;
         },
          //确定
-        handleImportSave(){
-            if(this.importForm.fileList.length == 0){
-                this.$message({
-                    message: '请选择导入文本！',
-                    type: 'warning'
-                });
-                return;
-            }
-            this.dialogImportVisible = false; 
-            this.loadData();
-            this.importForm.fileList = [];                                   
+        handleImportSave(q){
+            console.log(222)
+            console.log(this.$refs.upload)
+            // if(this.$refs.upload.fileList.length == '0'){
+            //     this.$message({
+            //         message: '请选择导入文本！',
+            //         type: 'warning'
+            //     });
+            //     return;
+            // }
+            this.$refs.upload.submit();            
+            this.dialogImportVisible = false;
+            this.listLoading = true;
+                
+            
+            
         },
         handlerror(err){
             console.log(err)
         },
-        handleSuccess(response){
+        handleSuccess(response, file, fileList){
+
+            
+           
+            console.log(this.fileList)
             console.log('success')
-            console.log(response)
+            this.loadData();
+            this.listLoading = false;                  
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+            console.log(file)
+            console.log(fileList)
         },
         handleFileChange(file,fileList){
-            this.importForm.fileList = fileList.slice(-1);
+            // this.fileList = fileList.slice(-1);
+            console.log(file)
+            console.log(fileList)
+   
         },
+
         handleDownload(){
             window.location.href="http://expressprod.oss-cn-hangzhou.aliyuncs.com/DemoExcel/template-orderbatch.xlsx"
         },
         //关闭dialog
         handleClose(){
             this.dialogImportVisible = false;
-            this.importForm.fileList = [];
         },
         //下载详情
         handleUpdown(index,row){
