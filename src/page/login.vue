@@ -1,8 +1,8 @@
 <template>
 <section class="login">
-  <h1>支付宝我的快递-- 寄件管理后台</h1>
-  <el-button type="primary" size="large" @click="loginIn">登 录</el-button>
-  <el-button type="primary" size="large" @click="loginInText">登 录 测 试</el-button>
+  <h1>支付宝寄件平台运营管理系统</h1>
+  <el-button type="primary" style="display:none" size="large" @click="loginIn">登 录</el-button>
+  <el-button type="primary" size="large" @click="loginInText"> 登 录 </el-button>
 </section>
 </template>
 <script type="text/javascript">
