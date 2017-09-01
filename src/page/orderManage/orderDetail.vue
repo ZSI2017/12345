@@ -331,9 +331,9 @@ import localEvent from 'src/vuex/function.js';
                     this.cancleColor = false;                
                 }else if (rsp.orderStatus == '3' && rsp.payStatus == '5') { // 已取件转其他渠道支付
                     this.orderSuccess = false;
-                    this.payOrder = false;
+                    this.payOrder = true;
                     this.sendExpress = false;    
-                    this.cancleColor = true;                
+                    this.cancleColor = false;                
                 }else{
                     this.orderSuccess = false;
                     this.payOrder = false;
