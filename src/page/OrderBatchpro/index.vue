@@ -55,7 +55,7 @@
                 <el-radio :label="1">标记其他渠道支付</el-radio>
                 <!--<el-radio :label="2">备选项</el-radio>-->
             </el-radio-group>
-            <el-form-item label="选择导入文本"  :label-width="120">             
+            <el-form-item label="选择导入文本"  :label-width="120">
                 <el-upload
                     class="upload-demo"
                     ref="upload"
@@ -67,7 +67,7 @@
                     :on-success='handleSuccess'
                     :disabled="isDisabled"
                     :auto-upload="false">
-                    <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>                    
+                    <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
                     <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
                 </el-upload>
             </el-form-item>
@@ -107,7 +107,7 @@ export default {
         this.loadData();
     },
     created() {
-            
+
     },
     filters: {
         formatDate(time) {
@@ -170,7 +170,7 @@ export default {
             console.log(this.fileList)           
             this.$refs.upload.submit();            
             this.dialogImportVisible = false;
-            this.listLoading = true;           
+            this.listLoading = true;
         },
         handlerror(err){
             console.log(err)
@@ -179,7 +179,7 @@ export default {
             console.log(this.fileList)
             console.log('success')
             this.loadData();
-            this.listLoading = false;                  
+            this.listLoading = false;
         },
         handleRemove(file, fileList) {
             this.isDisabled = false;            
@@ -192,14 +192,8 @@ export default {
                  this.isDisabled = true;
             }
         },
-        handleClick(){
-            // console.log(this.isDisabled)
-            // this.isDisabled = true;
-
-            
-        },
         resetForm() {
-           
+
         },
         handleDownload(){
             window.location.href="http://expressprod.oss-cn-hangzhou.aliyuncs.com/DemoExcel/template-orderbatch.xlsx"
@@ -231,7 +225,7 @@ export default {
             console.log(`当前页: ${val}`);
         },
 
-    }    
+    }
 }
 </script>
 
