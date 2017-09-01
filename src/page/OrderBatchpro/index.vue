@@ -59,12 +59,13 @@
                 <el-upload
                     class="upload-demo"
                     ref="upload"
-                    action="http://sendexmng-sit.alipay-eco.com/api/orderbatch/batchOtherPay"
+                    action="http://192.168.12.54:8080/api/orderbatch/batchOtherPay"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :file-list="fileList"
                     :on-change="handleFileChange"
                     :on-success='handleSuccess'
+                    :disabled="isDisabled"
                     :auto-upload="false">
                     <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>                    
                     <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
@@ -99,7 +100,7 @@ export default {
             totalCount: 0, //默认数据总数
             // 导入对话框
             fileList: [],
-
+            isDisabled:false
         }
     },
     mounted() {
@@ -134,10 +135,10 @@ export default {
                 _this.tableData = rsp.page_list;
                 _this.totalCount = parseInt(rsp.pages.cnt);
                 if(_this.totalCount == "0"){
-                this.$message({
-                    message: '成功！',
-                    type: 'success'
-                });
+                    this.$message({
+                        message: '成功！',
+                        type: 'success'
+                    });
                 }
             },(error)=>{
                 console.log(error)
@@ -151,6 +152,8 @@ export default {
         },
         setNewData(){
             this.fileList = [];
+            this.isDisabled = false;
+            console.log(this.isDisabled)
             console.log(this.fileList)
             this.dialogImportVisible = true;
 
@@ -161,17 +164,10 @@ export default {
             this.dialogImportVisible = false;
         },
          //确定
-        handleImportSave(q){
+        handleImportSave(){
             console.log(222)
             console.log(this.$refs.upload)
-            console.log(this.fileList)
-            // if(this.fileList.length == 0){
-            //     this.$message({
-            //         message: '请选择导入文本！',
-            //         type: 'warning'
-            //     });
-            //     return;
-            // }
+            console.log(this.fileList)           
             this.$refs.upload.submit();            
             this.dialogImportVisible = false;
             this.listLoading = true;           
@@ -186,18 +182,21 @@ export default {
             this.listLoading = false;                  
         },
         handleRemove(file, fileList) {
+            this.isDisabled = false;            
             console.log(file, fileList);
             console.log(file)
             console.log(fileList)
         },
         handleFileChange(file,fileList){
-            // this.fileList = fileList.slice(-1);
+            if(fileList.length == 1){
+                 this.isDisabled = true;
+            }
+        },
+        handleClick(){
+            // console.log(this.isDisabled)
+            // this.isDisabled = true;
 
-            console.log(file)
-            console.log(fileList)
-            console.log(this.fileList)
             
-   
         },
         resetForm() {
            
