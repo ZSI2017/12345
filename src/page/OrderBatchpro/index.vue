@@ -61,7 +61,6 @@
                 <el-upload
                     class="upload-demo"
                     ref="upload"
-
                     action="http://sendexmng-sit.alipay-eco.com/api/orderbatch/batchOtherPay"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
