@@ -68,9 +68,8 @@
                     :on-change="handleFileChange"
                     :on-success='handleSuccess'
                     :auto-upload="false"
-                    :disabled="isDisabled"
                     >
-                    <el-button slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+                    <el-button  :disabled="isDisabled" slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
                     <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
                 </el-upload>
             </el-form-item>
