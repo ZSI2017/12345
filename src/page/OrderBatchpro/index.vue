@@ -1,5 +1,5 @@
 <template>
-<div class="section">
+<div class="section batchMain">
     <div class="addButton">
         <el-row :span="24">
             <el-col :span="22" style="height:48px;">
@@ -76,18 +76,18 @@
         <el-button style="margin-left:40px" type="text"  @click="handleDownload">下载模板</el-button>
         <div slot="footer" class="dialog-footer">
             <el-button @click="handleCanle">取 消</el-button>
-            <el-button type="primary" @click="handleConfirm">确 定</el-button>
+            <el-button type="primary" @click="handleImportSave">确 定</el-button>
         </div>
     </el-dialog>
-    <el-dialog title="" :visible.sync="loadingTakeOffFlag" size="tiny">
-        <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 34%;"></i>
+    <!--<el-dialog title="" :visible.sync="loadingTakeOffFlag" size="tiny">
+        <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 18%;"></i>
         <p style="margin:0 40px 20px 40px;">确认批量标记其他渠道支付？</p>        
         <p style="color:red;margin:0 40px 20px 40px;">请先与快递公司、用户确认所有批处理订单均真实支付，否则可能产生巨额资金损失！！！</p>
         <span slot="footer" class="dialog-footer">
         <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
         <el-button type="primary" @click="handleImportSave">确 定</el-button>
         </span>
-    </el-dialog>
+    </el-dialog>-->
 </div>
 </template>
 
@@ -110,8 +110,8 @@ export default {
             totalCount: 0, //默认数据总数
             // 导入对话框
             fileList: [],
-            isDisabled:false,
-            loadingTakeOffFlag:false
+            isDisabled:false, //禁用标记
+            element:false, //空文件标记
         }
     },
     mounted() {
@@ -163,6 +163,7 @@ export default {
         },
         setNewData(){
             this.fileList = [];
+            this.element = false;
             this.isDisabled = false;
             console.log(this.isDisabled)
             console.log(this.fileList)
@@ -178,18 +179,36 @@ export default {
         handleImportSave(){
             console.log(222)
             console.log(this.$refs.upload)
-            console.log(this.fileList)           
-            this.$refs.upload.submit();            
-            this.loadingTakeOffFlag = false;
-            this.listLoading = true;
-            this.$message({
-                message: '批量处理完成！',
-                type: 'success'
-            });
-        },
-        handleConfirm(){
-            this.loadingTakeOffFlag = true;
+            console.log(this.fileList) 
+            if(this.element == false){
+                this.$message({
+                    message: '请选择导入文本！',
+                    type: 'warning'
+                });
+                return;
+            }
             this.dialogImportVisible = false;
+            const h = this.$createElement;
+            this.$confirm('确认批量标记其他渠道支付？', '确认批量标记其他渠道支付？', {
+                message: h('p', null, [
+                    h('div', { style: 'color: red;padding-right:20px;' }, '请先与快递公司、用户确认所有批处理订单均真实支付，否则可能产生巨额资金损失！！！')
+                ]),
+                confirmButtonText: '确定',
+                cancelButtonText: '等等，再检查一遍',
+                type: 'warning'
+            }).then(() => {
+                this.$refs.upload.submit();       
+                this.listLoading = true;
+                this.$message({
+                    message: '批量处理完成！',
+                    type: 'success'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消批量处理!'
+                });          
+            });
         },
         handlerror(err){
             console.log(err)
@@ -201,7 +220,8 @@ export default {
             this.listLoading = false;
         },
         handleRemove(file, fileList) {
-            this.isDisabled = false;            
+            this.isDisabled = false;   
+            this.element = false;         
             console.log(file, fileList);
             console.log(file)
             console.log(fileList)
@@ -209,6 +229,10 @@ export default {
         handleFileChange(file,fileList){
             if(fileList.length == 1){
                  this.isDisabled = true;
+                 this.element = true;
+            }
+            if(fileList.length == 0){
+                this.element = false;
             }
         },
         resetForm() {
@@ -249,6 +273,6 @@ export default {
 </script>
 
 <style>
-
+ 
 
 </style>
