@@ -66,14 +66,14 @@ function filterMenu(result) {
               if(pm.CustomerService){
                   filterName = [];
               }else {
-                 filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","订单批量处理"];
+                 filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","批量标记其他渠道支付"];
               }
           }else {
             store.dispatch('setAuthority',"审核");
             if(pm.CustomerService){
               filterName = ["开发者工具"];
             }else {
-               filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","订单批量处理"];
+               filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","批量标记其他渠道支付"];
             }
           }
    }else {
@@ -82,13 +82,13 @@ function filterMenu(result) {
            if(pm.CustomerService){
              filterName = ["开发者工具"];
            }else {
-              filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","订单批量处理"];
+              filterName = ['订单管理','订单取消频次管理',"黑名单管理","开发者工具","批量标记其他渠道支付"];
            }
        }else {
          if(pm.CustomerService){
            filterName = ["快递公司管理",'入口管理','运营位管理','公告管理','开发者工具'];
          }else {
-            filterName = ['订单管理','订单取消频次管理',"黑名单管理","快递公司管理",'入口管理','运营位管理','公告管理','开发者工具',"订单批量处理"];
+            filterName = ['订单管理','订单取消频次管理',"黑名单管理","快递公司管理",'入口管理','运营位管理','公告管理','开发者工具',"批量标记其他渠道支付"];
          }
        }
    }
