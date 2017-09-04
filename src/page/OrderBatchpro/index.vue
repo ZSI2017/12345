@@ -233,7 +233,7 @@ export default {
                     type: 'success'
                 });
                 this.toastFlag = true;
-                this.handleLoading = false;
+                
                 this.handleToast(response.result.successCnt,response.result.failCnt,response.result.gmtBegin,response.result.fileUrl)
             }else{
                 this.$message({
@@ -241,6 +241,7 @@ export default {
                     message: response.meta.msg
                 });  
             }
+            this.handleLoading = false;
             this.listLoading = false;
         },
         handleRemove(file, fileList) {
