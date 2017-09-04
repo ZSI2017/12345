@@ -247,6 +247,17 @@ export default {
 
   },
   methods: {
+    // 为表格中的行设置样式，
+    handleRowStyle(row,index) {
+
+      if(this.showProvinces !== '') {
+         if(this.showProvinces === row.provinceName) {
+            // return {'display':}
+         }else {
+             return {'display':'none'}
+         }
+      }
+    },
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },

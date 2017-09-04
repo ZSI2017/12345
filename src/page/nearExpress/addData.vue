@@ -245,6 +245,16 @@ export default {
 
   },
   methods: {
+    handleRowStyle(row,index) {
+
+      if(this.showProvinces !== '') {
+         if(this.showProvinces === row.provinceName) {
+            // return {'display':}
+         }else {
+             return {'display':'none'}
+         }
+      }
+    },
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
@@ -321,6 +331,7 @@ export default {
         this.showProvinces = '';
       }
       var searchProvinces = this.searchProvinces;
+      console.log(queryString);
       var results = queryString ? searchProvinces.filter(this.createFilter(queryString)) : searchProvinces;
       cb(results);
     },
