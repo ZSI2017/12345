@@ -88,7 +88,7 @@ import cache from './page/cache/index.vue'
 import whitelist from './page/whitelist/index.vue'
 
 
-//订单批量处理
+//批量标记其他渠道支付
 import orderBatchpro from './page/OrderBatchpro/index.vue'
 
 
@@ -151,7 +151,7 @@ let routes =  [
    name:"首页",
    component:index,
    children:[
-      {path:'/orderBatchpro',component:orderBatchpro,name:"订单批量处理"}
+      {path:'/orderBatchpro',component:orderBatchpro,name:"批量标记其他渠道支付"}
    ]
  },
  {

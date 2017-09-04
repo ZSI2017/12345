@@ -84,10 +84,8 @@
     <!--处理结果toast-->
     <el-dialog title="处理结果" :visible.sync="toastFlag" size="tiny" :before-close="handleList">
         <p style="margin:0 40px 20px 40px;"><span>成功处理{{toast.successCnt}}个，失败处理{{toast.failCnt}}个</span><span style="float:right;">{{toast.gmtBegin | formatDate}}</span></p>        
-        <p style="margin:40px;">
-            <el-button @click="handleToastUpdown">下载处理结果</el-button>
-        </p>
         <span slot="footer" class="dialog-footer">
+            <el-button @click="handleToastUpdown">下载处理结果</el-button>
         <el-button type="primary" @click="handleList">确 定</el-button>
         </span>
     </el-dialog>
@@ -252,6 +250,18 @@ export default {
             console.log(fileList)
         },
         handleFileChange(file,fileList){
+            console.log(file)
+            console.log(file.raw.type)
+            console.log(file.type)
+            console.log(fileList)
+            console.log(5555)
+            const isxlsx = file.raw.type=== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; //xlsx
+            if (!isxlsx) {
+                this.$message.error('上传文本必须是xlsx格式');
+                this.handleClose();
+                this.dialogImportVisible = true;
+                return false;
+            }
             if(fileList.length == 1){
                  this.isDisabled = true;
                  this.element = true;
