@@ -1,6 +1,6 @@
 <template>
-<div class="section batchMain">
-    <div class="addButton">
+<div class="section batchMain" element-loading-text="正在处理中..."  v-loading.body.fullscreen="handleLoading">
+    <div class="addButton" v-loading.body.fullscreen.lock="listLoading">
         <el-row :span="24">
             <el-col :span="22" style="height:48px;">
             </el-col>
@@ -35,7 +35,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
             <template scope="scope">
-                <el-button @click="handleUpdown(scope.$index,scope.row)" type="text" size="small">下载处理结果</el-button>
+                <el-button @click="handleUpdown(scope.row)" type="text" size="small">下载处理结果</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -68,8 +68,9 @@
                     :on-change="handleFileChange"
                     :on-success='handleSuccess'
                     :auto-upload="false"
+                    :disabled="isDisabled"
                     >
-                    <el-button  :disabled="isDisabled" slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
+                    <el-button  slot="trigger" size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
                     <div slot="tip" class="el-upload__tip">仅支持xlsx格式的文件</div>
                 </el-upload>
             </el-form-item>
@@ -80,20 +81,21 @@
             <el-button type="primary" @click="handleImportSave">确 定</el-button>
         </div>
     </el-dialog>
-    <!--<el-dialog title="" :visible.sync="loadingTakeOffFlag" size="tiny">
-        <i class="el-icon-warning" style="color:#F7BA2A;padding-right:10px;font-size: 36px!important;position: absolute;top: 18%;"></i>
-        <p style="margin:0 40px 20px 40px;">确认批量标记其他渠道支付？</p>        
-        <p style="color:red;margin:0 40px 20px 40px;">请先与快递公司、用户确认所有批处理订单均真实支付，否则可能产生巨额资金损失！！！</p>
+    <!--处理结果toast-->
+    <el-dialog title="处理结果" :visible.sync="toastFlag" size="tiny" :before-close="handleList">
+        <p style="margin:0 40px 20px 40px;"><span>成功处理{{toast.successCnt}}个，失败处理{{toast.failCnt}}个</span><span style="float:right;">{{toast.gmtBegin | formatDate}}</span></p>        
+        <p style="margin:40px;">
+            <el-button @click="handleToastUpdown">下载处理结果</el-button>
+        </p>
         <span slot="footer" class="dialog-footer">
-        <el-button @click="loadingTakeOffFlag = false">取 消</el-button>
-        <el-button type="primary" @click="handleImportSave">确 定</el-button>
+        <el-button type="primary" @click="handleList">确 定</el-button>
         </span>
-    </el-dialog>-->
+    </el-dialog>
 </div>
 </template>
 
 <script>
-// import localEvent from 'src/vuex/function.js';
+
 import {
   formatDate
 } from 'src/util/date.js';
@@ -107,12 +109,20 @@ export default {
             currentPage: 1,
             dialogImportVisible:false,
             dialogVisible:false,
+            handleLoading:false,
             radio2:1,
             totalCount: 0, //默认数据总数
             // 导入对话框
             fileList: [],
             isDisabled:false, //禁用标记
             element:false, //空文件标记
+            toastFlag:false,
+            toast:{
+                successCnt:'',
+                failCnt:'',
+                gmtBegin:'',
+                fileUrl:''
+            }
         }
     },
     mounted() {
@@ -199,11 +209,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.$refs.upload.submit();       
-                this.listLoading = true;
-                this.$message({
-                    message: '批量处理完成！',
-                    type: 'success'
-                });
+                this.handleLoading = true; 
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -215,9 +221,26 @@ export default {
             console.log(err)
         },
         handleSuccess(response, file, fileList){
-            console.log(this.fileList)
-            console.log('success')
-            this.loadData();
+            console.log(file)        
+            console.log(fileList)                            
+            console.log(response)
+            console.log(response.meta.code)
+            console.log(response.meta.msg)                                              
+            if(response.meta.code == '0000'){  
+                console.log('success')
+                this.$message({
+                    message: '批量处理完成！',
+                    type: 'success'
+                });
+                this.toastFlag = true;
+                this.handleLoading = false;
+                this.handleToast(response.result.successCnt,response.result.failCnt,response.result.gmtBegin,response.result.fileUrl)
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: response.meta.msg
+                });  
+            }
             this.listLoading = false;
         },
         handleRemove(file, fileList) {
@@ -236,8 +259,16 @@ export default {
                 this.element = false;
             }
         },
-        resetForm() {
-
+        handleToast(successCnt,failCnt,gmtBegin,fileUrl) {
+             this.toast.successCnt = successCnt;
+             this.toast.failCnt = failCnt;
+             this.toast.gmtBegin = gmtBegin;
+             this.toast.fileUrl = fileUrl;
+                         
+        },
+        handleList(){
+            this.loadData();
+            this.toastFlag = false;
         },
         handleDownload(){
             window.location.href="http://expressprod.oss-cn-hangzhou.aliyuncs.com/DemoExcel/template-orderbatch.xlsx"
@@ -248,11 +279,13 @@ export default {
             this.dialogImportVisible = false;
         },
         //下载详情
-        handleUpdown(index,row){
-            console.log(index)
+        handleUpdown(row){
             console.log(row)
             let downloadLink = row.fileUrl;
             window.location.href = downloadLink;
+        },
+        handleToastUpdown(){
+            window.location.href = this.toast.fileUrl;
         },
         //处理分页
         handleSizeChange(val) {
