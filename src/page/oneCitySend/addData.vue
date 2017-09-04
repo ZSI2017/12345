@@ -245,6 +245,17 @@ export default {
 
   },
   methods: {
+    // 为表格中的行设置样式，
+    handleRowStyle(row,index) {
+
+      if(this.showProvinces !== '') {
+         if(this.showProvinces === row.provinceName) {
+            // return {'display':}
+         }else {
+             return {'display':'none'}
+         }
+      }
+    },
     changeVisible(flag){
       this.dialogTableVisible = flag;
     },
@@ -540,7 +551,7 @@ export default {
       }else{
         this.addTag = true;
       }
-      
+
     },
     showInput() {
       this.inputVisible = true;
@@ -586,7 +597,7 @@ export default {
       const isLt2M2 = file.size / 1024 < 10;
 
       if (!isJPG2 && !isPNG2) {
-        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');    
+        this.$message.error('上传LOGO只能是 JPG/PNG 格式!');
       }
       if (!isLt2M2) {
         this.$message.error('上传LOGO大小不能超过 10K!');
