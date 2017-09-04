@@ -41,7 +41,7 @@
       <el-input
         class="input-new-tag"
         v-if="inputVisible"
-        v-model="inputValue"
+        v-model.trim="inputValue"
         ref="saveTagInput"
         size="small"
         @keyup.enter.native="handleInputConfirm"
@@ -171,7 +171,6 @@ export default {
       inputVisible: false,
       inputValue: '',
       addTag:true,
-      // 查看配置地区中的表格数据 和 是否显示的标志
       showHeader: false,
       dialogTableVisible: false,
       gridData: [],

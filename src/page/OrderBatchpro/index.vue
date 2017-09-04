@@ -221,9 +221,7 @@ export default {
         handleSuccess(response, file, fileList){
             console.log(file)        
             console.log(fileList)                            
-            console.log(response)
-            console.log(response.meta.code)
-            console.log(response.meta.msg)                                              
+            console.log(response)                                            
             if(response.meta.code == '0000'){  
                 console.log('success')
                 this.$message({
@@ -258,8 +256,7 @@ export default {
             const isxlsx = file.raw.type=== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; //xlsx
             if (!isxlsx) {
                 this.$message.error('上传文本必须是xlsx格式');
-                this.handleClose();
-                this.dialogImportVisible = true;
+                this.fileList = [];
                 return false;
             }
             if(fileList.length == 1){
