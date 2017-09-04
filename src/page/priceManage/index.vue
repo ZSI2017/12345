@@ -127,7 +127,7 @@
       <!-- http://sendexmng-sit.alipay-eco.com -->
       <el-upload
         class="upload-demo"
-        action="http://192.168.12.54:8080/api/freightPriceRule/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/freightPriceRule/upload"
         :on-change="handleFileChange"
         :file-list="importForm.fileList"
         :on-remove="handleRemove"
