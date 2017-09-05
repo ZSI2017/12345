@@ -14,7 +14,7 @@
     <el-form-item label="LOGO" prop="logo">
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="https://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange"
         :file-list="ruleForm.logo"
         :on-preview="handlePreview"
@@ -31,7 +31,7 @@
     <el-form-item label="角标">
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="https://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange2"
         :file-list="ruleForm.icon"
         :on-preview="handlePreview2"

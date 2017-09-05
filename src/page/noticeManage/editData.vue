@@ -12,7 +12,7 @@
     </el-form-item>
     <!-- <el-form-item label="运营图" prop="fileList2">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/notice/upload"
+        action="https://sendexmng-sit.alipay-eco.com/api/notice/upload"
         :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"

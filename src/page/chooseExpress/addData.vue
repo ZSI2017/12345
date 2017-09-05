@@ -7,10 +7,10 @@
     </el-form-item>
     <el-form-item label="运营图" prop="imageList">
       <!--        -->
-      <!-- action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload" -->
+      <!-- action="https://sendexmng-sit.alipay-eco.com/api/promotion/upload" -->
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+        action="https://sendexmng-sit.alipay-eco.com/api/promotion/upload"
         :on-change="handleImageChange"
         :file-list="ruleForm.imageList"
         :on-preview="handlePreview"
