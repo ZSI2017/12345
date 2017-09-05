@@ -21,7 +21,7 @@ if(process.env.NODE_ENV === "development"){
     // URL = 'http://192.168.12.54:8080'
     // URL  = "http://sendexmng-sit.alipay-eco.com";
 }else {
-    URL = "http://sendexmng-sit.alipay-eco.com"
+    URL = "https://sendexmng-sit.alipay-eco.com"
 }
 
 // add request interceptor
