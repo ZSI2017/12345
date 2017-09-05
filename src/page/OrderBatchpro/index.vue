@@ -83,7 +83,7 @@
     </el-dialog>
     <!--处理结果toast-->
     <el-dialog title="处理结果" :visible.sync="toastFlag" size="tiny" :before-close="handleList">
-        <p style="margin:0 40px 20px 40px;"><span>成功处理{{toast.successCnt}}个，失败处理{{toast.failCnt}}个</span><span style="float:right;">{{toast.gmtBegin | formatDate}}</span></p>        
+        <p style="margin:0 40px 20px 40px;"><span>成功处理{{toast.successCnt}}个，失败处理{{toast.failCnt}}个</span><span style="float:right;">{{toast.gmtBegin | formatDate}}</span></p>
         <span slot="footer" class="dialog-footer">
             <el-button @click="handleToastUpdown">下载处理结果</el-button>
         <el-button type="primary" @click="handleList">确 定</el-button>
@@ -188,7 +188,7 @@ export default {
         handleImportSave(){
             console.log(222)
             console.log(this.$refs.upload)
-            console.log(this.fileList) 
+            console.log(this.fileList)
             if(this.element == false){
                 this.$message({
                     message: '请选择导入文本！',
@@ -206,43 +206,43 @@ export default {
                 cancelButtonText: '等等，再检查一遍',
                 type: 'warning'
             }).then(() => {
-                this.$refs.upload.submit();       
-                this.handleLoading = true; 
+                this.$refs.upload.submit();
+                this.handleLoading = true;
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消批量处理!'
-                });          
+                });
             });
         },
         handlerror(err){
             console.log(err)
         },
         handleSuccess(response, file, fileList){
-            console.log(file)        
-            console.log(fileList)                            
-            console.log(response)                                            
-            if(response.meta.code == '0000'){  
+            console.log(file)
+            console.log(fileList)
+            console.log(response)
+            if(response.meta.code == '0000'){
                 console.log('success')
                 this.$message({
                     message: '批量处理完成！',
                     type: 'success'
                 });
                 this.toastFlag = true;
-                
+
                 this.handleToast(response.result.successCnt,response.result.failCnt,response.result.gmtBegin,response.result.fileUrl)
             }else{
                 this.$message({
                     type: 'error',
                     message: response.meta.msg
-                });  
+                });
             }
             this.handleLoading = false;
             this.listLoading = false;
         },
         handleRemove(file, fileList) {
-            this.isDisabled = false;   
-            this.element = false;         
+            this.isDisabled = false;
+            this.element = false;
             console.log(file, fileList);
             console.log(file)
             console.log(fileList)
@@ -272,14 +272,14 @@ export default {
              this.toast.failCnt = failCnt;
              this.toast.gmtBegin = gmtBegin;
              this.toast.fileUrl = fileUrl;
-                         
+
         },
         handleList(){
             this.loadData();
             this.toastFlag = false;
         },
         handleDownload(){
-            window.location.href="http://expressprod.oss-cn-hangzhou.aliyuncs.com/DemoExcel/template-orderbatch.xlsx"
+            window.location.href="https://expressprod.oss-cn-hangzhou.aliyuncs.com/DemoExcel/template-orderbatch.xlsx"
         },
         //关闭dialog
         handleClose(){
@@ -315,6 +315,6 @@ export default {
 </script>
 
 <style>
- 
+
 
 </style>
