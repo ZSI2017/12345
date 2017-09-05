@@ -49,9 +49,9 @@
 
     </div>
 
-    <div style="width:100%;box-sizing:border-box;padding:20px;padding-left:250px;padding-top:20px;flex:1;background:#f1f1f1;">
+    <div style="width:100%;box-sizing:border-box;padding:20px;padding-left:250px;padding-top:20px;flex:1;">
 
-      <el-breadcrumb v-bind:class="{ active: isActive }" style="padding:20px 0 20px 25px;line-height:100%;border:1px solid #D3DCE6;border-radius: 5px 5px 0 0;border-bottom:0;background:#fff;" separator="/">
+      <el-breadcrumb v-bind:class="{ active: isActive }" style="padding:20px 0 20px 25px;line-height:100%;border:1px solid #D3DCE6;border-radius: 5px 5px 0 0;border-bottom:0;background:#fff;box-shadow: 0 0 3px 0 rgba(33,107,211,.4);" separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item v-if="item.name&&item.name !='首页'" v-for="(item,index) in $route.matched" :to="{path:item.path}" :key="item.path">{{item.name}}</el-breadcrumb-item>
       </el-breadcrumb>
