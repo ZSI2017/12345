@@ -293,7 +293,7 @@ export default {
           //_this.pageId
           let httpData = {
                 "data": {
-                  "pageId": "BW1010",
+                  "pageId": "BM1010",
                   "title": _this.ruleForm.title,
                   // "imageUrl": _this.ruleForm.fileList,
                   // "sortWeight": _this.ruleForm.sortWeight,
