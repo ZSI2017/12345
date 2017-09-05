@@ -196,7 +196,7 @@ function filterMenu(result) {
         // alert("/login")
         next({path:"/login"});
         console.log("tto");
-      // window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
+      // window.location.href="https://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
 // } else {
   // store.dispatch('setAuthority',"开发者");

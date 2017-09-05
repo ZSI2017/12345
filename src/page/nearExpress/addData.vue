@@ -8,7 +8,7 @@
     <el-form-item label="LOGO" prop="logo">
       <el-upload
         class="upload-demo"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="https://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange"
         :file-list="ruleForm.logo"
         :on-preview="handlePreview"

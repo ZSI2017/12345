@@ -53,10 +53,10 @@ export default {
       let baseURL = window.location.href.slice(0,index);
       let fullPath = baseURL +"#"+hashURL;
       // alert(fullPath)
-      // const URL = "/loginProxy" http://sendexmng-sit.alipay-eco.com/smc
-      window.location.href="http://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(fullPath);
+      // const URL = "/loginProxy" https://sendexmng-sit.alipay-eco.com/smc
+      window.location.href="https://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(fullPath);
       // this.$http.get(URL,{
-      //   "realUrl":"http://sendexmng-sit.alipay-eco.com/smc"
+      //   "realUrl":"https://sendexmng-sit.alipay-eco.com/smc"
       // }, (result) => {
       //     alert(result)
       //     // _this.totalCount = result.page_list.length; //获取数据长度

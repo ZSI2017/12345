@@ -8,7 +8,7 @@
     </el-form-item>
     <el-form-item label="LOGO" prop="logo">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="https://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
@@ -28,7 +28,7 @@
     </el-form-item>
     <el-form-item label="角标">
       <el-upload v-if="isFromAddData"
-        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="https://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange2"
         :on-preview="handlePictureCardPreview2"
         :on-remove="handleRemove2"
