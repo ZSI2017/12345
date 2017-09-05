@@ -40,7 +40,7 @@
             list-type="picture"
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过200kb</div>
       </el-upload>
     </el-form-item>
     <el-form-item label="物流机构LOGO_CARD的URL">
@@ -48,7 +48,7 @@
             class="upload-demo"
             action="https://sendexmng-sit.alipay-eco.com/api/promotion/upload"
             :on-change="handleImageChange2"
-            :file-list="ruleForm.merchantLogo_card"
+            :file-list="fileIcon"
             :on-preview="handlePreview2"
             :on-remove="handleRemove2"
             :on-success='handleSuccess2'
@@ -56,7 +56,7 @@
             list-type="picture"
             >
             <el-button size="small" style="width:60px;background:#f1f1f1;"><i class="el-icon-upload2"></i> </el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过200kb</div>
         </el-upload>
     </el-form-item>
     <el-form-item label="收款人支付宝PID">
@@ -252,6 +252,7 @@ export default {
       value:'',
       value1:'',
       localDeleteId:'',
+      fileIcon:[],
       // 对输入表单进行验证
       ruleForm: {
         merchantCode:'',
@@ -371,9 +372,9 @@ export default {
         _this.ruleForm.merchantType = result.merchantType;
         _this.ruleForm.merchantName = result.merchantName;
         _this.ruleForm.merchantLogo[0].url = result.merchantLogo;
-        _this.ruleForm.merchantLogo[0].name = result.merchantLogo;
+        _this.ruleForm.merchantLogo[0].name = '点击查看大图';
         _this.ruleForm.merchantLogo_card[0].url = result.merchantLogo_card;
-        _this.ruleForm.merchantLogo_card[0].name = result.merchantLogo_card;
+        _this.ruleForm.merchantLogo_card[0].name = '点击查看大图';
         _this.ruleForm.payeePid = result.payeePid;
         _this.ruleForm.payeeAccount = result.payeeAccount;
         _this.ruleForm.contactName = result.contactName;
@@ -409,7 +410,12 @@ export default {
         _this.ruleForm.serviceTimeInterval = result.serviceTimeInterval;
         _this.ruleForm.gmtCreate = formatDate(newDate3, 'yyyy-MM-dd hh:mm:ss');
         _this.ruleForm.gmtModified = formatDate(newDate4, 'yyyy-MM-dd hh:mm:ss');
-
+        console.log(_this.ruleForm.merchantLogo_card[0].url)
+        if(_this.ruleForm.merchantLogo_card[0].url == ''){
+            this.fileIcon = []
+        }else{
+            this.fileIcon = this.ruleForm.merchantLogo_card
+        }
 
     },(error) => {
         this.$message({
@@ -443,8 +449,8 @@ export default {
               'merchantCode':this.ruleForm.merchantCode,
               'merchantType':this.ruleForm.merchantType,
               'merchantName':this.ruleForm.merchantName,
-              'merchantLogo':this.dialogImg,
-              'merchantLogo_card':this.dialogImg2,
+              'merchantLogo':this.ruleForm.merchantLogo[0].url,
+              'merchantLogo_card':this.ruleForm.merchantLogo_card[0].url,
               'payeePid':this.ruleForm.payeePid,
               'payeeAccount':this.ruleForm.payeeAccount,
               'contactName':this.ruleForm.contactName,
@@ -522,10 +528,15 @@ export default {
       alert(file);
       alert(fileList);
     },
-    handleRemove() {},
+    //对logo图片操作的控制
+    handleRemove(file, fileList) {
+      this.ruleForm.merchantLogo[0].url = '';
+      console.log(file, fileList);
+    },
     // 对 物流机构LOGO_CARD的URL 图片操作的控制
     handleImageChange2(file,fileList){
-        this.ruleForm.merchantLogo = fileList.slice(-1);
+        // this.ruleForm.merchantLogo_card = fileList.slice(-1);
+        this.fileIcon = fileList.slice(-1);
     },
     handlePreview2(file) {
       this.dialogVisible2 = true;
@@ -540,7 +551,11 @@ export default {
       alert(file);
       alert(fileList);
     },
-    handleRemove() {},
+    //对icon图片操作的控制
+    handleRemove2(file, fileList) {
+      this.ruleForm.merchantLogo_card[0].url = '';
+      console.log(file, fileList);
+    },
 
     onSubmit() {
       console.log('submit!');

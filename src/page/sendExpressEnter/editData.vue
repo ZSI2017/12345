@@ -28,7 +28,7 @@
     </el-form-item>
     <el-form-item label="角标">
       <el-upload v-if="isFromAddData"
-        action="https://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
+        action="http://sendexmng-sit.alipay-eco.com/api/sendapp/upload"
         :on-change="handleImageChange2"
         :on-preview="handlePictureCardPreview2"
         :on-remove="handleRemove2"
@@ -666,7 +666,8 @@ export default {
       this.dialogVisible2 = true;
     },
     handleImageChange2(file,fileList){
-         this.form.icon = fileList.slice(-1);
+        //  this.form.icon = fileList.slice(-1);
+         this.fileIcon = fileList.slice(-1);
     },
     handleSuccess2(file){
       console.log(file.result)
