@@ -338,7 +338,7 @@ export default {
          var result = {
              "data":{
                  "id":this.id,
-                 "pageId":"BW1010",
+                 "pageId":"BM1010",
                  "noticeId":this.localData.noticeId,
                  "content":this.form.content,
                  "title":this.form.title,
