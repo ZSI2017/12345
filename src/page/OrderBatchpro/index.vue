@@ -61,7 +61,7 @@
                 <el-upload
                     class="upload-demo"
                     ref="upload"
-                    action="http://192.168.12.54:8080/api/orderbatch/batchOtherPay"
+                    action="http://sendexmng-sit.alipay-eco.com/api/orderbatch/batchOtherPay"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :file-list="fileList"
