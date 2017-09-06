@@ -30,6 +30,9 @@
         <el-table-column prop="userName" align="center" label="名称">
         </el-table-column>
         <el-table-column prop="gmtCreate" align="center" label="时间">
+            <template scope="scope">
+                <p>{{scope.row.gmtCreate | formatDate}}</p>
+            </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
             <template scope="scope">
@@ -73,6 +76,9 @@
 
 <script>
 import localEvent from 'src/vuex/function.js';
+import {
+  formatDate
+} from 'src/util/date.js';
 
 
 export default {
@@ -96,6 +102,12 @@ export default {
   created() {
     this.loadData();
   },
+  filters: {
+        formatDate(time) {
+            var date = new Date(time);
+            return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+        }
+    },
   methods: {
     loadData: function(){
       var _this =this;
