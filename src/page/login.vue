@@ -1,6 +1,6 @@
 <template>
 <section class="login">
-  <h1>支付宝寄件平台运营管理系统</h1>
+  <h1>支付宝寄件平台运营管理系统{{$http.url}}</h1>
   <el-button type="primary" style="display:none" size="large" @click="loginIn">登 录</el-button>
   <el-button type="primary" size="large" @click="loginInText"> 登 录 </el-button>
 </section>
@@ -14,6 +14,7 @@ export default {
     }
   },
   created() {
+    // alert(this.$http.url);
      // 模拟 权限管理
     //  隐藏 或者显示 导航菜单 服务类型及折扣改管理
     // let routerArr = this.$router.options.routes;
@@ -53,10 +54,9 @@ export default {
       let baseURL = window.location.href.slice(0,index);
       let fullPath = baseURL +"#"+hashURL;
       // alert(fullPath)
-      // const URL = "/loginProxy" https://sendexmng-sit.alipay-eco.com/smc
-      window.location.href="https://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(fullPath);
+      window.location.href=this.$http.url+"/api/loginProxy?realUrl="+encodeURIComponent(fullPath);
       // this.$http.get(URL,{
-      //   "realUrl":"https://sendexmng-sit.alipay-eco.com/smc"
+      //   
       // }, (result) => {
       //     alert(result)
       //     // _this.totalCount = result.page_list.length; //获取数据长度

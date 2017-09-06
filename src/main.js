@@ -22,7 +22,6 @@ import http from "@/util/http.js"
 
 
 
-
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -36,12 +35,12 @@ Object.defineProperty(Vue.prototype,'PageStore',{value:PageStore})
 
  // Vue的 日志与警告
 Vue.config.silent = true;
-if(process.env.NODE_ENV === "development"){}else {
-  //去除控制台打印
-  console.log = function(){};
-  console.warn = function(){};
-  console.error = function(){};
-}
+// if(process.env.NODE_ENV === "development"){}else {
+//   //去除控制台打印
+//   console.log = function(){};
+//   console.warn = function(){};
+//   console.error = function(){};
+// }
 
 
 const router = new VueRouter({
@@ -196,7 +195,6 @@ function filterMenu(result) {
         // alert("/login")
         next({path:"/login"});
         console.log("tto");
-      // window.location.href="https://sendexmng-sit.alipay-eco.com/api/loginProxy?realUrl="+encodeURIComponent(window.location.href);
    }
 // } else {
   // store.dispatch('setAuthority',"开发者");

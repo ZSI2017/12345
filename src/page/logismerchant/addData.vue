@@ -30,7 +30,7 @@
         <!--<el-input v-model="ruleForm.merchantLogo" placeholder="请输入物流机构LOGO的URL"> </el-input>      -->
         <el-upload
             class="upload-demo"
-            action="https://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+            :action="$http.url+'/api/promotion/upload'"
             :on-change="handleImageChange"
             :file-list="ruleForm.merchantLogo"
             :on-preview="handlePreview"
@@ -46,7 +46,7 @@
     <el-form-item label="物流机构LOGO_CARD的URL">
         <el-upload
             class="upload-demo"
-            action="https://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+            :action="$http.url+'/api/promotion/upload'"
             :on-change="handleImageChange2"
             :file-list="ruleForm.merchantLogo_card"
             :on-preview="handlePreview2"

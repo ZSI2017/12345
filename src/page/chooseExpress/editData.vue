@@ -9,7 +9,7 @@
     </el-form-item>
     <el-form-item label="运营图" prop="fileList2">
       <el-upload v-if="isFromaddData"
-        action="https://sendexmng-sit.alipay-eco.com/api/promotion/upload"
+        :action="$http.url+'/api/promotion/upload'"
         :on-change="handleImageChange"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
