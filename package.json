@@ -5,7 +5,8 @@
   "author": "liqi <liqi@bangbangda.cn>",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js $PLAT",
+    "dev": "node build/dev-server.js",
+    "test":"node build/dev-server.js   --reporter checkstyle > checkstyle.xml",
     "start": "node build/dev-server.js",
     "build": "node build/build.js "
   },

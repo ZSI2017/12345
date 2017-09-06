@@ -1,3 +1,4 @@
+/* global VERSION:false */
 'use strict'
 import Cookie from "@/util/cookie.js"
 import Vue from 'vue'
@@ -12,16 +13,18 @@ var vue = new Vue();
 import axios from "axios";
 
 // let URL = "http://sendexmng-sit.alipay-eco.com"
- let URL = 'http://192.168.12.54:8080'
-if(process.env.NODE_ENV === "development"){
-    //  开发环境下调用
-}else {
-   //  预发环境
-    URL = "https://sendexmng-sit.alipay-eco.com"
-}
-if(process.env.PRO) {
-   //生产环境
+let URL = 'http://192.168.12.54:8080'
+if(VERSION == "pro") {
+     //生产环境
    URL = "https://sendexmng.alipay-eco.com"
+} else {
+  if(process.env.NODE_ENV === "development"){
+      //  开发环境下调用  默认
+  }else {
+     //  预发环境
+      URL = "https://sendexmng-sit.alipay-eco.com"
+  }
+
 }
 
 // add request interceptor
