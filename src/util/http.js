@@ -12,17 +12,16 @@ var vue = new Vue();
 import axios from "axios";
 
 // let URL = "http://sendexmng-sit.alipay-eco.com"
-let URL = 'http://192.168.12.54:8080'
-// let URL  = "http://sendexmng-sit.alipay-eco.com"
-// alert(window.myPro)
-// console.log(process.argv);
-   // alert(process.env.npm_config_report)
+ let URL = 'http://192.168.12.54:8080'
 if(process.env.NODE_ENV === "development"){
     //  开发环境下调用
-    // URL = 'http://192.168.12.54:8080'
-    // URL  = "http://sendexmng-sit.alipay-eco.com";
 }else {
+   //  预发环境
     URL = "https://sendexmng-sit.alipay-eco.com"
+}
+if(process.env.PRO) {
+   //生产环境
+   URL = "https://sendexmng.alipay-eco.com"
 }
 
 // add request interceptor
