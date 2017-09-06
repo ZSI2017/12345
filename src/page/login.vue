@@ -1,6 +1,6 @@
 <template>
 <section class="login">
-  <h1>支付宝寄件平台运营管理系统{{$http.url}}</h1>
+  <h1>支付宝寄件平台运营管理系统</h1>
   <el-button type="primary" style="display:none" size="large" @click="loginIn">登 录</el-button>
   <el-button type="primary" size="large" @click="loginInText"> 登 录 </el-button>
 </section>
@@ -56,7 +56,7 @@ export default {
       // alert(fullPath)
       window.location.href=this.$http.url+"/api/loginProxy?realUrl="+encodeURIComponent(fullPath);
       // this.$http.get(URL,{
-      //   
+      //
       // }, (result) => {
       //     alert(result)
       //     // _this.totalCount = result.page_list.length; //获取数据长度
