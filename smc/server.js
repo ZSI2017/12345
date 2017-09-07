@@ -22,7 +22,7 @@ app.get("/smc", function (request, response) {
     request.headers.cookie && request.headers.cookie.split(';').forEach(function(value){
              var tempArr = value.split('=');
              console.log("cookie: "+tempArr[0]+' '+tempArr[1]);
-             if(tempArr[0] == "ALIPAYJSESSIONID") {
+             if(tempArr[0].toString().indexOf("ALIPAYJSESSIONID")>-1) {
                 response.cookie('SMJSESSIONID', cryptPwd(tempArr[1]));
              }
        });
