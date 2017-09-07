@@ -107,14 +107,6 @@ function filterMenu(result) {
        //  隐藏 或者显示 导航菜单 服务类型及折扣改管理
        //&&Cookie.get("SMJSESSIONID")&&Cookie.get("SMJSESSIONID") &&Cookie.get("SMJSESSIONID")  &&Cookie.get("SMJSESSIONID")
       // Cookie.delete("express1");
-      console.log("beforeEach router --------------------------");
-      console.log(store.getters.getisAuthority)
-      console.log(Cookie.get("ECOACLJSESSIONID"));
-      console.log(Cookie.get("ctoken"));
-      console.log(Cookie.get("SMJSESSIONID"));
-      console.log("beforeEach router --------------------------");
-
-
   if(VERSION != "dev") {     // 非开发模式下验证登录
    if(Cookie.get("ECOACLJSESSIONID")&&Cookie.get("ctoken")&&Cookie.get("SMJSESSIONID")&&store.getters.getloginOutFlag === false) {
 
